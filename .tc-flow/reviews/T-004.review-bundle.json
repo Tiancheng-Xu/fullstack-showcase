@@ -1,0 +1,27 @@
+{
+  "schema": "tc-flow ReviewBundle v1",
+  "sanitized": true,
+  "runId": "tc_nurture_bloom_ui_20260729_3f7ba54d",
+  "taskId": "T-004",
+  "contractHash": "3f7ba54d134c029bc78e18aa2bb1f4e880816ddbb23345c8f6a151b15fe0ca5c",
+  "risk": "low",
+  "contractSummary": "Complete a frontend-only, local-state UI foundation and leave a clear learning handoff for later course-driven backend work. Do not deploy or push.",
+  "task": "Perform final mobile, desktop, interaction, accessibility, security, and build QA; document runtime commands, architecture boundaries, evidence, known limitations, and future extension points.",
+  "sanitizedDiff": "See .tc-flow/reviews/T-004.sanitized.diff. Added a project runtime guide, durable QA evidence, and root documentation links.",
+  "evidence": [
+    "Final Vitest: 3 test files and 8 tests passed.",
+    "Final typecheck: Vite route generation/build and TypeScript --noEmit passed.",
+    "Final production build passed with route-level chunks.",
+    "Scoped Biome check exited successfully; four intentional reduced-motion override warnings are documented and non-blocking.",
+    "Four-route accessibility audit: one h1 per page, no unnamed buttons, no images missing alt attributes, main landmark present.",
+    "Four-route responsive audit at 390x844: no horizontal overflow and no browser console issues.",
+    "Desktop audit at 1280x800: content container measured 768px and remained centered.",
+    "Secret scan found no private-key, AWS access-key, password, or secret patterns in application source.",
+    "Project guide explicitly states no backend, auth, database, remote API, upload, deployment, or GitHub push in phase one.",
+    "Worker self-review p0Issues: []"
+  ],
+  "redactions": {
+    "count": 0,
+    "types": []
+  }
+}

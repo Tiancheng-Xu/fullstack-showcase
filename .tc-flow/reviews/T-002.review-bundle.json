@@ -1,0 +1,24 @@
+{
+  "schema": "tc-flow ReviewBundle v1",
+  "sanitized": true,
+  "runId": "tc_nurture_bloom_ui_20260729_3f7ba54d",
+  "taskId": "T-002",
+  "contractHash": "3f7ba54d134c029bc78e18aa2bb1f4e880816ddbb23345c8f6a151b15fe0ca5c",
+  "risk": "low",
+  "contractSummary": "Create a frontend-only Better-T-Stack mobile demo from the provided Stitch design. No authentication, database, remote API, secrets, external uploads, deployment, or GitHub push.",
+  "task": "Establish semantic Tailwind design tokens, a reusable mobile app shell, shared UI primitives, and local Stitch assets. Acceptance requires component tests, typecheck, production build, scoped lint, and secret scan.",
+  "sanitizedDiff": "See .tc-flow/reviews/T-002.sanitized.diff. Added a semantic Tailwind v4 theme, reusable TopBar/BottomNav/AppShell, SectionHeader/StatusChip/Modal/FloatingActionButton, local Stitch logo and hero assets, and component tests. Modal is labelled, Escape/backdrop/close-button dismissible, and absent when closed.",
+  "evidence": [
+    "TDD RED: component suite failed before shared modal, section-header, and status-chip modules existed.",
+    "TDD GREEN: 2 test files and 5 tests passed.",
+    "Typecheck: Vite production build completed and TypeScript --noEmit passed.",
+    "Build: Vite production build completed successfully.",
+    "Scoped Biome check exited successfully; four intentional reduced-motion !important declarations are warnings only.",
+    "Secret scan: no private keys, AWS access-key patterns, passwords, or secrets found in task-owned source paths.",
+    "Worker self-review p0Issues: []"
+  ],
+  "redactions": {
+    "count": 0,
+    "types": []
+  }
+}

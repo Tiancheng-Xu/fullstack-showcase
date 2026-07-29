@@ -1,0 +1,24 @@
+{
+  "schema": "tc-flow ReviewBundle v1",
+  "sanitized": true,
+  "runId": "tc_nurture_bloom_ui_20260729_3f7ba54d",
+  "taskId": "T-001",
+  "contractHash": "3f7ba54d134c029bc78e18aa2bb1f4e880816ddbb23345c8f6a151b15fe0ca5c",
+  "risk": "low",
+  "contractSummary": "Create a frontend-only Better-T-Stack workspace for a mobile-first React demo. No authentication, database, remote API, secrets, external uploads, deployment, or GitHub push.",
+  "task": "Scaffold TanStack Router, Tailwind CSS, root developer commands, Vitest with jsdom, and a tested visible Chinese product identity. Acceptance requires test, typecheck, and production build to pass.",
+  "sanitizedDiff": "diff --git a/package.json b/package.json\n+scripts: dev delegates to apps/web dev:web; test, typecheck, and build delegate to apps/web/apps/web.\n+packageManager: pnpm@11.17.0\n\ndiff --git a/apps/web/bts.jsonc b/apps/web/bts.jsonc\n+Better-T-Stack 3.38.0: frontend tanstack-router; backend/runtime/database/orm/auth/payments/api/deploy all none.\n\ndiff --git a/apps/web/apps/web/vite.config.ts b/apps/web/apps/web/vite.config.ts\n+import { defineConfig } from \"vitest/config\";\n+test: { environment: \"jsdom\", setupFiles: [\"./src/test/setup.ts\"] }\n\ndiff --git a/apps/web/apps/web/src/components/app-identity.tsx b/apps/web/apps/web/src/components/app-identity.tsx\n+export function AppIdentity() { return <h1>育爱成长</h1>; }\n\ndiff --git a/apps/web/apps/web/src/components/__tests__/app-identity.test.tsx b/apps/web/apps/web/src/components/__tests__/app-identity.test.tsx\n+render(<AppIdentity />);\n+expect(screen.getByRole(\"heading\", { name: \"育爱成长\" })).toBeVisible();",
+  "evidence": [
+    "TDD RED: Vitest failed because app-identity did not exist.",
+    "TDD GREEN: 1 test file and 1 test passed.",
+    "Typecheck: Vite production build completed and TypeScript --noEmit passed.",
+    "Build: Vite production build completed successfully.",
+    "Scoped Biome check: 5 task-owned files passed with no fixes.",
+    "Secret scan: no private keys or AWS access-key patterns found.",
+    "Worker self-review p0Issues: []"
+  ],
+  "redactions": {
+    "count": 0,
+    "types": []
+  }
+}

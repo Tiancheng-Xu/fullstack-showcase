@@ -1,0 +1,8 @@
+diff --git a/apps/web/README.md b/apps/web/README.md
++Chinese project guide documents phase-one scope, Better-T-Stack structure, local commands, verification, and six course-aligned backend extension points.
+
+diff --git a/docs/qa/nurture-bloom-ui-foundation.md b/docs/qa/nurture-bloom-ui-foundation.md
++Durable QA record documents inputs, scope boundaries, automated gates, responsive visual checks, accessibility checks, design mapping, and known limitations.
+
+diff --git a/README.md b/README.md
++Root project guide links to the Nurture Bloom runtime guide and QA evidence.

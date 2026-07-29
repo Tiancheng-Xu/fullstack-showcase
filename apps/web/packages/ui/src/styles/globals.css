@@ -1,0 +1,159 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@source "../../../apps/**/*.{ts,tsx}";
+@source "../**/*.{ts,tsx}";
+
+:root {
+	--background: #fbf9f1;
+	--foreground: #1b1c17;
+	--card: #ffffff;
+	--card-foreground: #1b1c17;
+	--popover: #ffffff;
+	--popover-foreground: #1b1c17;
+	--primary: #845400;
+	--primary-foreground: #ffffff;
+	--primary-container: #ffb347;
+	--primary-soft: #ffddb6;
+	--secondary: #42617d;
+	--secondary-foreground: #ffffff;
+	--secondary-container: #bddefe;
+	--tertiary: #49654c;
+	--tertiary-foreground: #ffffff;
+	--tertiary-container: #cbebca;
+	--muted: #f0eee6;
+	--muted-foreground: #524535;
+	--accent: #f4c2c2;
+	--accent-foreground: #5f3033;
+	--destructive: #ba1a1a;
+	--destructive-foreground: #ffffff;
+	--error-container: #ffdad6;
+	--border: #d6c3b0;
+	--input: #eae8e0;
+	--ring: #42617d;
+	--surface-low: #f5f4ec;
+	--surface-high: #eae8e0;
+	--radius: 1rem;
+	--radius-card: 2rem;
+	--shadow-card: 0 18px 40px rgb(132 84 0 / 8%);
+	--shadow-floating: 0 18px 38px rgb(66 97 125 / 20%);
+	--font-ui:
+		"Quicksand", "PingFang SC", "Microsoft YaHei UI", system-ui, sans-serif;
+}
+
+@theme inline {
+	--font-sans: var(--font-ui);
+	--color-background: var(--background);
+	--color-foreground: var(--foreground);
+	--color-card: var(--card);
+	--color-card-foreground: var(--card-foreground);
+	--color-popover: var(--popover);
+	--color-popover-foreground: var(--popover-foreground);
+	--color-primary: var(--primary);
+	--color-primary-foreground: var(--primary-foreground);
+	--color-primary-container: var(--primary-container);
+	--color-primary-soft: var(--primary-soft);
+	--color-secondary: var(--secondary);
+	--color-secondary-foreground: var(--secondary-foreground);
+	--color-secondary-container: var(--secondary-container);
+	--color-tertiary: var(--tertiary);
+	--color-tertiary-foreground: var(--tertiary-foreground);
+	--color-tertiary-container: var(--tertiary-container);
+	--color-muted: var(--muted);
+	--color-muted-foreground: var(--muted-foreground);
+	--color-accent: var(--accent);
+	--color-accent-foreground: var(--accent-foreground);
+	--color-destructive: var(--destructive);
+	--color-destructive-foreground: var(--destructive-foreground);
+	--color-error-container: var(--error-container);
+	--color-border: var(--border);
+	--color-input: var(--input);
+	--color-ring: var(--ring);
+	--color-surface-low: var(--surface-low);
+	--color-surface-high: var(--surface-high);
+	--radius-sm: 0.5rem;
+	--radius-md: 1rem;
+	--radius-lg: 1.5rem;
+	--radius-xl: 2rem;
+	--radius-2xl: 3rem;
+	--shadow-card: var(--shadow-card);
+	--shadow-floating: var(--shadow-floating);
+}
+
+@layer base {
+	* {
+		box-sizing: border-box;
+		border-color: var(--border);
+	}
+
+	html {
+		min-width: 320px;
+		background: var(--background);
+		font-family: var(--font-ui);
+	}
+
+	body {
+		min-width: 320px;
+		min-height: 100vh;
+		margin: 0;
+		background:
+			radial-gradient(
+				circle at 10% 4%,
+				rgb(255 179 71 / 12%),
+				transparent 24rem
+			),
+			var(--background);
+		color: var(--foreground);
+		font-family: var(--font-ui);
+		-webkit-font-smoothing: antialiased;
+		overscroll-behavior: none;
+	}
+
+	button,
+	a,
+	input {
+		font: inherit;
+	}
+
+	button,
+	a {
+		-webkit-tap-highlight-color: transparent;
+	}
+
+	:focus-visible {
+		outline: 3px solid rgb(66 97 125 / 42%);
+		outline-offset: 3px;
+	}
+
+	::selection {
+		background: rgb(255 179 71 / 35%);
+	}
+}
+
+@layer utilities {
+	.pb-safe {
+		padding-bottom: env(safe-area-inset-bottom, 0px);
+	}
+
+	.pt-safe {
+		padding-top: env(safe-area-inset-top, 0px);
+	}
+
+	.hide-scrollbar {
+		scrollbar-width: none;
+	}
+
+	.hide-scrollbar::-webkit-scrollbar {
+		display: none;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	*,
+	*::before,
+	*::after {
+		scroll-behavior: auto !important;
+		animation-duration: 0.01ms !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: 0.01ms !important;
+	}
+}

@@ -1,0 +1,94 @@
+{
+  "schema": "tc-flow Contract v1",
+  "version": 1,
+  "runId": "tc_nurture_bloom_ui_20260729_3f7ba54d",
+  "feature": "nurture-bloom-ui-foundation",
+  "contractHash": "3f7ba54d134c029bc78e18aa2bb1f4e880816ddbb23345c8f6a151b15fe0ca5c",
+  "goal": "使用 Better-T-Stack 和 Stitch 视觉稿构建可交互、移动端优先的育爱成长前端作业基底，并抽取 Tailwind 全局设计令牌与可复用组件。",
+  "nonGoals": [
+    "认证",
+    "数据库",
+    "远程 API",
+    "文件上传",
+    "GitHub 推送",
+    "生产部署",
+    "医疗诊断"
+  ],
+  "repositories": [
+    {
+      "path": ".",
+      "role": "monorepo",
+      "branch": "tc/nurture-bloom-ui-foundation-3f7ba54d"
+    }
+  ],
+  "allowedWritePaths": [
+    ".gitignore",
+    "package.json",
+    "pnpm-workspace.yaml",
+    "pnpm-lock.yaml",
+    "apps/",
+    "docs/",
+    "README.md",
+    "HOMEWORKS.md",
+    ".tc-flow/"
+  ],
+  "allowedReadPaths": [
+    ".",
+    "/Users/shier/Downloads/stitch_.zip"
+  ],
+  "allowedTools": [
+    "Read",
+    "Edit",
+    "Write",
+    "Bash",
+    "pnpm",
+    "Playwright",
+    "TC Flow"
+  ],
+  "network": "npm package installation and local browser verification only; no external data upload",
+  "tasks": [
+    {
+      "id": "T-001",
+      "role": "other",
+      "risk": "low",
+      "desc": "在 apps/web 初始化 Better-T-Stack 前端、pnpm 工作区和测试基线",
+      "deps": []
+    },
+    {
+      "id": "T-002",
+      "role": "frontend",
+      "risk": "low",
+      "desc": "建立 Stitch 全局设计令牌、应用壳和可复用 UI 组件",
+      "deps": [
+        "T-001"
+      ]
+    },
+    {
+      "id": "T-003",
+      "role": "frontend",
+      "risk": "medium",
+      "desc": "实现成长、时光、百科、我的四个路由与本地类型化交互",
+      "deps": [
+        "T-002"
+      ]
+    },
+    {
+      "id": "T-004",
+      "role": "other",
+      "risk": "medium",
+      "desc": "执行移动端视觉、交互、可访问性和完整构建 QA，并整理学习交付文档",
+      "deps": [
+        "T-003"
+      ]
+    }
+  ],
+  "acceptanceCriteria": [
+    "Better-T-Stack 前端可以安装、开发、测试、类型检查和构建",
+    "Stitch 视觉基底在主要页面中得到还原，公共样式集中管理",
+    "成长、时光、百科、我的四个主入口可以导航",
+    "新增记录和百科筛选具有可见交互反馈",
+    "390px 移动宽度无主要布局溢出或固定导航遮挡",
+    "所有图片为本地资源，不依赖 Stitch 临时外链",
+    "没有密钥、真实家庭隐私或医疗数据进入仓库"
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "schema": "tc-flow Checkpoint v1",
+  "runId": "tc_nurture_bloom_ui_20260729_3f7ba54d",
+  "feature": "nurture-bloom-ui-foundation",
+  "contractHash": "3f7ba54d134c029bc78e18aa2bb1f4e880816ddbb23345c8f6a151b15fe0ca5c",
+  "node": "N5",
+  "taskId": "T-001",
+  "inputSummary": "Frontend-only Better-T-Stack scaffold under apps/web with root developer commands and Vitest baseline.",
+  "changedPaths": [
+    "package.json",
+    "pnpm-lock.yaml",
+    "apps/web/",
+    ".tc-flow/"
+  ],
+  "repositoryStatusHash": "dedfedfd6e6502b36532b49c82a4f2146b2288fbfc92e1bcc5303a60d941e9eb",
+  "evidence": {
+    "tddRed": "Vitest failed because app-identity was missing.",
+    "test": "1 test file and 1 test passed.",
+    "typecheck": "Vite build and TypeScript --noEmit passed.",
+    "build": "Vite production build passed.",
+    "lint": "Scoped Biome check passed for 5 task-owned files.",
+    "security": "No private-key or AWS access-key patterns found.",
+    "review": ".tc-flow/reviews/T-001.review-result.json",
+    "piiRedacted": 0
+  },
+  "retries": 0,
+  "toolRequests": [],
+  "interventions": [],
+  "blockers": [],
+  "events": ".tc-flow/events.jsonl",
+  "next": {
+    "node": "N3",
+    "taskId": "T-002"
+  }
+}

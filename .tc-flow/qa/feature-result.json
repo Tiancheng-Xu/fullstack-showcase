@@ -1,0 +1,23 @@
+{
+  "schema": "tc-flow FeatureQAResult v1",
+  "runId": "tc_nurture_bloom_ui_20260729_3f7ba54d",
+  "feature": "nurture-bloom-ui-foundation",
+  "contractHash": "3f7ba54d134c029bc78e18aa2bb1f4e880816ddbb23345c8f6a151b15fe0ca5c",
+  "verdict": "pass",
+  "acceptanceCriteria": {
+    "passed": 7,
+    "total": 7
+  },
+  "frontend": "pass",
+  "backend": "not-applicable",
+  "contract": "not-applicable",
+  "retries": 0,
+  "evidence": [
+    "All four task reviews passed without P0 findings.",
+    "Final tests, typecheck, production build, scoped lint, secret scan, and responsive browser QA passed.",
+    "Four routes navigate and render without console issues.",
+    "Growth add-record and guide filtering provide visible local feedback.",
+    "All bundled images are local and no external Stitch image URL is used."
+  ],
+  "next": "N7"
+}

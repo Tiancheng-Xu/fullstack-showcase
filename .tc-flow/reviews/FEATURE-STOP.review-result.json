@@ -1,0 +1,29 @@
+{
+  "schema": "tc-flow ReviewResult v1",
+  "runId": "tc_nurture_bloom_ui_20260729_3f7ba54d",
+  "taskId": "FEATURE-STOP",
+  "contractHash": "3f7ba54d134c029bc78e18aa2bb1f4e880816ddbb23345c8f6a151b15fe0ca5c",
+  "risk": "low",
+  "verdict": "pass",
+  "p0": false,
+  "provider": "kimi",
+  "model": "kimi-k3",
+  "transport": "openai-compatible-api",
+  "requestId": "chatcmpl-6a6a552133277b8471998ff7",
+  "reviewerDegraded": false,
+  "stage": "task-review",
+  "modelVerdict": "pass",
+  "issues": [],
+  "p0Issues": [],
+  "summary": "Cumulative Feature matches the frozen contract scope. All working-tree changes (README.md, .tc-flow/, apps/web/, docs/qa/, package.json, pnpm-lock.yaml) fall within the allowed write paths for package metadata, apps, docs, README, and .tc-flow. Corroborating evidence shows 4/4 clean task reviews, 7/7 Feature QA, and passing tests, typecheck, production build, scoped lint, responsive and accessibility audits, and secret scan. No authentication, database, remote API, upload, GitHub push, production deployment, or medical diagnosis functionality was introduced, and memory contains no PII or secrets. No P0 category (secret/PII leakage, irreversible data destruction, auth bypass, production outage, supply-chain/RCE, or out-of-contract security/data impact) is present in the supplied bundle. Gate passes.",
+  "reviewerDegradedReason": null,
+  "blockedReason": null,
+  "attempts": [
+    {
+      "provider": "kimi",
+      "model": "kimi-k3",
+      "requestId": "chatcmpl-6a6a552133277b8471998ff7",
+      "status": "pass"
+    }
+  ]
+}

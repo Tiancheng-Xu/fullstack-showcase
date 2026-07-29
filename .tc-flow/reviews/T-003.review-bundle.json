@@ -1,0 +1,26 @@
+{
+  "schema": "tc-flow ReviewBundle v1",
+  "sanitized": true,
+  "runId": "tc_nurture_bloom_ui_20260729_3f7ba54d",
+  "taskId": "T-003",
+  "contractHash": "3f7ba54d134c029bc78e18aa2bb1f4e880816ddbb23345c8f6a151b15fe0ca5c",
+  "risk": "low",
+  "contractSummary": "Create a frontend-only Better-T-Stack mobile demo from the provided Stitch design. All phase-one interactions must remain local with no authentication, database, remote API, upload, deployment, or GitHub push.",
+  "task": "Implement growth, moments, guide, and profile routes with typed local state and meaningful interactions. Acceptance requires tests, typecheck, production build, scoped lint, mobile and desktop visual checks, and clean browser console.",
+  "sanitizedDiff": "See .tc-flow/reviews/T-003.sanitized.diff. Four typed TanStack Router pages now reproduce the Stitch information architecture and support local add-record, search/category filter, favorite, modal, and reminder interactions.",
+  "evidence": [
+    "TDD RED: route interaction suite failed because guide, growth, and moments feature modules did not exist.",
+    "TDD GREEN: 3 test files and 8 tests passed.",
+    "Typecheck: Vite route generation/build and TypeScript --noEmit passed.",
+    "Build: Vite production build passed with route-level chunks.",
+    "Scoped Biome check passed for feature, route, layout, and FAB source files.",
+    "Browser QA: /growth, /moments, /guide, and /me rendered at 390x844 with no console errors or warnings.",
+    "Responsive QA: /growth rendered at 1280x800 with a measured 768px content container.",
+    "No remote fetch, upload, auth, database, deployment, or external persistence was introduced.",
+    "Worker self-review p0Issues: []"
+  ],
+  "redactions": {
+    "count": 0,
+    "types": []
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "schema": "tc-flow Checkpoint v1",
+  "runId": "tc_nurture_bloom_ui_20260729_3f7ba54d",
+  "feature": "nurture-bloom-ui-foundation",
+  "contractHash": "3f7ba54d134c029bc78e18aa2bb1f4e880816ddbb23345c8f6a151b15fe0ca5c",
+  "node": "N5",
+  "taskId": "T-002",
+  "inputSummary": "Semantic Stitch design tokens, mobile application shell, shared UI primitives, and bundled local assets.",
+  "changedPaths": [
+    "apps/web/apps/web/src/components/",
+    "apps/web/apps/web/src/lib/cn.ts",
+    "apps/web/apps/web/public/assets/nurture-bloom/",
+    "apps/web/packages/ui/src/styles/globals.css",
+    ".tc-flow/"
+  ],
+  "repositoryStatusHash": "dedfedfd6e6502b36532b49c82a4f2146b2288fbfc92e1bcc5303a60d941e9eb",
+  "evidence": {
+    "tddRed": "Shared-component test suite failed before the required modules existed.",
+    "test": "2 test files and 5 tests passed.",
+    "typecheck": "Vite build and TypeScript --noEmit passed.",
+    "build": "Vite production build passed.",
+    "lint": "Scoped Biome check passed with four documented reduced-motion warnings.",
+    "security": "No private-key, AWS access-key, password, or secret patterns found.",
+    "review": ".tc-flow/reviews/T-002.review-result.json",
+    "piiRedacted": 0
+  },
+  "retries": 0,
+  "toolRequests": [],
+  "interventions": [],
+  "blockers": [],
+  "events": ".tc-flow/events.jsonl",
+  "next": {
+    "node": "N3",
+    "taskId": "T-003"
+  }
+}

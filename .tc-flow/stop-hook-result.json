@@ -1,0 +1,16 @@
+{
+  "schema": "tc-flow StopHookResult v1",
+  "runId": "tc_nurture_bloom_ui_20260729_3f7ba54d",
+  "feature": "nurture-bloom-ui-foundation",
+  "contractHash": "3f7ba54d134c029bc78e18aa2bb1f4e880816ddbb23345c8f6a151b15fe0ca5c",
+  "verdict": "ALLOW",
+  "workingTree": "matched",
+  "memoryReviewed": true,
+  "review": ".tc-flow/reviews/FEATURE-STOP.review-result.json",
+  "provider": "kimi",
+  "model": "kimi-k3",
+  "requestId": "chatcmpl-6a6a552133277b8471998ff7",
+  "reviewerDegraded": false,
+  "p0Issues": [],
+  "next": "N8"
+}

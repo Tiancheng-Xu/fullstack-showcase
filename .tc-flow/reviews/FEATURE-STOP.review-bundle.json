@@ -1,0 +1,24 @@
+{
+  "schema": "tc-flow ReviewBundle v1",
+  "sanitized": true,
+  "runId": "tc_nurture_bloom_ui_20260729_3f7ba54d",
+  "taskId": "FEATURE-STOP",
+  "contractHash": "3f7ba54d134c029bc78e18aa2bb1f4e880816ddbb23345c8f6a151b15fe0ca5c",
+  "risk": "low",
+  "contractSummary": "Final working-tree gate for a local-only frontend Feature. Allowed paths are package metadata, apps, docs, README/HOMEWORKS, gitignore, and .tc-flow. GitHub push and production deployment are non-goals.",
+  "task": "Review the cumulative Feature against the frozen contract, task reviews, 7/7 Feature QA, memory, allowed write paths, and security boundaries. Return pass only if the working tree matches scope and contains no P0 issue.",
+  "sanitizedDiff": "Cumulative Feature contains Better-T-Stack metadata under apps/web, a TanStack Router React application, semantic Tailwind v4 theme, local Stitch assets, shared UI primitives, four local-state routes, 8 passing tests, runtime and QA documentation, and TC Flow evidence. Git status is limited to README.md, .tc-flow/, apps/web/, docs/qa/, package.json, and pnpm-lock.yaml; all are contract-allowed.",
+  "evidence": [
+    "Four task reviews passed with no P0 issues and no reviewer degradation.",
+    "Feature QA passed 7/7 acceptance criteria.",
+    "Final tests, typecheck, production build, scoped lint, responsive browser audit, accessibility audit, and secret scan passed.",
+    "Actual working-tree top-level changes are all within the frozen allowedWritePaths.",
+    "No authentication, database, remote API, upload, GitHub push, production deployment, or medical diagnosis was introduced.",
+    "Memory reviewed and written without PII or secrets.",
+    "Worker self-review p0Issues: []"
+  ],
+  "redactions": {
+    "count": 0,
+    "types": []
+  }
+}

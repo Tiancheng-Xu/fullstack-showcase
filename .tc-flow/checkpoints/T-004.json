@@ -1,0 +1,34 @@
+{
+  "schema": "tc-flow Checkpoint v1",
+  "runId": "tc_nurture_bloom_ui_20260729_3f7ba54d",
+  "feature": "nurture-bloom-ui-foundation",
+  "contractHash": "3f7ba54d134c029bc78e18aa2bb1f4e880816ddbb23345c8f6a151b15fe0ca5c",
+  "node": "N5",
+  "taskId": "T-004",
+  "inputSummary": "Final responsive, interaction, accessibility, security, build, and documentation QA.",
+  "changedPaths": [
+    "apps/web/README.md",
+    "docs/qa/nurture-bloom-ui-foundation.md",
+    "README.md",
+    ".tc-flow/"
+  ],
+  "repositoryStatusHash": "0d62d51f9e103a1b74db70d15ede463e1c123e0a4b8a6d097048017b98c35771",
+  "evidence": {
+    "test": "3 test files and 8 tests passed.",
+    "typecheck": "Vite route generation/build and TypeScript --noEmit passed.",
+    "build": "Vite production build passed with route-level chunks.",
+    "lint": "Scoped Biome check passed with four intentional reduced-motion warnings.",
+    "accessibility": "Four routes each have one h1, a main landmark, named buttons, alt-attributed images, no horizontal overflow, and a clean console.",
+    "security": "No private-key, AWS access-key, password, or secret patterns found.",
+    "review": ".tc-flow/reviews/T-004.review-result.json",
+    "piiRedacted": 0
+  },
+  "retries": 0,
+  "toolRequests": [],
+  "interventions": [],
+  "blockers": [],
+  "events": ".tc-flow/events.jsonl",
+  "next": {
+    "node": "N6"
+  }
+}

@@ -12,6 +12,13 @@
 
 完整验收项见 [HOMEWORKS.md](HOMEWORKS.md)。
 
+## 当前前端基底
+
+`apps/web` 已使用 Better-T-Stack 和 TC Flow 建立“育爱成长”移动端前端基底。当前只使用本地状态，后端会随课程进度逐步补全。
+
+- [项目运行与扩展说明](apps/web/README.md)
+- [UI 基底验收记录](docs/qa/nurture-bloom-ui-foundation.md)
+
 ## 目录约定
 
 ```text
@@ -49,4 +56,3 @@ docker version
 ```bash
 colima stop
 ```
-
