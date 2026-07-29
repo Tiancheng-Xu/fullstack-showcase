@@ -36,7 +36,7 @@
   },
   "testDeployment": "not-applicable by frozen contract",
   "production": "not-requested",
-  "branchCleanup": "delete after successful local merge verification",
+  "branchCleanup": "retained because the frozen contract produced no PR or tag lifecycle",
   "retries": 0,
   "blockers": []
 }
