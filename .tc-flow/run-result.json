@@ -1,0 +1,42 @@
+{
+  "schema": "tc-flow RunResult v1",
+  "runId": "tc_nurture_bloom_ui_20260729_3f7ba54d",
+  "feature": "nurture-bloom-ui-foundation",
+  "contractHash": "3f7ba54d134c029bc78e18aa2bb1f4e880816ddbb23345c8f6a151b15fe0ca5c",
+  "status": "complete",
+  "nodes": {
+    "N1": "completed",
+    "N2": "completed",
+    "N3-N5": "4/4 tasks completed and reviewed",
+    "N6": "pass (7/7 acceptance criteria)",
+    "N7": "ALLOW",
+    "N8": "local delivery"
+  },
+  "repository": {
+    "path": ".",
+    "role": "monorepo",
+    "branch": "tc/nurture-bloom-ui-foundation-3f7ba54d",
+    "featureCommit": "e887f1dc349275c690e4d08020ab4a2e41e6a813",
+    "integration": "local merge to main",
+    "push": "skipped by frozen contract",
+    "pullRequest": null
+  },
+  "verification": {
+    "test": "3 files, 8 tests passed",
+    "typecheck": "pass",
+    "build": "pass",
+    "featureQA": ".tc-flow/qa/feature-result.json",
+    "stopHook": ".tc-flow/stop-hook-result.json"
+  },
+  "reviewer": {
+    "provider": "kimi",
+    "model": "kimi-k3",
+    "degraded": false,
+    "p0Issues": []
+  },
+  "testDeployment": "not-applicable by frozen contract",
+  "production": "not-requested",
+  "branchCleanup": "delete after successful local merge verification",
+  "retries": 0,
+  "blockers": []
+}

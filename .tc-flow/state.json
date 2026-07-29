@@ -4,7 +4,7 @@
   "feature": "nurture-bloom-ui-foundation",
   "contractHash": "3f7ba54d134c029bc78e18aa2bb1f4e880816ddbb23345c8f6a151b15fe0ca5c",
   "currentNode": "N8",
-  "status": "running",
+  "status": "complete",
   "difficulty": "medium",
   "execution": {
     "worker": {
@@ -142,6 +142,16 @@
       "memoryReviewed": true,
       "review": ".tc-flow/reviews/FEATURE-STOP.review-result.json",
       "next": "N8"
+    },
+    {
+      "node": "N8",
+      "status": "complete",
+      "commit": "e887f1dc349275c690e4d08020ab4a2e41e6a813",
+      "push": "skipped-by-contract",
+      "testDeployment": "not-applicable",
+      "pullRequest": null,
+      "production": "not-requested",
+      "runResult": ".tc-flow/run-result.json"
     }
   ],
   "retries": {}
