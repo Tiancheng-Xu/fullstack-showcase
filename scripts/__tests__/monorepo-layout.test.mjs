@@ -93,5 +93,8 @@ test("documents the flattened learner workflow", async () => {
     assert.match(readme, new RegExp(fragment.replace("/", "\\/")));
   }
 
+  assert.match(readme, /Root scripts select the `apps\/web` workspace\./);
+  assert.match(readme, /Cloudflare deploys `apps\/web\/dist`\./);
+
   assert.doesNotMatch(readme, /apps\/web\/apps\/web|pnpm --dir apps\/web/);
 });

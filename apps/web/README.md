@@ -40,8 +40,11 @@ pnpm build
 
 打开终端显示的本地地址，默认入口会跳转到 `/growth`。
 
-根目录脚本会选择 `apps/web` 工作区执行开发、测试、类型检查和构建。Cloudflare
-预览工作流也从仓库根目录安装依赖并运行这些命令，最后部署 `apps/web/dist`。
+Root scripts select the `apps/web` workspace.
+
+Cloudflare preview CI installs from the repository root and runs `pnpm test`,
+`pnpm typecheck`, and `pnpm build`; `pnpm dev` is for local development only.
+Cloudflare deploys `apps/web/dist`.
 
 ## 验证
 
