@@ -13,6 +13,8 @@ const requiredFragments = [
 	"pnpm typecheck",
 	"pnpm build",
 	"cloudflare/wrangler-action@v3",
+	"packageManager: npm",
+	'wranglerVersion: "4.115.0"',
 	"pages deploy apps/web/apps/web/dist",
 	"${{ vars.CLOUDFLARE_PAGES_PROJECT }}",
 	"${{ secrets.CLOUDFLARE_API_TOKEN }}",
