@@ -16,6 +16,9 @@
 - `apps/api` remains documentation-only and must not contain a `package.json`.
 - The repository must contain exactly one `pnpm-workspace.yaml` and one `pnpm-lock.yaml`, both at the root.
 - The deploy artifact must be `apps/web/dist`.
+- Architecture, workflow, and directory changes must consult relevant guidance
+  under `/Users/shier/Desktop/一灯学习笔记`; explicit current user instructions
+  and verified project constraints/tests take precedence over the notes.
 - Do not merge a pull request or trigger a production deployment.
 
 ---
@@ -227,112 +230,59 @@ git add apps packages scripts/__tests__/monorepo-layout.test.mjs \
 git commit -m "refactor: flatten course homework workspace"
 ```
 
-### Task 2: Update the Cloudflare preview contract
+### Task 2: Document the flattened preview flow
+
+The Task 1 review fix already moved the active workflow and validator to the
+root lockfile, root install command, and `apps/web/dist`. This task makes the
+learner-facing documentation match that verified contract.
 
 **Files:**
-- Modify: `.github/workflows/cloudflare-preview.yml`
-- Modify: `scripts/validate-cloudflare-preview.mjs`
+- Modify: `scripts/__tests__/monorepo-layout.test.mjs`
 - Modify: `apps/web/README.md`
 
 **Interfaces:**
-- Consumes: Root commands from Task 1 and build output `apps/web/dist`.
-- Produces: A preview workflow that installs from the root lockfile and deploys the flattened web artifact.
+- Consumes: Root commands from Task 1 and the corrected Cloudflare preview contract.
+- Produces: Learner documentation that explains the flattened frontend, backend placeholder, shared UI, and root commands.
 
-- [ ] **Step 1: Strengthen the preview validator first**
+- [ ] **Step 1: Add a failing documentation contract test**
 
-In `scripts/validate-cloudflare-preview.mjs`, replace the old deploy fragment
-with these required fragments:
-
-```js
-const requiredFragments = [
-  "pull_request:",
-  "workflow_dispatch:",
-  "github.event.pull_request.head.repo.full_name == github.repository",
-  "cache-dependency-path: pnpm-lock.yaml",
-  "run: pnpm install --frozen-lockfile",
-  "pnpm test",
-  "pnpm typecheck",
-  "pnpm build",
-  "cloudflare/wrangler-action@v3",
-  "packageManager: npm",
-  'wranglerVersion: "4.115.0"',
-  "pages deploy apps/web/dist",
-  "${{ vars.CLOUDFLARE_PAGES_PROJECT }}",
-  "${{ secrets.CLOUDFLARE_API_TOKEN }}",
-  "${{ secrets.CLOUDFLARE_ACCOUNT_ID }}",
-  "https://course-homework-preview.pages.dev",
-];
-
-const forbiddenFragments = [
-  "apps/web/apps/web",
-  "pnpm --dir apps/web install",
-  "apps/web/pnpm-lock.yaml",
-];
-```
-
-After calculating `missing`, add:
+Add `readFile` to the existing `node:fs/promises` import and append:
 
 ```js
-const forbidden = forbiddenFragments.filter((fragment) =>
-  workflow.includes(fragment),
-);
+test("documents the flattened learner workflow", async () => {
+  const readme = await readFile(path.join(root, "apps/web/README.md"), "utf8");
 
-if (missing.length > 0 || forbidden.length > 0) {
-  const problems = [
-    ...(missing.length > 0 ? [`Missing: ${missing.join(", ")}`] : []),
-    ...(forbidden.length > 0
-      ? [`Forbidden: ${forbidden.join(", ")}`]
-      : []),
-  ];
-  console.error(`Workflow validation failed. ${problems.join(". ")}`);
-  process.exitCode = 1;
-} else {
-  console.log("Cloudflare preview workflow validation passed.");
-}
+  for (const fragment of [
+    "apps/web",
+    "apps/api",
+    "packages/ui",
+    "pnpm dev",
+    "pnpm test",
+    "pnpm typecheck",
+    "pnpm build",
+  ]) {
+    assert.match(readme, new RegExp(fragment.replace("/", "\\/")));
+  }
+
+  assert.doesNotMatch(readme, /apps\/web\/apps\/web|pnpm --dir apps\/web/);
+});
 ```
 
-Remove the former `if (missing.length > 0)` block.
-
-- [ ] **Step 2: Run the validator and verify RED**
+- [ ] **Step 2: Run the focused test and verify RED**
 
 Run:
 
 ```bash
-pnpm validate:preview
+pnpm test:structure
 ```
 
-Expected: FAIL and report the old nested install, lockfile, or deploy paths.
+Expected: FAIL because the existing README does not document all flattened
+paths and root commands.
 
-- [ ] **Step 3: Update the GitHub Actions paths**
-
-In `.github/workflows/cloudflare-preview.yml`:
-
-```yaml
-cache-dependency-path: pnpm-lock.yaml
-```
-
-```yaml
-- name: Install dependencies
-  run: pnpm install --frozen-lockfile
-```
-
-Change the Wrangler command to:
-
-```yaml
-command: >-
-  pages deploy apps/web/dist
-  --project-name=${{ vars.CLOUDFLARE_PAGES_PROJECT }}
-  --branch=preview
-  --commit-dirty=true
-```
-
-Keep workflow triggers, permissions, environment URL, secrets, project
-variable, action versions, and preview branch unchanged.
-
-- [ ] **Step 4: Update learner-facing commands**
+- [ ] **Step 3: Update learner-facing structure and commands**
 
 In `apps/web/README.md`, replace commands that enter `apps/web` or mention
-`apps/web/apps/web` with root commands:
+`apps/web/apps/web` with:
 
 ```bash
 pnpm dev
@@ -341,28 +291,123 @@ pnpm typecheck
 pnpm build
 ```
 
-Add a short structure section that identifies `apps/web` as the frontend,
-`apps/api` as the future backend boundary, and `packages/ui` as reusable UI.
+Add a concise structure section:
 
-- [ ] **Step 5: Run the validator and verify GREEN**
+```text
+apps/web     React + Vite frontend
+apps/api     future backend boundary; not built yet
+packages/ui  reusable UI components and global styles
+```
+
+Explain that root scripts select the web workspace and Cloudflare deploys
+`apps/web/dist`.
+
+- [ ] **Step 4: Run focused GREEN checks**
 
 Run:
 
 ```bash
+pnpm test:structure
 pnpm validate:preview
 ```
 
-Expected: `Cloudflare preview workflow validation passed.`
+Expected: the structural tests pass and the validator prints
+`Cloudflare preview workflow validation passed.`
 
-- [ ] **Step 6: Commit the preview-path update**
+- [ ] **Step 5: Commit the learner documentation**
 
 ```bash
-git add .github/workflows/cloudflare-preview.yml \
-  scripts/validate-cloudflare-preview.mjs apps/web/README.md
-git commit -m "ci: build preview from flattened workspace"
+git add apps/web/README.md scripts/__tests__/monorepo-layout.test.mjs
+git commit -m "docs: explain flattened preview workflow"
 ```
 
-### Task 3: Verify the migration end to end
+### Task 3: Add the learning-notes working agreement
+
+**Files:**
+- Create: `AGENTS.md`
+- Modify: `scripts/__tests__/monorepo-layout.test.mjs`
+
+**Interfaces:**
+- Consumes: Local learning notes at `/Users/shier/Desktop/一灯学习笔记`.
+- Produces: A repository-level instruction for future architecture, workflow, and directory changes.
+
+- [ ] **Step 1: Add a failing convention test**
+
+Append this test to `scripts/__tests__/monorepo-layout.test.mjs`:
+
+```js
+test("records the learning-notes working agreement", async () => {
+  const agreement = await readFile(path.join(root, "AGENTS.md"), "utf8");
+  assert.match(agreement, /\\/Users\\/shier\\/Desktop\\/一灯学习笔记/);
+  assert.match(agreement, /verified project constraints and tests take precedence/i);
+  assert.match(agreement, /do not copy/i);
+});
+```
+
+Add `readFile` to the existing `node:fs/promises` import.
+
+- [ ] **Step 2: Run the focused test and verify RED**
+
+Run:
+
+```bash
+pnpm test:structure
+```
+
+Expected: FAIL because `AGENTS.md` does not exist.
+
+- [ ] **Step 3: Create the project working agreement**
+
+Create `AGENTS.md`:
+
+```markdown
+# Course Homework Working Agreement
+
+## Learning source
+
+Before planning architecture, workflow, or directory changes in this
+repository, consult the relevant material under:
+
+`/Users/shier/Desktop/一灯学习笔记`
+
+Use the notes as design guidance. Do not copy the notes or their private
+content wholesale into this repository.
+
+## Precedence
+
+1. Explicit instructions from the user for the current task.
+2. Verified project constraints and tests.
+3. Relevant guidance from the learning notes.
+
+When the notes conflict with the project, record the conflict and resolution
+in the design or implementation plan before changing code.
+
+## Delivery discipline
+
+- Use an isolated feature worktree for multi-file changes.
+- Keep frontend and backend build scopes independent.
+- Do not commit credentials, local Cloudflare state, or private photographs.
+- Do not trigger production deployment without explicit authorization.
+```
+
+- [ ] **Step 4: Run the focused test and verify GREEN**
+
+Run:
+
+```bash
+pnpm test:structure
+```
+
+Expected: 4 tests pass, 0 fail.
+
+- [ ] **Step 5: Commit the convention**
+
+```bash
+git add AGENTS.md scripts/__tests__/monorepo-layout.test.mjs
+git commit -m "docs: add learning notes working agreement"
+```
+
+### Task 4: Verify the migration end to end
 
 **Files:**
 - Modify only if a verification failure exposes a migration defect.

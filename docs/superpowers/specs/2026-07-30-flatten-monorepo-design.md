@@ -101,6 +101,18 @@ replace the placeholder with a real workspace package and independent CI job.
 - No production deployment is triggered.
 - The existing stable preview URL remains unchanged.
 
+## Learning Notes Convention
+
+The repository root contains an `AGENTS.md` working agreement. Before planning
+architecture, workflow, or directory changes in `course-homework`, contributors
+must consult the relevant material under
+`/Users/shier/Desktop/一灯学习笔记`.
+
+The notes are design guidance, not files to copy wholesale. Explicit current
+user instructions and verified project constraints/tests take precedence. If
+the notes conflict with the project, the conflict and chosen resolution must be
+recorded in the design or implementation plan.
+
 ## Verification
 
 The migration is accepted only if all of the following pass from the
