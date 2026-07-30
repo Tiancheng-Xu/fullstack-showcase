@@ -72,8 +72,12 @@ test("places the application and shared packages at root boundaries", async () =
   assert.equal(await exists("apps/api/package.json"), false);
 });
 
-test("ignores Cloudflare local application files", async () => {
-  for (const localPath of ["apps/web/.dev.vars.local", "apps/web/.wrangler/state"]) {
+test("ignores generated and local application files", async () => {
+  for (const localPath of [
+    "apps/web/src/routeTree.gen.ts",
+    "apps/web/.dev.vars.local",
+    "apps/web/.wrangler/state",
+  ]) {
     assert.equal(await isIgnored(localPath), true, `${localPath} must be ignored`);
   }
 });
