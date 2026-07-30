@@ -32,6 +32,7 @@ packages/ui  reusable UI components and global styles
 
 ```bash
 pnpm install
+pnpm check
 pnpm dev
 pnpm test
 pnpm typecheck
@@ -42,6 +43,7 @@ pnpm build
 
 Root scripts select the `apps/web` workspace.
 
+`pnpm check` lints repository automation and root configuration with Biome.
 Cloudflare preview CI installs from the repository root and runs `pnpm test`,
 `pnpm typecheck`, and `pnpm build`; `pnpm dev` is for local development only.
 Cloudflare deploys `apps/web/dist`.

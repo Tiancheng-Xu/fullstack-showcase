@@ -3,9 +3,13 @@
 ## Learning source
 
 Before planning architecture, workflow, or directory changes in this
-repository, consult the relevant material under:
+repository, consult the relevant material under this preferred local path when
+that path is available:
 
 `/Users/shier/Desktop/一灯学习笔记`
+
+Otherwise, use repository-local requirements and designs, and record in the
+design or implementation plan that the learning notes were unavailable.
 
 Use the notes as design guidance. Do not copy the notes or their private
 content wholesale into this repository.

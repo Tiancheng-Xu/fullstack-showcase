@@ -2,12 +2,17 @@
   "name": "course-homework",
   "private": true,
   "scripts": {
+    "check": "biome lint scripts package.json biome.json",
     "dev": "pnpm --filter @course-homework/web dev",
     "test": "pnpm test:structure && pnpm --filter @course-homework/web test",
-    "test:structure": "node --test scripts/__tests__/monorepo-layout.test.mjs",
+    "test:structure": "node --test scripts/__tests__/*.test.mjs",
     "typecheck": "pnpm --filter @course-homework/web check-types",
     "build": "pnpm --filter @course-homework/web build",
     "validate:preview": "node scripts/validate-cloudflare-preview.mjs"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.5.6",
+    "yaml": "^2.9.0"
   },
   "packageManager": "pnpm@11.17.0"
 }

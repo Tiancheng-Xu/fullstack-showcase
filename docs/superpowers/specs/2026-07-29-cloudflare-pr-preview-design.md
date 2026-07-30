@@ -6,7 +6,10 @@ Use GitHub Actions to update one minimal, stable Cloudflare Pages preview enviro
 
 ## Architecture
 
-GitHub remains the source of truth and CI coordinator. A pull request runs the existing tests, typecheck, and Vite production build. After those gates pass, Wrangler uploads `apps/web/apps/web/dist` to the dedicated Pages test project `course-homework-preview`.
+GitHub remains the source of truth and CI coordinator. A pull request installs
+the root pnpm workspace, then runs the root tests, typecheck, and Vite production
+build. After those gates pass, Wrangler uploads `apps/web/dist` to the dedicated
+Pages test project `course-homework-preview`.
 
 The preview uses one stable URL:
 
@@ -46,9 +49,9 @@ Credentials never enter source files, logs, review bundles, or pull request text
 
 1. Checkout the pull request commit.
 2. Install Node.js 22 and pnpm 11.17.0.
-3. Install the nested Better-T-Stack workspace with the frozen lockfile.
+3. Run `pnpm install --frozen-lockfile` from the repository root.
 4. Run tests, typecheck, and production build.
-5. Upload `apps/web/apps/web/dist` to `course-homework-preview`.
+5. Upload `apps/web/dist` to `course-homework-preview`.
 6. Publish the stable `pages.dev` URL as the GitHub deployment environment URL.
 
 Only one preview deployment runs at a time. A newer run cancels an older run so stale code cannot overwrite the stable preview.

@@ -21,7 +21,11 @@ async function exists(relativePath) {
 async function findNamed(directory, target) {
   const matches = [];
   for (const entry of await readdir(directory, { withFileTypes: true })) {
-    if ([".git", ".tc-flow", ".tc-worktrees", "node_modules"].includes(entry.name)) {
+    if (
+      [".git", ".superpowers", ".tc-flow", ".tc-worktrees", "node_modules"].includes(
+        entry.name,
+      )
+    ) {
       continue;
     }
     const absolute = path.join(directory, entry.name);
@@ -123,9 +127,42 @@ test("documents the flattened learner workflow", async () => {
   assert.doesNotMatch(readme, /apps\/web\/apps\/web|pnpm --dir apps\/web/);
 });
 
+test("keeps active preview and application documentation on the flattened layout", async () => {
+  const appsReadme = await readFile(path.join(root, "apps/README.md"), "utf8");
+  const previewDesign = await readFile(
+    path.join(
+      root,
+      "docs/superpowers/specs/2026-07-29-cloudflare-pr-preview-design.md",
+    ),
+    "utf8",
+  );
+  const designLink = await readFile(
+    path.join(root, "specs/cloudflare-pr-preview/design.md"),
+    "utf8",
+  );
+
+  assert.match(appsReadme, /apps\/api.*documentation-only/is);
+  assert.match(previewDesign, /pnpm install --frozen-lockfile/);
+  assert.match(previewDesign, /apps\/web\/dist/);
+  assert.match(
+    designLink,
+    /docs\/superpowers\/specs\/2026-07-29-cloudflare-pr-preview-design\.md/,
+  );
+
+  for (const document of [appsReadme, previewDesign, designLink]) {
+    assert.doesNotMatch(
+      document,
+      /apps\/web\/apps\/web|apps\/web\/packages|apps\/web\/pnpm-lock\.yaml|pnpm --dir apps\/web|nested Better-T-Stack workspace/i,
+    );
+  }
+});
+
 test("records the learning-notes working agreement", async () => {
   const agreement = await readFile(path.join(root, "AGENTS.md"), "utf8");
   assert.match(agreement, /\/Users\/shier\/Desktop\/一灯学习笔记/);
+  assert.match(agreement, /when\s+that path is available/i);
+  assert.match(agreement, /otherwise.*repository-local requirements and designs/is);
+  assert.match(agreement, /record.*notes were unavailable/is);
   assert.match(agreement, /verified project constraints and tests take precedence/i);
   assert.match(agreement, /do not copy/i);
   assert.match(agreement, /isolated feature worktree for multi-file changes/i);

@@ -8,8 +8,11 @@
 	"files": {
 		"ignoreUnknown": false,
 		"includes": [
-			"**",
+			"**/*",
 			"!**/.next",
+			"!**/.superpowers",
+			"!**/.tc-flow",
+			"!**/.tc-worktrees",
 			"!**/dist",
 			"!**/.turbo",
 			"!**/.nx",
@@ -37,7 +40,7 @@
 	"linter": {
 		"enabled": true,
 		"rules": {
-			"recommended": true,
+			"preset": "recommended",
 			"correctness": {
 				"useExhaustiveDependencies": "info"
 			},
