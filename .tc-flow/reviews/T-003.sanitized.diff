@@ -1,18 +1,11 @@
-diff --git a/apps/web/apps/web/src/features/nurture b/apps/web/apps/web/src/features/nurture
-+Typed local domain models and fixture data for daily records, guide items, and family moments.
-+GrowthContent recreates metrics, milestones, vaccine reminder, daily records, and a local add-record modal.
-+MomentsContent recreates family stats, memory cards, local favorite toggles, and a non-uploading add-memory modal.
-+GuideContent recreates search, category filters, featured content, vaccine schedule, and filtered tips.
-+ProfileContent recreates caregiver identity, badges, baby profile, cloud usage, settings, and local reminder toggle.
-+Interaction tests cover adding a growth record, filtering guide content, and toggling a favorite.
+Task T-003 contains delivery verification and one CI repair:
 
-diff --git a/apps/web/apps/web/src/routes b/apps/web/apps/web/src/routes
-+Root redirects to /growth.
-+Added /growth, /moments, /guide, and /me typed TanStack Router routes.
-+Root shell now uses the Nurture Bloom AppShell and Chinese metadata.
+- Created a draft pull request from the isolated feature branch into main.
+- Confirmed the first workflow run passed tests, typecheck, and build, then failed while the deployment action attempted to install Wrangler through pnpm.
+- Added an automated workflow validator that requires an explicit package manager and Wrangler version.
+- Configured the deployment action to install Wrangler 4.115.0 through npm.
+- Confirmed the second workflow run passed every step and deployed the built static assets.
+- Refreshed the stable preview URL and verified the expected application title, page content, and primary navigation.
+- Kept the pull request in Draft state and did not trigger any production workflow, production project, custom domain, or merge.
 
-diff --git a/apps/web/apps/web/src/components/layout/bottom-nav.tsx b/apps/web/apps/web/src/components/layout/bottom-nav.tsx
-+Navigation uses typed TanStack Router links with active-page semantics.
-
-diff --git a/apps/web/apps/web/src/components/ui/floating-action-button.tsx b/apps/web/apps/web/src/components/ui/floating-action-button.tsx
-+Floating action button accepts an optional contextual icon while retaining the default plus icon.
+No secret value, account identifier, personal data, private filesystem path, or source photo is included.

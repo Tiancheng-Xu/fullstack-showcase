@@ -1,0 +1,47 @@
+{
+  "schema": "tc-flow Checkpoint v1",
+  "runId": "tc_cloudflare_pr_preview_20260729",
+  "feature": "cloudflare-pr-preview",
+  "contractHash": "aa5d84f908a529b4f846c23b04373a695caeff9c88ed05d44db77582be32d522",
+  "node": "N5",
+  "taskId": "T-003",
+  "inputSummary": "Create a draft pull request, verify automatic quality checks and stable preview deployment, repair the observed CI failure, and preserve the production boundary.",
+  "changedFiles": [
+    ".github/workflows/cloudflare-preview.yml",
+    "scripts/validate-cloudflare-preview.mjs",
+    "External GitHub draft pull request and Actions run",
+    "External Cloudflare Pages preview deployment"
+  ],
+  "testedCommit": "2fc2e7834646dbfc5b0277cf5a2e17f52900a2e5",
+  "tests": {
+    "workflowValidation": "pass",
+    "unit": "3 files, 8 tests passed",
+    "typecheck": "pass",
+    "build": "pass",
+    "githubActions": "run 30517588778 passed in 58 seconds",
+    "stablePreview": "application title, growth content, and primary navigation verified after refresh"
+  },
+  "review": {
+    "verdict": "pass",
+    "provider": "kimi",
+    "model": "kimi-k3",
+    "transport": "openai-compatible-api",
+    "requestId": "chatcmpl-6a6ae5f15255e0b1eebffd8b",
+    "reviewerDegraded": false,
+    "p0Issues": []
+  },
+  "piiFilter": {
+    "sanitized": true,
+    "redactions": 0
+  },
+  "retries": 1,
+  "repair": {
+    "cause": "The deployment action inferred pnpm and its temporary Wrangler installation was blocked by pnpm build-script policy.",
+    "change": "Select npm for the deployment action and pin Wrangler 4.115.0; enforce both settings in the workflow validator."
+  },
+  "humanInterventions": [
+    "User observed the pull request and Actions workflow through the visual GitHub pages."
+  ],
+  "blockers": [],
+  "next": "N6"
+}
