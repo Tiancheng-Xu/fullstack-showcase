@@ -104,4 +104,11 @@ test("records the learning-notes working agreement", async () => {
   assert.match(agreement, /\/Users\/shier\/Desktop\/一灯学习笔记/);
   assert.match(agreement, /verified project constraints and tests take precedence/i);
   assert.match(agreement, /do not copy/i);
+  assert.match(agreement, /isolated feature worktree for multi-file changes/i);
+  assert.match(agreement, /keep frontend and backend build scopes independent/i);
+  assert.match(
+    agreement,
+    /do not commit credentials, local Cloudflare state, or private photographs/i,
+  );
+  assert.match(agreement, /do not trigger production deployment without explicit authorization/i);
 });
