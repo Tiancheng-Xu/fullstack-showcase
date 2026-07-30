@@ -98,3 +98,10 @@ test("documents the flattened learner workflow", async () => {
 
   assert.doesNotMatch(readme, /apps\/web\/apps\/web|pnpm --dir apps\/web/);
 });
+
+test("records the learning-notes working agreement", async () => {
+  const agreement = await readFile(path.join(root, "AGENTS.md"), "utf8");
+  assert.match(agreement, /\/Users\/shier\/Desktop\/一灯学习笔记/);
+  assert.match(agreement, /verified project constraints and tests take precedence/i);
+  assert.match(agreement, /do not copy/i);
+});
