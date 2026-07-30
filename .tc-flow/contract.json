@@ -1,94 +1,73 @@
 {
   "schema": "tc-flow Contract v1",
   "version": 1,
-  "runId": "tc_nurture_bloom_ui_20260729_3f7ba54d",
-  "feature": "nurture-bloom-ui-foundation",
-  "contractHash": "3f7ba54d134c029bc78e18aa2bb1f4e880816ddbb23345c8f6a151b15fe0ca5c",
-  "goal": "使用 Better-T-Stack 和 Stitch 视觉稿构建可交互、移动端优先的育爱成长前端作业基底，并抽取 Tailwind 全局设计令牌与可复用组件。",
+  "runId": "tc_cloudflare_pr_preview_20260729",
+  "feature": "cloudflare-pr-preview",
+  "contractHash": "aa5d84f908a529b4f846c23b04373a695caeff9c88ed05d44db77582be32d522",
+  "goal": "为 course-homework 建立一个由 GitHub Actions 自动更新的最小化 Cloudflare Pages 可视预览环境，同时保留独立且人工控制的生产发布环节。",
   "nonGoals": [
-    "认证",
-    "数据库",
-    "远程 API",
-    "文件上传",
-    "GitHub 推送",
-    "生产部署",
-    "医疗诊断"
+    "自动生产部署",
+    "修改生产域名",
+    "合并 Pull Request",
+    "向 Fork PR 暴露 Cloudflare 凭据"
   ],
   "repositories": [
     {
       "path": ".",
       "role": "monorepo",
-      "branch": "tc/nurture-bloom-ui-foundation-3f7ba54d"
+      "branch": "tc/cloudflare-pr-preview-aa5d84f9"
     }
   ],
   "allowedWritePaths": [
-    ".gitignore",
+    ".github/",
+    "scripts/",
     "package.json",
-    "pnpm-workspace.yaml",
-    "pnpm-lock.yaml",
-    "apps/",
-    "docs/",
+    "apps/web/package.json",
+    "apps/web/pnpm-lock.yaml",
     "README.md",
-    "HOMEWORKS.md",
+    "docs/",
+    "apps/web/README.md",
+    "specs/cloudflare-pr-preview/",
     ".tc-flow/"
   ],
-  "allowedReadPaths": [
-    ".",
-    "/Users/shier/Downloads/stitch_.zip"
-  ],
+  "allowedReadPaths": ["."],
   "allowedTools": [
     "Read",
     "Edit",
     "Write",
     "Bash",
     "pnpm",
-    "Playwright",
+    "GitHub CLI",
+    "Cloudflare Dashboard",
+    "Wrangler",
     "TC Flow"
   ],
-  "network": "npm package installation and local browser verification only; no external data upload",
+  "network": "允许 npm 安装、GitHub 推送与 PR/Actions 操作、Cloudflare 测试环境管理；禁止生产部署和上传用户数据",
   "tasks": [
     {
       "id": "T-001",
       "role": "other",
-      "risk": "low",
-      "desc": "在 apps/web 初始化 Better-T-Stack 前端、pnpm 工作区和测试基线",
+      "desc": "实现稳定预览项目的 GitHub Actions 工作流并添加静态校验",
       "deps": []
     },
     {
       "id": "T-002",
-      "role": "frontend",
-      "risk": "low",
-      "desc": "建立 Stitch 全局设计令牌、应用壳和可复用 UI 组件",
-      "deps": [
-        "T-001"
-      ]
+      "role": "other",
+      "desc": "配置 Cloudflare 最小权限令牌、GitHub Secrets、项目变量并完成首次可视部署",
+      "deps": ["T-001"]
     },
     {
       "id": "T-003",
-      "role": "frontend",
-      "risk": "medium",
-      "desc": "实现成长、时光、百科、我的四个路由与本地类型化交互",
-      "deps": [
-        "T-002"
-      ]
-    },
-    {
-      "id": "T-004",
       "role": "other",
-      "risk": "medium",
-      "desc": "执行移动端视觉、交互、可访问性和完整构建 QA，并整理学习交付文档",
-      "deps": [
-        "T-003"
-      ]
+      "desc": "通过真实测试 PR 验证质量检查和固定预览地址刷新，并补全文档",
+      "deps": ["T-002"]
     }
   ],
   "acceptanceCriteria": [
-    "Better-T-Stack 前端可以安装、开发、测试、类型检查和构建",
-    "Stitch 视觉基底在主要页面中得到还原，公共样式集中管理",
-    "成长、时光、百科、我的四个主入口可以导航",
-    "新增记录和百科筛选具有可见交互反馈",
-    "390px 移动宽度无主要布局溢出或固定导航遮挡",
-    "所有图片为本地资源，不依赖 Stitch 临时外链",
-    "没有密钥、真实家庭隐私或医疗数据进入仓库"
+    "同仓库 PR 自动执行测试、类型检查、构建并刷新固定 Pages 预览",
+    "Fork PR 无法读取 Cloudflare Secrets",
+    "生产发布不会被 PR 工作流触发",
+    "测试 PR 的 Actions 和预览地址均有真实验证证据",
+    "Cloudflare 凭据不进入 Git 历史或日志"
   ]
 }

@@ -1,0 +1,42 @@
+{
+  "schema": "tc-flow Checkpoint v1",
+  "runId": "tc_cloudflare_pr_preview_20260729",
+  "feature": "cloudflare-pr-preview",
+  "contractHash": "aa5d84f908a529b4f846c23b04373a695caeff9c88ed05d44db77582be32d522",
+  "node": "N5",
+  "taskId": "T-001",
+  "inputSummary": "Implement a same-repository GitHub Actions workflow that updates one stable Cloudflare Pages preview project without touching production.",
+  "changedFiles": [
+    ".github/workflows/cloudflare-preview.yml",
+    "scripts/validate-cloudflare-preview.mjs",
+    "package.json",
+    "apps/web/README.md",
+    "docs/superpowers/specs/2026-07-29-cloudflare-pr-preview-design.md",
+    "specs/cloudflare-pr-preview/"
+  ],
+  "worktreeStatusHash": "09c81f553b3a492d83b006baee6240a27fe83b2b670453f3fbd4c7fc8dd8304d",
+  "tests": {
+    "workflowValidation": "pass",
+    "vitest": "3 files, 8 tests passed",
+    "typecheck": "pass",
+    "build": "pass"
+  },
+  "review": {
+    "verdict": "pass",
+    "provider": "kimi",
+    "model": "kimi-k3",
+    "transport": "openai-compatible-api",
+    "requestId": "chatcmpl-6a6ae2fffd4fe8c2d38656a3",
+    "reviewerDegraded": false,
+    "p0Issues": []
+  },
+  "piiFilter": {
+    "sanitized": true,
+    "redactions": 0
+  },
+  "retries": 0,
+  "toolRequests": [],
+  "humanInterventions": [],
+  "blockers": [],
+  "events": ".tc-flow/events.jsonl"
+}

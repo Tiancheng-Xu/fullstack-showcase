@@ -5,7 +5,8 @@
     "dev": "pnpm --dir apps/web/apps/web dev",
     "test": "pnpm --dir apps/web/apps/web test",
     "typecheck": "pnpm --dir apps/web/apps/web check-types",
-    "build": "pnpm --dir apps/web/apps/web build"
+    "build": "pnpm --dir apps/web/apps/web build",
+    "validate:preview": "node scripts/validate-cloudflare-preview.mjs"
   },
   "packageManager": "pnpm@11.17.0"
 }

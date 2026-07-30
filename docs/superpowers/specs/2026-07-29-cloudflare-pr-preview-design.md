@@ -2,26 +2,26 @@
 
 ## Goal
 
-Use GitHub Actions to create a real, isolated Cloudflare Pages preview environment for every same-repository pull request in `Tiancheng-Xu/course-homework`, update it on every PR commit, and remove it when the PR closes.
+Use GitHub Actions to update one minimal, stable Cloudflare Pages preview environment for same-repository pull requests in `Tiancheng-Xu/course-homework`.
 
 ## Architecture
 
-GitHub remains the source of truth and CI coordinator. A pull request runs the existing tests, typecheck, and Vite production build. After those gates pass, Wrangler creates or reuses a Pages Direct Upload project named `course-homework-pr-<number>` and uploads `apps/web/apps/web/dist`.
+GitHub remains the source of truth and CI coordinator. A pull request runs the existing tests, typecheck, and Vite production build. After those gates pass, Wrangler uploads `apps/web/apps/web/dist` to the dedicated Pages test project `course-homework-preview`.
 
-Each PR receives a stable URL:
+The preview uses one stable URL:
 
 ```text
-https://course-homework-pr-<number>.pages.dev
+https://course-homework-preview.pages.dev
 ```
 
-Closing the PR runs a cleanup job that deletes the whole PR-specific Pages project. This avoids the Cloudflare limitation that the latest deployment of a shared branch alias cannot be deleted.
+This intentionally minimizes the first deployment. Multiple simultaneous PR-specific environments and automatic cleanup are deferred until the course needs them.
 
 ## Events and permissions
 
-The workflow listens to `pull_request` events:
+The workflow listens to:
 
-- `opened`, `reopened`, `synchronize`: validate, build, create/update preview.
-- `closed`: delete the PR-specific Pages project.
+- `pull_request` events `opened`, `reopened`, and `synchronize`.
+- `workflow_dispatch` for an explicit manual test run.
 
 Only pull requests whose head repository is the same repository may deploy. Fork pull requests may run validation but never receive Cloudflare secrets.
 
@@ -38,7 +38,7 @@ GitHub Actions stores:
 
 - Secret `CLOUDFLARE_API_TOKEN`: custom Cloudflare token with Pages Edit permission for the selected account.
 - Secret `CLOUDFLARE_ACCOUNT_ID`: the selected Cloudflare account identifier.
-- Variable `CLOUDFLARE_PAGES_PREFIX`: `course-homework-pr`.
+- Variable `CLOUDFLARE_PAGES_PROJECT`: `course-homework-preview`.
 
 Credentials never enter source files, logs, review bundles, or pull request text.
 
@@ -48,20 +48,16 @@ Credentials never enter source files, logs, review bundles, or pull request text
 2. Install Node.js 22 and pnpm 11.17.0.
 3. Install the nested Better-T-Stack workspace with the frozen lockfile.
 4. Run tests, typecheck, and production build.
-5. Check whether the PR-specific Pages project exists.
-6. Create the project when missing, with `preview` as its internal production branch.
-7. Upload `apps/web/apps/web/dist`.
-8. Publish the stable `pages.dev` URL as the GitHub deployment environment URL.
-9. On PR close, delete the entire PR-specific Pages project non-interactively.
+5. Upload `apps/web/apps/web/dist` to `course-homework-preview`.
+6. Publish the stable `pages.dev` URL as the GitHub deployment environment URL.
 
-Concurrent runs for the same PR are cancelled so an older commit cannot overwrite a newer preview.
+Only one preview deployment runs at a time. A newer run cancels an older run so stale code cannot overwrite the stable preview.
 
 ## Failure handling
 
 - Quality-gate failure prevents deployment.
 - Missing Cloudflare credentials fails before mutation with a clear message.
-- Project creation is idempotent: an existing project is reused.
-- Cleanup treats an already-absent project as success.
+- The Pages project is bootstrapped once and then reused.
 - Production is never used as a fallback.
 
 ## Verification
@@ -70,7 +66,7 @@ Concurrent runs for the same PR are cancelled so an older commit cannot overwrit
 - Run the existing tests, typecheck, and build locally.
 - Push the feature branch and open a draft PR.
 - Confirm the Action succeeds and the deployment URL responds.
-- Close only a dedicated verification PR when cleanup behavior is being tested.
+- Open the stable preview and confirm the visible application identity.
 
 ## Non-goals
 
@@ -79,3 +75,4 @@ Concurrent runs for the same PR are cancelled so an older commit cannot overwrit
 - Cloudflare Access protection.
 - AWS deployment.
 - Preview deployments for forked pull requests.
+- Per-PR isolated Pages projects and automatic cleanup.
