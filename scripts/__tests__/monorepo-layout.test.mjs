@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { access, readdir } from "node:fs/promises";
+import { access, readFile, readdir } from "node:fs/promises";
 import { execFile as execFileCallback } from "node:child_process";
 import { promisify } from "node:util";
 import path from "node:path";
@@ -76,4 +76,22 @@ test("ignores Cloudflare local application files", async () => {
   for (const localPath of ["apps/web/.dev.vars.local", "apps/web/.wrangler/state"]) {
     assert.equal(await isIgnored(localPath), true, `${localPath} must be ignored`);
   }
+});
+
+test("documents the flattened learner workflow", async () => {
+  const readme = await readFile(path.join(root, "apps/web/README.md"), "utf8");
+
+  for (const fragment of [
+    "apps/web",
+    "apps/api",
+    "packages/ui",
+    "pnpm dev",
+    "pnpm test",
+    "pnpm typecheck",
+    "pnpm build",
+  ]) {
+    assert.match(readme, new RegExp(fragment.replace("/", "\\/")));
+  }
+
+  assert.doesNotMatch(readme, /apps\/web\/apps\/web|pnpm --dir apps\/web/);
 });

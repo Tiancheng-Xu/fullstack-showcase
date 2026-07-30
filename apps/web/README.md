@@ -15,19 +15,16 @@
 
 ## 技术结构
 
-Better-T-Stack 生成的工作区保留在本目录中，实际前端应用位于 `apps/web`：
+仓库采用扁平化工作区结构，根目录脚本会选择 web 工作区：
 
 ```text
-apps/web/
-├── apps/web/                 TanStack Router + React 前端
-│   ├── public/assets/        本地 Stitch 图片
-│   └── src/
-│       ├── components/       应用壳与通用 UI
-│       ├── features/         育爱成长领域页面与本地状态
-│       └── routes/           四个文件路由
-├── packages/ui/              全局 Tailwind CSS 主题与 UI 基础能力
-└── bts.jsonc                 Better-T-Stack 生成配置
+apps/web     React + Vite frontend
+apps/api     future backend boundary; not built yet
+packages/ui  reusable UI components and global styles
 ```
+
+前端源码、静态资源和 Vite 配置都直接位于 `apps/web`。`apps/api` 是未来后端
+边界，目前尚未构建；`packages/ui` 提供可复用 UI 组件和全局样式。
 
 ## 本地运行
 
@@ -36,9 +33,15 @@ apps/web/
 ```bash
 pnpm install
 pnpm dev
+pnpm test
+pnpm typecheck
+pnpm build
 ```
 
 打开终端显示的本地地址，默认入口会跳转到 `/growth`。
+
+根目录脚本会选择 `apps/web` 工作区执行开发、测试、类型检查和构建。Cloudflare
+预览工作流也从仓库根目录安装依赖并运行这些命令，最后部署 `apps/web/dist`。
 
 ## 验证
 
@@ -60,15 +63,6 @@ https://course-homework-preview.pages.dev
 工作流使用 GitHub Actions Secrets 保存 Cloudflare 凭据，Fork Pull Request
 不会执行部署。当前项目仅为课程测试环境；生产发布将使用独立项目、独立
 工作流和人工审批。
-
-代码规范检查：
-
-```bash
-pnpm --dir apps/web exec biome check \
-  apps/web/src/features/nurture \
-  apps/web/src/routes \
-  apps/web/src/components
-```
 
 ## 后续课程扩展点
 
