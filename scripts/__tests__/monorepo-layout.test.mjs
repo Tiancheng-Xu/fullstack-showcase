@@ -48,6 +48,20 @@ async function isIgnored(relativePath) {
   }
 }
 
+async function isTracked(relativePath) {
+  try {
+    await execFile("git", ["ls-files", "--error-unmatch", "--", relativePath], {
+      cwd: root,
+    });
+    return true;
+  } catch (error) {
+    if (error.code === 1) {
+      return false;
+    }
+    throw error;
+  }
+}
+
 test("uses one root workspace and lockfile", async () => {
   assert.deepEqual(await findNamed(root, "pnpm-workspace.yaml"), [
     "pnpm-workspace.yaml",
@@ -80,6 +94,12 @@ test("ignores generated and local application files", async () => {
   ]) {
     assert.equal(await isIgnored(localPath), true, `${localPath} must be ignored`);
   }
+
+  assert.equal(
+    await isTracked("apps/web/src/routeTree.gen.ts"),
+    false,
+    "apps/web/src/routeTree.gen.ts must not be tracked",
+  );
 });
 
 test("documents the flattened learner workflow", async () => {

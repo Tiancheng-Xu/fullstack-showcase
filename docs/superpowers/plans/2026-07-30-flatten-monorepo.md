@@ -472,16 +472,25 @@ Expected: `Cloudflare preview workflow validation passed.`
 Run:
 
 ```bash
-rg -n "apps/web/apps/web|apps/web/packages|apps/web/pnpm-lock.yaml|pnpm --dir apps/web" \
-  .github apps packages package.json pnpm-workspace.yaml \
+if rg -n "apps/web/apps/web|apps/web/packages|apps/web/pnpm-lock.yaml|pnpm --dir apps/web" \
+  .github apps packages scripts package.json pnpm-workspace.yaml \
   --glob '!**/node_modules/**' --glob '!**/dist/**' \
-  --glob '!**/__tests__/**' --glob '!**/*.{test,spec}.*'
+  --glob '!scripts/validate-cloudflare-preview.mjs' \
+  --glob '!scripts/__tests__/monorepo-layout.test.mjs'; then
+  echo "Nested workspace references found." >&2
+  exit 1
+else
+  scan_status=$?
+  [ "$scan_status" -eq 1 ] || exit "$scan_status"
+fi
 ```
 
 Expected: no matches in runtime configuration and learner-facing workspace
-documentation. This deliberately excludes test and validator negative guards,
-which retain forbidden fragments as assertions that the preview contract rejects
-them.
+documentation. This command exits 0 only when `rg` exits 1 (no matches); it
+preserves a nonzero exit for matches or an `rg` error. It deliberately excludes
+only the validator and structural-test negative guards, which retain forbidden
+fragments as assertions that the preview contract rejects them; all other
+scripts remain in scope.
 
 - [ ] **Step 7: Inspect the final repository delta**
 

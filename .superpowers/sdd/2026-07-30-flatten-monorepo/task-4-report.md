@@ -80,3 +80,40 @@ No migration source files were changed during verification. This report is the o
 ## Status
 
 RESOLVED — the scoped verification fix and evidence were committed.
+
+## Review-fix round 2 evidence (2026-07-30)
+
+### Changes
+
+- Replaced the Step 6 plain `rg` command with explicit status handling: zero
+  matches (`rg` exit 1) returns 0, while stale matches and `rg` errors remain
+  nonzero failures.
+- Restored `scripts` to the scan scope and excluded only
+  `scripts/validate-cloudflare-preview.mjs` and
+  `scripts/__tests__/monorepo-layout.test.mjs`, the two intentional
+  forbidden-fragment guard files.
+- Added a structural assertion using `git ls-files --error-unmatch` that
+  `apps/web/src/routeTree.gen.ts` is not tracked, alongside its existing ignore
+  assertion.
+
+### Focused test
+
+| Command | Exit code | Result / output summary |
+| --- | ---: | --- |
+| `pnpm test:structure` | 0 | 5 structural tests passed, including the generated route tree ignore and non-tracked assertions. The non-tracked assertion passed immediately because it protects the already-correct repository state; no RED result is claimed for it. |
+
+### Fresh Task 4 verification
+
+| Step | Command | Exit code | Result / output summary |
+| --- | --- | ---: | --- |
+| Install | `pnpm install --frozen-lockfile` | 0 | `Scope: all 5 workspace projects`; `Already up to date`; completed in 159ms using pnpm v11.17.0. |
+| Tests | `pnpm test` | 0 | Structural Node test: 5 tests passed, 0 failed. Vitest: 3 files and 8 tests passed. |
+| Typecheck | `pnpm typecheck` | 0 | `vite build && tsc --noEmit` completed with no TypeScript errors; Vite transformed 1,896 modules. |
+| Production build | `pnpm build` | 0 | Vite transformed 1,896 modules and completed successfully. |
+| Build artifact | `test -f apps/web/dist/index.html` | 0 | The production frontend artifact exists. |
+| Preview validator | `pnpm validate:preview` | 0 | `Cloudflare preview workflow validation passed.` |
+| Nested-reference scan | Revised Task 4 Step 6 wrapper | 0 | `rg` returned 1 with zero matches in `.github`, `apps`, `packages`, `scripts`, and root package/workspace files; the wrapper converted only that no-match status to success. |
+| Generated artifact cleanup | `rm apps/web/src/routeTree.gen.ts && test ! -e apps/web/src/routeTree.gen.ts` | 0 | Build-generated local route tree was removed after verification. |
+| Post-cleanup status | `git status --short` | 0 | Only the scoped round-2 edits were present: `M docs/superpowers/plans/2026-07-30-flatten-monorepo.md` and `M scripts/__tests__/monorepo-layout.test.mjs`. |
+| Post-cleanup whitespace | `git diff --check tc/cloudflare-pr-preview-aa5d84f9...HEAD` | 0 | No output; no whitespace errors in the committed migration range. |
+| Post-cleanup diff scope | `git diff --stat tc/cloudflare-pr-preview-aa5d84f9...HEAD` | 0 | 87 files changed, 5,837 insertions, 5,169 deletions; the stat covers the flattened-workspace migration and prior Task 4 evidence. |
