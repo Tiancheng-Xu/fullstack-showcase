@@ -1,10 +1,13 @@
 import assert from "node:assert/strict";
 import { access, readdir } from "node:fs/promises";
+import { execFile as execFileCallback } from "node:child_process";
+import { promisify } from "node:util";
 import path from "node:path";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..");
+const execFile = promisify(execFileCallback);
 
 async function exists(relativePath) {
   try {
@@ -31,6 +34,20 @@ async function findNamed(directory, target) {
   return matches;
 }
 
+async function isIgnored(relativePath) {
+  try {
+    await execFile("git", ["check-ignore", "--quiet", "--no-index", relativePath], {
+      cwd: root,
+    });
+    return true;
+  } catch (error) {
+    if (error.code === 1) {
+      return false;
+    }
+    throw error;
+  }
+}
+
 test("uses one root workspace and lockfile", async () => {
   assert.deepEqual(await findNamed(root, "pnpm-workspace.yaml"), [
     "pnpm-workspace.yaml",
@@ -53,4 +70,10 @@ test("places the application and shared packages at root boundaries", async () =
   assert.equal(await exists("apps/web/apps"), false);
   assert.equal(await exists("apps/web/packages"), false);
   assert.equal(await exists("apps/api/package.json"), false);
+});
+
+test("ignores Cloudflare local application files", async () => {
+  for (const localPath of ["apps/web/.dev.vars.local", "apps/web/.wrangler/state"]) {
+    assert.equal(await isIgnored(localPath), true, `${localPath} must be ignored`);
+  }
 });
