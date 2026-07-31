@@ -45,7 +45,7 @@ React /api
 
 - API：8 个测试文件、31 项测试通过；
 - Web：5 个测试文件、20 项测试通过；
-- Go：36 个顶层测试及其子测试通过，竞态检测通过；
+- Go：43 个顶层测试及其子测试通过，竞态检测通过；
 - 结构与密钥边界：15 项测试通过；
 - API 与 Web TypeScript 类型检查通过；
 - API ESM 构建与 Web Vite 生产构建通过；
@@ -53,6 +53,7 @@ React /api
 - Biome 检查通过；
 - Web 构建已生成 `homework.github-profile` 独立路由包。
 - Go `go vet`、gofmt 门禁与独立二进制构建通过；
+- Node 与 Go 迁移器双向复用真实 SQLite 文件均通过，迁移账本始终为三条；
 - 首次运行会自动创建 `apps/api/data` 并完成迁移；
 - 实际启动后 `/health` 返回 200；
 - 未保存钥匙串凭据时 `/api/github/me` 返回安全的 503 `GITHUB_TOKEN_MISSING`，不包含钥匙串输出、堆栈或令牌值。
@@ -121,12 +122,15 @@ pnpm build:go
 ### 迁移与接口
 
 - [x] Go 1.26 使用 CGo-free `modernc.org/sqlite`；
+- [x] Go 默认仅监听 `127.0.0.1:3002`，避免携带本机钥匙串能力的课程服务意外暴露到局域网；
 - [x] Go 直接读取现有 `apps/api/drizzle` 三份 SQL，复现目录顺序、statement breakpoint、SHA-256、UTC 时间戳和 `__drizzle_migrations` 账本；
+- [x] Node 先迁移后由 Go 接管、Go 先迁移后由 Node 接管的真实跨运行时测试均通过；
 - [x] 空库迁移、重复迁移、Drizzle 已有账本识别、哈希冲突拒绝和失败事务回滚均有测试；
 - [x] `GET /health` 在 3002 返回 200 和 `{"status":"ok"}`；
 - [x] Go 实现 `/api/github/me`、GET/POST `/api/github-profile`，JSON 与安全错误码保持一致；
 - [x] Hono 与 Go 均把数据库失败映射为 500 `PERSISTENCE_FAILED`；
 - [x] `API_PROXY_TARGET` 只用于 Vite 服务端代理配置，不使用 `VITE_` 前缀，不进入浏览器代码。
+- [x] 独立代码审查发现的并发 upsert 返回漂移、GitHub 必填字段缺失、日志换行注入和钥匙串输出无流式上限均已加入先失败后通过的回归测试；姓名与简介裁剪语义也与 JavaScript 对齐。
 
 ### Codex 内置浏览器观察
 
@@ -145,6 +149,7 @@ pnpm build:go
 - 直接 `go build ./cmd/server` 曾产生源码目录二进制；构建命令现固定写入被忽略的 `apps/api-go/.build/`，根构建门禁复验无工作区污染。
 - Vite 配置首次未符合 Biome 单行格式；项目既有 `pnpm check` 已准确拦截，使用项目格式器修复后全量门禁重新通过。
 - 最终验证首次从 `apps/api-go` 目录调用 pnpm，导致验证范围意外缩小为 Go 包；最终命令固定从仓库根目录运行，并用 `go -C apps/api-go test -race ./...` 保持 Go 模块定位，不再切换 pnpm 的工作区范围。
+- 独立审查指出本地服务默认监听所有网卡会扩大钥匙串能力边界；默认地址现固定为回环地址，显式主机覆盖需通过配置校验，未知路径日志只记录静态 `<unmatched>` 标识，避免控制字符伪造日志行。
 
 这些问题分别增加了回归保护或确定性构建路径；没有把一次性业务错误扩写成不必要的全局流程规则。
 

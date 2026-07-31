@@ -83,6 +83,22 @@ func TestProviderMapsCancellationSafely(t *testing.T) {
 	assertAppError(t, err, 503, "GITHUB_CREDENTIAL_UNAVAILABLE", "canceled")
 }
 
+func TestCommandRunnerBoundsCredentialOutputWhileStreaming(t *testing.T) {
+	t.Parallel()
+
+	output, err := (commandRunner{}).Output(
+		context.Background(),
+		"/usr/bin/printf",
+		strings.Repeat("x", maxCredentialOutput+1),
+	)
+	if err == nil {
+		t.Fatalf("Output() returned %d bytes without error", len(output))
+	}
+	if len(output) != 0 {
+		t.Fatalf("Output() returned %d bytes on overflow", len(output))
+	}
+}
+
 type runnerFunc func(context.Context, string, ...string) ([]byte, error)
 
 func (f runnerFunc) Output(ctx context.Context, name string, args ...string) ([]byte, error) {

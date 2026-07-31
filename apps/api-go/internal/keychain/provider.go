@@ -66,5 +66,29 @@ func (p *Provider) Token(ctx context.Context) (string, error) {
 type commandRunner struct{}
 
 func (commandRunner) Output(ctx context.Context, name string, args ...string) ([]byte, error) {
-	return exec.CommandContext(ctx, name, args...).Output()
+	command := exec.CommandContext(ctx, name, args...)
+	output := boundedOutput{limit: maxCredentialOutput}
+	command.Stdout = &output
+	if err := command.Run(); err != nil {
+		return nil, err
+	}
+	return output.data, nil
+}
+
+type boundedOutput struct {
+	data  []byte
+	limit int
+}
+
+func (output *boundedOutput) Write(chunk []byte) (int, error) {
+	remaining := output.limit - len(output.data)
+	if remaining <= 0 {
+		return 0, errors.New("credential output exceeded limit")
+	}
+	if len(chunk) > remaining {
+		output.data = append(output.data, chunk[:remaining]...)
+		return remaining, errors.New("credential output exceeded limit")
+	}
+	output.data = append(output.data, chunk...)
+	return len(chunk), nil
 }

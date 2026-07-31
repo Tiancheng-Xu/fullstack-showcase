@@ -2,12 +2,14 @@ package config
 
 import (
 	"fmt"
+	"net"
 	"os"
 	"strconv"
 )
 
 const (
 	defaultPort            = 3002
+	defaultHost            = "127.0.0.1"
 	defaultDatabasePath    = "../api/data/github-profile.sqlite"
 	defaultMigrationsDir   = "../api/drizzle"
 	defaultKeychainService = "course-homework.github-profile"
@@ -15,6 +17,7 @@ const (
 )
 
 type Config struct {
+	Host            string
 	Port            int
 	DatabasePath    string
 	MigrationsDir   string
@@ -25,6 +28,7 @@ type Config struct {
 func LoadCurrent() (Config, error) {
 	environment := make(map[string]string)
 	for _, key := range []string{
+		"GO_API_HOST",
 		"GO_API_PORT",
 		"DB_FILE_NAME",
 		"MIGRATIONS_DIR",
@@ -39,6 +43,14 @@ func LoadCurrent() (Config, error) {
 }
 
 func Load(environment map[string]string) (Config, error) {
+	host, err := valueOrDefault(environment, "GO_API_HOST", defaultHost)
+	if err != nil {
+		return Config{}, err
+	}
+	if host != "localhost" && net.ParseIP(host) == nil {
+		return Config{}, fmt.Errorf("GO_API_HOST must be localhost or an IP address")
+	}
+
 	port := defaultPort
 	if value, ok := environment["GO_API_PORT"]; ok {
 		parsed, err := strconv.Atoi(value)
@@ -66,12 +78,17 @@ func Load(environment map[string]string) (Config, error) {
 	}
 
 	return Config{
+		Host:            host,
 		Port:            port,
 		DatabasePath:    databasePath,
 		MigrationsDir:   migrationsDir,
 		KeychainService: keychainService,
 		KeychainAccount: keychainAccount,
 	}, nil
+}
+
+func (c Config) ListenAddress() string {
+	return net.JoinHostPort(c.Host, strconv.Itoa(c.Port))
 }
 
 func valueOrDefault(environment map[string]string, key, fallback string) (string, error) {

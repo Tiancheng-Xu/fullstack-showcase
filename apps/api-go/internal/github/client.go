@@ -105,13 +105,25 @@ func (c *Client) FetchAuthenticatedProfile(ctx context.Context) (contracts.Profi
 		return contracts.Profile{}, upstreamError(response)
 	}
 
-	var upstream upstreamProfile
+	var upstreamWire upstreamProfileWire
 	decoder := json.NewDecoder(io.LimitReader(response.Body, maxGitHubBodyLength))
-	if err := decoder.Decode(&upstream); err != nil {
+	if err := decoder.Decode(&upstreamWire); err != nil {
 		return contracts.Profile{}, unavailable(err)
 	}
 	if err := ensureJSONEnd(decoder); err != nil {
 		return contracts.Profile{}, unavailable(err)
+	}
+	upstream, err := upstreamWire.profile()
+	if err != nil {
+		return contracts.Profile{}, unavailable(err)
+	}
+	if upstream.Name != nil {
+		trimmed := contracts.TrimJavaScriptSpace(*upstream.Name)
+		upstream.Name = &trimmed
+	}
+	if upstream.Bio != nil {
+		trimmed := contracts.TrimJavaScriptSpace(*upstream.Bio)
+		upstream.Bio = &trimmed
 	}
 	profile := contracts.Profile{
 		GitHubID:        upstream.ID,
@@ -132,15 +144,62 @@ func (c *Client) FetchAuthenticatedProfile(ctx context.Context) (contracts.Profi
 }
 
 type upstreamProfile struct {
-	ID          int64   `json:"id"`
-	Login       string  `json:"login"`
-	Name        *string `json:"name"`
-	Bio         *string `json:"bio"`
-	AvatarURL   string  `json:"avatar_url"`
-	HTMLURL     string  `json:"html_url"`
-	PublicRepos int     `json:"public_repos"`
-	Followers   int     `json:"followers"`
-	CreatedAt   string  `json:"created_at"`
+	ID          int64
+	Login       string
+	Name        *string
+	Bio         *string
+	AvatarURL   string
+	HTMLURL     string
+	PublicRepos int
+	Followers   int
+	CreatedAt   string
+}
+
+type upstreamProfileWire struct {
+	ID          *int64          `json:"id"`
+	Login       *string         `json:"login"`
+	Name        json.RawMessage `json:"name"`
+	Bio         json.RawMessage `json:"bio"`
+	AvatarURL   *string         `json:"avatar_url"`
+	HTMLURL     *string         `json:"html_url"`
+	PublicRepos *int            `json:"public_repos"`
+	Followers   *int            `json:"followers"`
+	CreatedAt   *string         `json:"created_at"`
+}
+
+func (wire upstreamProfileWire) profile() (upstreamProfile, error) {
+	if wire.ID == nil || wire.Login == nil || wire.Name == nil || wire.Bio == nil ||
+		wire.AvatarURL == nil || wire.HTMLURL == nil || wire.PublicRepos == nil ||
+		wire.Followers == nil || wire.CreatedAt == nil {
+		return upstreamProfile{}, errors.New("GitHub response omitted a required field")
+	}
+	name, err := decodeNullableString(wire.Name)
+	if err != nil {
+		return upstreamProfile{}, err
+	}
+	bio, err := decodeNullableString(wire.Bio)
+	if err != nil {
+		return upstreamProfile{}, err
+	}
+	return upstreamProfile{
+		ID:          *wire.ID,
+		Login:       *wire.Login,
+		Name:        name,
+		Bio:         bio,
+		AvatarURL:   *wire.AvatarURL,
+		HTMLURL:     *wire.HTMLURL,
+		PublicRepos: *wire.PublicRepos,
+		Followers:   *wire.Followers,
+		CreatedAt:   *wire.CreatedAt,
+	}, nil
+}
+
+func decodeNullableString(data json.RawMessage) (*string, error) {
+	var value *string
+	if err := json.Unmarshal(data, &value); err != nil {
+		return nil, errors.New("GitHub nullable field is malformed")
+	}
+	return value, nil
 }
 
 func validateProfile(profile contracts.Profile) error {

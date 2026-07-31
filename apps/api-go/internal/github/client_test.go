@@ -2,6 +2,7 @@ package github
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"io"
 	"net/http"
@@ -122,6 +123,63 @@ func TestFetchAuthenticatedProfileRejectsMalformedData(t *testing.T) {
 			_, err := client.FetchAuthenticatedProfile(context.Background())
 			assertGitHubAppError(t, err, 502, "GITHUB_UNAVAILABLE")
 		})
+	}
+}
+
+func TestFetchAuthenticatedProfileRejectsEveryMissingRequiredField(t *testing.T) {
+	t.Parallel()
+
+	for _, field := range []string{
+		"id",
+		"login",
+		"name",
+		"bio",
+		"avatar_url",
+		"html_url",
+		"public_repos",
+		"followers",
+		"created_at",
+	} {
+		field := field
+		t.Run(field, func(t *testing.T) {
+			t.Parallel()
+			var upstream map[string]any
+			if err := json.Unmarshal([]byte(validUpstreamProfile), &upstream); err != nil {
+				t.Fatal(err)
+			}
+			delete(upstream, field)
+			body, err := json.Marshal(upstream)
+			if err != nil {
+				t.Fatal(err)
+			}
+			client := newTestClient(staticResponse(200, nil, string(body)), "https://api.github.test", "fixture-credential")
+			_, err = client.FetchAuthenticatedProfile(context.Background())
+			assertGitHubAppError(t, err, 502, "GITHUB_UNAVAILABLE")
+		})
+	}
+}
+
+func TestFetchAuthenticatedProfileUsesJavaScriptTrimSemantics(t *testing.T) {
+	t.Parallel()
+
+	body := strings.Replace(validUpstreamProfile, `"name": "Tiancheng Xu"`, `"name": "\uFEFF  Tiancheng Xu \uFEFF"`, 1)
+	body = strings.Replace(body, `"bio": null`, `"bio": "\uFEFF Biography \uFEFF"`, 1)
+	client := newTestClient(staticResponse(200, nil, body), "https://api.github.test", "fixture-credential")
+	profile, err := client.FetchAuthenticatedProfile(context.Background())
+	if err != nil {
+		t.Fatalf("FetchAuthenticatedProfile() error = %v", err)
+	}
+	if profile.DisplayName == nil || *profile.DisplayName != "Tiancheng Xu" || profile.Bio == nil || *profile.Bio != "Biography" {
+		t.Fatalf("trimmed fields = %#v/%#v", profile.DisplayName, profile.Bio)
+	}
+
+	nextLineBody := strings.Replace(validUpstreamProfile, `"name": "Tiancheng Xu"`, `"name": "\u0085Tiancheng Xu\u0085"`, 1)
+	profile, err = newTestClient(staticResponse(200, nil, nextLineBody), "https://api.github.test", "fixture-credential").FetchAuthenticatedProfile(context.Background())
+	if err != nil {
+		t.Fatal(err)
+	}
+	if profile.DisplayName == nil || *profile.DisplayName != "\u0085Tiancheng Xu\u0085" {
+		t.Fatalf("U+0085 should not be trimmed: %#v", profile.DisplayName)
 	}
 }
 

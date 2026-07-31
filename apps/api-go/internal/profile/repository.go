@@ -48,7 +48,7 @@ func (r *Repository) FindLatest(ctx context.Context) (*contracts.Profile, error)
 
 func (r *Repository) Upsert(ctx context.Context, profile contracts.Profile) (contracts.Profile, error) {
 	timestamp := r.now().UTC().Format(time.RFC3339Nano)
-	_, err := r.db.ExecContext(ctx, `INSERT INTO github_profiles (
+	row := r.db.QueryRowContext(ctx, `INSERT INTO github_profiles (
 		github_id,
 		login,
 		display_name,
@@ -72,7 +72,18 @@ func (r *Repository) Upsert(ctx context.Context, profile contracts.Profile) (con
 		followers = excluded.followers,
 		github_created_at = excluded.github_created_at,
 		synced_at = excluded.synced_at,
-		updated_at = excluded.updated_at`,
+		updated_at = excluded.updated_at
+	RETURNING
+		github_id,
+		login,
+		display_name,
+		bio,
+		avatar_url,
+		profile_url,
+		public_repos,
+		followers,
+		github_created_at,
+		synced_at`,
 		profile.GitHubID,
 		profile.Login,
 		profile.DisplayName,
@@ -86,27 +97,9 @@ func (r *Repository) Upsert(ctx context.Context, profile contracts.Profile) (con
 		timestamp,
 		timestamp,
 	)
-	if err != nil {
-		return contracts.Profile{}, fmt.Errorf("upsert profile: %w", err)
-	}
-
-	row := r.db.QueryRowContext(ctx, `SELECT
-		github_id,
-		login,
-		display_name,
-		bio,
-		avatar_url,
-		profile_url,
-		public_repos,
-		followers,
-		github_created_at,
-		synced_at
-	FROM github_profiles
-	WHERE github_id = ?
-	LIMIT 1`, profile.GitHubID)
 	saved, err := scanProfile(row)
 	if err != nil {
-		return contracts.Profile{}, fmt.Errorf("read upserted profile: %w", err)
+		return contracts.Profile{}, fmt.Errorf("upsert profile: %w", err)
 	}
 	return saved, nil
 }

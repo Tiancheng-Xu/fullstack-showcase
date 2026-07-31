@@ -53,6 +53,21 @@ func TestParseSaveInputUsesJavaScriptStringLength(t *testing.T) {
 	}
 }
 
+func TestParseSaveInputUsesJavaScriptTrimSemantics(t *testing.T) {
+	t.Parallel()
+
+	input, err := ParseSaveInput([]byte(`{"displayName":"\ufeff Edited name \ufeff","bio":"\u0085kept\u0085"}`))
+	if err != nil {
+		t.Fatalf("ParseSaveInput() error = %v", err)
+	}
+	if input.DisplayName == nil || *input.DisplayName != "Edited name" {
+		t.Fatalf("DisplayName = %#v, want JavaScript whitespace trimmed", input.DisplayName)
+	}
+	if input.Bio == nil || *input.Bio != "\u0085kept\u0085" {
+		t.Fatalf("Bio = %#v, want U+0085 retained like JavaScript String.trim()", input.Bio)
+	}
+}
+
 func TestProfileJSONContract(t *testing.T) {
 	t.Parallel()
 

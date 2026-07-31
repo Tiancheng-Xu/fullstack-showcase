@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"strings"
 	"testing"
@@ -148,6 +149,70 @@ func TestValidateSchemaRejectsIncompleteSchema(t *testing.T) {
 	}
 	if err := ValidateSchema(context.Background(), db); err == nil {
 		t.Fatal("ValidateSchema() expected error")
+	}
+}
+
+func TestNodeAndGoMigrationRunnersShareTheSameLedger(t *testing.T) {
+	repositoryRoot, err := filepath.Abs("../../../..")
+	if err != nil {
+		t.Fatalf("resolve repository root: %v", err)
+	}
+
+	t.Run("Node first then Go", func(t *testing.T) {
+		databasePath := filepath.Join(t.TempDir(), "node-first.sqlite")
+		runNodeMigration(t, repositoryRoot, databasePath)
+
+		db, err := OpenDatabase(databasePath)
+		if err != nil {
+			t.Fatalf("OpenDatabase() error = %v", err)
+		}
+		defer db.Close()
+		if err := Apply(context.Background(), db, realMigrationsDir); err != nil {
+			t.Fatalf("Go Apply() after Node error = %v", err)
+		}
+		if err := ValidateSchema(context.Background(), db); err != nil {
+			t.Fatalf("ValidateSchema() error = %v", err)
+		}
+		assertMigrationLedger(t, db, 3)
+	})
+
+	t.Run("Go first then Node", func(t *testing.T) {
+		databasePath := filepath.Join(t.TempDir(), "go-first.sqlite")
+		db, err := OpenDatabase(databasePath)
+		if err != nil {
+			t.Fatalf("OpenDatabase() error = %v", err)
+		}
+		if err := Apply(context.Background(), db, realMigrationsDir); err != nil {
+			db.Close()
+			t.Fatalf("Go Apply() error = %v", err)
+		}
+		if err := db.Close(); err != nil {
+			t.Fatalf("Close() error = %v", err)
+		}
+
+		runNodeMigration(t, repositoryRoot, databasePath)
+		db, err = OpenDatabase(databasePath)
+		if err != nil {
+			t.Fatalf("reopen database: %v", err)
+		}
+		defer db.Close()
+		if err := ValidateSchema(context.Background(), db); err != nil {
+			t.Fatalf("ValidateSchema() error = %v", err)
+		}
+		assertMigrationLedger(t, db, 3)
+	})
+}
+
+func runNodeMigration(t *testing.T, repositoryRoot, databasePath string) {
+	t.Helper()
+	if _, err := exec.LookPath("pnpm"); err != nil {
+		t.Fatalf("pnpm is required for the cross-runtime migration contract: %v", err)
+	}
+	command := exec.Command("pnpm", "--filter", "@course-homework/api", "db:migrate")
+	command.Dir = repositoryRoot
+	command.Env = append(os.Environ(), "DB_FILE_NAME="+databasePath)
+	if output, err := command.CombinedOutput(); err != nil {
+		t.Fatalf("Node migration failed: %v\n%s", err, output)
 	}
 }
 

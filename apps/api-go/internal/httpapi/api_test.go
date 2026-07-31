@@ -159,10 +159,32 @@ func TestRequestLogOmitsHeadersAndBodies(t *testing.T) {
 			t.Fatalf("log leaked %q: %s", forbidden, logLine)
 		}
 	}
-	for _, required := range []string{"method=POST", "path=/api/github-profile", "status=200", "duration_ms="} {
+	for _, required := range []string{"method=POST", "route=/api/github-profile", "status=200", "duration_ms="} {
 		if !strings.Contains(logLine, required) {
 			t.Fatalf("log missing %q: %s", required, logLine)
 		}
+	}
+}
+
+func TestRequestLogUsesStaticRouteForUnknownControlCharacterPath(t *testing.T) {
+	t.Parallel()
+
+	var logOutput bytes.Buffer
+	handler := newTestHandler(githubStub{}, &repositoryStub{}, &logOutput)
+	response := request(t, handler, http.MethodGet, "/unknown%0Astatus=200", "")
+	assertErrorResponse(t, response, 404, "NOT_FOUND")
+
+	logLine := logOutput.String()
+	if !strings.Contains(logLine, "route=<unmatched>") {
+		t.Fatalf("log = %q, want unmatched route", logLine)
+	}
+	for _, forbidden := range []string{"unknown", "%0A", "\nstatus=200"} {
+		if strings.Contains(logLine, forbidden) {
+			t.Fatalf("log leaked attacker path %q: %q", forbidden, logLine)
+		}
+	}
+	if strings.Count(logLine, "\n") != 1 {
+		t.Fatalf("log contains forged records: %q", logLine)
 	}
 }
 

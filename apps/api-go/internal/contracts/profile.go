@@ -65,9 +65,23 @@ func parseNullableString(data []byte, maxLength int) (*string, error) {
 		return nil, nil
 	}
 
-	trimmed := strings.TrimSpace(*value)
+	trimmed := TrimJavaScriptSpace(*value)
 	if len(utf16.Encode([]rune(trimmed))) > maxLength {
 		return nil, ErrInvalidSaveInput
 	}
 	return &trimmed, nil
+}
+
+func TrimJavaScriptSpace(value string) string {
+	return strings.TrimFunc(value, isJavaScriptSpace)
+}
+
+func isJavaScriptSpace(value rune) bool {
+	switch value {
+	case '\u0009', '\u000A', '\u000B', '\u000C', '\u000D', '\u0020', '\u00A0', '\u1680',
+		'\u2028', '\u2029', '\u202F', '\u205F', '\u3000', '\uFEFF':
+		return true
+	default:
+		return value >= '\u2000' && value <= '\u200A'
+	}
 }

@@ -43,6 +43,7 @@ func New(dependencies Dependencies, logOutput io.Writer) http.Handler {
 
 func (a *API) ServeHTTP(response http.ResponseWriter, request *http.Request) {
 	started := time.Now()
+	route := routeIdentifier(request.URL.Path)
 	statusResponse := &statusWriter{ResponseWriter: response, status: http.StatusOK}
 	defer func() {
 		if recover() != nil {
@@ -50,9 +51,9 @@ func (a *API) ServeHTTP(response http.ResponseWriter, request *http.Request) {
 		}
 		_, _ = fmt.Fprintf(
 			a.logOutput,
-			"method=%s path=%s status=%d duration_ms=%d\n",
+			"method=%s route=%s status=%d duration_ms=%d\n",
 			request.Method,
-			request.URL.Path,
+			route,
 			statusResponse.status,
 			time.Since(started).Milliseconds(),
 		)
@@ -82,6 +83,15 @@ func (a *API) ServeHTTP(response http.ResponseWriter, request *http.Request) {
 		}
 	default:
 		writeAppError(statusResponse, apperror.New(404, "NOT_FOUND", "The requested resource was not found.", nil))
+	}
+}
+
+func routeIdentifier(path string) string {
+	switch path {
+	case "/health", "/api/github/me", "/api/github-profile":
+		return path
+	default:
+		return "<unmatched>"
 	}
 }
 

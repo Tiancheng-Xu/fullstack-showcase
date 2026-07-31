@@ -1,6 +1,6 @@
 # GitHub 个人资料 Go API
 
-这是 Hono 作业的本地 Go 迁移版本。Hono 继续监听 3000；Go 默认监听 3002，并实现相同的四个路由与 JSON 合约。
+这是 Hono 作业的本地 Go 迁移版本。Hono 继续监听 3000；Go 默认仅在本机回环地址 `127.0.0.1:3002` 监听，并实现相同的四个路由与 JSON 合约。
 
 ## 安全边界
 
@@ -49,6 +49,6 @@ pnpm typecheck:go
 pnpm build:go
 ```
 
-可选的非敏感覆盖项：`GO_API_PORT`、`DB_FILE_NAME`、`MIGRATIONS_DIR`、`KEYCHAIN_SERVICE`、`KEYCHAIN_ACCOUNT`。
+可选的非敏感覆盖项：`GO_API_HOST`、`GO_API_PORT`、`DB_FILE_NAME`、`MIGRATIONS_DIR`、`KEYCHAIN_SERVICE`、`KEYCHAIN_ACCOUNT`。`GO_API_HOST` 只接受 `localhost` 或明确的 IP 地址；如改为非回环地址，需自行评估局域网暴露风险。
 
 本模块只完成本地 Go 迁移，不包含 AWS、ECR、ECS、ALB、Fargate、Cloud Map、推送或生产部署。

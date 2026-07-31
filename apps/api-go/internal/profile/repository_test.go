@@ -2,7 +2,9 @@ package profile
 
 import (
 	"context"
+	"fmt"
 	"strings"
+	"sync"
 	"testing"
 	"time"
 
@@ -119,6 +121,43 @@ func TestRepositoryErrorsDoNotContainProfileData(t *testing.T) {
 	}
 	if strings.Contains(err.Error(), profile.Login) {
 		t.Fatal("repository error leaked profile data")
+	}
+}
+
+func TestConcurrentUpsertsReturnEachCallersOwnValues(t *testing.T) {
+	db := testdb.Open(t)
+	repository := NewRepository(db, fixedNow)
+	const writers = 32
+	start := make(chan struct{})
+	errorsByWriter := make(chan error, writers)
+	var ready sync.WaitGroup
+	ready.Add(writers)
+
+	for index := range writers {
+		go func() {
+			bio := fmt.Sprintf("concurrent-bio-%02d", index)
+			input := sampleProfile()
+			input.Bio = &bio
+			ready.Done()
+			<-start
+			got, err := repository.Upsert(context.Background(), input)
+			if err != nil {
+				errorsByWriter <- err
+				return
+			}
+			if got.Bio == nil || *got.Bio != bio {
+				errorsByWriter <- fmt.Errorf("writer %d got bio %v, want %q", index, got.Bio, bio)
+				return
+			}
+			errorsByWriter <- nil
+		}()
+	}
+	ready.Wait()
+	close(start)
+	for range writers {
+		if err := <-errorsByWriter; err != nil {
+			t.Error(err)
+		}
 	}
 }
 

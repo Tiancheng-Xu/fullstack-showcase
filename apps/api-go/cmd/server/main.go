@@ -53,7 +53,7 @@ func run() error {
 	}, log.Writer())
 
 	server := &http.Server{
-		Addr:              fmt.Sprintf(":%d", cfg.Port),
+		Addr:              cfg.ListenAddress(),
 		Handler:           handler,
 		ReadHeaderTimeout: 5 * time.Second,
 		ReadTimeout:       10 * time.Second,
@@ -65,7 +65,7 @@ func run() error {
 	defer stop()
 	serverErrors := make(chan error, 1)
 	go func() {
-		log.Printf("Go profile API listening on http://localhost:%d", cfg.Port)
+		log.Printf("Go profile API listening on http://%s", cfg.ListenAddress())
 		serverErrors <- server.ListenAndServe()
 	}()
 
