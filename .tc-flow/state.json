@@ -263,12 +263,13 @@
     {
       "node": "N8",
       "status": "completed",
-      "delivery": "local branch",
+      "delivery": "remote branch and draft pull request",
       "branch": "tc/stitch-parent-ui-refresh-afa3edc1",
       "featureCommit": "7da36780874522bf707a040d7e9b6aab6ee505ae",
-      "push": "skipped because not requested",
+      "push": "success: origin/tc/stitch-parent-ui-refresh-afa3edc1",
+      "pullRequest": "https://github.com/Tiancheng-Xu/course-homework/pull/3",
       "production": "manual-pending",
-      "integration": "pending human choice",
+      "integration": "draft PR pending review",
       "result": ".tc-flow/run-result.json"
     }
   ],
