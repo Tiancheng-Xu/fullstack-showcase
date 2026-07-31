@@ -1,0 +1,33 @@
+{
+  "schema": "tc-flow ReviewResult v1",
+  "runId": "tc_stitch_parent_ui_20260731_afa3edc1",
+  "taskId": "SUI-003",
+  "contractHash": "afa3edc1af282aa049cb7accf261befefde00c7cede749b3334c57b984539cd9",
+  "risk": "medium",
+  "verdict": "pass",
+  "p0": false,
+  "provider": "kimi",
+  "model": "kimi-k3",
+  "transport": "openai-compatible-api",
+  "requestId": "chatcmpl-6a6c42f3b723fe5928308b92",
+  "reviewerDegraded": false,
+  "stage": "task-review",
+  "modelVerdict": "pass",
+  "issues": [
+    "[object Object]",
+    "[object Object]",
+    "[object Object]"
+  ],
+  "p0Issues": [],
+  "summary": "The change satisfies every contract element: a single mock baby profile, all four record types (feeding, sleep, height, weight), confirmation-gated local deletion, vaccine reminder switches with provenance (source names) and a fixed non-diagnostic medical disclaimer, plus the required /growth/records and /vaccines routes. No diagnosis, persistence, backend calls, storage, or real child data are introduced, and demo measurements were normalized for consistency with the shared profile. Evidence shows TDD red/green, 16/16 tests passing, clean typecheck and production build, and scoped lint. No secrets, PII, destructive operations, auth surface, network/supply-chain risk, or out-of-contract data impact were identified, so no P0 issues. Only minor advisory items remain around verifying modal focus management and switch labeling that cannot be confirmed from the sanitized bundle. Verdict: pass.",
+  "reviewerDegradedReason": null,
+  "blockedReason": null,
+  "attempts": [
+    {
+      "provider": "kimi",
+      "model": "kimi-k3",
+      "requestId": "chatcmpl-6a6c42f3b723fe5928308b92",
+      "status": "pass"
+    }
+  ]
+}

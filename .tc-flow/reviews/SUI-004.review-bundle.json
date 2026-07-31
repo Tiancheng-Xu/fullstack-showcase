@@ -1,0 +1,24 @@
+{
+  "schema": "tc-flow ReviewBundle v1",
+  "sanitized": true,
+  "runId": "tc_stitch_parent_ui_20260731_afa3edc1",
+  "taskId": "SUI-004",
+  "contractHash": "afa3edc1af282aa049cb7accf261befefde00c7cede749b3334c57b984539cd9",
+  "risk": "medium",
+  "contractSummary": "Parent-facing local Mock UI only. The moments gallery must use bundled Stitch photos, provide local favorite state, link the lead card to a detail route, and make no remote upload or public-sharing claim.",
+  "task": "Restore the Stitch moments gallery and moment detail screen using local assets, working favorite controls, a local add placeholder, and the /moments/:momentId route.",
+  "sanitizedDiff": "MomentsContent now renders every gallery card with a bundled /assets/nurture-bloom/stitch image, descriptive image alt text, an accessible full-card detail link, and a separate labelled favorite button with aria-pressed. The local add modal explicitly states that no file is uploaded. MomentDetailContent resolves one moment from the shared mock dataset and displays the local image, date, title, description, tags, local favorite control, edit placeholder, back link, and an accessible missing-item fallback. A TanStack file route supplies momentId to the detail component. Tests verify local image paths, detail href, and detail content.",
+  "evidence": [
+    "TDD RED: focused moments suite failed because moment-detail-content did not exist.",
+    "TDD GREEN: moments and existing local-interaction suites passed 5/5.",
+    "Full regression: 7 files, 18/18 tests passed.",
+    "Typecheck: Vite build and tsc --noEmit passed.",
+    "Production build passed.",
+    "Scoped Biome: 4 task files passed.",
+    "Security: all photos are bundled fictional demo assets; no upload, network request, location metadata, or public sharing."
+  ],
+  "redactions": {
+    "count": 0,
+    "types": []
+  }
+}

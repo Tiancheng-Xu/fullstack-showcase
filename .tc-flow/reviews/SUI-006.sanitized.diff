@@ -1,0 +1,4 @@
+Profile now uses the shared fictional family data and bundled Stitch portraits.
+Membership, storage-capacity upgrades, and cloud promises were removed.
+Local reminder switch, baby-edit link/form, and confirmed logout flow were added.
+No real data persistence, upload, or network request was introduced.

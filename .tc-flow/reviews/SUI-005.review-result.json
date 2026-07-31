@@ -1,0 +1,31 @@
+{
+  "schema": "tc-flow ReviewResult v1",
+  "runId": "tc_stitch_parent_ui_20260731_afa3edc1",
+  "taskId": "SUI-005",
+  "contractHash": "afa3edc1af282aa049cb7accf261befefde00c7cede749b3334c57b984539cd9",
+  "risk": "medium",
+  "verdict": "pass",
+  "p0": false,
+  "provider": "kimi",
+  "model": "kimi-k3",
+  "transport": "openai-compatible-api",
+  "requestId": "chatcmpl-6a6c451bde3cf5f5a83239aa",
+  "reviewerDegraded": false,
+  "stage": "task-review",
+  "modelVerdict": "pass",
+  "issues": [
+    "[object Object]"
+  ],
+  "p0Issues": [],
+  "summary": "Change satisfies the contract in full. GuideContent combines keyword and category filtering with China-first labeling, source names on cards, and an actionable empty state; GuideArticleContent exposes source link, provider purpose, source-access date, content-review date, age range, and the fixed non-diagnostic disclaimer with a missing-item fallback. Future public-network providers are registered only, with explicit confirmation that V1 makes no browser-side calls and article copy remains reviewed local Mock content — so the no-diagnosis / no-live-call requirements hold. All quality gates are green: 21/21 tests across 8 files, tsc --noEmit, Vite production build, and scoped Biome. No P0 categories are implicated: no secrets or PII, no auth surface, no data destruction, no network egress from the browser.",
+  "reviewerDegradedReason": null,
+  "blockedReason": null,
+  "attempts": [
+    {
+      "provider": "kimi",
+      "model": "kimi-k3",
+      "requestId": "chatcmpl-6a6c451bde3cf5f5a83239aa",
+      "status": "pass"
+    }
+  ]
+}

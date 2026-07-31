@@ -1,15 +1,15 @@
 {
   "schema": "tc-flow State v1",
-  "runId": "tc_nurture_bloom_ui_20260729_3f7ba54d",
-  "feature": "nurture-bloom-ui-foundation",
-  "contractHash": "3f7ba54d134c029bc78e18aa2bb1f4e880816ddbb23345c8f6a151b15fe0ca5c",
+  "runId": "tc_stitch_parent_ui_20260731_afa3edc1",
+  "feature": "stitch-parent-ui-refresh",
+  "contractHash": "afa3edc1af282aa049cb7accf261befefde00c7cede749b3334c57b984539cd9",
   "currentNode": "N8",
-  "status": "complete",
+  "status": "active",
   "difficulty": "medium",
   "execution": {
     "worker": {
       "provider": "codex",
-      "model": "gpt-5",
+      "model": "gpt-5.6-sol",
       "transport": "codex-desktop"
     },
     "reviewer": {
@@ -17,142 +17,251 @@
       "model": null,
       "transport": "openai-compatible-api"
     },
-    "reviewerDegraded": false,
-    "reviewerDegradedReason": null,
+    "reviewerDegraded": true,
+    "reviewerDegradedReason": "SUI-007 Kimi rate-limited; DeepSeek fallback passed",
     "requiresHumanConfirmation": false
   },
   "tasks": {
-    "T-001": "completed",
-    "T-002": "completed",
-    "T-003": "completed",
-    "T-004": "completed"
+    "SUI-001": "completed",
+    "SUI-002": "completed",
+    "SUI-003": "completed",
+    "SUI-004": "completed",
+    "SUI-005": "completed",
+    "SUI-006": "completed",
+    "SUI-007": "completed"
   },
   "history": [
     {
       "node": "N1",
       "status": "completed",
       "architecture": "monorepo",
-      "worktree": "/Users/shier/Desktop/course-homework/.tc-worktrees/nurture-bloom-ui-foundation-3f7ba54d",
-      "recovery": "restart-feature"
+      "worktree": "/Users/shier/Desktop/course-homework/.tc-worktrees/stitch-parent-ui-refresh-afa3edc1",
+      "recovery": "fresh"
     },
     {
       "node": "N2",
       "status": "completed",
-      "memory": [],
+      "memory": ["nurture-bloom-ui-foundation-3f7ba54d"],
       "difficulty": "medium",
       "strategy": "goal-hook",
       "worker": {
         "provider": "codex",
-        "model": "gpt-5",
+        "model": "gpt-5.6-sol",
         "transport": "codex-desktop"
       },
       "reviewer": {
         "provider": "kimi",
-        "model": "kimi-k3",
+        "model": null,
         "transport": "openai-compatible-api"
       },
       "reviewerDegraded": false,
       "requiresHumanConfirmation": false
     },
     {
+      "node": "N3",
+      "status": "completed",
+      "taskId": "SUI-001",
+      "p0Issues": []
+    },
+    {
       "node": "N4",
       "status": "pass",
-      "taskId": "T-001",
+      "taskId": "SUI-001",
       "provider": "kimi",
       "model": "kimi-k3",
       "transport": "openai-compatible-api",
-      "requestId": "chatcmpl-6a6a50456f9d846adf677979",
+      "requestId": "chatcmpl-6a6c3eaac05696b2de087b61",
       "reviewerDegraded": false,
       "p0Issues": []
     },
     {
       "node": "N5",
       "status": "completed",
-      "taskId": "T-001",
-      "checkpoint": ".tc-flow/checkpoints/T-001.json",
+      "taskId": "SUI-001",
+      "checkpoint": ".tc-flow/checkpoints/SUI-001.json",
       "next": "N3"
     },
     {
+      "node": "N3",
+      "status": "completed",
+      "taskId": "SUI-002",
+      "p0Issues": []
+    },
+    {
       "node": "N4",
       "status": "pass",
-      "taskId": "T-002",
+      "taskId": "SUI-002",
       "provider": "kimi",
       "model": "kimi-k3",
       "transport": "openai-compatible-api",
-      "requestId": "chatcmpl-6a6a5202dac2ed2f42151728",
+      "requestId": "chatcmpl-6a6c4022fe8cfdb70babcd25",
       "reviewerDegraded": false,
-      "p0Issues": []
+      "p0Issues": [],
+      "retries": 1
     },
     {
       "node": "N5",
       "status": "completed",
-      "taskId": "T-002",
-      "checkpoint": ".tc-flow/checkpoints/T-002.json",
+      "taskId": "SUI-002",
+      "checkpoint": ".tc-flow/checkpoints/SUI-002.json",
       "next": "N3"
     },
     {
+      "node": "N3",
+      "status": "completed",
+      "taskId": "SUI-003",
+      "p0Issues": []
+    },
+    {
       "node": "N4",
       "status": "pass",
-      "taskId": "T-003",
+      "taskId": "SUI-003",
       "provider": "kimi",
       "model": "kimi-k3",
       "transport": "openai-compatible-api",
-      "requestId": "chatcmpl-6a6a53d12af41a0d7dc727e8",
+      "requestId": "chatcmpl-6a6c42f3b723fe5928308b92",
       "reviewerDegraded": false,
       "p0Issues": []
     },
     {
       "node": "N5",
       "status": "completed",
-      "taskId": "T-003",
-      "checkpoint": ".tc-flow/checkpoints/T-003.json",
+      "taskId": "SUI-003",
+      "checkpoint": ".tc-flow/checkpoints/SUI-003.json",
       "next": "N3"
     },
     {
+      "node": "N3",
+      "status": "completed",
+      "taskId": "SUI-004",
+      "p0Issues": []
+    },
+    {
       "node": "N4",
       "status": "pass",
-      "taskId": "T-004",
+      "taskId": "SUI-004",
+      "provider": "deepseek",
+      "model": "deepseek-v4-pro",
+      "transport": "openai-compatible-api",
+      "requestId": "62b50238-6c3b-407c-afeb-3cbbb6ae5186",
+      "reviewerDegraded": true,
+      "reviewerDegradedReason": "kimi-request-failed",
+      "p0Issues": []
+    },
+    {
+      "node": "N5",
+      "status": "completed",
+      "taskId": "SUI-004",
+      "checkpoint": ".tc-flow/checkpoints/SUI-004.json",
+      "next": "N3"
+    },
+    {
+      "node": "N3",
+      "status": "completed",
+      "taskId": "SUI-005",
+      "p0Issues": []
+    },
+    {
+      "node": "N4",
+      "status": "pass",
+      "taskId": "SUI-005",
       "provider": "kimi",
       "model": "kimi-k3",
       "transport": "openai-compatible-api",
-      "requestId": "chatcmpl-6a6a54967b45518e514ba802",
+      "requestId": "chatcmpl-6a6c451bde3cf5f5a83239aa",
       "reviewerDegraded": false,
       "p0Issues": []
     },
     {
       "node": "N5",
       "status": "completed",
-      "taskId": "T-004",
-      "checkpoint": ".tc-flow/checkpoints/T-004.json",
+      "taskId": "SUI-005",
+      "checkpoint": ".tc-flow/checkpoints/SUI-005.json",
+      "next": "N3"
+    },
+    {
+      "node": "N3",
+      "status": "completed",
+      "taskId": "SUI-006",
+      "p0Issues": []
+    },
+    {
+      "node": "N4",
+      "status": "pass",
+      "taskId": "SUI-006",
+      "provider": "kimi",
+      "model": "kimi-k3",
+      "transport": "openai-compatible-api",
+      "requestId": "chatcmpl-6a6c462dc50aaca0e6030325",
+      "reviewerDegraded": false,
+      "p0Issues": []
+    },
+    {
+      "node": "N5",
+      "status": "completed",
+      "taskId": "SUI-006",
+      "checkpoint": ".tc-flow/checkpoints/SUI-006.json",
+      "next": "N3"
+    },
+    {
+      "node": "N3",
+      "status": "completed",
+      "taskId": "SUI-007",
+      "p0Issues": []
+    },
+    {
+      "node": "N4",
+      "status": "pass",
+      "taskId": "SUI-007",
+      "provider": "deepseek",
+      "model": "deepseek-v4-pro",
+      "transport": "openai-compatible-api",
+      "requestId": "88f543fd-a582-4cc7-b695-fa6188b7cb38",
+      "reviewerDegraded": true,
+      "reviewerDegradedReason": "kimi-request-failed",
+      "p0Issues": []
+    },
+    {
+      "node": "N5",
+      "status": "completed",
+      "taskId": "SUI-007",
+      "checkpoint": ".tc-flow/checkpoints/SUI-007.json",
       "next": "N6"
     },
     {
       "node": "N6",
       "status": "pass",
-      "result": ".tc-flow/qa/feature-result.json",
-      "acceptanceCriteria": "7/7",
+      "acceptanceCriteria": {
+        "passed": 10,
+        "total": 10
+      },
+      "frontend": "pass",
+      "backend": "not-applicable",
+      "contract": "compatible",
       "retries": 0,
+      "result": ".tc-flow/qa/feature-result.json",
       "next": "N7"
     },
     {
       "node": "N7",
-      "status": "pass",
-      "stopHook": "ALLOW",
-      "workingTree": "matched",
-      "memoryReviewed": true,
-      "review": ".tc-flow/reviews/FEATURE-STOP.review-result.json",
+      "status": "completed",
+      "memory": ".tc-flow/memory/stitch-parent-ui-refresh-afa3edc1.md",
+      "runMemory": ".tc-flow/run-memory.md",
+      "stopHook": {
+        "verdict": "ALLOW",
+        "workingTree": "matched",
+        "memoryReviewed": true,
+        "review": ".tc-flow/reviews/FEATURE-STOP.review-result.json",
+        "provider": "kimi",
+        "model": "kimi-k3",
+        "requestId": "chatcmpl-6a6c495be8509f89c759c35a",
+        "reviewerDegraded": false,
+        "p0Issues": []
+      },
       "next": "N8"
-    },
-    {
-      "node": "N8",
-      "status": "complete",
-      "commit": "e887f1dc349275c690e4d08020ab4a2e41e6a813",
-      "push": "skipped-by-contract",
-      "testDeployment": "not-applicable",
-      "pullRequest": null,
-      "production": "not-requested",
-      "runResult": ".tc-flow/run-result.json"
     }
   ],
-  "retries": {}
+  "retries": {
+    "SUI-002": 1
+  }
 }

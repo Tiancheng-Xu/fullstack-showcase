@@ -3,6 +3,7 @@ import {
 	Baby,
 	BedDouble,
 	CheckCircle2,
+	ChevronRight,
 	Milk,
 	Ruler,
 	Scale,
@@ -13,7 +14,7 @@ import { type FormEvent, useState } from "react";
 import { Modal } from "@/components/ui/modal";
 import { SectionHeader } from "@/components/ui/section-header";
 import { StatusChip } from "@/components/ui/status-chip";
-import { initialRecords } from "./data";
+import { babyProfile, growthRecords } from "./data";
 import type { DailyRecord, RecordKind } from "./types";
 
 const recordUnits: Record<RecordKind, string> = {
@@ -24,7 +25,7 @@ const recordUnits: Record<RecordKind, string> = {
 };
 
 export function GrowthContent() {
-	const [records, setRecords] = useState(initialRecords);
+	const [records, setRecords] = useState(growthRecords);
 	const [modalOpen, setModalOpen] = useState(false);
 	const [kind, setKind] = useState<RecordKind>("喂奶");
 	const [value, setValue] = useState("180");
@@ -42,16 +43,25 @@ export function GrowthContent() {
 	}
 
 	return (
-		<div className="space-y-8">
-			<section>
-				<p className="font-semibold text-muted-foreground text-sm">早安</p>
-				<h1 className="mt-1 font-bold text-2xl text-primary tracking-[-0.03em]">
-					宝贝的小世界
-				</h1>
-				<p className="mt-1 text-muted-foreground">糯米 · 6个月15天</p>
+		<div className="space-y-7">
+			<section className="flex items-center justify-between gap-4">
+				<div>
+					<p className="font-semibold text-muted-foreground text-sm">
+						早安，宝贝
+					</p>
+					<h1 className="mt-1 font-bold text-3xl tracking-[-0.04em]">
+						{babyProfile.nickname}的小世界
+					</h1>
+					<p className="mt-1 text-muted-foreground">{babyProfile.ageDisplay}</p>
+				</div>
+				<img
+					alt={`${babyProfile.nickname}的头像`}
+					className="size-16 rounded-full border-4 border-card object-cover shadow-card"
+					src={babyProfile.avatar}
+				/>
 			</section>
 
-			<section className="space-y-4">
+			<section className="space-y-3">
 				<SectionHeader title="生长曲线" />
 				<div className="grid grid-cols-2 gap-3">
 					<MetricCard
@@ -59,19 +69,19 @@ export function GrowthContent() {
 						icon={Ruler}
 						label="身高"
 						unit="cm"
-						value="68"
+						value={String(babyProfile.heightCm)}
 					/>
 					<MetricCard
 						color="orange"
 						icon={Scale}
 						label="体重"
 						unit="kg"
-						value="8.5"
+						value={String(babyProfile.weightKg)}
 					/>
 				</div>
 			</section>
 
-			<section className="space-y-4">
+			<section className="space-y-3">
 				<SectionHeader actionLabel="查看全部" title="里程碑" />
 				<div className="hide-scrollbar flex snap-x gap-3 overflow-x-auto pb-2">
 					<Milestone icon={Baby} meta="6个月达成" title="会坐了" tone="green" />
@@ -90,36 +100,47 @@ export function GrowthContent() {
 				</div>
 			</section>
 
-			<section className="flex items-center gap-4 rounded-[2rem] bg-error-container p-5 text-on-error-container">
+			<a
+				className="flex items-center gap-4 rounded-[2rem] bg-error-container p-5 text-on-error-container shadow-card"
+				href="/vaccines"
+			>
 				<div className="grid size-12 shrink-0 place-items-center rounded-full bg-card">
 					<Syringe aria-hidden="true" />
 				</div>
 				<div className="min-w-0 flex-1">
 					<h2 className="font-bold text-lg">下次疫苗</h2>
-					<p className="truncate text-sm opacity-80">乙肝疫苗（第3剂）</p>
+					<p className="truncate text-sm opacity-80">乙肝疫苗（第 3 剂）</p>
 				</div>
 				<p className="font-bold text-2xl">
 					3<span className="ml-1 text-sm">天后</span>
 				</p>
-			</section>
+				<ChevronRight aria-hidden="true" size={19} />
+			</a>
 
-			<section className="space-y-4">
+			<section className="space-y-3">
 				<SectionHeader
 					actionLabel="添加记录"
 					onAction={() => setModalOpen(true)}
 					title="今日记录"
 				/>
 				<div className="space-y-3">
-					{records.map((record) => (
+					{records.slice(0, 3).map((record) => (
 						<RecordRow key={record.id} record={record} />
 					))}
 				</div>
+				<a
+					className="flex h-12 items-center justify-center gap-2 rounded-full bg-surface-low font-bold text-primary text-sm"
+					href="/growth/records"
+				>
+					查看全部记录
+					<ChevronRight aria-hidden="true" size={17} />
+				</a>
 			</section>
 
 			<Modal
 				onClose={() => setModalOpen(false)}
 				open={modalOpen}
-				title="添加记录"
+				title="选择记录类型"
 			>
 				<form className="space-y-4" onSubmit={addRecord}>
 					<label className="grid gap-2 font-semibold text-sm">
@@ -173,7 +194,7 @@ function MetricCard({
 }) {
 	const styles =
 		color === "blue"
-			? "bg-secondary-soft text-secondary"
+			? "bg-secondary-container text-secondary"
 			: "bg-primary-soft text-primary";
 	return (
 		<article className="relative overflow-hidden rounded-[2rem] bg-card p-5 shadow-card">
@@ -187,7 +208,7 @@ function MetricCard({
 					{unit}
 				</span>
 			</p>
-			<StatusChip tone="success">正常</StatusChip>
+			<StatusChip tone="success">已记录</StatusChip>
 		</article>
 	);
 }
@@ -204,8 +225,8 @@ function Milestone({
 	tone: "green" | "blue" | "neutral";
 }) {
 	const toneClass = {
-		green: "bg-tertiary-soft text-tertiary",
-		blue: "bg-secondary-soft text-secondary",
+		green: "bg-tertiary-container text-tertiary",
+		blue: "bg-secondary-container text-secondary",
 		neutral: "bg-muted text-muted-foreground",
 	}[tone];
 	return (

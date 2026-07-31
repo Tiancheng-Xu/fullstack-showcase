@@ -1,0 +1,4 @@
+Moments gallery now renders bundled Stitch photos with accessible detail links and local favorite controls.
+Moment detail displays the selected photo, date, description, tags, favorite state, and a missing-item fallback.
+Route added: /moments/:momentId.
+No upload, remote image dependency, location metadata, or public sharing was introduced.

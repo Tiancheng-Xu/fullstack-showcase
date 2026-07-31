@@ -1,0 +1,42 @@
+{
+  "schema": "tc-flow Checkpoint v1",
+  "runId": "tc_stitch_parent_ui_20260731_afa3edc1",
+  "feature": "stitch-parent-ui-refresh",
+  "contractHash": "afa3edc1af282aa049cb7accf261befefde00c7cede749b3334c57b984539cd9",
+  "node": "N5",
+  "taskId": "SUI-006",
+  "input": "Profile, baby edit, reminders, and logout confirmation from the committed Stitch/PRD mapping.",
+  "changedFiles": [
+    "apps/web/apps/web/src/features/nurture/profile-content.tsx",
+    "apps/web/apps/web/src/features/nurture/edit-baby-content.tsx",
+    "apps/web/apps/web/src/features/nurture/__tests__/profile-flow.test.tsx",
+    "apps/web/apps/web/src/routes/me.tsx",
+    "apps/web/apps/web/src/routes/me.baby.tsx"
+  ],
+  "repositoryState": {
+    "cumulativeTaskDiffSha256": "530c340f16565646168cc75b91ed7cebbc9f112d1a11e22d0538a97d86c12fc4",
+    "statusSha256BeforeCheckpoint": "7374ad0f03bd0093a5956ea72e6be65d4b8125fb19e17c84f52aa97180fc5ba2"
+  },
+  "evidence": {
+    "tddRed": "Focused suite failed because edit-baby-content.tsx did not exist.",
+    "tests": "9 files, 23 tests passed.",
+    "typecheck": "Vite build and tsc --noEmit passed.",
+    "build": "Production Vite build passed.",
+    "lint": "5 scoped files passed after formatting.",
+    "review": ".tc-flow/reviews/SUI-006.review-result.json",
+    "piiRedacted": 0
+  },
+  "review": {
+    "verdict": "pass",
+    "provider": "kimi",
+    "model": "kimi-k3",
+    "transport": "openai-compatible-api",
+    "requestId": "chatcmpl-6a6c462dc50aaca0e6030325",
+    "reviewerDegraded": false
+  },
+  "retries": 0,
+  "toolRequests": [],
+  "humanInterventions": [],
+  "blockers": [],
+  "events": ".tc-flow/events.jsonl"
+}

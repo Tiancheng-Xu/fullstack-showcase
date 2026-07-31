@@ -1,0 +1,37 @@
+{
+  "schema": "tc-flow ReviewResult v1",
+  "runId": "tc_stitch_parent_ui_20260731_afa3edc1",
+  "taskId": "SUI-007",
+  "contractHash": "afa3edc1af282aa049cb7accf261befefde00c7cede749b3334c57b984539cd9",
+  "risk": "medium",
+  "verdict": "pass",
+  "p0": false,
+  "provider": "deepseek",
+  "model": "deepseek-v4-pro",
+  "transport": "openai-compatible-api",
+  "requestId": "88f543fd-a582-4cc7-b695-fa6188b7cb38",
+  "reviewerDegraded": true,
+  "stage": "task-review",
+  "modelVerdict": "pass",
+  "issues": [],
+  "p0Issues": [],
+  "summary": "All QA checks passed: route repair fixed nested routing, all routes are directly reachable, no horizontal overflow at 320px, fixed navigation has no gap, builds and tests succeed, 390×844 screenshots captured, and browser smoke test produced no console errors. No security, data, or outage issues detected.",
+  "reviewerDegradedReason": "kimi-request-failed",
+  "blockedReason": null,
+  "attempts": [
+    {
+      "provider": "kimi",
+      "model": "kimi-k3",
+      "requestId": null,
+      "status": "error",
+      "code": "PROVIDER_HTTP_ERROR",
+      "httpStatus": 429
+    },
+    {
+      "provider": "deepseek",
+      "model": "deepseek-v4-pro",
+      "requestId": "88f543fd-a582-4cc7-b695-fa6188b7cb38",
+      "status": "pass"
+    }
+  ]
+}

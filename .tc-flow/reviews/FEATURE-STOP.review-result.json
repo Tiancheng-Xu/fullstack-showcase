@@ -1,28 +1,33 @@
 {
   "schema": "tc-flow ReviewResult v1",
-  "runId": "tc_nurture_bloom_ui_20260729_3f7ba54d",
+  "runId": "tc_stitch_parent_ui_20260731_afa3edc1",
   "taskId": "FEATURE-STOP",
-  "contractHash": "3f7ba54d134c029bc78e18aa2bb1f4e880816ddbb23345c8f6a151b15fe0ca5c",
-  "risk": "low",
+  "contractHash": "afa3edc1af282aa049cb7accf261befefde00c7cede749b3334c57b984539cd9",
+  "risk": "medium",
   "verdict": "pass",
   "p0": false,
   "provider": "kimi",
   "model": "kimi-k3",
   "transport": "openai-compatible-api",
-  "requestId": "chatcmpl-6a6a552133277b8471998ff7",
+  "requestId": "chatcmpl-6a6c495be8509f89c759c35a",
   "reviewerDegraded": false,
   "stage": "task-review",
   "modelVerdict": "pass",
-  "issues": [],
+  "issues": [
+    "Advisory (non-blocking): Authentication and onboarding are mock-only per contract; ensure any future production-auth task does not reuse the mock flow as a security boundary.",
+    "Advisory (non-blocking): Visible external article provenance links are the only live network URLs; confirm they point to intended public sources and remain informational only.",
+    "Advisory (non-blocking): The future provider registry is inert in V1 (no browser-side requests); any activation should trigger a fresh security review for supply-chain/data-impact.",
+    "Note: Path 'apps/web/apps/web/' is nested unusually but is within the frozen allowed write paths and is reflected consistently in git status."
+  ],
   "p0Issues": [],
-  "summary": "Cumulative Feature matches the frozen contract scope. All working-tree changes (README.md, .tc-flow/, apps/web/, docs/qa/, package.json, pnpm-lock.yaml) fall within the allowed write paths for package metadata, apps, docs, README, and .tc-flow. Corroborating evidence shows 4/4 clean task reviews, 7/7 Feature QA, and passing tests, typecheck, production build, scoped lint, responsive and accessibility audits, and secret scan. No authentication, database, remote API, upload, GitHub push, production deployment, or medical diagnosis functionality was introduced, and memory contains no PII or secrets. No P0 category (secret/PII leakage, irreversible data destruction, auth bypass, production outage, supply-chain/RCE, or out-of-contract security/data impact) is present in the supplied bundle. Gate passes.",
+  "summary": "Final working-tree gate passes. Actual changes are confined to the frozen allowed write paths (.tc-flow/, apps/web/apps/web/, apps/web/packages/ui/src/styles/globals.css, docs/qa/stitch-parent-ui-refresh/), consistent with the contract's write scope. All evidence supports completion: seven task reviews passed without P0, Feature QA 10/10, tests 24/24, typecheck/production build/Biome/git-diff checks green, zero 320px overflow across 12 parent routes, six 390x844 screenshots reviewed, and a clean ten-route browser session with no console warnings/errors. Security boundaries hold: no real PII, credentials, storage keys, production auth, backend persistence, file upload, AWS mutation, deployment, or medical diagnosis introduced; product images are local; the only network URLs are visible provenance links plus an inert future provider registry with no V1 browser-side requests. Memory writes contain no PII, secrets, full chat, or provider credentials. No P0 conditions (secret/PII leakage, irreversible destruction, auth bypass, production outage, supply-chain/RCE, or out-of-contract security/data impact) are present. Build/test success is noted but was not the basis for the verdict. Verdict: pass.",
   "reviewerDegradedReason": null,
   "blockedReason": null,
   "attempts": [
     {
       "provider": "kimi",
       "model": "kimi-k3",
-      "requestId": "chatcmpl-6a6a552133277b8471998ff7",
+      "requestId": "chatcmpl-6a6c495be8509f89c759c35a",
       "status": "pass"
     }
   ]

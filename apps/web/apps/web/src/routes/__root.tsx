@@ -2,6 +2,7 @@ import {
 	createRootRouteWithContext,
 	HeadContent,
 	Outlet,
+	useRouterState,
 } from "@tanstack/react-router";
 import { Toaster } from "@web/ui/components/sonner";
 
@@ -33,10 +34,14 @@ export const Route = createRootRouteWithContext<RouterAppContext>()({
 });
 
 function RootComponent() {
+	const pathname = useRouterState({
+		select: (state) => state.location.pathname,
+	});
+
 	return (
 		<>
 			<HeadContent />
-			<AppShell>
+			<AppShell pathname={pathname}>
 				<Outlet />
 			</AppShell>
 			<Toaster richColors />

@@ -1,0 +1,42 @@
+{
+  "schema": "tc-flow Checkpoint v1",
+  "runId": "tc_stitch_parent_ui_20260731_afa3edc1",
+  "feature": "stitch-parent-ui-refresh",
+  "contractHash": "afa3edc1af282aa049cb7accf261befefde00c7cede749b3334c57b984539cd9",
+  "node": "N5",
+  "taskId": "SUI-002",
+  "input": "Auth and onboarding routes from the committed Stitch/PRD mapping.",
+  "changedFiles": [
+    "apps/web/apps/web/src/features/nurture/auth-pages.tsx",
+    "apps/web/apps/web/src/features/nurture/__tests__/auth-pages.test.tsx",
+    "apps/web/apps/web/src/routes/login.tsx",
+    "apps/web/apps/web/src/routes/register.tsx",
+    "apps/web/apps/web/src/routes/onboarding.tsx",
+    "apps/web/apps/web/src/routes/index.tsx"
+  ],
+  "repositoryState": {
+    "cumulativeTaskDiffSha256": "4a1c21540556013a24cc661db0320f1fcef1bf30ac2d82e0523510d38a2ad23f",
+    "statusSha256BeforeCheckpoint": "d2ad4c500858af467b3cc01f5e040f92f32294305b5f37b3cf05adeb33b8af52"
+  },
+  "evidence": {
+    "tddRed": "Auth suite failed because auth-pages.tsx did not exist.",
+    "tests": "5 files, 13 tests passed.",
+    "typecheck": "Vite build and tsc --noEmit passed.",
+    "lint": "6 scoped files passed.",
+    "review": ".tc-flow/reviews/SUI-002.review-result.json",
+    "piiRedacted": 2
+  },
+  "review": {
+    "verdict": "pass",
+    "provider": "kimi",
+    "model": "kimi-k3",
+    "transport": "openai-compatible-api",
+    "requestId": "chatcmpl-6a6c4022fe8cfdb70babcd25",
+    "reviewerDegraded": false
+  },
+  "retries": 1,
+  "toolRequests": [],
+  "humanInterventions": [],
+  "blockers": [],
+  "events": ".tc-flow/events.jsonl"
+}

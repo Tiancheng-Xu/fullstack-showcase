@@ -1,40 +1,38 @@
 {
   "schema": "tc-flow Contract v1",
   "version": 1,
-  "runId": "tc_nurture_bloom_ui_20260729_3f7ba54d",
-  "feature": "nurture-bloom-ui-foundation",
-  "contractHash": "3f7ba54d134c029bc78e18aa2bb1f4e880816ddbb23345c8f6a151b15fe0ca5c",
-  "goal": "使用 Better-T-Stack 和 Stitch 视觉稿构建可交互、移动端优先的育爱成长前端作业基底，并抽取 Tailwind 全局设计令牌与可复用组件。",
+  "runId": "tc_stitch_parent_ui_20260731_afa3edc1",
+  "feature": "stitch-parent-ui-refresh",
+  "contractHash": "afa3edc1af282aa049cb7accf261befefde00c7cede749b3334c57b984539cd9",
+  "goal": "直接更新现有 V1 家长端 H5，按最新 Stitch 快照还原 17 个已映射页面与状态，并保留可测试的本地交互。",
   "nonGoals": [
-    "认证",
+    "后端 API",
+    "认证持久化",
     "数据库",
-    "远程 API",
-    "文件上传",
-    "GitHub 推送",
-    "生产部署",
-    "医疗诊断"
+    "真实文件上传",
+    "GitHub/Hono 课程实验",
+    "AWS",
+    "生产部署"
   ],
   "repositories": [
     {
       "path": ".",
       "role": "monorepo",
-      "branch": "tc/nurture-bloom-ui-foundation-3f7ba54d"
+      "branch": "tc/stitch-parent-ui-refresh-afa3edc1"
     }
   ],
   "allowedWritePaths": [
-    ".gitignore",
-    "package.json",
-    "pnpm-workspace.yaml",
-    "pnpm-lock.yaml",
-    "apps/",
-    "docs/",
-    "README.md",
-    "HOMEWORKS.md",
+    "apps/web/apps/web/",
+    "apps/web/packages/ui/src/styles/globals.css",
+    "docs/qa/stitch-parent-ui-refresh/",
     ".tc-flow/"
   ],
   "allowedReadPaths": [
     ".",
-    "/Users/shier/Downloads/stitch_.zip"
+    "design/stitch/1860491822987812698/",
+    "specs/1.nurture-bloom-mvp/",
+    "specs/2.stitch-parent-ui-refresh/",
+    "docs/superpowers/plans/2026-07-31-stitch-parent-ui-refresh.md"
   ],
   "allowedTools": [
     "Read",
@@ -42,53 +40,72 @@
     "Write",
     "Bash",
     "pnpm",
+    "Vitest",
     "Playwright",
     "TC Flow"
   ],
-  "network": "npm package installation and local browser verification only; no external data upload",
+  "network": "dependency installation, local browser verification, and allowlist-only redacted TC Flow task review",
   "tasks": [
     {
-      "id": "T-001",
-      "role": "other",
-      "risk": "low",
-      "desc": "在 apps/web 初始化 Better-T-Stack 前端、pnpm 工作区和测试基线",
+      "id": "SUI-001",
+      "role": "frontend",
+      "risk": "medium",
+      "desc": "同步本地图片资产、统一 Mock 资料、设计 Token 和路由感知 App Shell",
       "deps": []
     },
     {
-      "id": "T-002",
-      "role": "frontend",
-      "risk": "low",
-      "desc": "建立 Stitch 全局设计令牌、应用壳和可复用 UI 组件",
-      "deps": [
-        "T-001"
-      ]
-    },
-    {
-      "id": "T-003",
+      "id": "SUI-002",
       "role": "frontend",
       "risk": "medium",
-      "desc": "实现成长、时光、百科、我的四个路由与本地类型化交互",
-      "deps": [
-        "T-002"
-      ]
+      "desc": "实现登录、注册与宝宝建档页面及本地成功跳转",
+      "deps": ["SUI-001"]
     },
     {
-      "id": "T-004",
+      "id": "SUI-003",
+      "role": "frontend",
+      "risk": "medium",
+      "desc": "还原成长首页、成长记录列表、类型选择、删除确认和疫苗日程",
+      "deps": ["SUI-001"]
+    },
+    {
+      "id": "SUI-004",
+      "role": "frontend",
+      "risk": "medium",
+      "desc": "还原时光相册与相册详情并保留本地收藏交互",
+      "deps": ["SUI-001"]
+    },
+    {
+      "id": "SUI-005",
+      "role": "frontend",
+      "risk": "medium",
+      "desc": "还原育儿百科与文章详情并保留联合过滤",
+      "deps": ["SUI-001"]
+    },
+    {
+      "id": "SUI-006",
+      "role": "frontend",
+      "risk": "medium",
+      "desc": "还原个人中心、宝宝资料编辑、提醒开关和退出确认",
+      "deps": ["SUI-001"]
+    },
+    {
+      "id": "SUI-007",
       "role": "other",
       "risk": "medium",
-      "desc": "执行移动端视觉、交互、可访问性和完整构建 QA，并整理学习交付文档",
-      "deps": [
-        "T-003"
-      ]
+      "desc": "完成 H5 响应式、可访问性、视觉截图和完整回归验收",
+      "deps": ["SUI-002", "SUI-003", "SUI-004", "SUI-005", "SUI-006"]
     }
   ],
   "acceptanceCriteria": [
-    "Better-T-Stack 前端可以安装、开发、测试、类型检查和构建",
-    "Stitch 视觉基底在主要页面中得到还原，公共样式集中管理",
-    "成长、时光、百科、我的四个主入口可以导航",
-    "新增记录和百科筛选具有可见交互反馈",
-    "390px 移动宽度无主要布局溢出或固定导航遮挡",
-    "所有图片为本地资源，不依赖 Stitch 临时外链",
-    "没有密钥、真实家庭隐私或医疗数据进入仓库"
+    "Auth 页面不显示家长端顶部栏与底部导航",
+    "登录、注册和建档表单具有可访问校验与本地成功跳转",
+    "成长首页、记录列表、删除确认和疫苗日程可操作",
+    "时光相册使用本地图片并支持收藏与详情",
+    "百科支持联合过滤且文章详情包含来源与免责声明",
+    "个人中心不承诺会员云盘并支持资料编辑、提醒和退出确认",
+    "所有产品图片使用本地路径",
+    "320px 以上无页面级横向滚动或固定导航遮挡",
+    "测试、类型检查和构建通过",
+    "没有密钥、真实家庭隐私或远程 Stitch 依赖进入产品代码"
   ]
 }

@@ -1,0 +1,330 @@
+import { Eye, EyeOff, Heart, ShieldCheck, Sparkles } from "lucide-react";
+import { type FormEvent, type ReactNode, useState } from "react";
+
+import { STITCH_ASSETS } from "./stitch-assets";
+
+type SuccessProps = {
+	onSuccess: () => void;
+};
+
+const fieldClass =
+	"h-14 w-full rounded-2xl border border-transparent bg-surface-low px-4 text-base outline-none transition focus:border-secondary/40 focus:ring-4 focus:ring-secondary/10";
+
+export function LoginContent({ onSuccess }: SuccessProps) {
+	const [email, setEmail] = useState("");
+	const [password, setPassword] = useState("");
+	const [showPassword, setShowPassword] = useState(false);
+	const [error, setError] = useState("");
+
+	function submit(event: FormEvent<HTMLFormElement>) {
+		event.preventDefault();
+		if (!email.includes("@") || password.length < 8) {
+			setError("请输入有效邮箱和至少 8 位密码");
+			return;
+		}
+		setError("");
+		onSuccess();
+	}
+
+	return (
+		<AuthPage
+			description="欢迎回来，继续记录金金成长中的每一个小惊喜。"
+			title="陪伴，从今天继续"
+		>
+			<form className="space-y-5" onSubmit={submit}>
+				<AuthField id="login-email" label="邮箱">
+					<input
+						autoComplete="email"
+						className={fieldClass}
+						id="login-email"
+						onChange={(event) => setEmail(event.target.value)}
+						placeholder="parent@example.com"
+						type="email"
+						value={email}
+					/>
+				</AuthField>
+				<AuthField id="login-password" label="密码">
+					<div className="relative">
+						<input
+							autoComplete="current-password"
+							className={`${fieldClass} pr-14`}
+							id="login-password"
+							onChange={(event) => setPassword(event.target.value)}
+							placeholder="请输入密码"
+							type={showPassword ? "text" : "password"}
+							value={password}
+						/>
+						<button
+							aria-label={showPassword ? "隐藏密码" : "显示密码"}
+							className="absolute inset-y-0 right-1 grid w-12 place-items-center rounded-full text-muted-foreground"
+							onClick={() => setShowPassword((current) => !current)}
+							type="button"
+						>
+							{showPassword ? <EyeOff size={19} /> : <Eye size={19} />}
+						</button>
+					</div>
+				</AuthField>
+				<FormError message={error} />
+				<PrimarySubmit>登录</PrimarySubmit>
+				<p className="text-center text-muted-foreground text-sm">
+					第一次使用？{" "}
+					<a className="font-bold text-primary" href="/register">
+						创建账号
+					</a>
+				</p>
+			</form>
+		</AuthPage>
+	);
+}
+
+export function RegisterContent({ onSuccess }: SuccessProps) {
+	const [email, setEmail] = useState("");
+	const [password, setPassword] = useState("");
+	const [confirmation, setConfirmation] = useState("");
+	const [error, setError] = useState("");
+
+	function submit(event: FormEvent<HTMLFormElement>) {
+		event.preventDefault();
+		if (!email.includes("@")) {
+			setError("请输入有效邮箱");
+			return;
+		}
+		if (
+			password.length < 8 ||
+			!/[A-Za-z]/.test(password) ||
+			!/\d/.test(password)
+		) {
+			setError("密码至少 8 位，并同时包含字母和数字");
+			return;
+		}
+		if (password !== confirmation) {
+			setError("两次输入的密码不一致");
+			return;
+		}
+		setError("");
+		onSuccess();
+	}
+
+	return (
+		<AuthPage
+			description="建立一个只属于你和宝宝的温柔成长空间。"
+			illustration={STITCH_ASSETS.registerSprout}
+			title="开始记录爱与成长"
+		>
+			<form className="space-y-4" onSubmit={submit}>
+				<AuthField id="register-email" label="邮箱">
+					<input
+						autoComplete="email"
+						className={fieldClass}
+						id="register-email"
+						onChange={(event) => setEmail(event.target.value)}
+						placeholder="parent@example.com"
+						type="email"
+						value={email}
+					/>
+				</AuthField>
+				<AuthField id="register-password" label="密码">
+					<input
+						autoComplete="new-password"
+						className={fieldClass}
+						id="register-password"
+						onChange={(event) => setPassword(event.target.value)}
+						placeholder="至少 8 位，包含字母和数字"
+						type="password"
+						value={password}
+					/>
+				</AuthField>
+				<AuthField id="register-confirmation" label="确认密码">
+					<input
+						autoComplete="new-password"
+						className={fieldClass}
+						id="register-confirmation"
+						onChange={(event) => setConfirmation(event.target.value)}
+						placeholder="再次输入密码"
+						type="password"
+						value={confirmation}
+					/>
+				</AuthField>
+				<FormError message={error} />
+				<PrimarySubmit>创建账号</PrimarySubmit>
+				<p className="text-center text-muted-foreground text-sm">
+					已有账号？{" "}
+					<a className="font-bold text-primary" href="/login">
+						返回登录
+					</a>
+				</p>
+			</form>
+		</AuthPage>
+	);
+}
+
+type OnboardingValue = {
+	nickname: string;
+	birthDate: string;
+	gender: "女" | "男" | "暂不填写";
+};
+
+export function OnboardingContent({
+	onSuccess,
+}: {
+	onSuccess: (value: OnboardingValue) => void;
+}) {
+	const [nickname, setNickname] = useState("金金");
+	const [birthDate, setBirthDate] = useState("2026-01-16");
+	const [gender, setGender] = useState<OnboardingValue["gender"]>("女");
+	const [error, setError] = useState("");
+
+	function submit(event: FormEvent<HTMLFormElement>) {
+		event.preventDefault();
+		if (!nickname.trim()) {
+			setError("请输入宝宝昵称");
+			return;
+		}
+		if (!birthDate) {
+			setError("请选择宝宝生日");
+			return;
+		}
+		setError("");
+		onSuccess({ nickname: nickname.trim(), birthDate, gender });
+	}
+
+	return (
+		<AuthPage
+			description="这些信息只用于生成成长时间线，之后仍可在“我的”中修改。"
+			illustration={STITCH_ASSETS.onboardingBaby}
+			title="先认识一下宝宝吧"
+		>
+			<form className="space-y-5" onSubmit={submit}>
+				<AuthField id="baby-nickname" label="宝宝昵称">
+					<input
+						className={fieldClass}
+						id="baby-nickname"
+						maxLength={20}
+						onChange={(event) => setNickname(event.target.value)}
+						value={nickname}
+					/>
+				</AuthField>
+				<AuthField id="baby-birth-date" label="宝宝生日">
+					<input
+						className={fieldClass}
+						id="baby-birth-date"
+						max="2026-07-31"
+						onChange={(event) => setBirthDate(event.target.value)}
+						type="date"
+						value={birthDate}
+					/>
+				</AuthField>
+				<fieldset>
+					<legend className="mb-2 font-bold text-sm">性别</legend>
+					<div className="grid grid-cols-3 gap-2">
+						{(["女", "男", "暂不填写"] as const).map((value) => (
+							<label
+								className="cursor-pointer rounded-2xl bg-surface-low px-2 py-3 text-center font-semibold text-sm has-[:checked]:bg-primary-soft has-[:checked]:text-primary"
+								key={value}
+							>
+								<input
+									checked={gender === value}
+									className="sr-only"
+									name="gender"
+									onChange={() => setGender(value)}
+									type="radio"
+								/>
+								{value}
+							</label>
+						))}
+					</div>
+				</fieldset>
+				<FormError message={error} />
+				<PrimarySubmit>完成建档</PrimarySubmit>
+			</form>
+		</AuthPage>
+	);
+}
+
+function AuthPage({
+	children,
+	description,
+	illustration,
+	title,
+}: {
+	children: ReactNode;
+	description: string;
+	illustration?: string;
+	title: string;
+}) {
+	return (
+		<div className="mx-auto flex w-full max-w-md flex-col pb-8">
+			<div className="relative mb-6 flex min-h-40 items-center justify-center overflow-hidden rounded-[2rem] bg-gradient-to-br from-primary-soft/70 via-card to-secondary-container/60">
+				{illustration ? (
+					<img
+						alt=""
+						className="h-40 w-full object-cover mix-blend-multiply"
+						src={illustration}
+					/>
+				) : (
+					<div className="grid size-24 place-items-center rounded-full bg-card/80 text-primary shadow-card">
+						<Heart fill="currentColor" size={42} />
+					</div>
+				)}
+				<Sparkles
+					className="absolute top-5 right-6 text-primary/45"
+					size={25}
+				/>
+			</div>
+			<div className="mb-7 text-center">
+				<h1 className="font-bold text-3xl tracking-[-0.04em]">{title}</h1>
+				<p className="mx-auto mt-3 max-w-sm text-muted-foreground leading-6">
+					{description}
+				</p>
+			</div>
+			<section className="rounded-[2rem] bg-card p-6 shadow-card">
+				{children}
+			</section>
+			<p className="mt-5 flex items-center justify-center gap-2 text-muted-foreground text-xs">
+				<ShieldCheck aria-hidden="true" size={15} />
+				家庭资料仅用于本地课程演示
+			</p>
+		</div>
+	);
+}
+
+function AuthField({
+	children,
+	id,
+	label,
+}: {
+	children: ReactNode;
+	id: string;
+	label: string;
+}) {
+	return (
+		<div className="grid gap-2">
+			<label className="font-bold text-sm" htmlFor={id}>
+				{label}
+			</label>
+			{children}
+		</div>
+	);
+}
+
+function FormError({ message }: { message: string }) {
+	return message ? (
+		<p
+			className="rounded-2xl bg-error-container px-4 py-3 text-destructive text-sm"
+			role="alert"
+		>
+			{message}
+		</p>
+	) : null;
+}
+
+function PrimarySubmit({ children }: { children: ReactNode }) {
+	return (
+		<button
+			className="h-14 w-full rounded-full bg-primary-container font-bold text-lg text-primary shadow-card transition active:scale-[0.98]"
+			type="submit"
+		>
+			{children}
+		</button>
+	);
+}

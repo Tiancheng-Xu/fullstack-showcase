@@ -1,23 +1,34 @@
 {
   "schema": "tc-flow FeatureQAResult v1",
-  "runId": "tc_nurture_bloom_ui_20260729_3f7ba54d",
-  "feature": "nurture-bloom-ui-foundation",
-  "contractHash": "3f7ba54d134c029bc78e18aa2bb1f4e880816ddbb23345c8f6a151b15fe0ca5c",
+  "runId": "tc_stitch_parent_ui_20260731_afa3edc1",
+  "feature": "stitch-parent-ui-refresh",
+  "contractHash": "afa3edc1af282aa049cb7accf261befefde00c7cede749b3334c57b984539cd9",
   "verdict": "pass",
   "acceptanceCriteria": {
-    "passed": 7,
-    "total": 7
+    "passed": 10,
+    "total": 10
   },
   "frontend": "pass",
   "backend": "not-applicable",
-  "contract": "not-applicable",
+  "contract": "compatible",
   "retries": 0,
   "evidence": [
-    "All four task reviews passed without P0 findings.",
-    "Final tests, typecheck, production build, scoped lint, secret scan, and responsive browser QA passed.",
-    "Four routes navigate and render without console issues.",
-    "Growth add-record and guide filtering provide visible local feedback.",
-    "All bundled images are local and no external Stitch image URL is used."
+    "All seven task reviews passed without P0 findings.",
+    "Authentication routes hide product navigation and provide labelled local forms.",
+    "Growth, records, vaccine, moments, guide, profile, and four independent detail routes are directly usable.",
+    "China-first article provenance and four future provider adapters are explicit; V1 makes no browser-side provider calls.",
+    "All fourteen bundled images use local product paths and no remote Stitch dependency remains.",
+    "Final Vitest passed 24/24 across 10 files; typecheck and production build passed.",
+    "All 54 app source files passed Biome; reduced-motion CSS emitted four intentional warnings and zero errors.",
+    "Browser QA found and repaired nested detail-route masking; a regression test now enforces root-level details.",
+    "Twelve routes had zero document overflow at 320x700 and fixed navigation did not cover content.",
+    "Six 390x844 screenshots were captured with images loaded; clean ten-route smoke had zero console issues."
   ],
+  "artifacts": {
+    "qa": "docs/qa/stitch-parent-ui-refresh/README.md",
+    "screenshots": "docs/qa/stitch-parent-ui-refresh/screenshots/",
+    "taskCheckpoints": ".tc-flow/checkpoints/SUI-001.json through SUI-007.json",
+    "taskReviews": ".tc-flow/reviews/SUI-001.review-result.json through SUI-007.review-result.json"
+  },
   "next": "N7"
 }

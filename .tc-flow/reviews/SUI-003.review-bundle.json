@@ -1,0 +1,24 @@
+{
+  "schema": "tc-flow ReviewBundle v1",
+  "sanitized": true,
+  "runId": "tc_stitch_parent_ui_20260731_afa3edc1",
+  "taskId": "SUI-003",
+  "contractHash": "afa3edc1af282aa049cb7accf261befefde00c7cede749b3334c57b984539cd9",
+  "risk": "medium",
+  "contractSummary": "Parent-facing local Mock UI only. Growth uses one baby profile, four record types, accessible delete confirmation, and a vaccine reminder toggle with provenance and a medical disclaimer. No diagnosis, persistence, backend, or real child data.",
+  "task": "Restore the Stitch growth overview, filtered record timeline with confirmed local deletion, and vaccine schedule with local reminder switches. Add routes for growth records and vaccines.",
+  "sanitizedDiff": "GrowthContent now reads a single babyProfile and growthRecords dataset, displays name, age, avatar, height, weight, milestones, vaccine summary, today's records, and an accessible record-type modal containing feeding, sleep, height, and weight options. GrowthRecordsContent keeps a local records array, combines category filtering with a timeline, opens an accessible Modal before deletion, and removes only the confirmed record. VaccineContent keeps local reminder state keyed by vaccine id, renders completed/upcoming status, exposes role=switch with aria-checked, displays each source name, and includes a fixed non-diagnostic disclaimer. New file routes expose /growth/records and /vaccines. Demo height and weight records were normalized to the same 68 cm and 8.5 kg shown in the shared profile. Tests verify all record types, combined filtering, confirmation before deletion, and the vaccine switch transition.",
+  "evidence": [
+    "TDD RED: focused growth-flow suite failed because growth-records-content did not exist.",
+    "TDD GREEN: focused growth-flow suite passed 3/3.",
+    "Full regression: 6 files, 16/16 tests passed.",
+    "Typecheck: Vite build and tsc --noEmit passed.",
+    "Production build passed.",
+    "Scoped Biome: 6 task files checked after formatter corrections.",
+    "Security: only fictional Mock child data; no network request, credential, storage, or medical diagnosis."
+  ],
+  "redactions": {
+    "count": 0,
+    "types": []
+  }
+}

@@ -1,0 +1,4 @@
+Responsive and visual QA covered all parent routes at 320px and six key screens at 390x844.
+Four detail routes were changed to independent TanStack root children after browser QA found parent-page masking.
+A route-structure regression test, QA record, screenshots, final build, and clean browser smoke were added.
+All document overflow checks and final automated gates passed.

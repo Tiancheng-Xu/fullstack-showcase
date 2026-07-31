@@ -1,0 +1,54 @@
+{
+  "schema": "tc-flow Checkpoint v1",
+  "runId": "tc_stitch_parent_ui_20260731_afa3edc1",
+  "feature": "stitch-parent-ui-refresh",
+  "contractHash": "afa3edc1af282aa049cb7accf261befefde00c7cede749b3334c57b984539cd9",
+  "node": "N5",
+  "taskId": "SUI-007",
+  "input": "Final responsive, route, browser, visual, accessibility, and automated QA.",
+  "changedFiles": [
+    "apps/web/apps/web/src/routes/growth_.records.tsx",
+    "apps/web/apps/web/src/routes/moments_.$momentId.tsx",
+    "apps/web/apps/web/src/routes/guide_.$articleId.tsx",
+    "apps/web/apps/web/src/routes/me_.baby.tsx",
+    "apps/web/apps/web/src/routes/__tests__/-route-parenting.test.ts",
+    "docs/qa/stitch-parent-ui-refresh/README.md",
+    "docs/qa/stitch-parent-ui-refresh/screenshots/390-login.png",
+    "docs/qa/stitch-parent-ui-refresh/screenshots/390-growth.png",
+    "docs/qa/stitch-parent-ui-refresh/screenshots/390-growth-records.png",
+    "docs/qa/stitch-parent-ui-refresh/screenshots/390-moments.png",
+    "docs/qa/stitch-parent-ui-refresh/screenshots/390-guide.png",
+    "docs/qa/stitch-parent-ui-refresh/screenshots/390-me.png"
+  ],
+  "repositoryState": {
+    "cumulativeTaskDiffSha256": "a18fe56eb2acbed32d15214dd54f6e1ff9e84b7795b42d6c96b2f9520b829747",
+    "statusSha256BeforeCheckpoint": "4904707e3580b564d423c035f01f110370b5e37217049f6477d82db531509f7a"
+  },
+  "evidence": {
+    "routeRed": "Direct browser visit to /growth/records rendered the growth parent instead of the records screen.",
+    "routeGreen": "Four detail paths became root children; focused test and direct browser headings passed.",
+    "tests": "10 files, 24 tests passed.",
+    "typecheck": "Vite build and tsc --noEmit passed.",
+    "build": "Production Vite build passed.",
+    "lint": "54 app files passed; reduced-motion CSS has 4 intentional warnings and 0 errors.",
+    "responsive": "12 routes had zero document overflow at 320x700.",
+    "screenshots": "6 PNG files at 390x844.",
+    "browser": "Clean ten-route smoke had zero console issues.",
+    "review": ".tc-flow/reviews/SUI-007.review-result.json",
+    "piiRedacted": 0
+  },
+  "review": {
+    "verdict": "pass",
+    "provider": "deepseek",
+    "model": "deepseek-v4-pro",
+    "transport": "openai-compatible-api",
+    "requestId": "88f543fd-a582-4cc7-b695-fa6188b7cb38",
+    "reviewerDegraded": true,
+    "reviewerDegradedReason": "kimi-request-failed"
+  },
+  "retries": 0,
+  "toolRequests": [],
+  "humanInterventions": [],
+  "blockers": [],
+  "events": ".tc-flow/events.jsonl"
+}
