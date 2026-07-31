@@ -40,9 +40,9 @@
 - `apps/api/src/app.ts`: dependency-injected Hono routes.
 - `apps/api/src/env.ts`: server environment validation.
 - `apps/api/src/server.ts`: production wiring and port 3000 listener.
-- `apps/api/drizzle/create_github_profiles/`: generated initial migration and snapshot.
-- `apps/api/drizzle/add_profile_metrics/`: generated add-column migration and snapshot.
-- `apps/api/drizzle/remove_location/`: generated drop-column migration and snapshot.
+- `apps/api/drizzle/*_create_github_profiles/`: generated initial migration and snapshot.
+- `apps/api/drizzle/*_add_profile_metrics/`: generated add-column migration and snapshot.
+- `apps/api/drizzle/*_remove_location/`: generated drop-column migration and snapshot.
 - `apps/api/src/**/*.test.ts`: focused API, client, repository, and migration tests.
 
 ### Web application
@@ -410,9 +410,9 @@ git commit -m "feat: read GitHub credentials from macOS Keychain"
 - Create: `apps/api/src/db/profile-repository.ts`
 - Create: `apps/api/src/db/migrations.test.ts`
 - Create: `apps/api/src/db/profile-repository.test.ts`
-- Generate: `apps/api/drizzle/create_github_profiles/`
-- Generate: `apps/api/drizzle/add_profile_metrics/`
-- Generate: `apps/api/drizzle/remove_location/`
+- Generate: `apps/api/drizzle/*_create_github_profiles/`
+- Generate: `apps/api/drizzle/*_add_profile_metrics/`
+- Generate: `apps/api/drizzle/*_remove_location/`
 
 **Interfaces:**
 - Consumes: `GitHubProfile` from Task 1.
@@ -422,8 +422,8 @@ git commit -m "feat: read GitHub credentials from macOS Keychain"
 
 The migration test must:
 
-1. Discover the three named migration directories in lexical creation order from Drizzle metadata.
-2. Read Drizzle's generated migration metadata and apply `create_github_profiles/migration.sql` first to an in-memory `DatabaseSync`.
+1. Discover the three timestamp-prefixed migration directories in lexical creation order.
+2. Parse each generated `snapshot.json` and apply `*_create_github_profiles/migration.sql` first to an in-memory `DatabaseSync`.
 3. Insert a row containing `location = 'New York'`.
 4. Apply `add_profile_metrics/migration.sql` and `remove_location/migration.sql`.
 5. Assert that `PRAGMA table_info(github_profiles)` contains the final columns and excludes `location`.
@@ -460,7 +460,6 @@ export default defineConfig({
 	schema: "./src/db/schema.ts",
 	out: "./drizzle",
 	dbCredentials: { url: process.env.DB_FILE_NAME ?? "./data/github-profile.sqlite" },
-	migrations: { prefix: "none" },
 });
 ```
 
@@ -468,7 +467,7 @@ Create the initial schema with `githubId`, `login`, `displayName`, `location`, `
 
 Run: `pnpm --filter @course-homework/api db:generate --name=create_github_profiles`
 
-Expected: Drizzle creates `apps/api/drizzle/create_github_profiles/` containing `migration.sql` and its schema snapshot.
+Expected: Drizzle creates a timestamp-prefixed `apps/api/drizzle/*_create_github_profiles/` directory containing `migration.sql` and `snapshot.json`.
 
 - [ ] **Step 4: Generate the add-field migration**
 
@@ -476,7 +475,7 @@ Modify the schema to retain `location` and add nullable `bio`, non-negative `pub
 
 Run: `pnpm --filter @course-homework/api db:generate --name=add_profile_metrics`
 
-Expected: Drizzle creates `apps/api/drizzle/add_profile_metrics/` with only the required additions and any table-copy SQL needed by SQLite.
+Expected: Drizzle creates `apps/api/drizzle/*_add_profile_metrics/` with the required additions and table-copy SQL needed by SQLite. Remove the redundant generated `ALTER TABLE ... ADD synced_at DEFAULT CURRENT_TIMESTAMP` statement because SQLite rejects non-constant defaults during `ADD COLUMN`; the immediately following generated table copy creates and backfills that column safely.
 
 - [ ] **Step 5: Generate the drop-field migration and finalize the schema**
 
@@ -484,7 +483,7 @@ Remove only `location` from `schema.ts`.
 
 Run: `pnpm --filter @course-homework/api db:generate --name=remove_location`
 
-Expected: Drizzle creates `apps/api/drizzle/remove_location/`; the final TypeScript schema exactly matches the design data model.
+Expected: Drizzle creates `apps/api/drizzle/*_remove_location/`; the final TypeScript schema exactly matches the design data model.
 
 - [ ] **Step 6: Implement the connection and repository**
 
