@@ -23,7 +23,7 @@ are not modified.
 ```text
 React profile form
   -> Hono API
-  -> server-only GITHUB_TOKEN
+  -> macOS Keychain credential provider
   -> GitHub GET /user
   -> validated profile DTO
   -> review form
@@ -84,7 +84,8 @@ Calls `https://api.github.com/user` and returns a whitelisted profile:
   "profileUrl": "https://github.com/example",
   "publicRepos": 10,
   "followers": 20,
-  "githubCreatedAt": "2020-01-01T00:00:00Z"
+  "githubCreatedAt": "2020-01-01T00:00:00Z",
+  "syncedAt": "2026-07-31T12:00:00Z"
 }
 ```
 
@@ -149,12 +150,19 @@ correct after the add/drop sequence.
 - The GitHub `GET /user` endpoint requires no additional fine-grained
   permissions, so the token receives no repository, organization, or write
   permission.
-- Keep the token in an ignored local API environment file during development.
-- Provide only the variable name and setup instructions in `.env.example`.
+- Save the real token through the macOS Keychain Access graphical interface as
+  a generic-password item with service `course-homework.github-profile` and
+  account `Tiancheng-Xu`.
+- Retrieve the token at request time through a server-only credential provider;
+  hold it only in process memory and never print the Keychain result.
+- Keep only non-secret Keychain lookup names, database path, and port in
+  `.env.example`.
 - Redact `authorization`, `token`, and secret-like values from logs and errors.
 - Never place the token in browser storage, frontend environment variables,
   database columns, fixtures, screenshots, commits, CI output, or review text.
 - Document token expiry and revocation in the homework evidence.
+- Delete both the GitHub token and the matching Keychain item after evidence is
+  captured.
 
 The currently authenticated GitHub CLI OAuth token is not accepted as evidence
 for this requirement because it is not a fine-grained personal access token.
@@ -215,6 +223,19 @@ The future Go homework will reimplement the `POST /api/github-profile` upsert
 and `GET /api/github-profile` read path against the same final schema. Contract
 fixtures and error-code tests remain language-neutral so the Node and Go
 implementations can be compared for equivalent constraints and behavior.
+
+## Completion status
+
+After every local test and browser check passes, `HOMEWORKS.md` records the
+stable assignment ID `AI-FULLSTACK-GITHUB-PROFILE` with separate columns:
+
+- local full-stack loop: complete;
+- AWS migration: pending;
+- evidence: `docs/qa/github-profile-fullstack.md`.
+
+The AWS status remains pending until SAM, VPC, IAM, and cloud verification are
+implemented in the later milestone. Local completion never implies that the
+cloud assignment is complete.
 
 ## Non-goals
 
