@@ -1,0 +1,33 @@
+{
+	"name": "@course-homework/api",
+	"version": "0.0.0",
+	"private": true,
+	"type": "module",
+	"exports": {
+		"./contracts": "./src/contracts/github-profile.ts"
+	},
+	"scripts": {
+		"build": "tsup",
+		"db:check": "drizzle-kit check",
+		"db:generate": "drizzle-kit generate",
+		"db:migrate": "drizzle-kit migrate",
+		"dev": "tsx watch src/server.ts",
+		"test": "vitest run",
+		"typecheck": "tsc --noEmit"
+	},
+	"dependencies": {
+		"@hono/node-server": "^2.0.12",
+		"dotenv": "catalog:",
+		"drizzle-orm": "1.0.0-rc.4",
+		"hono": "^4.12.32",
+		"zod": "catalog:"
+	},
+	"devDependencies": {
+		"@types/node": "catalog:",
+		"drizzle-kit": "1.0.0-rc.4",
+		"tsup": "^8.5.1",
+		"tsx": "^4.23.1",
+		"typescript": "catalog:",
+		"vitest": "^4.1.10"
+	}
+}

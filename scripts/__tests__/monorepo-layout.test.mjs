@@ -87,7 +87,7 @@ test("places the application and shared packages at root boundaries", async () =
 
   assert.equal(await exists("apps/web/apps"), false);
   assert.equal(await exists("apps/web/packages"), false);
-  assert.equal(await exists("apps/api/package.json"), false);
+  assert.equal(await exists("apps/api/package.json"), true);
 });
 
 test("ignores generated and local application files", async () => {

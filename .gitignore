@@ -56,3 +56,10 @@ artifacts/
 
 # Local SDD artifacts
 .superpowers/sdd/
+
+# Local GitHub profile homework state
+apps/api/.env
+apps/api/data/
+*.sqlite
+*.sqlite-shm
+*.sqlite-wal
