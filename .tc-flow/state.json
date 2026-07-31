@@ -4,7 +4,7 @@
   "feature": "stitch-parent-ui-refresh",
   "contractHash": "afa3edc1af282aa049cb7accf261befefde00c7cede749b3334c57b984539cd9",
   "currentNode": "N8",
-  "status": "active",
+  "status": "completed",
   "difficulty": "medium",
   "execution": {
     "worker": {
@@ -259,6 +259,17 @@
         "p0Issues": []
       },
       "next": "N8"
+    },
+    {
+      "node": "N8",
+      "status": "completed",
+      "delivery": "local branch",
+      "branch": "tc/stitch-parent-ui-refresh-afa3edc1",
+      "featureCommit": "7da36780874522bf707a040d7e9b6aab6ee505ae",
+      "push": "skipped because not requested",
+      "production": "manual-pending",
+      "integration": "pending human choice",
+      "result": ".tc-flow/run-result.json"
     }
   ],
   "retries": {

@@ -1,42 +1,50 @@
 {
   "schema": "tc-flow RunResult v1",
-  "runId": "tc_nurture_bloom_ui_20260729_3f7ba54d",
-  "feature": "nurture-bloom-ui-foundation",
-  "contractHash": "3f7ba54d134c029bc78e18aa2bb1f4e880816ddbb23345c8f6a151b15fe0ca5c",
+  "runId": "tc_stitch_parent_ui_20260731_afa3edc1",
+  "feature": "stitch-parent-ui-refresh",
+  "contractHash": "afa3edc1af282aa049cb7accf261befefde00c7cede749b3334c57b984539cd9",
   "status": "complete",
   "nodes": {
     "N1": "completed",
     "N2": "completed",
-    "N3-N5": "4/4 tasks completed and reviewed",
-    "N6": "pass (7/7 acceptance criteria)",
+    "N3-N5": "7/7 tasks completed and reviewed",
+    "N6": "pass (10/10 acceptance criteria)",
     "N7": "ALLOW",
-    "N8": "local delivery"
+    "N8": "local branch delivery"
   },
   "repository": {
     "path": ".",
     "role": "monorepo",
-    "branch": "tc/nurture-bloom-ui-foundation-3f7ba54d",
-    "featureCommit": "e887f1dc349275c690e4d08020ab4a2e41e6a813",
-    "integration": "local merge to main",
-    "push": "skipped by frozen contract",
+    "branch": "tc/stitch-parent-ui-refresh-afa3edc1",
+    "featureCommit": "7da36780874522bf707a040d7e9b6aab6ee505ae",
+    "integration": "pending human choice",
+    "push": "skipped because not requested",
     "pullRequest": null
   },
   "verification": {
-    "test": "3 files, 8 tests passed",
+    "test": "10 files, 24 tests passed",
     "typecheck": "pass",
     "build": "pass",
+    "biome": "54 source files passed",
+    "responsive": "12/12 routes have zero horizontal overflow at 320px",
+    "browserConsole": "clean on 10-route smoke test",
+    "screenshots": "6 screenshots at 390x844",
     "featureQA": ".tc-flow/qa/feature-result.json",
     "stopHook": ".tc-flow/stop-hook-result.json"
   },
   "reviewer": {
-    "provider": "kimi",
-    "model": "kimi-k3",
-    "degraded": false,
+    "primary": "kimi",
+    "fallback": "deepseek",
+    "degradedTasks": ["SUI-004", "SUI-007"],
+    "degradedReason": "Kimi rate limit; DeepSeek fallback passed",
     "p0Issues": []
   },
-  "testDeployment": "not-applicable by frozen contract",
-  "production": "not-requested",
-  "branchCleanup": "retained because the frozen contract produced no PR or tag lifecycle",
-  "retries": 0,
+  "compatibility": "compatible with current local mock contract; future Go provider adapters retained",
+  "testDeployment": "not-applicable for local UI feature",
+  "production": "manual-pending; not requested",
+  "branchCleanup": "retained because integration choice is pending and there is no merged PR or release tag",
+  "retries": {
+    "SUI-002": 1
+  },
   "blockers": []
 }
