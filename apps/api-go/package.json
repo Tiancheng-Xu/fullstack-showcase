@@ -3,7 +3,7 @@
 	"version": "0.0.0",
 	"private": true,
 	"scripts": {
-		"build": "go build -o .build/api-go ./cmd/server",
+		"build": "mkdir -p .build && go build -o .build/api-go ./cmd/server",
 		"check": "test -z \"$(gofmt -l .)\"",
 		"db:migrate": "go run ./cmd/migrate",
 		"dev": "go run ./cmd/server",

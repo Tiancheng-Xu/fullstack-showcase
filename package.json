@@ -2,12 +2,16 @@
 	"name": "course-homework",
 	"private": true,
 	"scripts": {
-		"check": "biome check scripts package.json biome.json apps/api/src apps/api/drizzle.config.ts apps/api/vitest.config.ts apps/api/tsup.config.ts apps/api/package.json apps/web/src/features/github-profile apps/web/src/routes/homework.github-profile.tsx apps/web/src/features/nurture/profile-content.tsx apps/web/vite.config.ts",
+		"check": "biome check scripts package.json biome.json apps/api/src apps/api/drizzle.config.ts apps/api/vitest.config.ts apps/api/tsup.config.ts apps/api/package.json apps/web/src/features/github-profile apps/web/src/routes/homework.github-profile.tsx apps/web/src/features/nurture/profile-content.tsx apps/web/vite.config.ts && pnpm --filter @course-homework/api-go check",
 		"dev": "pnpm --filter @course-homework/api db:migrate && pnpm --parallel --filter @course-homework/api --filter @course-homework/web dev",
-		"test": "pnpm test:structure && pnpm --filter @course-homework/api test && pnpm --filter @course-homework/web test",
+		"dev:go": "pnpm --filter @course-homework/api-go db:migrate && API_PROXY_TARGET=http://localhost:3002 pnpm --parallel --filter @course-homework/api-go --filter @course-homework/web dev",
+		"test": "pnpm test:structure && pnpm --filter @course-homework/api test && pnpm --filter @course-homework/api-go test && pnpm --filter @course-homework/web test",
+		"test:go": "pnpm --filter @course-homework/api-go test",
 		"test:structure": "node --test scripts/__tests__/*.test.mjs",
-		"typecheck": "pnpm --filter @course-homework/api typecheck && pnpm --filter @course-homework/web check-types",
-		"build": "pnpm --filter @course-homework/api build && pnpm --filter @course-homework/web build",
+		"typecheck": "pnpm --filter @course-homework/api typecheck && pnpm --filter @course-homework/api-go typecheck && pnpm --filter @course-homework/web check-types",
+		"typecheck:go": "pnpm --filter @course-homework/api-go typecheck",
+		"build": "pnpm --filter @course-homework/api build && pnpm --filter @course-homework/api-go build && pnpm --filter @course-homework/web build",
+		"build:go": "pnpm --filter @course-homework/api-go build",
 		"validate:preview": "node scripts/validate-cloudflare-preview.mjs"
 	},
 	"devDependencies": {

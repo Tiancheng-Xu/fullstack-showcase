@@ -149,14 +149,13 @@ describe("GitHub profile Hono API", () => {
 	it("hides unexpected internal details", async () => {
 		const response = await createApp(
 			dependencies({
-				profiles: {
-					findLatest: vi.fn(async () => {
-						throw new Error("private SQL and stack detail");
+				github: {
+					fetchAuthenticatedProfile: vi.fn(async () => {
+						throw new Error("private unexpected detail");
 					}),
-					upsert: vi.fn(async (profile) => profile),
 				},
 			}),
-		).request("/api/github-profile");
+		).request("/api/github/me");
 
 		expect(response.status).toBe(500);
 		expect(await response.json()).toEqual({
@@ -166,4 +165,42 @@ describe("GitHub profile Hono API", () => {
 			},
 		});
 	});
+
+	it.each(["read", "write"] as const)(
+		"maps profile persistence %s failures to the documented safe error",
+		async (operation) => {
+			const profiles = {
+				findLatest: vi.fn(async () => {
+					if (operation === "read") {
+						throw new Error("private SQL read detail");
+					}
+					return githubProfile;
+				}),
+				upsert: vi.fn(async (profile: GitHubProfile) => {
+					if (operation === "write") {
+						throw new Error("private SQL write detail");
+					}
+					return profile;
+				}),
+			};
+			const response = await createApp(dependencies({ profiles })).request(
+				"/api/github-profile",
+				operation === "write"
+					? {
+							method: "POST",
+							body: JSON.stringify({ displayName: null, bio: null }),
+							headers: { "content-type": "application/json" },
+						}
+					: undefined,
+			);
+
+			expect(response.status).toBe(500);
+			expect(await response.json()).toEqual({
+				error: {
+					code: "PERSISTENCE_FAILED",
+					message: "The GitHub profile could not be persisted.",
+				},
+			});
+		},
+	);
 });

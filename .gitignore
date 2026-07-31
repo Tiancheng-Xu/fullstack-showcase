@@ -17,6 +17,7 @@ coverage/
 
 # Go
 bin/
+apps/api-go/.build/
 *.test
 *.out
 vendor/

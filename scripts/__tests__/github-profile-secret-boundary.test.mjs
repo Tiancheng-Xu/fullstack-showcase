@@ -14,11 +14,14 @@ const textExtensions = new Set([
 	".css",
 	".env",
 	".example",
+	".go",
 	".html",
 	".js",
 	".json",
 	".jsx",
 	".mjs",
+	".mod",
+	".sum",
 	".ts",
 	".tsx",
 	".yaml",
@@ -28,7 +31,7 @@ const textExtensions = new Set([
 async function collectFiles(directory) {
 	const files = [];
 	for (const entry of await readdir(directory, { withFileTypes: true })) {
-		if (["dist", "node_modules", "coverage"].includes(entry.name)) {
+		if ([".build", "dist", "node_modules", "coverage"].includes(entry.name)) {
 			continue;
 		}
 
@@ -44,6 +47,13 @@ async function collectFiles(directory) {
 
 test("GitHub profile API package exists", async () => {
 	await assert.doesNotReject(access(path.join(root, "apps/api/package.json")));
+});
+
+test("Go GitHub profile API package exists", async () => {
+	await assert.doesNotReject(access(path.join(root, "apps/api-go/go.mod")));
+	await assert.doesNotReject(
+		access(path.join(root, "apps/api-go/package.json")),
+	);
 });
 
 test("source and config files contain no GitHub token channel", async () => {
@@ -83,8 +93,26 @@ test("root commands orchestrate the complete local homework", async () => {
 	assert.match(scripts.dev, /@course-homework\/web/);
 	for (const command of ["test", "typecheck", "build"]) {
 		assert.match(scripts[command], /@course-homework\/api/);
+		assert.match(scripts[command], /@course-homework\/api-go/);
 		assert.match(scripts[command], /@course-homework\/web/);
 	}
 	assert.match(scripts.check, /apps\/api\/src/);
 	assert.match(scripts.check, /apps\/web\/src\/features\/github-profile/);
+	assert.match(scripts.check, /@course-homework\/api-go/);
+	assert.match(scripts["dev:go"], /@course-homework\/api-go.*db:migrate/);
+	assert.match(scripts["dev:go"], /API_PROXY_TARGET=http:\/\/localhost:3002/);
+	assert.match(scripts["dev:go"], /--parallel/);
+	for (const command of ["test:go", "typecheck:go", "build:go"]) {
+		assert.match(scripts[command], /@course-homework\/api-go/);
+	}
+});
+
+test("Vite proxy can target Go without a browser environment secret", async () => {
+	const viteConfig = await readFile(
+		path.join(root, "apps/web/vite.config.ts"),
+		"utf8",
+	);
+	assert.match(viteConfig, /process\.env\.API_PROXY_TARGET/);
+	assert.match(viteConfig, /http:\/\/localhost:3000/);
+	assert.doesNotMatch(viteConfig, /VITE_.*(?:TOKEN|SECRET|API_PROXY_TARGET)/);
 });

@@ -18,6 +18,15 @@ function validationError() {
 	});
 }
 
+function persistenceError(cause: unknown) {
+	return new AppError({
+		status: 500,
+		code: "PERSISTENCE_FAILED",
+		safeMessage: "The GitHub profile could not be persisted.",
+		cause,
+	});
+}
+
 export function createApp({ github, profiles }: AppDependencies) {
 	const app = new Hono();
 
@@ -47,7 +56,9 @@ export function createApp({ github, profiles }: AppDependencies) {
 	});
 
 	app.get("/api/github-profile", async (context) => {
-		const profile = await profiles.findLatest();
+		const profile = await profiles.findLatest().catch((error: unknown) => {
+			throw persistenceError(error);
+		});
 		if (!profile) {
 			throw new AppError({
 				status: 404,
@@ -66,11 +77,15 @@ export function createApp({ github, profiles }: AppDependencies) {
 		}
 
 		const githubProfile = await github.fetchAuthenticatedProfile();
-		const saved = await profiles.upsert({
-			...githubProfile,
-			displayName: parsed.data.displayName,
-			bio: parsed.data.bio,
-		});
+		const saved = await profiles
+			.upsert({
+				...githubProfile,
+				displayName: parsed.data.displayName,
+				bio: parsed.data.bio,
+			})
+			.catch((error: unknown) => {
+				throw persistenceError(error);
+			});
 		return context.json(saved);
 	});
 
