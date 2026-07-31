@@ -3,7 +3,6 @@ package keychain
 import (
 	"context"
 	"errors"
-	"fmt"
 	"os/exec"
 	"strings"
 
@@ -11,6 +10,8 @@ import (
 )
 
 const maxCredentialOutput = 4096
+
+var errCredentialOutputExceeded = errors.New("credential output exceeded limit")
 
 type Runner interface {
 	Output(ctx context.Context, name string, args ...string) ([]byte, error)
@@ -57,7 +58,7 @@ func (p *Provider) Token(ctx context.Context) (string, error) {
 			503,
 			"GITHUB_CREDENTIAL_UNAVAILABLE",
 			"GitHub credential is temporarily unavailable.",
-			fmt.Errorf("credential output exceeded limit"),
+			errCredentialOutputExceeded,
 		)
 	}
 	return strings.TrimSpace(string(output)), nil
@@ -72,23 +73,27 @@ func (commandRunner) Output(ctx context.Context, name string, args ...string) ([
 	if err := command.Run(); err != nil {
 		return nil, err
 	}
+	if output.overflow {
+		return nil, errCredentialOutputExceeded
+	}
 	return output.data, nil
 }
 
 type boundedOutput struct {
-	data  []byte
-	limit int
+	data     []byte
+	limit    int
+	overflow bool
 }
 
 func (output *boundedOutput) Write(chunk []byte) (int, error) {
 	remaining := output.limit - len(output.data)
-	if remaining <= 0 {
-		return 0, errors.New("credential output exceeded limit")
+	if remaining > 0 && len(chunk) > remaining {
+		output.data = append(output.data, chunk[:remaining]...)
+	} else if remaining > 0 {
+		output.data = append(output.data, chunk...)
 	}
 	if len(chunk) > remaining {
-		output.data = append(output.data, chunk[:remaining]...)
-		return remaining, errors.New("credential output exceeded limit")
+		output.overflow = true
 	}
-	output.data = append(output.data, chunk...)
 	return len(chunk), nil
 }

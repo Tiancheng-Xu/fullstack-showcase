@@ -6,6 +6,7 @@ import (
 	"reflect"
 	"strings"
 	"testing"
+	"time"
 
 	"github.com/Tiancheng-Xu/course-homework/apps/api-go/internal/apperror"
 )
@@ -86,13 +87,22 @@ func TestProviderMapsCancellationSafely(t *testing.T) {
 func TestCommandRunnerBoundsCredentialOutputWhileStreaming(t *testing.T) {
 	t.Parallel()
 
+	ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
+	defer cancel()
 	output, err := (commandRunner{}).Output(
-		context.Background(),
-		"/usr/bin/printf",
-		strings.Repeat("x", maxCredentialOutput+1),
+		ctx,
+		"/bin/sh",
+		"-c",
+		"dd if=/dev/zero bs=1048576 count=4 2>/dev/null",
 	)
+	if ctx.Err() != nil {
+		t.Fatal("Output() stopped draining stdout and depended on context cancellation")
+	}
 	if err == nil {
 		t.Fatalf("Output() returned %d bytes without error", len(output))
+	}
+	if !errors.Is(err, errCredentialOutputExceeded) {
+		t.Fatalf("Output() error = %v, want credential output limit error", err)
 	}
 	if len(output) != 0 {
 		t.Fatalf("Output() returned %d bytes on overflow", len(output))
