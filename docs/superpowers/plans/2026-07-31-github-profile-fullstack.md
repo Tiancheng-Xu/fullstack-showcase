@@ -32,7 +32,7 @@
 - `apps/api/drizzle.config.ts`: SQLite schema, migration output, and local database URL.
 - `apps/api/src/contracts/github-profile.ts`: Zod request/response schemas and shared types.
 - `apps/api/src/errors/app-error.ts`: stable safe API errors.
-- `apps/api/src/credentials/keychain-token-provider.ts`: server-only macOS Keychain adapter.
+- `apps/api/src/auth/keychain-token-provider.ts`: server-only macOS Keychain adapter.
 - `apps/api/src/github/github-client.ts`: authenticated GitHub `/user` adapter and upstream error mapping.
 - `apps/api/src/db/schema.ts`: final `github_profiles` Drizzle schema.
 - `apps/api/src/db/database.ts`: `node:sqlite` and Drizzle connection factory.
@@ -271,8 +271,8 @@ git commit -m "feat: establish GitHub profile API contracts"
 ### Task 2: macOS Keychain provider and authenticated GitHub client
 
 **Files:**
-- Create: `apps/api/src/credentials/keychain-token-provider.ts`
-- Create: `apps/api/src/credentials/keychain-token-provider.test.ts`
+- Create: `apps/api/src/auth/keychain-token-provider.ts`
+- Create: `apps/api/src/auth/keychain-token-provider.test.ts`
 - Create: `apps/api/src/github/github-client.ts`
 - Create: `apps/api/src/github/github-client.test.ts`
 
@@ -299,7 +299,7 @@ The success fixture returns `"test-token\n"` and expects `"test-token"`. A Keych
 
 - [ ] **Step 2: Run the Keychain tests and verify failure**
 
-Run: `pnpm --filter @course-homework/api test -- src/credentials/keychain-token-provider.test.ts`
+Run: `pnpm --filter @course-homework/api test -- src/auth/keychain-token-provider.test.ts`
 
 Expected: FAIL because `createMacOSKeychainTokenProvider` is missing.
 
@@ -323,7 +323,7 @@ Invoke `/usr/bin/security` with `execFile`, the fixed argument array above, UTF-
 
 - [ ] **Step 4: Run the Keychain provider tests**
 
-Run: `pnpm --filter @course-homework/api test -- src/credentials/keychain-token-provider.test.ts`
+Run: `pnpm --filter @course-homework/api test -- src/auth/keychain-token-provider.test.ts`
 
 Expected: PASS for found, missing, and unavailable Keychain cases.
 
@@ -384,7 +384,7 @@ Map and validate the whitelisted camel-case DTO with `githubProfileSchema`. Neve
 
 - [ ] **Step 8: Run client tests and the secret scan**
 
-Run: `pnpm --filter @course-homework/api test -- src/credentials src/github`
+Run: `pnpm --filter @course-homework/api test -- src/auth src/github`
 
 Expected: PASS for Keychain lookup, success, whitelist, status mapping, malformed response, and timeout cases.
 
@@ -395,7 +395,7 @@ Expected: PASS; fixture token text is generic and no fine-grained token prefix e
 - [ ] **Step 9: Commit the credential and GitHub adapters**
 
 ```bash
-git add apps/api/src/credentials apps/api/src/github
+git add apps/api/src/auth apps/api/src/github
 git commit -m "feat: read GitHub credentials from macOS Keychain"
 ```
 
