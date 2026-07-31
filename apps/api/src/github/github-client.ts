@@ -1,9 +1,9 @@
 import { z } from "zod";
+import type { GitHubTokenProvider } from "../auth/keychain-token-provider";
 import {
 	type GitHubProfile,
 	githubProfileSchema,
 } from "../contracts/github-profile";
-import type { GitHubTokenProvider } from "../auth/keychain-token-provider";
 import { AppError } from "../errors/app-error";
 
 const upstreamProfileSchema = z.object({

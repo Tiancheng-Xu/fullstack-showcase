@@ -1,7 +1,9 @@
-import { readdir, readFile } from "node:fs/promises";
+import { mkdtemp, readdir, readFile, rm } from "node:fs/promises";
+import { tmpdir } from "node:os";
 import path from "node:path";
 import { DatabaseSync } from "node:sqlite";
 import { describe, expect, it } from "vitest";
+import { migrateDatabaseFile } from "./migration-runner";
 
 const migrationsRoot = path.resolve(import.meta.dirname, "../../drizzle");
 
@@ -120,5 +122,26 @@ describe("GitHub profile migration history", () => {
 					"2021-01-01T00:00:00Z",
 				),
 		).toThrow();
+	});
+
+	it("creates a new database directory before applying migrations", async () => {
+		const temporaryDirectory = await mkdtemp(
+			path.join(tmpdir(), "github-profile-migration-"),
+		);
+		const databasePath = path.join(temporaryDirectory, "nested/profile.sqlite");
+		try {
+			migrateDatabaseFile(databasePath, migrationsRoot);
+			const sqlite = new DatabaseSync(databasePath);
+			expect(
+				sqlite
+					.prepare(
+						"select name from sqlite_master where type = 'table' and name = 'github_profiles'",
+					)
+					.get(),
+			).toEqual({ name: "github_profiles" });
+			sqlite.close();
+		} finally {
+			await rm(temporaryDirectory, { recursive: true, force: true });
+		}
 	});
 });

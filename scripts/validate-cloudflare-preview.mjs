@@ -62,8 +62,7 @@ function validateWorkflow(workflow) {
 		errors.push("jobs.preview.environment.name");
 	}
 	if (
-		preview?.environment?.url !==
-		"https://course-homework-preview.pages.dev"
+		preview?.environment?.url !== "https://course-homework-preview.pages.dev"
 	) {
 		errors.push("jobs.preview.environment.url");
 	}
@@ -113,7 +112,10 @@ function validateWorkflow(workflow) {
 		"--branch=preview",
 		"--commit-dirty=true",
 	]) {
-		if (typeof deployCommand !== "string" || !deployCommand.includes(fragment)) {
+		if (
+			typeof deployCommand !== "string" ||
+			!deployCommand.includes(fragment)
+		) {
 			errors.push(fragment);
 		}
 	}
@@ -133,12 +135,16 @@ try {
 
 	const errors = validateWorkflow(document.toJS());
 	if (errors.length > 0) {
-		console.error(`Workflow validation failed. Missing or invalid: ${errors.join(", ")}`);
+		console.error(
+			`Workflow validation failed. Missing or invalid: ${errors.join(", ")}`,
+		);
 		process.exitCode = 1;
 	} else {
 		console.log("Cloudflare preview workflow validation passed.");
 	}
 } catch (error) {
-	console.error(`Cloudflare preview workflow has invalid YAML: ${error.message}`);
+	console.error(
+		`Cloudflare preview workflow has invalid YAML: ${error.message}`,
+	);
 	process.exitCode = 1;
 }

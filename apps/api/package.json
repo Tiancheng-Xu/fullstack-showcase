@@ -10,7 +10,7 @@
 		"build": "tsup",
 		"db:check": "drizzle-kit check",
 		"db:generate": "drizzle-kit generate",
-		"db:migrate": "drizzle-kit migrate",
+		"db:migrate": "tsx src/db/migrate.ts",
 		"dev": "tsx watch src/server.ts",
 		"test": "vitest run",
 		"typecheck": "tsc --noEmit"

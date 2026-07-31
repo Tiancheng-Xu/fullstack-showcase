@@ -70,3 +70,21 @@ test("source and config files contain no GitHub token channel", async () => {
 
 	assert.deepEqual(violations, []);
 });
+
+test("root commands orchestrate the complete local homework", async () => {
+	const packageJson = JSON.parse(
+		await readFile(path.join(root, "package.json"), "utf8"),
+	);
+	const { scripts } = packageJson;
+
+	assert.match(scripts.dev, /@course-homework\/api.*db:migrate/);
+	assert.match(scripts.dev, /--parallel/);
+	assert.match(scripts.dev, /@course-homework\/api/);
+	assert.match(scripts.dev, /@course-homework\/web/);
+	for (const command of ["test", "typecheck", "build"]) {
+		assert.match(scripts[command], /@course-homework\/api/);
+		assert.match(scripts[command], /@course-homework\/web/);
+	}
+	assert.match(scripts.check, /apps\/api\/src/);
+	assert.match(scripts.check, /apps\/web\/src\/features\/github-profile/);
+});
