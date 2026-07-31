@@ -1,3 +1,4 @@
+import { Link } from "@tanstack/react-router";
 import {
 	Baby,
 	Bell,
@@ -85,6 +86,18 @@ export function ProfileContent() {
 			</section>
 
 			<section className="overflow-hidden rounded-[2rem] bg-card shadow-card">
+				<Link
+					className="flex w-full items-center gap-3 p-4 text-left hover:bg-muted/50"
+					to="/homework/github-profile"
+				>
+					<Cloud aria-hidden="true" className="text-primary" size={20} />
+					<span className="flex-1 font-semibold">GitHub 个人资料作业</span>
+					<ChevronRight
+						aria-hidden="true"
+						className="text-muted-foreground"
+						size={18}
+					/>
+				</Link>
 				<SettingsRow icon={Users} label="家庭成员管理" />
 				<button
 					aria-pressed={reminders}
