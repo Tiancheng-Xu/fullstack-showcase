@@ -34,6 +34,25 @@ test("accepts the repository preview workflow", async () => {
   assert.match(result.stdout, /workflow validation passed/i);
 });
 
+test("rejects npm for the Wrangler package manager", async (t) => {
+  const fixtureDirectory = await mkdtemp(
+    path.join(tmpdir(), "cloudflare-preview-validator-"),
+  );
+  t.after(() => rm(fixtureDirectory, { recursive: true, force: true }));
+
+  const fixturePath = path.join(fixtureDirectory, "npm-wrangler.yml");
+  const source = await readFile(workflow, "utf8");
+  await writeFile(
+    fixturePath,
+    source.replace(/packageManager: \w+/, "packageManager: npm"),
+  );
+
+  const result = await runValidator(fixturePath);
+
+  assert.notEqual(result.exitCode, 0);
+  assert.match(result.stderr, /wrangler packageManager pnpm/i);
+});
+
 test("rejects a required command that appears only in a YAML comment", async (t) => {
   const fixtureDirectory = await mkdtemp(
     path.join(tmpdir(), "cloudflare-preview-validator-"),

@@ -101,8 +101,8 @@ function validateWorkflow(workflow) {
 	if (deploy?.with?.accountId !== githubAccountId) {
 		errors.push("CLOUDFLARE_ACCOUNT_ID");
 	}
-	if (deploy?.with?.packageManager !== "npm") {
-		errors.push("wrangler packageManager npm");
+	if (deploy?.with?.packageManager !== "pnpm") {
+		errors.push("wrangler packageManager pnpm");
 	}
 	if (deploy?.with?.wranglerVersion !== "4.115.0") {
 		errors.push("wranglerVersion 4.115.0");

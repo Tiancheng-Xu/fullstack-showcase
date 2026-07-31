@@ -57,7 +57,7 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          packageManager: npm
+          packageManager: pnpm
           wranglerVersion: "4.115.0"
           command: >-
             pages deploy apps/web/dist
