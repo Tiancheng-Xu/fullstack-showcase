@@ -2,6 +2,7 @@ package config
 
 import (
 	"fmt"
+	"os"
 	"strconv"
 )
 
@@ -19,6 +20,22 @@ type Config struct {
 	MigrationsDir   string
 	KeychainService string
 	KeychainAccount string
+}
+
+func LoadCurrent() (Config, error) {
+	environment := make(map[string]string)
+	for _, key := range []string{
+		"GO_API_PORT",
+		"DB_FILE_NAME",
+		"MIGRATIONS_DIR",
+		"KEYCHAIN_SERVICE",
+		"KEYCHAIN_ACCOUNT",
+	} {
+		if value, ok := os.LookupEnv(key); ok {
+			environment[key] = value
+		}
+	}
+	return Load(environment)
 }
 
 func Load(environment map[string]string) (Config, error) {

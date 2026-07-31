@@ -3,15 +3,13 @@ package main
 import (
 	"context"
 	"log"
-	"os"
-	"strings"
 
 	"github.com/Tiancheng-Xu/course-homework/apps/api-go/internal/config"
 	"github.com/Tiancheng-Xu/course-homework/apps/api-go/internal/migrations"
 )
 
 func main() {
-	cfg, err := config.Load(currentEnvironment())
+	cfg, err := config.LoadCurrent()
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -29,15 +27,4 @@ func main() {
 		log.Fatal(err)
 	}
 	log.Print("database migrations complete")
-}
-
-func currentEnvironment() map[string]string {
-	result := make(map[string]string)
-	for _, entry := range os.Environ() {
-		key, value, found := strings.Cut(entry, "=")
-		if found {
-			result[key] = value
-		}
-	}
-	return result
 }
