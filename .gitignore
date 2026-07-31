@@ -1,53 +1,55 @@
-# Secrets and local configuration
+# Dependencies
+node_modules
+.pnp
+.pnp.js
+
+# Build outputs
+dist
+build
+*.tsbuildinfo
+
+# Generated files
+apps/web/src/routeTree.gen.ts
+
+# Environment variables
 .env
-.env.*
-!.env.example
-*.pem
-*.key
-*.p12
-credentials
+.env*.local
 
-# Node.js
-node_modules/
-.pnpm-store/
-dist/
-build/
-coverage/
-.turbo/
-
-# Go
-bin/
-*.test
-*.out
-vendor/
-
-# Python / AI tools
-.venv/
-venv/
-__pycache__/
-*.py[cod]
-.pytest_cache/
-.mypy_cache/
-
-# AWS SAM / CDK
-.aws-sam/
-cdk.out/
-
-# Cocos and game engines
-library/
-local/
-temp/
-profiles/
-native/engine/
-
-# Editors and operating systems
-.DS_Store
-.idea/
+# IDEs and editors
 .vscode/*
-!.vscode/extensions.json
 !.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.idea
+*.swp
+*.swo
+*~
+.DS_Store
 
-# Logs and generated artifacts
+# Logs
+logs
 *.log
-artifacts/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+.pnpm-debug.log*
 
+# Turbo
+.turbo
+.nx
+
+# Better-T-Stack
+.alchemy
+.vercel
+
+# Testing
+coverage
+.nyc_output
+
+# Misc
+*.tgz
+.cache
+tmp
+temp

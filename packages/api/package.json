@@ -1,0 +1,26 @@
+{
+  "name": "@nurture-bloom-mvp-99d5175d/api",
+  "type": "module",
+  "exports": {
+    ".": {
+      "default": "./src/index.ts"
+    },
+    "./*": {
+      "default": "./src/*.ts"
+    }
+  },
+  "scripts": {},
+  "dependencies": {
+    "@nurture-bloom-mvp-99d5175d/db": "workspace:*",
+    "@nurture-bloom-mvp-99d5175d/env": "workspace:*",
+    "@trpc/client": "catalog:",
+    "@trpc/server": "catalog:",
+    "dotenv": "catalog:",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@nurture-bloom-mvp-99d5175d/config": "workspace:*",
+    "hono": "catalog:",
+    "typescript": "catalog:"
+  }
+}

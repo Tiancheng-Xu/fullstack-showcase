@@ -1,0 +1,30 @@
+{
+  "name": "server",
+  "type": "module",
+  "main": "src/index.ts",
+  "scripts": {
+    "build": "tsdown",
+    "check-types": "tsc -b",
+    "compile": "bun build --compile --minify --sourcemap --bytecode ./src/index.ts --outfile server",
+    "dev": "tsx watch src/index.ts",
+    "start": "node dist/index.mjs"
+  },
+  "dependencies": {
+    "@hono/node-server": "^2.0.8",
+    "@hono/trpc-server": "^0.4.2",
+    "@nurture-bloom-mvp-99d5175d/api": "workspace:*",
+    "@nurture-bloom-mvp-99d5175d/db": "workspace:*",
+    "@nurture-bloom-mvp-99d5175d/env": "workspace:*",
+    "@trpc/server": "catalog:",
+    "dotenv": "catalog:",
+    "hono": "catalog:",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@nurture-bloom-mvp-99d5175d/config": "workspace:*",
+    "@types/node": "catalog:",
+    "tsdown": "^0.22.3",
+    "tsx": "^4.22.5",
+    "typescript": "catalog:"
+  }
+}

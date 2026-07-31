@@ -1,0 +1,3 @@
+{
+  "extends": "@nurture-bloom-mvp-99d5175d/config/tsconfig.base.json"
+}

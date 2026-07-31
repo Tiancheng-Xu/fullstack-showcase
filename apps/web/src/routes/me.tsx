@@ -1,0 +1,12 @@
+import { createFileRoute } from "@tanstack/react-router";
+import { ChevronRight, Github, Heart, Settings, ShieldCheck, Sparkles, UserRound } from "lucide-react";
+import { baby } from "@/data/demo";
+
+export const Route = createFileRoute("/me")({ component: MePage });
+
+function MePage() {
+  return <div className="flex flex-col gap-6 px-6 pt-6"><section className="rounded-[28px] bg-gradient-to-br from-[#845400] to-[#ffb347] p-6 text-white soft-shadow"><div className="flex items-center gap-4"><div className="flex h-16 w-16 items-center justify-center rounded-full bg-white/20"><UserRound className="h-8 w-8" /></div><div><p className="text-sm text-white/75">正在陪伴</p><h1 className="text-2xl font-bold">{baby.name}的家庭</h1><p className="mt-1 text-sm text-white/75">成长记录已坚持 28 天</p></div></div><div className="mt-6 grid grid-cols-3 gap-2 text-center"><Stat value="28" label="记录天数" /><Stat value="16" label="成长瞬间" /><Stat value="3" label="里程碑" /></div></section><section className="space-y-3"><MenuItem icon={<UserRound />} title="宝宝资料" detail="出生日期、身高体重" /><MenuItem icon={<Github />} title="GitHub 学习实践" detail="接入 GitHub API 的练习入口" /><MenuItem icon={<Settings />} title="应用设置" detail="通知、主题和数据管理" /></section><section className="rounded-[22px] bg-white p-5 soft-shadow"><div className="flex items-start gap-3"><div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#cbebca] text-[#324d35]"><ShieldCheck className="h-5 w-5" /></div><div><h2 className="font-semibold">数据与隐私</h2><p className="mt-1 text-sm leading-relaxed text-[#6f6254]">首版学习数据仅用于本地演示。后续接入云端前，会先明确数据边界和权限。</p></div></div></section><p className="flex items-center justify-center gap-2 pb-6 text-xs text-[#847463]"><Heart className="h-3.5 w-3.5 fill-[#ffb347] text-[#ffb347]" /> 用心记录每一个小小的成长</p></div>;
+}
+
+function Stat({ value, label }: { value: string; label: string }) { return <div><p className="text-2xl font-bold">{value}</p><p className="mt-1 text-xs text-white/75">{label}</p></div>; }
+function MenuItem({ icon, title, detail }: { icon: React.ReactNode; title: string; detail: string }) { return <button className="flex w-full items-center gap-3 rounded-[22px] bg-white p-4 text-left soft-shadow transition hover:-translate-y-0.5"><div className="flex h-11 w-11 items-center justify-center rounded-full bg-[#ffddb6] text-[#704700]">{icon}</div><div className="min-w-0 flex-1"><p className="font-semibold">{title}</p><p className="mt-1 text-xs text-[#6f6254]">{detail}</p></div><ChevronRight className="h-5 w-5 text-[#b3a390]" /></button>; }

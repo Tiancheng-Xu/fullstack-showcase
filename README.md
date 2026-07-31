@@ -1,52 +1,103 @@
-# Course Homework
+# nurture-bloom-mvp-99d5175d
 
-课程必做作业与实践项目。该仓库与“学习笔记”仓库完全独立，只存放可运行代码、基础设施配置、测试和交付说明。
+This project was created with [Better-T-Stack](https://github.com/AmanVarshney01/create-better-t-stack), a modern TypeScript stack that combines React, TanStack Router, Hono, TRPC, and more.
 
-## 推荐实现顺序
+## Features
 
-1. Web 与 Serverless 基础：Hono、GitHub API、Drizzle、SAM
-2. Go 与云原生部署：Go、ECR、ECS、ALB、Fargate、Cloud Map
-3. 可靠性与发布：Synthetics、SNS/SQS、死信队列、API Canary、PR 独立环境
-4. AI 工程：MCP、Agents、RAG、Rerank、Mastra、LangGraph
-5. 游戏与图形：Phaser、Three.js、Babylon.js、Cocos、微信/抖音小游戏
+- **TypeScript** - For type safety and improved developer experience
+- **TanStack Router** - File-based routing with full type safety
+- **TailwindCSS** - Utility-first CSS for rapid UI development
+- **Shared UI package** - shadcn/ui primitives live in `packages/ui`
+- **Hono** - Lightweight, performant server framework
+- **tRPC** - End-to-end type-safe APIs
+- **Node.js** - Runtime environment
+- **Drizzle** - TypeScript-first ORM
+- **SQLite/Turso** - Database engine
+- **Turborepo** - Optimized monorepo build system
 
-完整验收项见 [HOMEWORKS.md](HOMEWORKS.md)。
+## Getting Started
 
-## 目录约定
-
-```text
-apps/       可独立运行或部署的应用
-packages/   跨应用共享代码
-infra/      SAM、容器和云基础设施配置
-docs/       架构图、运行手册和作业证据
-```
-
-每个应用至少提供：
-
-- `README.md`：目标、架构、启动与部署步骤
-- `.env.example`：只写变量名和示例值，不提交密钥
-- 自动化测试或最小可复现验证命令
-- 作业验收证据：截图、日志或公开地址，放入对应应用的 `docs/`
-
-## 本地环境
-
-- macOS / Apple Silicon
-- Node.js 22 + pnpm
-- Go + gopls
-- Docker CLI + Colima
-- AWS CLI + SAM CLI（AWS 账号通过后再配置凭据）
-- Wrangler、Cocos Creator、微信开发者工具、抖音开发者工具
-
-启动容器环境：
+First, install the dependencies:
 
 ```bash
-colima start
-docker version
+pnpm install
 ```
 
-不用容器时释放资源：
+## Database Setup
+
+This project uses SQLite with Drizzle ORM.
+
+1. Start the local SQLite database (optional):
 
 ```bash
-colima stop
+pnpm run db:local
 ```
 
+2. Update your `.env` file in the `apps/server` directory with the appropriate connection details if needed.
+
+3. Apply the schema to your database:
+
+```bash
+pnpm run db:push
+```
+
+Then, run the development server:
+
+```bash
+pnpm run dev
+```
+
+Open [http://localhost:3001](http://localhost:3001) in your browser to see the web application.
+The API is running at [http://localhost:3000](http://localhost:3000).
+
+## UI Customization
+
+React web apps in this stack share shadcn/ui primitives through `packages/ui`.
+
+- Change design tokens and global styles in `packages/ui/src/styles/globals.css`
+- Update shared primitives in `packages/ui/src/components/*`
+- Adjust shadcn aliases or style config in `packages/ui/components.json` and `apps/web/components.json`
+
+### Add more shared components
+
+Run this from the project root to add more primitives to the shared UI package:
+
+```bash
+npx shadcn@latest add accordion dialog popover sheet table -c packages/ui
+```
+
+Import shared components like this:
+
+```tsx
+import { Button } from "@nurture-bloom-mvp-99d5175d/ui/components/button";
+```
+
+### Add app-specific blocks
+
+If you want to add app-specific blocks instead of shared primitives, run the shadcn CLI from `apps/web`.
+
+## Project Structure
+
+```
+nurture-bloom-mvp-99d5175d/
+├── apps/
+│   ├── web/         # Frontend application (React + TanStack Router)
+│   └── server/      # Backend API (Hono, TRPC)
+├── packages/
+│   ├── ui/          # Shared shadcn/ui components and styles
+│   ├── api/         # API layer / business logic
+│   └── db/          # Database schema & queries
+```
+
+## Available Scripts
+
+- `pnpm run dev`: Start all applications in development mode
+- `pnpm run build`: Build all applications
+- `pnpm run dev:web`: Start only the web application
+- `pnpm run dev:server`: Start only the server
+- `pnpm run check-types`: Check TypeScript types across all apps
+- `pnpm run db:push`: Push schema changes to database
+- `pnpm run db:generate`: Generate database client/types
+- `pnpm run db:migrate`: Run database migrations
+- `pnpm run db:studio`: Open database studio UI
+- `pnpm run db:local`: Start the local SQLite database

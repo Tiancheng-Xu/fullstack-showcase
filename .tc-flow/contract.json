@@ -1,0 +1,31 @@
+{
+  "schema": "tc-flow Contract v1",
+  "version": 1,
+  "runId": "tc_nurture_bloom_mvp_20260729",
+  "feature": "1.nurture-bloom-mvp",
+  "contractHash": "99d5175d3f52852678295082fc20f755840402a44e4f7d6d6c543ed31a6f04d1",
+  "goal": "在 Better-T-Stack 上构建可运行的育爱成长 MVP，以 Stitch UI 为视觉基底，逐步接入 Hono、tRPC、Drizzle，并保留课程实践边界。",
+  "nonGoals": ["认证", "真实云端媒体存储", "生产部署", "医疗诊断", "AI/RAG/Agent"],
+  "repositories": [{"path": ".", "role": "monorepo", "branch": "tc/nurture-bloom-mvp-99d5175d"}],
+  "allowedWritePaths": ["apps/", "packages/", "assets/stitch/", "docs/", "specs/1.nurture-bloom-mvp/", ".tc-flow/"],
+  "allowedReadPaths": ["."],
+  "allowedTools": ["Read", "Edit", "Write", "Bash", "pnpm", "Playwright", "TC Flow"],
+  "network": "npm package installation only; no external data upload",
+  "tasks": [
+    {"id":"T-001","role":"other","desc":"初始化 Better-T-Stack 应用骨架、开发/构建/测试命令和项目规则","deps":[]},
+    {"id":"T-002","role":"frontend","desc":"从 Stitch 设计中建立全局 Tailwind token、布局壳和可复用 UI 组件","deps":["T-001"]},
+    {"id":"T-003","role":"frontend","desc":"实现成长首页、时光、百科和个人中心的移动端页面与导航","deps":["T-002"]},
+    {"id":"T-004","role":"backend","desc":"接入本地数据交互、Hono API 边界和 Drizzle 最小数据模型","deps":["T-001","T-003"]},
+    {"id":"T-005","role":"frontend","desc":"发现问题后完成浏览器视觉/交互优化和课程实践记录","deps":["T-004"]},
+    {"id":"T-006","role":"other","desc":"执行完整测试、构建、移动端关键路径 QA，并整理交付证据","deps":["T-005"]}
+  ],
+  "acceptanceCriteria": [
+    "Better-T-Stack 项目可以安装、开发、构建和测试",
+    "Stitch 视觉基底在主要页面中得到还原，公共样式集中管理",
+    "四个主入口可以导航，状态反馈可理解",
+    "至少一个成长记录闭环可用",
+    "至少一个 Hono API 和一个 Drizzle 数据模型接入产品",
+    "390px 移动宽度无主要布局溢出",
+    "没有密钥或真实隐私数据进入仓库"
+  ]
+}

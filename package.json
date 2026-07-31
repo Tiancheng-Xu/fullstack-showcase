@@ -1,0 +1,33 @@
+{
+  "name": "nurture-bloom-mvp-99d5175d",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "type": "module",
+  "scripts": {
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "check-types": "turbo run check-types",
+    "dev:web": "turbo run dev -F web",
+    "dev:server": "turbo run dev -F server",
+    "db:push": "turbo run db:push -F @nurture-bloom-mvp-99d5175d/db",
+    "db:studio": "turbo run db:studio -F @nurture-bloom-mvp-99d5175d/db",
+    "db:generate": "turbo run db:generate -F @nurture-bloom-mvp-99d5175d/db",
+    "db:migrate": "turbo run db:migrate -F @nurture-bloom-mvp-99d5175d/db",
+    "db:local": "turbo run db:local -F @nurture-bloom-mvp-99d5175d/db"
+  },
+  "dependencies": {
+    "@nurture-bloom-mvp-99d5175d/env": "workspace:*",
+    "dotenv": "catalog:",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@nurture-bloom-mvp-99d5175d/config": "workspace:*",
+    "@types/node": "catalog:",
+    "turbo": "^2.10.2",
+    "typescript": "catalog:"
+  },
+  "packageManager": "pnpm@11.17.0"
+}
