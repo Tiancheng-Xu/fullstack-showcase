@@ -1,0 +1,44 @@
+{
+  "schema": "tc-flow Checkpoint v1",
+  "runId": "tc_cloudflare_pr_preview_20260729",
+  "feature": "cloudflare-pr-preview",
+  "contractHash": "aa5d84f908a529b4f846c23b04373a695caeff9c88ed05d44db77582be32d522",
+  "node": "N5",
+  "taskId": "T-002",
+  "inputSummary": "Create the dedicated preview Pages project, configure least-privilege credentials in GitHub Actions, and complete the first visible test deployment.",
+  "changedFiles": [
+    "External Cloudflare Pages project configuration",
+    "External GitHub Actions Secrets and Variable configuration"
+  ],
+  "worktreeStatusHash": "f92aec5571a2cc293f55616c3c61fead2706ae3229082382754ba165c3ef2be6",
+  "tests": {
+    "tokenValidation": "pass",
+    "pagesProjectCreation": "pass",
+    "firstDeployment": "15 files uploaded",
+    "stablePreview": "visible application identity and navigation verified"
+  },
+  "review": {
+    "verdict": "pass",
+    "provider": "kimi",
+    "model": "kimi-k3",
+    "transport": "openai-compatible-api",
+    "requestId": "chatcmpl-6a6ae38f157a4e90b05c6c0e",
+    "reviewerDegraded": false,
+    "p0Issues": []
+  },
+  "piiFilter": {
+    "sanitized": true,
+    "redactions": 0
+  },
+  "securityIncident": {
+    "status": "remediated",
+    "summary": "A superseded token appeared in a setup screenshot. Both same-name tokens were revoked and replaced with a unique token. No exposed token remains active."
+  },
+  "retries": 0,
+  "toolRequests": [],
+  "humanInterventions": [
+    "User remained online for visual Cloudflare and GitHub setup."
+  ],
+  "blockers": [],
+  "events": ".tc-flow/events.jsonl"
+}

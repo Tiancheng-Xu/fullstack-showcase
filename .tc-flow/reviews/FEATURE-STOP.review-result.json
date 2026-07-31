@@ -1,28 +1,32 @@
 {
   "schema": "tc-flow ReviewResult v1",
-  "runId": "tc_nurture_bloom_ui_20260729_3f7ba54d",
+  "runId": "tc_cloudflare_pr_preview_20260729",
   "taskId": "FEATURE-STOP",
-  "contractHash": "3f7ba54d134c029bc78e18aa2bb1f4e880816ddbb23345c8f6a151b15fe0ca5c",
-  "risk": "low",
+  "contractHash": "aa5d84f908a529b4f846c23b04373a695caeff9c88ed05d44db77582be32d522",
+  "risk": "medium",
   "verdict": "pass",
   "p0": false,
   "provider": "kimi",
   "model": "kimi-k3",
   "transport": "openai-compatible-api",
-  "requestId": "chatcmpl-6a6a552133277b8471998ff7",
+  "requestId": "chatcmpl-6a6ae67a92f93ba9e88877f8",
   "reviewerDegraded": false,
   "stage": "task-review",
   "modelVerdict": "pass",
-  "issues": [],
+  "issues": [
+    "[object Object]",
+    "[object Object]",
+    "[object Object]"
+  ],
   "p0Issues": [],
-  "summary": "Cumulative Feature matches the frozen contract scope. All working-tree changes (README.md, .tc-flow/, apps/web/, docs/qa/, package.json, pnpm-lock.yaml) fall within the allowed write paths for package metadata, apps, docs, README, and .tc-flow. Corroborating evidence shows 4/4 clean task reviews, 7/7 Feature QA, and passing tests, typecheck, production build, scoped lint, responsive and accessibility audits, and secret scan. No authentication, database, remote API, upload, GitHub push, production deployment, or medical diagnosis functionality was introduced, and memory contains no PII or secrets. No P0 category (secret/PII leakage, irreversible data destruction, auth bypass, production outage, supply-chain/RCE, or out-of-contract security/data impact) is present in the supplied bundle. Gate passes.",
+  "summary": "The sanitized change and delivery evidence are consistent with the frozen contract: preview-only Cloudflare Pages deployment via same-repository PRs and manual dispatch, local and CI quality gates enforced, no token values, account identifiers, personal data, or private photos in the diff, and no production trigger, merge, or custom domain. The CI repair (npm selection plus Wrangler pinned to 4.115.0) is guarded by a failing-then-passing static validator, and run 30517588778 passed all steps deploying the tested source commit, with browser verification confirming expected identity and navigation on the stable preview. The PR remains Draft and production remains manual-pending, so there is no production-outage, secret-leakage, data-destruction, auth-bypass, or RCE exposure evidenced in this bundle. No P0 issues. Three low-severity observations remain: committed process/recovery artifacts, ad hoc npm install of Wrangler in CI, and unverifiable workflow hardening details (SHA pinning, token permissions, trigger type). None block finalizing the draft PR or the preview deployment; address or explicitly accept them before merge. Verdict: pass.",
   "reviewerDegradedReason": null,
   "blockedReason": null,
   "attempts": [
     {
       "provider": "kimi",
       "model": "kimi-k3",
-      "requestId": "chatcmpl-6a6a552133277b8471998ff7",
+      "requestId": "chatcmpl-6a6ae67a92f93ba9e88877f8",
       "status": "pass"
     }
   ]

@@ -1,27 +1,27 @@
 {
   "schema": "tc-flow RunResult v1",
-  "runId": "tc_nurture_bloom_ui_20260729_3f7ba54d",
-  "feature": "nurture-bloom-ui-foundation",
-  "contractHash": "3f7ba54d134c029bc78e18aa2bb1f4e880816ddbb23345c8f6a151b15fe0ca5c",
+  "runId": "tc_cloudflare_pr_preview_20260729",
+  "feature": "cloudflare-pr-preview",
+  "contractHash": "aa5d84f908a529b4f846c23b04373a695caeff9c88ed05d44db77582be32d522",
   "status": "complete",
   "nodes": {
     "N1": "completed",
     "N2": "completed",
-    "N3-N5": "4/4 tasks completed and reviewed",
-    "N6": "pass (7/7 acceptance criteria)",
+    "N3-N5": "3/3 tasks completed and independently reviewed",
+    "N6": "pass (5/5 acceptance criteria)",
     "N7": "ALLOW",
-    "N8": "local delivery"
+    "N8": "draft pull request and preview test deployment"
   },
   "repository": {
-    "path": ".",
     "role": "monorepo",
-    "branch": "tc/nurture-bloom-ui-foundation-3f7ba54d",
-    "featureCommit": "e887f1dc349275c690e4d08020ab4a2e41e6a813",
-    "integration": "local merge to main",
-    "push": "skipped by frozen contract",
-    "pullRequest": null
+    "branch": "tc/cloudflare-pr-preview-aa5d84f9",
+    "testedCommit": "2fc2e7834646dbfc5b0277cf5a2e17f52900a2e5",
+    "push": "pass",
+    "pullRequest": "https://github.com/Tiancheng-Xu/course-homework/pull/1",
+    "pullRequestState": "draft"
   },
   "verification": {
+    "workflowValidation": "pass",
     "test": "3 files, 8 tests passed",
     "typecheck": "pass",
     "build": "pass",
@@ -34,9 +34,13 @@
     "degraded": false,
     "p0Issues": []
   },
-  "testDeployment": "not-applicable by frozen contract",
-  "production": "not-requested",
-  "branchCleanup": "retained because the frozen contract produced no PR or tag lifecycle",
-  "retries": 0,
+  "testDeployment": {
+    "status": "pass",
+    "workflowRun": "https://github.com/Tiancheng-Xu/course-homework/actions/runs/30517588778",
+    "preview": "https://course-homework-preview.pages.dev"
+  },
+  "production": "manual-pending",
+  "branchCleanup": "retained because the draft pull request is not merged and the preview workflow is part of ongoing course work",
+  "retries": 1,
   "blockers": []
 }

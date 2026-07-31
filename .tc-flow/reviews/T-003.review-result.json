@@ -1,15 +1,15 @@
 {
   "schema": "tc-flow ReviewResult v1",
-  "runId": "tc_nurture_bloom_ui_20260729_3f7ba54d",
+  "runId": "tc_cloudflare_pr_preview_20260729",
   "taskId": "T-003",
-  "contractHash": "3f7ba54d134c029bc78e18aa2bb1f4e880816ddbb23345c8f6a151b15fe0ca5c",
-  "risk": "low",
+  "contractHash": "aa5d84f908a529b4f846c23b04373a695caeff9c88ed05d44db77582be32d522",
+  "risk": "medium",
   "verdict": "pass",
   "p0": false,
   "provider": "kimi",
   "model": "kimi-k3",
   "transport": "openai-compatible-api",
-  "requestId": "chatcmpl-6a6a53d12af41a0d7dc727e8",
+  "requestId": "chatcmpl-6a6ae5f15255e0b1eebffd8b",
   "reviewerDegraded": false,
   "stage": "task-review",
   "modelVerdict": "pass",
@@ -18,14 +18,14 @@
     "[object Object]"
   ],
   "p0Issues": [],
-  "summary": "The submission satisfies the contract: four typed TanStack Router pages (growth, moments, guide, profile/me) reproduce the Stitch IA with purely local interactions, and every acceptance item is evidenced — TDD red/green with 8 passing tests, TypeScript --noEmit typecheck, Vite production build with route-level chunks, scoped Biome lint, mobile QA on all four routes with a clean console, and a desktop check confirming the 768px responsive container. Scope constraints are respected: evidence explicitly confirms no remote fetch, auth, database, upload, deployment, or external persistence, consistent with the frontend-only phase-one mandate. No P0-category findings (no secrets/PII, no destructive operations, no auth surface, no supply-chain or RCE vectors) are present in the bundle. Two low-severity, non-blocking observations are noted regarding desktop QA breadth and per-interaction test itemization. Verdict: pass.",
+  "summary": "The contract is satisfied. A same-repository draft PR (#1) was created and remains unmerged and not ready; the initial workflow failure (pnpm blocking Wrangler build scripts) was reproduced with a failing static validator before the fix, then repaired by explicitly selecting npm and pinning Wrangler 4.115.0 for the deployment action. Local validation (static workflow validator, 8 tests across 3 files, typecheck, production build) passed post-repair, and workflow run #2 auto-triggered via the synchronize event succeeded in 58 seconds with the stable preview URL refreshed and correct content confirmed. The preview-versus-production boundary was preserved: no production workflow, Pages project, custom domain, content change, or merge was created or triggered, and no secrets appear in the sanitized bundle. No P0 conditions (secret/PII leakage, destructive actions, auth bypass, production impact, or supply-chain/RCE) are present; the pinned, first-party Wrangler install in CI is standard practice. Two low-severity observations are noted: the npm-vs-pnpm workaround trades away a pnpm supply-chain safeguard and may invite lockfile drift, and preview stability was verified on a single refresh cycle.",
   "reviewerDegradedReason": null,
   "blockedReason": null,
   "attempts": [
     {
       "provider": "kimi",
       "model": "kimi-k3",
-      "requestId": "chatcmpl-6a6a53d12af41a0d7dc727e8",
+      "requestId": "chatcmpl-6a6ae5f15255e0b1eebffd8b",
       "status": "pass"
     }
   ]

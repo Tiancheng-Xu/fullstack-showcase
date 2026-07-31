@@ -9,25 +9,22 @@
 - 四个页面：成长、时光、百科、我的
 - 本地交互：新增记录、搜索、分类筛选、收藏、弹窗、提醒开关
 - 无后端、无登录、无数据库、无远程 API
-- 不上传图片，不部署线上环境
+- 不上传私人图片；公开测试版本部署到独立 Cloudflare Pages 预览项目
 
 课程后续可在不推翻 UI 的情况下逐步接入 Hono、Drizzle、AWS Lambda、ECS、SQS、Agent 与 RAG。
 
 ## 技术结构
 
-Better-T-Stack 生成的工作区保留在本目录中，实际前端应用位于 `apps/web`：
+仓库采用扁平化工作区结构，根目录脚本会选择 web 工作区：
 
 ```text
-apps/web/
-├── apps/web/                 TanStack Router + React 前端
-│   ├── public/assets/        本地 Stitch 图片
-│   └── src/
-│       ├── components/       应用壳与通用 UI
-│       ├── features/         育爱成长领域页面与本地状态
-│       └── routes/           四个文件路由
-├── packages/ui/              全局 Tailwind CSS 主题与 UI 基础能力
-└── bts.jsonc                 Better-T-Stack 生成配置
+apps/web     React + Vite frontend
+apps/api     future backend boundary; not built yet
+packages/ui  reusable UI components and global styles
 ```
+
+前端源码、静态资源和 Vite 配置都直接位于 `apps/web`。`apps/api` 是未来后端
+边界，目前尚未构建；`packages/ui` 提供可复用 UI 组件和全局样式。
 
 ## 本地运行
 
@@ -35,10 +32,21 @@ apps/web/
 
 ```bash
 pnpm install
+pnpm check
 pnpm dev
+pnpm test
+pnpm typecheck
+pnpm build
 ```
 
 打开终端显示的本地地址，默认入口会跳转到 `/growth`。
+
+Root scripts select the `apps/web` workspace.
+
+`pnpm check` lints repository automation and root configuration with Biome.
+Cloudflare preview CI installs from the repository root and runs `pnpm test`,
+`pnpm typecheck`, and `pnpm build`; `pnpm dev` is for local development only.
+Cloudflare deploys `apps/web/dist`.
 
 ## 验证
 
@@ -46,16 +54,20 @@ pnpm dev
 pnpm test
 pnpm typecheck
 pnpm build
+pnpm validate:preview
 ```
 
-代码规范检查：
+## 在线预览
 
-```bash
-pnpm --dir apps/web exec biome check \
-  apps/web/src/features/nurture \
-  apps/web/src/routes \
-  apps/web/src/components
+同仓库 Pull Request 会通过 GitHub Actions 自动更新：
+
+```text
+https://course-homework-preview.pages.dev
 ```
+
+工作流使用 GitHub Actions Secrets 保存 Cloudflare 凭据，Fork Pull Request
+不会执行部署。当前项目仅为课程测试环境；生产发布将使用独立项目、独立
+工作流和人工审批。
 
 ## 后续课程扩展点
 
