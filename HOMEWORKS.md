@@ -26,6 +26,14 @@
 - 使用 ECR、ECS、ALB、Fargate 部署服务，并通过 Cloud Map 连接 Lambda 接口。
 - 基于 PR 创建独立开发环境，使用 Cloudflare、CodeBuild 和三个最小权限 IAM 角色完成 Go 版本。
 
+### 当前完成状态
+
+| 作业 ID | 本地 Go 迁移 | 本地可视验收 | 云原生部署 | 验收证据 |
+|---|---|---|---|---|
+| `AI-FULLSTACK-GITHUB-PROFILE-GO` | ✅ Go API、共享迁移与 SQLite 仓储通过 | ✅ Codex 内置浏览器通过 Go 3002 验收 | ⏳ ECR、ECS、ALB、Fargate、Cloud Map 待后续专题 | [本地验收记录](docs/qa/github-profile-fullstack.md#go-本地迁移验收) |
+
+本地 Go 完成不代表云原生部署完成；只有真实云端资源、权限、费用边界和外部验收全部通过后，才能更新“云原生部署”。
+
 ## 里程碑 3：可靠性、异步系统与 AIOps（原 07/18）
 
 - 完成 AWS Synthetics 巡检任务。
