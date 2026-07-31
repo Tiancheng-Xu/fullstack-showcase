@@ -15,7 +15,7 @@
 
 | 作业 ID | 本地实现 | 本地可视验收 | AWS 迁移 | 验收证据 |
 |---|---|---|---|---|
-| `AI-FULLSTACK-GITHUB-PROFILE` | ✅ 自动化验证通过 | ⏸ 内置浏览器连接待恢复 | ⏳ 待后续专题 | [本地验收记录](docs/qa/github-profile-fullstack.md) |
+| `AI-FULLSTACK-GITHUB-PROFILE` | ✅ 自动化验证通过 | ✅ Codex 内置浏览器验收通过 | ⏳ 待后续专题 | [本地验收记录](docs/qa/github-profile-fullstack.md) |
 
 状态检查必须分别读取“本地实现”“本地可视验收”和“AWS 迁移”，不得因本地代码通过而推断云端已完成。只有内置浏览器完成读取、保存、刷新恢复和安全错误检查后，才能把“本地可视验收”改为 ✅。
 
