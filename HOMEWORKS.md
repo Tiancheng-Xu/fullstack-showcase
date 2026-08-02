@@ -62,6 +62,33 @@
 - 选做：使用 Codex + Blender MCP 创建场景并加载到 Babylon.js。
 - 选做：用 TRELLIS.2 生成场景汽车并导入 Blender。
 
+## 里程碑 6：Web3 与 DApp（08/01、08/02）
+
+### 08/01：Solidity 合约
+
+1. 完成私人银行合约。
+2. 完成 ETH 抢红包合约。
+
+### 08/02：人生的第一个 DApp
+
+1. 新建 Vite + React 前端项目，开发一个链上记事本。
+2. 前端使用 wagmi。
+3. 使用 Hardhat 开发并部署智能合约，同时领取水龙头测试币用于验收。
+4. 将合约部署到 Sepolia 测试链，并在 [Sepolia Etherscan](https://sepolia.etherscan.io/) 查看。
+5. 对测试链合约完成源码开源验证。
+6. 可选：使用 [RainbowKit](https://rainbowkit.com/) 或 [ConnectKit](https://family.co/docs/connectkit) 完成钱包连接界面。
+7. 完成前端与链上合约的读取、写入和交易状态交互。
+
+本里程碑中的“后端”默认指部署在 Sepolia 上的智能合约及其链上状态，不额外要求传统服务器，除非课程后续补充要求。
+
+### 当前完成状态
+
+| 作业 ID | 本地实现 | 测试链部署与验证 | 验收证据 |
+|---|---|---|---|
+| `WEB3-PRIVATE-BANK` | ✅ 用户确认已完成 | ⏳ 待补记录 | ⏳ 待补源码、交易或部署证据 |
+| `WEB3-ETH-RED-PACKET` | ✅ 用户确认已完成 | ⏳ 待补记录 | ⏳ 待补源码、交易或部署证据 |
+| `WEB3-ONCHAIN-NOTEBOOK` | ⏳ 待实施 | ⏳ Sepolia 部署与源码验证 | ⏳ 待补本地交互和 Etherscan 证据 |
+
 ## 通用完成标准
 
 - 所有密钥只放在本机钥匙串、CI Secret 或云端 Secret Manager，不提交仓库。
