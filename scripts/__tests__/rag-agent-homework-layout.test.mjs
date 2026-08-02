@@ -9,7 +9,10 @@ test("RAG homework has an isolated package and records the actual implementation
 	await stat(new URL("package.json", homework));
 	const readme = await readFile(new URL("README.md", homework), "utf8");
 	assert.match(readme, /^# RAG 与 Agent 编排/m);
-	assert.match(readme, /实际实现：.*Qwen\/Qwen3-8B.*NVIDIA CUDA.*一灯学习笔记/s);
+	assert.match(
+		readme,
+		/实际实现：.*Qwen\/Qwen3-8B.*NVIDIA CUDA.*一灯学习笔记/s,
+	);
 });
 
 test("the learning notes source is documented as strictly read-only", async () => {

@@ -54,6 +54,14 @@
 
 实际实现保留原作业名称，知识材料改为严格只读的“一灯学习笔记”；先在 NVIDIA CUDA 远程机器上对 `Qwen/Qwen3-8B` 进行 QLoRA 训练，再建设 Qdrant、BGE-M3、BM25/RRF、Mastra Rerank、Mastra Client 与 LangGraph 流程。本机 Mac 不承担训练。
 
+### 当前完成状态
+
+| 作业 ID | 本地训练准备 | NVIDIA CUDA 训练 | RAG 与 Agent 应用 | 验收证据 |
+|---|---|---|---|---|
+| `AI-RAG-AGENT-ORCHESTRATION` | ✅ 63 条审核数据、版本化 release、CUDA 配置与白名单 ZIP | ⏳ 下一次会话执行 | ⏳ Qdrant、Mastra、LangGraph 待后续阶段 | [本地准备记录](homeworks/04-rag-agent-orchestration/docs/local-preparation-2026-08-02.md) |
+
+本地 Ollama 草稿生成不等于模型训练；只有 NVIDIA GPU、CUDA 预检、真实 QLoRA 日志和 Adapter 哈希全部取得后，才能更新“NVIDIA CUDA 训练”。
+
 ## 里程碑 5：游戏与 3D（原 07/18、07/26）
 
 - 了解 Three.js 和 Phaser，并完成一款 Phaser 2D 游戏。
