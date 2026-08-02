@@ -11,11 +11,19 @@ type ManifestBoundaries = Readonly<{
 
 function isInside(root: string, candidate: string): boolean {
 	const relative = path.relative(path.resolve(root), path.resolve(candidate));
-	return relative === "" || (!relative.startsWith("..") && !path.isAbsolute(relative));
+	return (
+		relative === "" ||
+		(!relative.startsWith("..") && !path.isAbsolute(relative))
+	);
 }
 
-export function resolveManifestDestination(input: string, repositoryRoot: string): string {
-	return path.isAbsolute(input) ? path.normalize(input) : path.resolve(repositoryRoot, input);
+export function resolveManifestDestination(
+	input: string,
+	repositoryRoot: string,
+): string {
+	return path.isAbsolute(input)
+		? path.normalize(input)
+		: path.resolve(repositoryRoot, input);
 }
 
 export async function writeManifest(
@@ -30,7 +38,9 @@ export async function writeManifest(
 		throw new Error("Manifest destination must be inside the homework root");
 	}
 
-	const safeDocuments = documents.map(({ absolutePath: _absolutePath, ...metadata }) => metadata);
+	const safeDocuments = documents.map(
+		({ absolutePath: _absolutePath, ...metadata }) => metadata,
+	);
 	await mkdir(path.dirname(destination), { recursive: true });
 	await writeFile(
 		destination,
@@ -46,16 +56,34 @@ async function main(): Promise<void> {
 		throw new Error("RAG_SOURCE_ROOT and RAG_MANIFEST_PATH are required");
 	}
 	const homeworkRoot = fileURLToPath(new URL("../../", import.meta.url));
-	const repositoryRoot = fileURLToPath(new URL("../../../../", import.meta.url));
+	const repositoryRoot = fileURLToPath(
+		new URL("../../../../", import.meta.url),
+	);
 	const documents = await discoverMarkdown({
 		root: sourceRoot,
-		excludedDirectoryNames: new Set([".git", "node_modules", ".archive", "tmp"]),
+		excludedDirectoryNames: new Set([
+			".git",
+			"node_modules",
+			".archive",
+			"tmp",
+		]),
 	});
-	const resolvedDestination = resolveManifestDestination(destination, repositoryRoot);
-	await writeManifest(documents, resolvedDestination, { sourceRoot, homeworkRoot });
-	process.stdout.write(`${JSON.stringify({ documentCount: documents.length, destination })}\n`);
+	const resolvedDestination = resolveManifestDestination(
+		destination,
+		repositoryRoot,
+	);
+	await writeManifest(documents, resolvedDestination, {
+		sourceRoot,
+		homeworkRoot,
+	});
+	process.stdout.write(
+		`${JSON.stringify({ documentCount: documents.length, destination })}\n`,
+	);
 }
 
-if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
+if (
+	process.argv[1] &&
+	import.meta.url === pathToFileURL(process.argv[1]).href
+) {
 	await main();
 }

@@ -16,7 +16,12 @@ async function visitDirectory(
 		const absolutePath = path.join(directory, entry.name);
 		if (entry.isDirectory()) {
 			if (!excludedDirectoryNames.has(entry.name)) {
-				await visitDirectory(root, absolutePath, excludedDirectoryNames, documents);
+				await visitDirectory(
+					root,
+					absolutePath,
+					excludedDirectoryNames,
+					documents,
+				);
 			}
 			continue;
 		}
@@ -36,9 +41,13 @@ async function visitDirectory(
 	}
 }
 
-export async function discoverMarkdown(options: CorpusOptions): Promise<readonly SourceDocument[]> {
+export async function discoverMarkdown(
+	options: CorpusOptions,
+): Promise<readonly SourceDocument[]> {
 	const root = path.resolve(options.root);
 	const documents: SourceDocument[] = [];
 	await visitDirectory(root, root, options.excludedDirectoryNames, documents);
-	return documents.sort((left, right) => left.relativePath.localeCompare(right.relativePath));
+	return documents.sort((left, right) =>
+		left.relativePath.localeCompare(right.relativePath),
+	);
 }
