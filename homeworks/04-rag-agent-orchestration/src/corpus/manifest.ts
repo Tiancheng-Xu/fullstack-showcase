@@ -14,6 +14,10 @@ function isInside(root: string, candidate: string): boolean {
 	return relative === "" || (!relative.startsWith("..") && !path.isAbsolute(relative));
 }
 
+export function resolveManifestDestination(input: string, repositoryRoot: string): string {
+	return path.isAbsolute(input) ? path.normalize(input) : path.resolve(repositoryRoot, input);
+}
+
 export async function writeManifest(
 	documents: readonly SourceDocument[],
 	destination: string,
@@ -42,11 +46,13 @@ async function main(): Promise<void> {
 		throw new Error("RAG_SOURCE_ROOT and RAG_MANIFEST_PATH are required");
 	}
 	const homeworkRoot = fileURLToPath(new URL("../../", import.meta.url));
+	const repositoryRoot = fileURLToPath(new URL("../../../../", import.meta.url));
 	const documents = await discoverMarkdown({
 		root: sourceRoot,
 		excludedDirectoryNames: new Set([".git", "node_modules", ".archive", "tmp"]),
 	});
-	await writeManifest(documents, path.resolve(destination), { sourceRoot, homeworkRoot });
+	const resolvedDestination = resolveManifestDestination(destination, repositoryRoot);
+	await writeManifest(documents, resolvedDestination, { sourceRoot, homeworkRoot });
 	process.stdout.write(`${JSON.stringify({ documentCount: documents.length, destination })}\n`);
 }
 

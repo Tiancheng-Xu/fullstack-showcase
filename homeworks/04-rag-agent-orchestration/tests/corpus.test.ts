@@ -3,7 +3,7 @@ import { tmpdir } from "node:os";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
 import { discoverMarkdown } from "../src/corpus/discover.js";
-import { writeManifest } from "../src/corpus/manifest.js";
+import { resolveManifestDestination, writeManifest } from "../src/corpus/manifest.js";
 
 describe("discoverMarkdown", () => {
 	it("returns Markdown metadata without writing to the source", async () => {
@@ -26,6 +26,21 @@ describe("discoverMarkdown", () => {
 });
 
 describe("writeManifest", () => {
+	it("resolves repository-relative CLI paths from the repository root", () => {
+		const repositoryRoot = path.join(path.sep, "workspace", "course-homework");
+		expect(
+			resolveManifestDestination(
+				"homeworks/04-rag-agent-orchestration/data/private/corpus-manifest.json",
+				repositoryRoot,
+			),
+		).toBe(
+			path.join(
+				repositoryRoot,
+				"homeworks/04-rag-agent-orchestration/data/private/corpus-manifest.json",
+			),
+		);
+	});
+
 	it("refuses to write inside the read-only source tree", async () => {
 		const sourceRoot = await mkdtemp(path.join(tmpdir(), "rag-source-"));
 		const homeworkRoot = await mkdtemp(path.join(tmpdir(), "rag-homework-"));
