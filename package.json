@@ -12,6 +12,9 @@
 		"typecheck:go": "pnpm --filter @course-homework/api-go typecheck",
 		"build": "pnpm --filter @course-homework/api build && pnpm --filter @course-homework/api-go build && pnpm --filter @course-homework/web build",
 		"build:go": "pnpm --filter @course-homework/api-go build",
+		"rag:check": "pnpm --filter @course-homework/rag-agent-orchestration check",
+		"rag:test": "pnpm --filter @course-homework/rag-agent-orchestration test",
+		"rag:typecheck": "pnpm --filter @course-homework/rag-agent-orchestration typecheck",
 		"validate:preview": "node scripts/validate-cloudflare-preview.mjs"
 	},
 	"devDependencies": {

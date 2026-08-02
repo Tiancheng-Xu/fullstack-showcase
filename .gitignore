@@ -52,6 +52,14 @@ native/engine/
 *.log
 artifacts/
 
+# RAG and model-training private state
+homeworks/04-rag-agent-orchestration/data/private/
+homeworks/04-rag-agent-orchestration/artifacts/private/
+homeworks/04-rag-agent-orchestration/.cache/
+homeworks/04-rag-agent-orchestration/**/outputs/
+homeworks/04-rag-agent-orchestration/**/*.safetensors
+homeworks/04-rag-agent-orchestration/**/*.gguf
+
 # TC Flow worktrees
 .tc-worktrees/
 

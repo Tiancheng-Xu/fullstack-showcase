@@ -1,0 +1,23 @@
+{
+	"name": "@course-homework/rag-agent-orchestration",
+	"private": true,
+	"type": "module",
+	"scripts": {
+		"check": "biome check src tests package.json tsconfig.json vitest.config.ts",
+		"test": "vitest run",
+		"typecheck": "tsc --noEmit",
+		"manifest": "tsx src/corpus/manifest.ts",
+		"dataset:verify": "tsx src/dataset/review.ts",
+		"bundle:verify": "tsx src/bundle/verify.ts"
+	},
+	"dependencies": {
+		"zod": "catalog:"
+	},
+	"devDependencies": {
+		"@types/node": "catalog:",
+		"tsx": "^4.20.6",
+		"typescript": "catalog:",
+		"vitest": "^4.1.10",
+		"yaml": "^2.9.0"
+	}
+}

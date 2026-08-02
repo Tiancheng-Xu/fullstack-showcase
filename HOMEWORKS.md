@@ -52,6 +52,8 @@
 - 选做：把向量数据库工作流的历史经验整理为 Markdown 并入库。
 - 选做：结合底座模型、LoRA 和向量数据库进行内容润色；本机不配置训练环境。
 
+实际实现保留原作业名称，知识材料改为严格只读的“一灯学习笔记”；先在 NVIDIA CUDA 远程机器上对 `Qwen/Qwen3-8B` 进行 QLoRA 训练，再建设 Qdrant、BGE-M3、BM25/RRF、Mastra Rerank、Mastra Client 与 LangGraph 流程。本机 Mac 不承担训练。
+
 ## 里程碑 5：游戏与 3D（原 07/18、07/26）
 
 - 了解 Three.js 和 Phaser，并完成一款 Phaser 2D 游戏。
