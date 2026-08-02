@@ -7,6 +7,7 @@
 		"test": "vitest run",
 		"typecheck": "tsc --noEmit",
 		"manifest": "tsx src/corpus/manifest.ts",
+		"review:apply": "tsx src/dataset/apply-review.ts",
 		"dataset:verify": "tsx src/dataset/review.ts",
 		"bundle:verify": "tsx src/bundle/verify.ts"
 	},
