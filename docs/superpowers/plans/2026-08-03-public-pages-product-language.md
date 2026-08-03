@@ -395,7 +395,14 @@ Expected: all selected tests PASS and rendered DOM contains none of the prohibit
 - [ ] **Step 6: Commit Task 3**
 
 ```sh
-git add homeworks/06-web3-dapp/web/src
+git add \
+  homeworks/06-web3-dapp/web/src/App.test.tsx \
+  homeworks/06-web3-dapp/web/src/components/Hero.tsx \
+  homeworks/06-web3-dapp/web/src/components/WalletPanel.test.tsx \
+  homeworks/06-web3-dapp/web/src/components/WalletPanel.tsx \
+  homeworks/06-web3-dapp/web/src/components/CourseEvidenceFooter.tsx \
+  homeworks/06-web3-dapp/web/src/features/notebook/NotebookPanel.test.tsx \
+  homeworks/06-web3-dapp/web/src/features/notebook/NotebookPanel.tsx
 git commit -m "feat(web3): productize public BabySteps language"
 ```
 
@@ -486,7 +493,23 @@ git diff --check
 Stage only files owned by this plan, then commit:
 
 ```sh
-git add apps/web/src homeworks/06-web3-dapp/web/src scripts/__tests__/public-product-language.test.mjs
+git add \
+  apps/web/src/features/github-profile/github-profile-content.test.tsx \
+  apps/web/src/features/github-profile/github-profile-content.tsx \
+  apps/web/src/features/nurture/__tests__/local-interactions.test.tsx \
+  apps/web/src/features/nurture/moments-content.tsx \
+  apps/web/src/features/nurture/profile-content.test.tsx \
+  apps/web/src/features/nurture/profile-content.tsx \
+  apps/web/src/routes/homework.github-profile.tsx \
+  apps/web/src/routes/projects.github-profile.tsx \
+  homeworks/06-web3-dapp/web/src/App.test.tsx \
+  homeworks/06-web3-dapp/web/src/components/Hero.tsx \
+  homeworks/06-web3-dapp/web/src/components/WalletPanel.test.tsx \
+  homeworks/06-web3-dapp/web/src/components/WalletPanel.tsx \
+  homeworks/06-web3-dapp/web/src/components/CourseEvidenceFooter.tsx \
+  homeworks/06-web3-dapp/web/src/features/notebook/NotebookPanel.test.tsx \
+  homeworks/06-web3-dapp/web/src/features/notebook/NotebookPanel.tsx \
+  scripts/__tests__/public-product-language.test.mjs
 git commit -m "feat: align public pages for product showcase"
 ```
 
