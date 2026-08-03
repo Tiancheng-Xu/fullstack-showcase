@@ -212,3 +212,33 @@ test("keeps Saturday and Sunday Web3 homework isolated", async () => {
 	}
 	assert.equal(await exists("apps/web/src/features/web3"), false);
 });
+
+test("registers the isolated Sunday Web3 workspace and protects local secrets", async () => {
+	const [workspace, rootPackageText] = await Promise.all([
+		readFile(path.join(root, "pnpm-workspace.yaml"), "utf8"),
+		readFile(path.join(root, "package.json"), "utf8"),
+	]);
+	const rootPackage = JSON.parse(rootPackageText);
+
+	assert.match(workspace, /homeworks\/\*\/\*/);
+	for (const script of [
+		"web3:check",
+		"web3:test",
+		"web3:typecheck",
+		"web3:build",
+	]) {
+		assert.equal(typeof rootPackage.scripts[script], "string");
+	}
+	for (const localPath of [
+		"homeworks/06-web3-dapp/contracts/.hardhat-keystore.json",
+		"homeworks/06-web3-dapp/contracts/cache",
+		"homeworks/06-web3-dapp/contracts/ignition/deployments",
+		"homeworks/06-web3-dapp/web/.env.local",
+	]) {
+		assert.equal(
+			await isIgnored(localPath),
+			true,
+			`${localPath} must be ignored`,
+		);
+	}
+});

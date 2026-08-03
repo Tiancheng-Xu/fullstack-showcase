@@ -52,6 +52,12 @@ native/engine/
 *.log
 artifacts/
 
+# Local Web3 development state and credentials
+homeworks/06-web3-dapp/contracts/.hardhat-keystore.json
+homeworks/06-web3-dapp/contracts/cache
+homeworks/06-web3-dapp/contracts/ignition/deployments
+homeworks/06-web3-dapp/web/.env.local
+
 # TC Flow worktrees
 .tc-worktrees/
 

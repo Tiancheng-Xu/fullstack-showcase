@@ -12,6 +12,10 @@
 		"typecheck:go": "pnpm --filter @course-homework/api-go typecheck",
 		"build": "pnpm --filter @course-homework/api build && pnpm --filter @course-homework/api-go build && pnpm --filter @course-homework/web build",
 		"build:go": "pnpm --filter @course-homework/api-go build",
+		"web3:check": "pnpm --filter @course-homework/web3-contracts check && pnpm --filter @course-homework/web3-web check",
+		"web3:test": "pnpm --filter @course-homework/web3-contracts test && pnpm --filter @course-homework/web3-web test",
+		"web3:typecheck": "pnpm --filter @course-homework/web3-contracts typecheck && pnpm --filter @course-homework/web3-web typecheck",
+		"web3:build": "pnpm --filter @course-homework/web3-contracts build && pnpm --filter @course-homework/web3-web build",
 		"validate:preview": "node scripts/validate-cloudflare-preview.mjs"
 	},
 	"devDependencies": {
