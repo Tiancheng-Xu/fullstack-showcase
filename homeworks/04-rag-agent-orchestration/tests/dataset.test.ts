@@ -87,7 +87,15 @@ describe("SFT dataset", () => {
 	});
 
 	it("accepts an approved three-message example with provenance", () => {
-		expect(SftExampleSchema.parse(example)).toEqual(example);
+		expect(SftExampleSchema.parse(example)).toMatchObject({
+			...example,
+			capability: "architecture",
+			topic: "cross-topic",
+			provenance: {
+				sourceKind: "legacy-derived",
+				sourceGroup: "rag-sft-20260802-v1",
+			},
+		});
 	});
 
 	it("rejects drafts from the outbound training payload", () => {

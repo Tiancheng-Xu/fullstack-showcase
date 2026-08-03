@@ -41,7 +41,11 @@ export function applyReviewDecisions(
 		const reviewed = SftExampleSchema.parse({
 			...draft,
 			id,
-			review: { status: "approved", reviewedAt: options.reviewedAt },
+			review: {
+				status: "approved",
+				reviewedAt: options.reviewedAt,
+				rubricVersion: draft.review.rubricVersion,
+			},
 		});
 		validateForExport(reviewed);
 		approved.push(reviewed);

@@ -10,7 +10,14 @@ const DraftResponseSchema = z.object({
 	assistant: z.string().min(1).max(8000),
 });
 
-const topicAliases = new Map<string, SftExample["topic"]>([
+type LegacyDraftTopic =
+	| "learn"
+	| "interview"
+	| "architecture"
+	| "execute"
+	| "refusal";
+
+const topicAliases = new Map<string, LegacyDraftTopic>([
 	["learn", "learn"],
 	["学习", "learn"],
 	["interview", "interview"],
@@ -23,7 +30,7 @@ const topicAliases = new Map<string, SftExample["topic"]>([
 	["拒绝", "refusal"],
 ]);
 
-export function normalizeDraftTopic(value: string): SftExample["topic"] {
+export function normalizeDraftTopic(value: string): LegacyDraftTopic {
 	return topicAliases.get(value.trim().toLowerCase()) ?? "learn";
 }
 
