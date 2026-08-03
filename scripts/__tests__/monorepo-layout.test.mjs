@@ -77,6 +77,10 @@ async function isTracked(relativePath) {
 	}
 }
 
+function escapeRegExp(value) {
+	return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
 test("uses one root workspace and lockfile", async () => {
 	assert.deepEqual(await findNamed(root, "pnpm-workspace.yaml"), [
 		"pnpm-workspace.yaml",
@@ -239,6 +243,64 @@ test("registers the isolated Sunday Web3 workspace and protects local secrets", 
 			await isIgnored(localPath),
 			true,
 			`${localPath} must be ignored`,
+		);
+	}
+});
+
+test("documents and protects the complete Sunday Web3 implementation", async () => {
+	for (const required of [
+		"homeworks/06-web3-dapp/web/src/features/growth/useGrowth.ts",
+		"homeworks/06-web3-dapp/web/src/components/StarBuddy.tsx",
+		"docs/qa/web3-onchain-notebook.md",
+	]) {
+		assert.equal(await exists(required), true, `${required} must exist`);
+	}
+
+	const readme = await readFile(
+		path.join(root, "homeworks/06-web3-dapp/README.md"),
+		"utf8",
+	);
+	for (const fragment of [
+		"UTC+8",
+		"Meal",
+		"Walk",
+		"Read",
+		"SEPOLIA_RPC_URL",
+		"SEPOLIA_PRIVATE_KEY",
+		"ETHERSCAN_API_KEY",
+		"VITE_ONCHAIN_NOTEBOOK_ADDRESS",
+		"web3:check",
+		"web3:test",
+		"web3:typecheck",
+		"web3:build",
+		"deploy:sepolia",
+		"deploy:verify:sepolia",
+	]) {
+		assert.match(readme, new RegExp(escapeRegExp(fragment)));
+	}
+
+	const { stdout } = await execFile(
+		"git",
+		["ls-files", "-z", "--", "homeworks/06-web3-dapp"],
+		{ cwd: root, encoding: "utf8" },
+	);
+	const trackedFiles = stdout.split("\0").filter(Boolean);
+	for (const relativePath of trackedFiles) {
+		const content = await readFile(path.join(root, relativePath), "utf8");
+		assert.doesNotMatch(
+			content,
+			/0x[0-9a-fA-F]{64}/,
+			`${relativePath} must not contain a private-key-like value`,
+		);
+		assert.doesNotMatch(
+			content,
+			/(?:mnemonic|助记词)\s*[:=]\s*[^\s`]+/i,
+			`${relativePath} must not contain a mnemonic value`,
+		);
+		assert.doesNotMatch(
+			content,
+			/VITE_[A-Z0-9_]*(?:SECRET|PRIVATE|KEY|TOKEN)[A-Z0-9_]*/,
+			`${relativePath} must not define a client-side secret variable`,
 		);
 	}
 });
