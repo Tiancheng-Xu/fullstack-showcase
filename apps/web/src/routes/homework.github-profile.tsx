@@ -1,7 +1,10 @@
-import { createFileRoute } from "@tanstack/react-router";
-
-import { GitHubProfileContent } from "@/features/github-profile/github-profile-content";
+import { createFileRoute, redirect } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/homework/github-profile")({
-	component: GitHubProfileContent,
+	beforeLoad: () => {
+		throw redirect({
+			to: "/projects/github-profile",
+			replace: true,
+		});
+	},
 });
