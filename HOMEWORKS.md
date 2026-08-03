@@ -62,6 +62,14 @@
 - 选做：使用 Codex + Blender MCP 创建场景并加载到 Babylon.js。
 - 选做：用 TRELLIS.2 生成场景汽车并导入 Blender。
 
+## 里程碑 6：Web3 与智能合约（原 08/02、08/03）
+
+| 周六源码/编译 | 周六 Remix VM 部署/交互 | 周日本地实现 | Sepolia 部署 | Etherscan 验证 | 前端可视验收 |
+|---|---|---|---|---|---|
+| ✅ | ✅ | ⏳ | ⏳ | ⏳ | ⏳ |
+
+周六记录仅为 Remix VM（Osaka）中的临时本地 EVM 证据，不代表 Sepolia 部署或 Etherscan 验证。详见[周六 Remix 合约验收记录](docs/qa/web3-saturday-contracts.md)。
+
 ## 通用完成标准
 
 - 所有密钥只放在本机钥匙串、CI Secret 或云端 Secret Manager，不提交仓库。

@@ -200,3 +200,15 @@ test("records the learning-notes working agreement", async () => {
 		/do not trigger production deployment without explicit authorization/i,
 	);
 });
+
+test("keeps Saturday and Sunday Web3 homework isolated", async () => {
+	for (const required of [
+		"homeworks/05-web3-remix/contracts/SimpleBank.sol",
+		"homeworks/05-web3-remix/contracts/RedPacket.sol",
+		"homeworks/05-web3-remix/README.md",
+		"docs/qa/web3-saturday-contracts.md",
+	]) {
+		assert.equal(await exists(required), true, `${required} must exist`);
+	}
+	assert.equal(await exists("apps/web/src/features/web3"), false);
+});
