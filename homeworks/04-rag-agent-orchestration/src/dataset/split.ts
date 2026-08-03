@@ -8,6 +8,7 @@ import { validateReviewedExamples } from "./review.js";
 export type SplitExample = Readonly<{
 	id: string;
 	sourceIds: readonly string[];
+	duplicateClusterId?: string;
 	messages?: readonly Readonly<{ role: string; content: string }>[];
 }>;
 
@@ -36,11 +37,20 @@ function connectedComponents<T extends SplitExample>(
 		}
 	};
 	const sourceOwners = new Map<string, number>();
+	const clusterOwners = new Map<string, number>();
 	for (const [index, example] of examples.entries()) {
 		for (const sourceId of example.sourceIds) {
 			const owner = sourceOwners.get(sourceId);
 			if (owner === undefined) {
 				sourceOwners.set(sourceId, index);
+			} else {
+				union(index, owner);
+			}
+		}
+		if (example.duplicateClusterId) {
+			const owner = clusterOwners.get(example.duplicateClusterId);
+			if (owner === undefined) {
+				clusterOwners.set(example.duplicateClusterId, index);
 			} else {
 				union(index, owner);
 			}
