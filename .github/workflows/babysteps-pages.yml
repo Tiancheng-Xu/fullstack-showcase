@@ -27,7 +27,7 @@ jobs:
     name: Verify and build BabySteps
     runs-on: ubuntu-latest
     env:
-      VITE_ONCHAIN_NOTEBOOK_ADDRESS: 0xeb7216D50a2708a59fef5322e452e34382aFCDaD
+      VITE_ONCHAIN_NOTEBOOK_ADDRESS: "0xeb7216D50a2708a59fef5322e452e34382aFCDaD"
       VITE_BASE_PATH: /fullstack-showcase/
     steps:
       - name: Check out source
