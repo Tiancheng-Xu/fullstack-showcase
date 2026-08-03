@@ -29,6 +29,14 @@ function fakeApi(overrides: Partial<GitHubProfileApi> = {}): GitHubProfileApi {
 }
 
 describe("GitHub profile homework form", () => {
+	it("presents the profile as a product page", async () => {
+		render(<GitHubProfileContent api={fakeApi()} />);
+
+		expect(await screen.findByText("GitHub 个人资料")).toBeVisible();
+		expect(screen.getByText("AI 全栈个人资料")).toBeVisible();
+		expect(document.body).not.toHaveTextContent(/作业|课程|老师|验收/);
+	});
+
 	it("shows the empty saved state without exposing a credential field", async () => {
 		render(<GitHubProfileContent api={fakeApi()} />);
 

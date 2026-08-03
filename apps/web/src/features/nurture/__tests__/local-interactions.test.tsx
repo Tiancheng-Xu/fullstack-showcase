@@ -40,4 +40,14 @@ describe("Nurture Bloom local interactions", () => {
 
 		expect(favorite).toHaveAttribute("aria-pressed", "true");
 	});
+
+	it("describes future Moments capability as a product version", async () => {
+		const user = userEvent.setup();
+		render(<MomentsContent />);
+
+		await user.click(screen.getByRole("button", { name: "添加时光" }));
+
+		expect(screen.getByText("后续版本将接入真实图片上传")).toBeVisible();
+		expect(document.body).not.toHaveTextContent(/作业|课程|老师|验收/);
+	});
 });

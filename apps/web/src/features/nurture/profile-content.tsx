@@ -88,10 +88,10 @@ export function ProfileContent() {
 			<section className="overflow-hidden rounded-[2rem] bg-card shadow-card">
 				<Link
 					className="flex w-full items-center gap-3 p-4 text-left hover:bg-muted/50"
-					to="/homework/github-profile"
+					to="/projects/github-profile"
 				>
 					<Cloud aria-hidden="true" className="text-primary" size={20} />
-					<span className="flex-1 font-semibold">GitHub 个人资料作业</span>
+					<span className="flex-1 font-semibold">GitHub 个人资料</span>
 					<ChevronRight
 						aria-hidden="true"
 						className="text-muted-foreground"

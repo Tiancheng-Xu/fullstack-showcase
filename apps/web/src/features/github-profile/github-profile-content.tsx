@@ -144,9 +144,9 @@ export function GitHubProfileContent({
 					</div>
 					<div>
 						<p className="font-semibold text-primary text-xs">
-							AI 全栈课程作业
+							AI 全栈个人资料
 						</p>
-						<h1 className="mt-1 font-bold text-2xl">GitHub 个人资料作业</h1>
+						<h1 className="mt-1 font-bold text-2xl">GitHub 个人资料</h1>
 						<p className="mt-2 text-muted-foreground text-sm leading-6">
 							GitHub 访问凭据只保存在服务端的系统钥匙串中，浏览器不会接触它。
 						</p>

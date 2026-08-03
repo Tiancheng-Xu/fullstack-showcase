@@ -99,7 +99,7 @@ export function MomentsContent() {
 						className="mx-auto text-primary"
 						size={36}
 					/>
-					<p className="mt-3 font-semibold">课程后续将接入真实图片上传</p>
+					<p className="mt-3 font-semibold">后续版本将接入真实图片上传</p>
 					<p className="mt-1 text-muted-foreground text-sm">
 						当前阶段保留本地交互，不会上传任何文件。
 					</p>
