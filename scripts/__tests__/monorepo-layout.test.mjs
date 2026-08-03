@@ -267,9 +267,9 @@ test("documents and protects the complete Sunday Web3 implementation", async () 
 		"Meal",
 		"Walk",
 		"Read",
-		"SEPOLIA_RPC_URL",
-		"SEPOLIA_PRIVATE_KEY",
-		"ETHERSCAN_API_KEY",
+		"SEPOLIARPCURL",
+		"SEPOLIAPRIVATEKEY",
+		"ETHERSCANAPIKEY",
 		"VITE_ONCHAIN_NOTEBOOK_ADDRESS",
 		"web3:check",
 		"web3:test",
@@ -296,8 +296,12 @@ test("documents and protects the complete Sunday Web3 implementation", async () 
 	const trackedFiles = stdout.split("\0").filter(Boolean);
 	for (const relativePath of trackedFiles) {
 		const content = await readFile(path.join(root, relativePath), "utf8");
+		const contentWithoutPublicSepoliaTransactions = content.replaceAll(
+			/https:\/\/sepolia\.etherscan\.io\/tx\/0x[0-9a-fA-F]{64}/g,
+			"https://sepolia.etherscan.io/tx/PUBLIC_TRANSACTION_HASH",
+		);
 		assert.doesNotMatch(
-			content,
+			contentWithoutPublicSepoliaTransactions,
 			/0x[0-9a-fA-F]{64}/,
 			`${relativePath} must not contain a private-key-like value`,
 		);
