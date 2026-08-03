@@ -54,13 +54,15 @@
 
 实际实现保留原作业名称，知识材料改为严格只读的“一灯学习笔记”；先在 NVIDIA CUDA 远程机器上对 `Qwen/Qwen3-8B` 进行 QLoRA 训练，再建设 Qdrant、BGE-M3、BM25/RRF、Mastra Rerank、Mastra Client 与 LangGraph 流程。本机 Mac 不承担训练。
 
+综合产品实现为“一灯 Agent”：课程知识助理与面试教练优先用大白话组织知识网络，同时提供 `grill-me`、架构顾问、项目读取/修改/测试、增量索引、长期学习记忆、官方知识最小单元回写，以及 Codex、Claude Code、Cherry Studio/Ollama 跨平台离线能力。创建或扩大付费资源仍需当次明确确认。正式设计见 [综合设计](docs/superpowers/specs/2026-08-02-yideng-agent-rag-training-design.md)，当前训练计划见 [正式训练计划](docs/superpowers/plans/2026-08-02-qwen3-formal-training.md)。
+
 ### 当前完成状态
 
-| 作业 ID | 本地训练准备 | NVIDIA CUDA 训练 | RAG 与 Agent 应用 | 验收证据 |
-|---|---|---|---|---|
-| `AI-RAG-AGENT-ORCHESTRATION` | ✅ 63 条审核数据、版本化 release、CUDA 配置与白名单 ZIP | ⏳ 下一次会话执行 | ⏳ Qdrant、Mastra、LangGraph 待后续阶段 | [本地准备记录](homeworks/04-rag-agent-orchestration/docs/local-preparation-2026-08-02.md) |
+| 作业 ID | Smoke 准备 | 正式训练数据 | NVIDIA CUDA 训练 | RAG、Agent 与跨平台 | 验收证据 |
+|---|---|---|---|---|---|
+| `AI-RAG-AGENT-ORCHESTRATION` | ✅ v1 共 63 条：50 train / 7 validation / 6 frozen test | ⏳ 至少 300 train，独立 validation/test 另计 | ⏳ 实际硬件待付费启动后核验 | ⏳ Qdrant、Rerank、Mastra Client、LangGraph、记忆和平台适配 | [本地准备记录](homeworks/04-rag-agent-orchestration/docs/local-preparation-2026-08-02.md) |
 
-本地 Ollama 草稿生成不等于模型训练；只有 NVIDIA GPU、CUDA 预检、真实 QLoRA 日志和 Adapter 哈希全部取得后，才能更新“NVIDIA CUDA 训练”。
+本地 Ollama 草稿生成和 50 条 smoke 不等于正式训练；只有正式 release 至少 300 条 train、独立验证/冻结测试与泄漏检查通过，并取得 NVIDIA GPU/CUDA 预检、正式 QLoRA 日志、Adapter 哈希、base 对比和 Mac GGUF/Ollama 验收后，才能更新“NVIDIA CUDA 训练”。原课程的 RAG、Rerank、Mastra Client 与 LangGraph 仍是独立必做门槛，不能被 QLoRA 替代。
 
 ## 里程碑 5：游戏与 3D（原 07/18、07/26）
 
