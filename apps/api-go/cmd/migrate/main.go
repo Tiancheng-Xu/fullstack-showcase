@@ -4,8 +4,8 @@ import (
 	"context"
 	"log"
 
-	"github.com/Tiancheng-Xu/course-homework/apps/api-go/internal/config"
-	"github.com/Tiancheng-Xu/course-homework/apps/api-go/internal/migrations"
+	"github.com/Tiancheng-Xu/fullstack-showcase/apps/api-go/internal/config"
+	"github.com/Tiancheng-Xu/fullstack-showcase/apps/api-go/internal/migrations"
 )
 
 func main() {

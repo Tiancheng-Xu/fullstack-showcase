@@ -6,7 +6,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/Tiancheng-Xu/course-homework/apps/api-go/internal/migrations"
+	"github.com/Tiancheng-Xu/fullstack-showcase/apps/api-go/internal/migrations"
 )
 
 func Open(t testing.TB) *sql.DB {

@@ -11,7 +11,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Tiancheng-Xu/course-homework/apps/api-go/internal/apperror"
+	"github.com/Tiancheng-Xu/fullstack-showcase/apps/api-go/internal/apperror"
 )
 
 const validUpstreamProfile = `{

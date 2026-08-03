@@ -8,8 +8,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Tiancheng-Xu/course-homework/apps/api-go/internal/contracts"
-	"github.com/Tiancheng-Xu/course-homework/apps/api-go/internal/testdb"
+	"github.com/Tiancheng-Xu/fullstack-showcase/apps/api-go/internal/contracts"
+	"github.com/Tiancheng-Xu/fullstack-showcase/apps/api-go/internal/testdb"
 )
 
 func TestFindLatestReturnsNilForEmptyDatabase(t *testing.T) {

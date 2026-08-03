@@ -28,7 +28,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       VITE_ONCHAIN_NOTEBOOK_ADDRESS: 0xeb7216D50a2708a59fef5322e452e34382aFCDaD
-      VITE_BASE_PATH: /course-homework/
+      VITE_BASE_PATH: /fullstack-showcase/
     steps:
       - name: Check out source
         uses: actions/checkout@v4

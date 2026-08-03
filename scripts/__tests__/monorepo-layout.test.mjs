@@ -337,7 +337,7 @@ test("publishes BabySteps through GitHub Pages with the repository base path", a
 		"actions/deploy-pages@v4",
 		"homeworks/06-web3-dapp/web/dist",
 		"VITE_ONCHAIN_NOTEBOOK_ADDRESS",
-		"VITE_BASE_PATH: /course-homework/",
+		"VITE_BASE_PATH: /fullstack-showcase/",
 	]) {
 		assert.match(workflow, new RegExp(escapeRegExp(fragment)));
 	}

@@ -11,12 +11,12 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/Tiancheng-Xu/course-homework/apps/api-go/internal/config"
-	"github.com/Tiancheng-Xu/course-homework/apps/api-go/internal/github"
-	"github.com/Tiancheng-Xu/course-homework/apps/api-go/internal/httpapi"
-	"github.com/Tiancheng-Xu/course-homework/apps/api-go/internal/keychain"
-	"github.com/Tiancheng-Xu/course-homework/apps/api-go/internal/migrations"
-	"github.com/Tiancheng-Xu/course-homework/apps/api-go/internal/profile"
+	"github.com/Tiancheng-Xu/fullstack-showcase/apps/api-go/internal/config"
+	"github.com/Tiancheng-Xu/fullstack-showcase/apps/api-go/internal/github"
+	"github.com/Tiancheng-Xu/fullstack-showcase/apps/api-go/internal/httpapi"
+	"github.com/Tiancheng-Xu/fullstack-showcase/apps/api-go/internal/keychain"
+	"github.com/Tiancheng-Xu/fullstack-showcase/apps/api-go/internal/migrations"
+	"github.com/Tiancheng-Xu/fullstack-showcase/apps/api-go/internal/profile"
 )
 
 func main() {

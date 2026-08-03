@@ -2,7 +2,7 @@
 
 ## Goal
 
-Use GitHub Actions to update one minimal, stable Cloudflare Pages preview environment for same-repository pull requests in `Tiancheng-Xu/course-homework`.
+Use GitHub Actions to update one minimal, stable Cloudflare Pages preview environment for same-repository pull requests in `Tiancheng-Xu/fullstack-showcase`.
 
 ## Architecture
 

@@ -1,4 +1,4 @@
-module github.com/Tiancheng-Xu/course-homework/apps/api-go
+module github.com/Tiancheng-Xu/fullstack-showcase/apps/api-go
 
 go 1.26
 

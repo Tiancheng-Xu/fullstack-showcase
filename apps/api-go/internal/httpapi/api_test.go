@@ -11,8 +11,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Tiancheng-Xu/course-homework/apps/api-go/internal/apperror"
-	"github.com/Tiancheng-Xu/course-homework/apps/api-go/internal/contracts"
+	"github.com/Tiancheng-Xu/fullstack-showcase/apps/api-go/internal/apperror"
+	"github.com/Tiancheng-Xu/fullstack-showcase/apps/api-go/internal/contracts"
 )
 
 func TestHealth(t *testing.T) {
