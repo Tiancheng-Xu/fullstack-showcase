@@ -7,8 +7,9 @@
 | P0 本地链上便签实现 | ✅ | 合约、wagmi hook 与页面测试通过；280 UTF-8 字节限制、覆盖保存和清空当前值已实现 |
 | P1 本地 BabySteps 实现 | ✅ | 三类活动、UTC+8 每日限制、成长星、四阶段星宝和独立活动界面已实现 |
 | P1 本地可转积分实现 | ✅ | 双账本、直接赠送、余额读取、交易状态和赠送页面已通过专项测试 |
-| 本地自动化验证 | ✅ | Web3 合约 27 项、前端 121 项；仓库结构 20 项、API 31 项、Web 23 项及 Go 全包测试通过 |
+| 本地自动化验证 | ✅ | Web3 合约 27 项、前端 121 项；仓库结构 21 项、API 31 项、Web 23 项及 Go 全包测试通过 |
 | 本地可视验收 | ✅ | 外置 Chrome + MetaMask 连接 Sepolia；页面刷新、钱包切换、输入边界和交易状态均已观察 |
+| GitHub Pages 公网发布 | ✅ | `https://tiancheng-xu.github.io/fullstack-showcase/`；外置 Chrome 已确认产品页、Sepolia 与便签区域正常加载 |
 | Sepolia 部署 | ✅ | 合约 `0xeb7216…FCDaD`，部署交易 `0x2128ff…f674a`，区块 `11411013` |
 | Etherscan 开源验证 | ✅ | Contract Source Code Verified，Exact Match；合约名 `OnchainNotebook` |
 | Sepolia P0 交互 | ✅ | 已保存、刷新读取、覆盖、两步清空并恢复原文；所有事件均由公开 RPC 复核 |
@@ -40,7 +41,7 @@
 | `pnpm web3:typecheck` | ✅ 合约与前端 TypeScript 检查通过 |
 | `pnpm web3:build` | ✅ 使用真实 Sepolia 合约地址完成生产构建 |
 | `pnpm check` | ✅ 仓库 Biome 与 Go 格式检查通过 |
-| `pnpm test` | ✅ 结构 20 项、API 31 项、Go 全包、Web 23 项通过 |
+| `pnpm test` | ✅ 结构 21 项、API 31 项、Go 全包、Web 23 项通过 |
 | `pnpm typecheck` | ✅ API、Go、Web 检查通过 |
 | `pnpm build` | ✅ API、Go、现有 Web 生产构建成功 |
 | `git diff --check` | ✅ 无空白错误 |
@@ -64,6 +65,14 @@
 - [x] P1：零地址、本人地址、零数量、小数和余额不足均被页面或合约安全拒绝。
 - [x] 成功交易链接打开 Sepolia Etherscan 对应交易。
 - [x] 页面没有输入、显示或上传儿童隐私资料的入口。
+
+## GitHub Pages 公网证据
+
+- 公网产品页：[BabySteps · 成长星球](https://tiancheng-xu.github.io/fullstack-showcase/)
+- 公开源码仓库：[Tiancheng-Xu/fullstack-showcase](https://github.com/Tiancheng-Xu/fullstack-showcase)
+- 发布工作流：[GitHub Actions 运行 `30831265265`](https://github.com/Tiancheng-Xu/fullstack-showcase/actions/runs/30831265265)
+- 发布来源：分支 `codex/web3-onchain-notebook`，GitHub Pages 环境仅额外允许该展示分支和 `main`
+- 外置 Chrome 观察：标题为 `BabySteps · 成长星球`，Sepolia、钱包连接、成长、赠送和链上便签区域均加载；页面无“作业/课程/老师/验收”展示文字
 
 ## Sepolia 公开证据
 

@@ -72,7 +72,8 @@
 
 周日实现为 `BabySteps · 成长星球` 概念验证版，已完成链上便签、wagmi 前端、
 双账本成长星、测试钱包直接赠送和原创虚拟伙伴，并已部署至 Sepolia、完成 Etherscan
-源码 Exact Match 验证及 Chrome + MetaMask 可视验收。详见
+源码 Exact Match 验证及 Chrome + MetaMask 可视验收；公网产品页为
+[BabySteps · 成长星球](https://tiancheng-xu.github.io/fullstack-showcase/)。详见
 [周日 BabySteps 验收记录](docs/qa/web3-onchain-notebook.md)。
 
 ## 通用完成标准
