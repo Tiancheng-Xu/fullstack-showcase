@@ -166,7 +166,7 @@ git commit -m "feat(web): present public pages as products"
 
 **Interfaces:**
 - Consumes: the `/projects/github-profile` link produced by Task 1 and the existing `GitHubProfileContent` component.
-- Produces: one canonical rendering route, a legacy redirect used by existing bookmarks, and a repository-wide guard for public frontend literals.
+- Produces: one canonical rendering route and a legacy redirect used by existing bookmarks.
 
 - [ ] **Step 1: Add the failing route structure test**
 
@@ -174,25 +174,8 @@ Create `scripts/__tests__/public-product-language.test.mjs`:
 
 ```js
 import assert from "node:assert/strict";
-import { readdir, readFile } from "node:fs/promises";
+import { readFile } from "node:fs/promises";
 import test from "node:test";
-
-const repositoryRoot = new URL("../../", import.meta.url);
-const publicSourceRoots = [
-	new URL("apps/web/src/", repositoryRoot),
-	new URL("homeworks/06-web3-dapp/web/src/", repositoryRoot),
-];
-
-async function sourceFiles(directory) {
-	const entries = await readdir(directory, { withFileTypes: true });
-	const nested = await Promise.all(entries.map(async (entry) => {
-		const url = new URL(`${entry.name}${entry.isDirectory() ? "/" : ""}`, directory);
-		if (entry.isDirectory()) return sourceFiles(url);
-		if (!entry.name.endsWith(".tsx") || entry.name.includes(".test.")) return [];
-		return [url];
-	}));
-	return nested.flat();
-}
 
 const canonicalPath = new URL(
 	"../../apps/web/src/routes/projects.github-profile.tsx",
@@ -213,14 +196,6 @@ test("GitHub Profile has a product route and a legacy redirect", async () => {
 	assert.match(legacy, /to:\s*"\/projects\/github-profile"/);
 	assert.match(legacy, /replace:\s*true/);
 	assert.doesNotMatch(legacy, /component:\s*GitHubProfileContent/);
-});
-
-test("public frontend literals do not present projects as coursework", async () => {
-	const files = (await Promise.all(publicSourceRoots.map(sourceFiles))).flat();
-	for (const file of files) {
-		const source = await readFile(file, "utf8");
-		assert.doesNotMatch(source, /作业|课程|老师|验收/, file.pathname);
-	}
 });
 ```
 
@@ -288,6 +263,7 @@ git commit -m "feat(web): add public GitHub Profile route"
 ### Task 3: Productize BabySteps rendered language
 
 **Files:**
+- Modify: `scripts/__tests__/public-product-language.test.mjs`
 - Modify: `homeworks/06-web3-dapp/web/src/App.test.tsx`
 - Modify: `homeworks/06-web3-dapp/web/src/components/Hero.tsx`
 - Modify: `homeworks/06-web3-dapp/web/src/components/WalletPanel.test.tsx`
@@ -301,6 +277,41 @@ git commit -m "feat(web): add public GitHub Profile route"
 - Produces: product-language DOM with the same component APIs, CSS hooks, and transaction behavior.
 
 - [ ] **Step 1: Replace old copy expectations with the approved product language**
+
+First extend `public-product-language.test.mjs` with a recursive scan over
+`apps/web/src` and `homeworks/06-web3-dapp/web/src`. Exclude `*.test.tsx`; assert
+that every remaining `.tsx` source does not match `/作业|课程|老师|验收/`.
+
+Update the import and add the scan:
+
+```js
+import { readdir, readFile } from "node:fs/promises";
+
+const repositoryRoot = new URL("../../", import.meta.url);
+const publicSourceRoots = [
+	new URL("apps/web/src/", repositoryRoot),
+	new URL("homeworks/06-web3-dapp/web/src/", repositoryRoot),
+];
+
+async function sourceFiles(directory) {
+	const entries = await readdir(directory, { withFileTypes: true });
+	const nested = await Promise.all(entries.map(async (entry) => {
+		const url = new URL(`${entry.name}${entry.isDirectory() ? "/" : ""}`, directory);
+		if (entry.isDirectory()) return sourceFiles(url);
+		if (!entry.name.endsWith(".tsx") || entry.name.includes(".test.")) return [];
+		return [url];
+	}));
+	return nested.flat();
+}
+
+test("public frontend literals do not present projects as coursework", async () => {
+	const files = (await Promise.all(publicSourceRoots.map(sourceFiles))).flat();
+	for (const file of files) {
+		const source = await readFile(file, "utf8");
+		assert.doesNotMatch(source, /作业|课程|老师|验收/, file.pathname);
+	}
+});
+```
 
 Update `App.test.tsx` to expect:
 
@@ -396,6 +407,7 @@ Expected: all selected tests PASS and rendered DOM contains none of the prohibit
 
 ```sh
 git add \
+  scripts/__tests__/public-product-language.test.mjs \
   homeworks/06-web3-dapp/web/src/App.test.tsx \
   homeworks/06-web3-dapp/web/src/components/Hero.tsx \
   homeworks/06-web3-dapp/web/src/components/WalletPanel.test.tsx \
