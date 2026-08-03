@@ -317,3 +317,30 @@ test("documents and protects the complete Sunday Web3 implementation", async () 
 		);
 	}
 });
+
+test("publishes BabySteps through GitHub Pages with the repository base path", async () => {
+	const workflowPath = ".github/workflows/babysteps-pages.yml";
+	assert.equal(await exists(workflowPath), true, `${workflowPath} must exist`);
+
+	const [workflow, viteConfig] = await Promise.all([
+		readFile(path.join(root, workflowPath), "utf8"),
+		readFile(
+			path.join(root, "homeworks/06-web3-dapp/web/vite.config.ts"),
+			"utf8",
+		),
+	]);
+
+	for (const fragment of [
+		"codex/web3-onchain-notebook",
+		"actions/configure-pages@v5",
+		"actions/upload-pages-artifact@v4",
+		"actions/deploy-pages@v4",
+		"homeworks/06-web3-dapp/web/dist",
+		"VITE_ONCHAIN_NOTEBOOK_ADDRESS",
+		"VITE_BASE_PATH: /course-homework/",
+	]) {
+		assert.match(workflow, new RegExp(escapeRegExp(fragment)));
+	}
+	assert.match(viteConfig, /VITE_BASE_PATH/);
+	assert.doesNotMatch(workflow, /(?:PRIVATE_KEY|MNEMONIC|助记词)/i);
+});
