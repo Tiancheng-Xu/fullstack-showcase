@@ -251,6 +251,8 @@ test("documents and protects the complete Sunday Web3 implementation", async () 
 	for (const required of [
 		"homeworks/06-web3-dapp/web/src/features/growth/useGrowth.ts",
 		"homeworks/06-web3-dapp/web/src/components/StarBuddy.tsx",
+		"homeworks/06-web3-dapp/web/src/features/growth/usePointTransfer.ts",
+		"homeworks/06-web3-dapp/web/src/features/growth/PointTransferPanel.tsx",
 		"docs/qa/web3-onchain-notebook.md",
 	]) {
 		assert.equal(await exists(required), true, `${required} must exist`);
@@ -275,9 +277,16 @@ test("documents and protects the complete Sunday Web3 implementation", async () 
 		"web3:build",
 		"deploy:sepolia",
 		"deploy:verify:sepolia",
+		"累计成长值",
+		"可转余额",
+		"transferGrowthPoints",
+		"不可兑换",
+		"receipt",
 	]) {
 		assert.match(readme, new RegExp(escapeRegExp(fragment)));
 	}
+	assert.doesNotMatch(readme, /(?<!不)是\s*(?:ERC-20|ERC20)/i);
+	assert.doesNotMatch(readme, /已(?:经)?部署.{0,20}(?:主网|mainnet)/i);
 
 	const { stdout } = await execFile(
 		"git",

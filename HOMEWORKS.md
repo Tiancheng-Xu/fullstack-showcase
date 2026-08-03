@@ -71,7 +71,7 @@
 周六记录仅为 Remix VM（Osaka）中的临时本地 EVM 证据，不代表 Sepolia 部署或 Etherscan 验证。详见[周六 Remix 合约验收记录](docs/qa/web3-saturday-contracts.md)。
 
 周日本地实现为 `BabySteps · 成长星球` 概念验证版，已独立完成链上便签、wagmi 前端、
-成长星和原创虚拟伙伴；本地通过不代表真实测试链完成。详见
+双账本成长星、测试钱包直接赠送和原创虚拟伙伴；本地通过不代表真实测试链完成。详见
 [周日 BabySteps 验收记录](docs/qa/web3-onchain-notebook.md)。
 
 ## 通用完成标准
