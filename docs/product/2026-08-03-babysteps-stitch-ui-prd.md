@@ -343,7 +343,7 @@ Stitch 只负责界面与交互状态表现，不生成或替代智能合约、�
 
 ## 13. 前端接入契约
 
-导出的视图应以 props/state 驱动，避免把示例数据写死。建议组件边界：
+导出的视图应以 props/state 驱动，避免把示例数据写死。建议组件边界（已在 `homeworks/06-web3-dapp/web` 视图层落地）：
 
 - `Hero`
 - `SafetyNoticeGrid`
@@ -356,19 +356,71 @@ Stitch 只负责界面与交互状态表现，不生成或替代智能合约、�
 - `NotebookPanel`
 - `CourseEvidenceFooter`
 
-活动卡最少接收：
+建议前端状态模型：
 
 ```ts
+type WalletPanelState =
+  | "missing"
+  | "disconnected"
+  | "connecting"
+  | "wrong-network"
+  | "ready"
+  | "read-error";
+
+type ActivityVisualState =
+  | "available"
+  | "cooldown"
+  | "daily-limit"
+  | "loading"
+  | "read-error"
+  | "awaiting-signature"
+  | "confirming"
+  | "success"
+  | "rejected"
+  | "write-error";
+
 type ActivityCardState = {
   id: "meal" | "walk" | "read";
   title: string;
   reward: 3 | 5 | 7;
-  available?: boolean;
-  dailyLimitReached?: boolean;
-  pending?: boolean;
-  statusMessage?: string;
+  visualState: ActivityVisualState;
+  statusMessage: string;
+  transactionHash?: `0x${string}`;
+};
+
+type TransferPanelState = {
+  visualState:
+    | "idle"
+    | "reading"
+    | "read-error"
+    | "awaiting-signature"
+    | "confirming"
+    | "success"
+    | "write-error";
+  validationMessage?: string;
+  transactionHash?: `0x${string}`;
+};
+
+type NotebookPanelState = {
+  visualState:
+    | "idle"
+    | "reading"
+    | "read-error"
+    | "awaiting-signature"
+    | "confirming"
+    | "success"
+    | "write-error";
+  clearConfirmOpen: boolean;
+  transactionHash?: `0x${string}`;
 };
 ```
+
+主任务接入要求：
+
+- 活动状态必须能区分 `cooldown` 与 `daily-limit`，且两者都不能泄露具体剩余时间。
+- 如果现有 hook 只提供 `hasRecordedToday` 之类布尔值，必须在主任务适配层补齐为上述 `visualState`，不要在展示组件内推断业务时间。
+- 钱包卡片如需承载“读取失败”，应由接入层显式提供 `read-error`，不要让视图通过异常字符串猜测。
+- 所有成功态都应在 transaction receipt 成功后才进入 `success`，然后刷新读状态。
 
 不要在生成代码中：
 
@@ -419,7 +471,31 @@ type ActivityCardState = {
 请生成可复用组件和 design tokens。视图必须由 props/state 驱动，不要实现假的钱包、假的交易或假的链上数据；后续由现有 React + wagmi 逻辑接入。
 ```
 
-## 16. Stitch 首轮生成后的迭代提示词
+## 16. 2026-08-03 实施回写（视图层）
+
+本 PRD 已用于 `homeworks/06-web3-dapp/web` 的视图层实现，范围仅限响应式单页 UI、样式、纯展示模型与组件测试；Solidity、ABI、wagmi hooks、交易流程与安全校验仍由主任务维护。
+
+本次视图层已落实：
+
+- 1440 px 与 390 px 同序响应式布局；
+- 暖绘本风 Hero、须知卡、圆角故事卡、深海蓝绿描边与星宝视觉；
+- 钱包连接、成长活动、赠送成长星、公开链上便签与课程证据区的完整单页顺序；
+- 等待签名、链上确认、成功、失败、字段校验、读取失败、清空二次确认等文字化状态反馈；
+- `prefers-reduced-motion`、`focus-visible`、`aria-live`、进度条语义和移动端无横向滚动约束。
+
+本次明确未引入且后续也不得从 Stitch 稿外扩：
+
+- DID、ERC-721、NFT、IPFS、Web3.js；
+- 数字传家宝、永久儿童寄语、孩子档案、虚构导航；
+- 服务条款页、隐私页、主网、价格、收益、金融交易或课程外功能。
+
+主任务仍需完成的接入点：
+
+- 为三张活动卡提供不泄露冷却时间的最终 `visualState` 映射，至少覆盖 `available`、`cooldown`、`daily-limit`、`loading`、`read-error`、`awaiting-signature`、`confirming`、`success`、`rejected`、`write-error`；
+- 如需让钱包卡片独立承载“读取失败”，由接入层显式注入 `read-error`；
+- 提供真实、已部署、非零的 `VITE_ONCHAIN_NOTEBOOK_ADDRESS` 以通过生产构建门禁；本次视图层验证只允许使用临时非零地址做本地 bundling smoke test，不视为部署。
+
+## 17. Stitch 首轮生成后的迭代提示词
 
 如果首轮设计偏“加密交易所”，输入：
 
@@ -439,7 +515,7 @@ type ActivityCardState = {
 不要改变主页面视觉。补齐同一页面的状态变体：钱包未连接、错误网络、活动冷却且无按钮、当天上限且无按钮、等待 MetaMask 签名、链上确认、成功、失败、赠送表单错误、便签超限和清空二次确认。
 ```
 
-## 17. 交付给 Codex 的内容
+## 18. 交付给 Codex 的内容
 
 Stitch 生成完成后，请提供以下任一项：
 
@@ -450,7 +526,7 @@ Stitch 生成完成后，请提供以下任一项：
 
 Codex 接入时只替换或重构视图层，保留并复用现有 Solidity、ABI、wagmi hooks、交易确认、安全校验和测试语义；如 Stitch 设计与真实链上状态冲突，以真实业务规则和课程验收要求为准。
 
-## 18. 依据
+## 19. 依据
 
 - 课程作业要求：Vite + React、wagmi、Hardhat、Sepolia、合约验证和前后端交互；
 - 现有 BabySteps 本地实现：链上便签、星宝成长、双账本和测试钱包赠送；
