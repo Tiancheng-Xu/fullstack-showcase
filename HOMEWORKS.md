@@ -28,6 +28,8 @@
 
 ## 里程碑 4：RAG 与 Agent 编排（原 07/25、07/26）
 
+实际成果仓库：[`Tiancheng-Xu/personal-ai-agent`](https://github.com/Tiancheng-Xu/personal-ai-agent)（Private）。当前已完成 Qwen3-8B QLoRA、353/38/49 数据切分、冻结测试集 base/adapter 对照、GGUF 量化和 Mac Ollama 验收；下列 RAG、Rerank、Mastra Client 与 LangGraph 仍按未完成项管理。
+
 - 准备冰箱、彩电、显示器维修 Markdown 文档。
 - 准备向量数据库和向量模型，用 Mastra 写入维修文档。
 - 将已有 Agent 接入 RAG，并且必须加入 Rerank。
@@ -52,4 +54,3 @@
 - 每个可部署应用都有一条可复现的本地验证命令。
 - 云端资源均记录架构、权限边界、销毁方法和费用风险。
 - 每项作业通过 PR 合并，CI 必须通过后才算完成。
-
