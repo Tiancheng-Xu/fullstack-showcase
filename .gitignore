@@ -17,6 +17,7 @@ coverage/
 
 # Go
 bin/
+apps/api-go/.build/
 *.test
 *.out
 vendor/
@@ -51,5 +52,26 @@ native/engine/
 *.log
 artifacts/
 
+# RAG and model-training private state
+homeworks/04-rag-agent-orchestration/data/private/
+!homeworks/04-rag-agent-orchestration/artifacts/
+homeworks/04-rag-agent-orchestration/artifacts/*
+!homeworks/04-rag-agent-orchestration/artifacts/README.md
+homeworks/04-rag-agent-orchestration/artifacts/private/
+homeworks/04-rag-agent-orchestration/.cache/
+homeworks/04-rag-agent-orchestration/**/outputs/
+homeworks/04-rag-agent-orchestration/**/*.safetensors
+homeworks/04-rag-agent-orchestration/**/*.gguf
+
 # TC Flow worktrees
 .tc-worktrees/
+
+# Local SDD artifacts
+.superpowers/sdd/
+
+# Local GitHub profile homework state
+apps/api/.env
+apps/api/data/
+*.sqlite
+*.sqlite-shm
+*.sqlite-wal

@@ -1,0 +1,192 @@
+{
+  "version": "7",
+  "dialect": "sqlite",
+  "id": "013a2f47-ef3d-45d6-b27b-4812fee70a91",
+  "prevIds": [
+    "5af73bbd-6785-4cda-9985-bab7e4004c3f"
+  ],
+  "ddl": [
+    {
+      "name": "github_profiles",
+      "entityType": "tables"
+    },
+    {
+      "type": "integer",
+      "notNull": false,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "name": "github_id",
+      "entityType": "columns",
+      "table": "github_profiles"
+    },
+    {
+      "type": "text",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "name": "login",
+      "entityType": "columns",
+      "table": "github_profiles"
+    },
+    {
+      "type": "text",
+      "notNull": false,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "name": "display_name",
+      "entityType": "columns",
+      "table": "github_profiles"
+    },
+    {
+      "type": "text",
+      "notNull": false,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "name": "location",
+      "entityType": "columns",
+      "table": "github_profiles"
+    },
+    {
+      "type": "text",
+      "notNull": false,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "name": "bio",
+      "entityType": "columns",
+      "table": "github_profiles"
+    },
+    {
+      "type": "text",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "name": "avatar_url",
+      "entityType": "columns",
+      "table": "github_profiles"
+    },
+    {
+      "type": "text",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "name": "profile_url",
+      "entityType": "columns",
+      "table": "github_profiles"
+    },
+    {
+      "type": "integer",
+      "notNull": true,
+      "autoincrement": false,
+      "default": "0",
+      "generated": null,
+      "name": "public_repos",
+      "entityType": "columns",
+      "table": "github_profiles"
+    },
+    {
+      "type": "integer",
+      "notNull": true,
+      "autoincrement": false,
+      "default": "0",
+      "generated": null,
+      "name": "followers",
+      "entityType": "columns",
+      "table": "github_profiles"
+    },
+    {
+      "type": "text",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "name": "github_created_at",
+      "entityType": "columns",
+      "table": "github_profiles"
+    },
+    {
+      "type": "text",
+      "notNull": true,
+      "autoincrement": false,
+      "default": "(CURRENT_TIMESTAMP)",
+      "generated": null,
+      "name": "synced_at",
+      "entityType": "columns",
+      "table": "github_profiles"
+    },
+    {
+      "type": "text",
+      "notNull": true,
+      "autoincrement": false,
+      "default": "(CURRENT_TIMESTAMP)",
+      "generated": null,
+      "name": "created_at",
+      "entityType": "columns",
+      "table": "github_profiles"
+    },
+    {
+      "type": "text",
+      "notNull": true,
+      "autoincrement": false,
+      "default": "(CURRENT_TIMESTAMP)",
+      "generated": null,
+      "name": "updated_at",
+      "entityType": "columns",
+      "table": "github_profiles"
+    },
+    {
+      "columns": [
+        "github_id"
+      ],
+      "nameExplicit": false,
+      "name": "github_profiles_pk",
+      "table": "github_profiles",
+      "entityType": "pks"
+    },
+    {
+      "columns": [
+        {
+          "value": "login",
+          "isExpression": false
+        }
+      ],
+      "isUnique": true,
+      "where": null,
+      "origin": "manual",
+      "name": "github_profiles_login_unique",
+      "entityType": "indexes",
+      "table": "github_profiles"
+    },
+    {
+      "value": "\"avatar_url\" like 'https://avatars.githubusercontent.com/%'",
+      "name": "github_profiles_avatar_url_https_check",
+      "entityType": "checks",
+      "table": "github_profiles"
+    },
+    {
+      "value": "\"profile_url\" like 'https://github.com/%'",
+      "name": "github_profiles_profile_url_https_check",
+      "entityType": "checks",
+      "table": "github_profiles"
+    },
+    {
+      "value": "\"public_repos\" >= 0",
+      "name": "github_profiles_public_repos_nonnegative_check",
+      "entityType": "checks",
+      "table": "github_profiles"
+    },
+    {
+      "value": "\"followers\" >= 0",
+      "name": "github_profiles_followers_nonnegative_check",
+      "entityType": "checks",
+      "table": "github_profiles"
+    }
+  ],
+  "renames": []
+}

@@ -1,23 +1,24 @@
 {
   "schema": "tc-flow FeatureQAResult v1",
-  "runId": "tc_nurture_bloom_ui_20260729_3f7ba54d",
-  "feature": "nurture-bloom-ui-foundation",
-  "contractHash": "3f7ba54d134c029bc78e18aa2bb1f4e880816ddbb23345c8f6a151b15fe0ca5c",
+  "runId": "tc_cloudflare_pr_preview_20260729",
+  "feature": "cloudflare-pr-preview",
+  "contractHash": "aa5d84f908a529b4f846c23b04373a695caeff9c88ed05d44db77582be32d522",
   "verdict": "pass",
   "acceptanceCriteria": {
-    "passed": 7,
-    "total": 7
+    "passed": 5,
+    "total": 5
   },
   "frontend": "pass",
   "backend": "not-applicable",
-  "contract": "not-applicable",
-  "retries": 0,
+  "contract": "compatible",
+  "retries": 1,
   "evidence": [
-    "All four task reviews passed without P0 findings.",
-    "Final tests, typecheck, production build, scoped lint, secret scan, and responsive browser QA passed.",
-    "Four routes navigate and render without console issues.",
-    "Growth add-record and guide filtering provide visible local feedback.",
-    "All bundled images are local and no external Stitch image URL is used."
+    "All three task reviews passed without P0 findings or reviewer degradation.",
+    "Static workflow validation, 3 test files with 8 tests, type checking, and the production build passed.",
+    "A same-repository draft pull request triggered the preview workflow automatically.",
+    "The first deployment failure was reproduced, repaired with a validated configuration change, and the second Actions run passed all steps.",
+    "The stable preview served the expected application after the successful Actions run.",
+    "Production deployment, production Pages resources, custom domains, merging, and family photos remained outside the preview flow."
   ],
   "next": "N7"
 }

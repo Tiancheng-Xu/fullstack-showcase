@@ -1,16 +1,21 @@
 {
   "schema": "tc-flow StopHookResult v1",
-  "runId": "tc_nurture_bloom_ui_20260729_3f7ba54d",
-  "feature": "nurture-bloom-ui-foundation",
-  "contractHash": "3f7ba54d134c029bc78e18aa2bb1f4e880816ddbb23345c8f6a151b15fe0ca5c",
+  "runId": "tc_cloudflare_pr_preview_20260729",
+  "feature": "cloudflare-pr-preview",
+  "contractHash": "aa5d84f908a529b4f846c23b04373a695caeff9c88ed05d44db77582be32d522",
   "verdict": "ALLOW",
   "workingTree": "matched",
   "memoryReviewed": true,
   "review": ".tc-flow/reviews/FEATURE-STOP.review-result.json",
   "provider": "kimi",
   "model": "kimi-k3",
-  "requestId": "chatcmpl-6a6a552133277b8471998ff7",
+  "requestId": "chatcmpl-6a6ae67a92f93ba9e88877f8",
   "reviewerDegraded": false,
   "p0Issues": [],
+  "acceptedLowRiskObservations": [
+    "TC Flow artifacts are committed for auditability in this course project.",
+    "The preview action installs a pinned Wrangler version through npm; dependency locking is a follow-up workflow improvement.",
+    "Action SHA pinning is a follow-up supply-chain hardening improvement before production."
+  ],
   "next": "N8"
 }

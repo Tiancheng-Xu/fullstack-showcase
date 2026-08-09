@@ -1,103 +1,780 @@
-diff --git a/package.json b/package.json
+diff --git a/.github/workflows/cloudflare-preview.yml b/.github/workflows/cloudflare-preview.yml
 new file mode 100644
+index 0000000..08f4d2b
 --- /dev/null
-+++ b/package.json
-@@
-+{
-+  "name": "course-homework",
-+  "private": true,
-+  "scripts": {
-+    "dev": "pnpm --dir apps/web dev:web",
-+    "test": "pnpm --dir apps/web/apps/web test",
-+    "typecheck": "pnpm --dir apps/web/apps/web check-types",
-+    "build": "pnpm --dir apps/web/apps/web build"
++++ b/.github/workflows/cloudflare-preview.yml
+@@ -0,0 +1,65 @@
++name: Cloudflare Preview
++
++on:
++  pull_request:
++    types: [opened, reopened, synchronize]
++  workflow_dispatch:
++
++permissions:
++  contents: read
++  deployments: write
++
++concurrency:
++  group: cloudflare-preview
++  cancel-in-progress: true
++
++jobs:
++  preview:
++    name: Build and deploy preview
++    if: >-
++      github.event_name == 'workflow_dispatch' ||
++      github.event.pull_request.head.repo.full_name == github.repository
++    runs-on: ubuntu-latest
++    environment:
++      name: cloudflare-preview
++      url: https://course-homework-preview.pages.dev
++
++    steps:
++      - name: Check out source
++        uses: actions/checkout@v4
++
++      - name: Set up pnpm
++        uses: pnpm/action-setup@v4
++        with:
++          version: 11.17.0
++
++      - name: Set up Node.js
++        uses: actions/setup-node@v4
++        with:
++          node-version: 22
++          cache: pnpm
++          cache-dependency-path: apps/web/pnpm-lock.yaml
++
++      - name: Install dependencies
++        run: pnpm --dir apps/web install --frozen-lockfile
++
++      - name: Run tests
++        run: pnpm test
++
++      - name: Check types
++        run: pnpm typecheck
++
++      - name: Build web app
++        run: pnpm build
++
++      - name: Deploy stable preview
++        uses: cloudflare/wrangler-action@v3
++        with:
++          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
++          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
++          command: >-
++            pages deploy apps/web/apps/web/dist
++            --project-name=${{ vars.CLOUDFLARE_PAGES_PROJECT }}
++            --branch=preview
++            --commit-dirty=true
++          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+diff --git a/.tc-flow/contract.json b/.tc-flow/contract.json
+index 34ea962..056b18a 100644
+--- a/.tc-flow/contract.json
++++ b/.tc-flow/contract.json
+@@ -1,94 +1,73 @@
+ {
+   "schema": "tc-flow Contract v1",
+   "version": 1,
+-  "runId": "tc_nurture_bloom_ui_20260729_3f7ba54d",
+-  "feature": "nurture-bloom-ui-foundation",
+-  "contractHash": "3f7ba54d134c029bc78e18aa2bb1f4e880816ddbb23345c8f6a151b15fe0ca5c",
+-  "goal": "使用 Better-T-Stack 和 Stitch 视觉稿构建可交互、移动端优先的育爱成长前端作业基底，并抽取 Tailwind 全局设计令牌与可复用组件。",
++  "runId": "tc_cloudflare_pr_preview_20260729",
++  "feature": "cloudflare-pr-preview",
++  "contractHash": "aa5d84f908a529b4f846c23b04373a695caeff9c88ed05d44db77582be32d522",
++  "goal": "为 course-homework 建立一个由 GitHub Actions 自动更新的最小化 Cloudflare Pages 可视预览环境，同时保留独立且人工控制的生产发布环节。",
+   "nonGoals": [
+-    "认证",
+-    "数据库",
+-    "远程 API",
+-    "文件上传",
+-    "GitHub 推送",
+-    "生产部署",
+-    "医疗诊断"
++    "自动生产部署",
++    "修改生产域名",
++    "合并 Pull Request",
++    "向 Fork PR 暴露 Cloudflare 凭据"
+   ],
+   "repositories": [
+     {
+       "path": ".",
+       "role": "monorepo",
+-      "branch": "tc/nurture-bloom-ui-foundation-3f7ba54d"
++      "branch": "tc/cloudflare-pr-preview-aa5d84f9"
+     }
+   ],
+   "allowedWritePaths": [
+-    ".gitignore",
++    ".github/",
++    "scripts/",
+     "package.json",
+-    "pnpm-workspace.yaml",
+-    "pnpm-lock.yaml",
+-    "apps/",
+-    "docs/",
++    "apps/web/package.json",
++    "apps/web/pnpm-lock.yaml",
+     "README.md",
+-    "HOMEWORKS.md",
++    "docs/",
++    "apps/web/README.md",
++    "specs/cloudflare-pr-preview/",
+     ".tc-flow/"
+   ],
+-  "allowedReadPaths": [
+-    ".",
+-    "/Users/shier/Downloads/stitch_.zip"
+-  ],
++  "allowedReadPaths": ["."],
+   "allowedTools": [
+     "Read",
+     "Edit",
+     "Write",
+     "Bash",
+     "pnpm",
+-    "Playwright",
++    "GitHub CLI",
++    "Cloudflare Dashboard",
++    "Wrangler",
+     "TC Flow"
+   ],
+-  "network": "npm package installation and local browser verification only; no external data upload",
++  "network": "允许 npm 安装、GitHub 推送与 PR/Actions 操作、Cloudflare 测试环境管理；禁止生产部署和上传用户数据",
+   "tasks": [
+     {
+       "id": "T-001",
+       "role": "other",
+-      "risk": "low",
+-      "desc": "在 apps/web 初始化 Better-T-Stack 前端、pnpm 工作区和测试基线",
++      "desc": "实现稳定预览项目的 GitHub Actions 工作流并添加静态校验",
+       "deps": []
+     },
+     {
+       "id": "T-002",
+-      "role": "frontend",
+-      "risk": "low",
+-      "desc": "建立 Stitch 全局设计令牌、应用壳和可复用 UI 组件",
+-      "deps": [
+-        "T-001"
+-      ]
++      "role": "other",
++      "desc": "配置 Cloudflare 最小权限令牌、GitHub Secrets、项目变量并完成首次可视部署",
++      "deps": ["T-001"]
+     },
+     {
+       "id": "T-003",
+-      "role": "frontend",
+-      "risk": "medium",
+-      "desc": "实现成长、时光、百科、我的四个路由与本地类型化交互",
+-      "deps": [
+-        "T-002"
+-      ]
+-    },
+-    {
+-      "id": "T-004",
+       "role": "other",
+-      "risk": "medium",
+-      "desc": "执行移动端视觉、交互、可访问性和完整构建 QA，并整理学习交付文档",
+-      "deps": [
+-        "T-003"
+-      ]
++      "desc": "通过真实测试 PR 验证质量检查和固定预览地址刷新，并补全文档",
++      "deps": ["T-002"]
+     }
+   ],
+   "acceptanceCriteria": [
+-    "Better-T-Stack 前端可以安装、开发、测试、类型检查和构建",
+-    "Stitch 视觉基底在主要页面中得到还原，公共样式集中管理",
+-    "成长、时光、百科、我的四个主入口可以导航",
+-    "新增记录和百科筛选具有可见交互反馈",
+-    "390px 移动宽度无主要布局溢出或固定导航遮挡",
+-    "所有图片为本地资源，不依赖 Stitch 临时外链",
+-    "没有密钥、真实家庭隐私或医疗数据进入仓库"
++    "同仓库 PR 自动执行测试、类型检查、构建并刷新固定 Pages 预览",
++    "Fork PR 无法读取 Cloudflare Secrets",
++    "生产发布不会被 PR 工作流触发",
++    "测试 PR 的 Actions 和预览地址均有真实验证证据",
++    "Cloudflare 凭据不进入 Git 历史或日志"
+   ]
+ }
+diff --git a/.tc-flow/events.jsonl b/.tc-flow/events.jsonl
+index 7b9eb66..d77e83d 100644
+--- a/.tc-flow/events.jsonl
++++ b/.tc-flow/events.jsonl
+@@ -1,18 +1,5 @@
+-{"node":"N1","status":"started","runId":"tc_nurture_bloom_ui_20260729_3f7ba54d","feature":"nurture-bloom-ui-foundation","contractHash":"3f7ba54d134c029bc78e18aa2bb1f4e880816ddbb23345c8f6a151b15fe0ca5c","recovery":"restart-feature"}
+-{"node":"N1","status":"completed","runId":"tc_nurture_bloom_ui_20260729_3f7ba54d","architecture":"monorepo","worktree":"/Users/shier/Desktop/course-homework/.tc-worktrees/nurture-bloom-ui-foundation-3f7ba54d","recovery":"restart-feature"}
+-{"node":"N2","status":"completed","runId":"tc_nurture_bloom_ui_20260729_3f7ba54d","memory":[],"difficulty":"medium","strategy":"goal-hook","worker":{"provider":"codex","model":"gpt-5","transport":"codex-desktop"},"reviewer":{"provider":"kimi","model":"kimi-k3","transport":"openai-compatible-api"},"reviewerDegraded":false,"requiresHumanConfirmation":false}
+-{"node":"N3","status":"started","runId":"tc_nurture_bloom_ui_20260729_3f7ba54d","taskId":"T-001"}
+-{"node":"N4","status":"pass","runId":"tc_nurture_bloom_ui_20260729_3f7ba54d","taskId":"T-001","provider":"kimi","model":"kimi-k3","transport":"openai-compatible-api","requestId":"chatcmpl-6a6a50456f9d846adf677979","reviewerDegraded":false,"p0Issues":[],"piiRedacted":0,"retries":0}
+-{"node":"N5","status":"completed","runId":"tc_nurture_bloom_ui_20260729_3f7ba54d","taskId":"T-001","checkpoint":".tc-flow/checkpoints/T-001.json","featureProgress":"1/4","next":"N3"}
+-{"node":"N3","status":"started","runId":"tc_nurture_bloom_ui_20260729_3f7ba54d","taskId":"T-002"}
+-{"node":"N4","status":"pass","runId":"tc_nurture_bloom_ui_20260729_3f7ba54d","taskId":"T-002","provider":"kimi","model":"kimi-k3","transport":"openai-compatible-api","requestId":"chatcmpl-6a6a5202dac2ed2f42151728","reviewerDegraded":false,"p0Issues":[],"piiRedacted":0,"retries":0}
+-{"node":"N5","status":"completed","runId":"tc_nurture_bloom_ui_20260729_3f7ba54d","taskId":"T-002","checkpoint":".tc-flow/checkpoints/T-002.json","featureProgress":"2/4","next":"N3"}
+-{"node":"N3","status":"started","runId":"tc_nurture_bloom_ui_20260729_3f7ba54d","taskId":"T-003"}
+-{"node":"N4","status":"pass","runId":"tc_nurture_bloom_ui_20260729_3f7ba54d","taskId":"T-003","provider":"kimi","model":"kimi-k3","transport":"openai-compatible-api","requestId":"chatcmpl-6a6a53d12af41a0d7dc727e8","reviewerDegraded":false,"p0Issues":[],"piiRedacted":0,"retries":0}
+-{"node":"N5","status":"completed","runId":"tc_nurture_bloom_ui_20260729_3f7ba54d","taskId":"T-003","checkpoint":".tc-flow/checkpoints/T-003.json","featureProgress":"3/4","next":"N3"}
+-{"node":"N3","status":"started","runId":"tc_nurture_bloom_ui_20260729_3f7ba54d","taskId":"T-004"}
+-{"node":"N4","status":"pass","runId":"tc_nurture_bloom_ui_20260729_3f7ba54d","taskId":"T-004","provider":"kimi","model":"kimi-k3","transport":"openai-compatible-api","requestId":"chatcmpl-6a6a54967b45518e514ba802","reviewerDegraded":false,"p0Issues":[],"piiRedacted":0,"retries":0}
+-{"node":"N5","status":"completed","runId":"tc_nurture_bloom_ui_20260729_3f7ba54d","taskId":"T-004","checkpoint":".tc-flow/checkpoints/T-004.json","featureProgress":"4/4","next":"N6"}
+-{"node":"N6","status":"pass","runId":"tc_nurture_bloom_ui_20260729_3f7ba54d","acceptanceCriteria":"7/7","frontend":"pass","backend":"not-applicable","contract":"not-applicable","retries":0,"next":"N7"}
+-{"node":"N7","status":"pass","runId":"tc_nurture_bloom_ui_20260729_3f7ba54d","stopHook":"ALLOW","workingTree":"matched","memoryReviewed":true,"review":".tc-flow/reviews/FEATURE-STOP.review-result.json","provider":"kimi","model":"kimi-k3","requestId":"chatcmpl-6a6a552133277b8471998ff7","reviewerDegraded":false,"p0Issues":[],"next":"N8"}
+-{"node":"N8","status":"complete","runId":"tc_nurture_bloom_ui_20260729_3f7ba54d","commit":"e887f1dc349275c690e4d08020ab4a2e41e6a813","push":"skipped-by-contract","testDeployment":"not-applicable","pullRequest":null,"production":"not-requested","runResult":".tc-flow/run-result.json"}
++{"timestamp":"2026-07-29T00:00:00Z","runId":"tc_cloudflare_pr_preview_20260729","node":"N1","event":"feature_initialized","feature":"cloudflare-pr-preview","contractHash":"aa5d84f908a529b4f846c23b04373a695caeff9c88ed05d44db77582be32d522","recovery":"fresh"}
++{"timestamp":"2026-07-30T05:20:00Z","runId":"tc_cloudflare_pr_preview_20260729","node":"N2","event":"routing_completed","difficulty":"medium","strategy":"goal-hook","worker":"codex","reviewer":"kimi-k3","reviewerDegraded":false}
++{"timestamp":"2026-07-30T05:33:00Z","runId":"tc_cloudflare_pr_preview_20260729","node":"N3","event":"task_started","taskId":"T-001"}
++{"timestamp":"2026-07-30T05:34:00Z","runId":"tc_cloudflare_pr_preview_20260729","node":"N3","event":"external_configuration_completed","taskId":"T-002","pagesProject":"course-homework-preview","secrets":["CLOUDFLARE_API_TOKEN","CLOUDFLARE_ACCOUNT_ID"],"variable":"CLOUDFLARE_PAGES_PROJECT"}
++{"timestamp":"2026-07-30T05:35:00Z","runId":"tc_cloudflare_pr_preview_20260729","node":"N3","event":"task_self_check_passed","taskId":"T-001","tests":{"workflow":"pass","unit":"8 passed","typecheck":"pass","build":"pass"}}
+diff --git a/.tc-flow/state.json b/.tc-flow/state.json
+index 0099e74..9c0ddeb 100644
+--- a/.tc-flow/state.json
++++ b/.tc-flow/state.json
+@@ -1,158 +1,22 @@
+ {
+-  "schema": "tc-flow State v1",
+-  "runId": "tc_nurture_bloom_ui_20260729_3f7ba54d",
+-  "feature": "nurture-bloom-ui-foundation",
+-  "contractHash": "3f7ba54d134c029bc78e18aa2bb1f4e880816ddbb23345c8f6a151b15fe0ca5c",
+-  "currentNode": "N8",
+-  "status": "complete",
++  "runId": "tc_cloudflare_pr_preview_20260729",
++  "feature": "cloudflare-pr-preview",
++  "contractHash": "aa5d84f908a529b4f846c23b04373a695caeff9c88ed05d44db77582be32d522",
++  "currentNode": "N4",
+   "difficulty": "medium",
+-  "execution": {
+-    "worker": {
+-      "provider": "codex",
+-      "model": "gpt-5",
+-      "transport": "codex-desktop"
+-    },
+-    "reviewer": {
+-      "provider": "kimi",
+-      "model": null,
+-      "transport": "openai-compatible-api"
+-    },
+-    "reviewerDegraded": false,
+-    "reviewerDegradedReason": null,
+-    "requiresHumanConfirmation": false
++  "worker": {
++    "provider": "codex",
++    "transport": "codex-cli"
+   },
++  "reviewer": {
++    "provider": "kimi",
++    "model": "kimi-k3",
++    "transport": "openai-compatible-api"
 +  },
-+  "packageManager": "pnpm@11.17.0"
-+}
-diff --git a/apps/web/bts.jsonc b/apps/web/bts.jsonc
-new file mode 100644
---- /dev/null
-+++ b/apps/web/bts.jsonc
-@@
-+{
-+  "version": "3.38.0",
-+  "frontend": ["tanstack-router"],
-+  "backend": "none",
-+  "runtime": "none",
-+  "database": "none",
-+  "orm": "none",
-+  "auth": "none",
-+  "payments": "none",
-+  "packageManager": "pnpm",
-+  "api": "none"
-+}
-diff --git a/apps/web/apps/web/package.json b/apps/web/apps/web/package.json
-new file mode 100644
---- /dev/null
-+++ b/apps/web/apps/web/package.json
-@@
-+{
-+  "name": "web",
-+  "private": true,
-+  "scripts": {
-+    "dev": "vite dev",
-+    "build": "vite build",
-+    "check-types": "vite build && tsc --noEmit",
-+    "test": "vitest run"
-+  },
-+  "dependencies": {
-+    "@tanstack/react-router": "^1.170.18",
-+    "react": "^19.2.8",
-+    "react-dom": "^19.2.8",
-+    "tailwindcss": "^4.3.3"
-+  },
-+  "devDependencies": {
-+    "@testing-library/jest-dom": "^7.0.0",
-+    "@testing-library/react": "^16.3.2",
-+    "jsdom": "^30.0.0",
-+    "typescript": "^6.0.3",
-+    "vite": "^8.1.5",
-+    "vitest": "^4.1.10"
++  "reviewerDegraded": false,
+   "tasks": {
+-    "T-001": "completed",
++    "T-001": "in_review",
+     "T-002": "completed",
+-    "T-003": "completed",
+-    "T-004": "completed"
+-  },
+-  "history": [
+-    {
+-      "node": "N1",
+-      "status": "completed",
+-      "architecture": "monorepo",
+-      "worktree": "/Users/shier/Desktop/course-homework/.tc-worktrees/nurture-bloom-ui-foundation-3f7ba54d",
+-      "recovery": "restart-feature"
+-    },
+-    {
+-      "node": "N2",
+-      "status": "completed",
+-      "memory": [],
+-      "difficulty": "medium",
+-      "strategy": "goal-hook",
+-      "worker": {
+-        "provider": "codex",
+-        "model": "gpt-5",
+-        "transport": "codex-desktop"
+-      },
+-      "reviewer": {
+-        "provider": "kimi",
+-        "model": "kimi-k3",
+-        "transport": "openai-compatible-api"
+-      },
+-      "reviewerDegraded": false,
+-      "requiresHumanConfirmation": false
+-    },
+-    {
+-      "node": "N4",
+-      "status": "pass",
+-      "taskId": "T-001",
+-      "provider": "kimi",
+-      "model": "kimi-k3",
+-      "transport": "openai-compatible-api",
+-      "requestId": "chatcmpl-6a6a50456f9d846adf677979",
+-      "reviewerDegraded": false,
+-      "p0Issues": []
+-    },
+-    {
+-      "node": "N5",
+-      "status": "completed",
+-      "taskId": "T-001",
+-      "checkpoint": ".tc-flow/checkpoints/T-001.json",
+-      "next": "N3"
+-    },
+-    {
+-      "node": "N4",
+-      "status": "pass",
+-      "taskId": "T-002",
+-      "provider": "kimi",
+-      "model": "kimi-k3",
+-      "transport": "openai-compatible-api",
+-      "requestId": "chatcmpl-6a6a5202dac2ed2f42151728",
+-      "reviewerDegraded": false,
+-      "p0Issues": []
+-    },
+-    {
+-      "node": "N5",
+-      "status": "completed",
+-      "taskId": "T-002",
+-      "checkpoint": ".tc-flow/checkpoints/T-002.json",
+-      "next": "N3"
+-    },
+-    {
+-      "node": "N4",
+-      "status": "pass",
+-      "taskId": "T-003",
+-      "provider": "kimi",
+-      "model": "kimi-k3",
+-      "transport": "openai-compatible-api",
+-      "requestId": "chatcmpl-6a6a53d12af41a0d7dc727e8",
+-      "reviewerDegraded": false,
+-      "p0Issues": []
+-    },
+-    {
+-      "node": "N5",
+-      "status": "completed",
+-      "taskId": "T-003",
+-      "checkpoint": ".tc-flow/checkpoints/T-003.json",
+-      "next": "N3"
+-    },
+-    {
+-      "node": "N4",
+-      "status": "pass",
+-      "taskId": "T-004",
+-      "provider": "kimi",
+-      "model": "kimi-k3",
+-      "transport": "openai-compatible-api",
+-      "requestId": "chatcmpl-6a6a54967b45518e514ba802",
+-      "reviewerDegraded": false,
+-      "p0Issues": []
+-    },
+-    {
+-      "node": "N5",
+-      "status": "completed",
+-      "taskId": "T-004",
+-      "checkpoint": ".tc-flow/checkpoints/T-004.json",
+-      "next": "N6"
+-    },
+-    {
+-      "node": "N6",
+-      "status": "pass",
+-      "result": ".tc-flow/qa/feature-result.json",
+-      "acceptanceCriteria": "7/7",
+-      "retries": 0,
+-      "next": "N7"
+-    },
+-    {
+-      "node": "N7",
+-      "status": "pass",
+-      "stopHook": "ALLOW",
+-      "workingTree": "matched",
+-      "memoryReviewed": true,
+-      "review": ".tc-flow/reviews/FEATURE-STOP.review-result.json",
+-      "next": "N8"
+-    },
+-    {
+-      "node": "N8",
+-      "status": "complete",
+-      "commit": "e887f1dc349275c690e4d08020ab4a2e41e6a813",
+-      "push": "skipped-by-contract",
+-      "testDeployment": "not-applicable",
+-      "pullRequest": null,
+-      "production": "not-requested",
+-      "runResult": ".tc-flow/run-result.json"
+-    }
+-  ],
+-  "retries": {}
++    "T-003": "pending"
 +  }
-+}
-diff --git a/apps/web/apps/web/vite.config.ts b/apps/web/apps/web/vite.config.ts
-new file mode 100644
---- /dev/null
-+++ b/apps/web/apps/web/vite.config.ts
-@@
-+import tailwindcss from "@tailwindcss/vite";
-+import { tanstackRouter } from "@tanstack/router-plugin/vite";
-+import react from "@vitejs/plugin-react";
-+import { defineConfig } from "vitest/config";
+ }
+diff --git a/apps/web/README.md b/apps/web/README.md
+index 8ef9fd7..34475b3 100644
+--- a/apps/web/README.md
++++ b/apps/web/README.md
+@@ -9,7 +9,7 @@
+ - 四个页面：成长、时光、百科、我的
+ - 本地交互：新增记录、搜索、分类筛选、收藏、弹窗、提醒开关
+ - 无后端、无登录、无数据库、无远程 API
+-- 不上传图片，不部署线上环境
++- 不上传私人图片；公开测试版本部署到独立 Cloudflare Pages 预览项目
+ 
+ 课程后续可在不推翻 UI 的情况下逐步接入 Hono、Drizzle、AWS Lambda、ECS、SQS、Agent 与 RAG。
+ 
+@@ -46,8 +46,21 @@ pnpm dev
+ pnpm test
+ pnpm typecheck
+ pnpm build
++pnpm validate:preview
+ ```
+ 
++## 在线预览
 +
-+export default defineConfig({
-+  server: { port: 3001 },
-+  plugins: [tailwindcss(), tanstackRouter({ target: "react", autoCodeSplitting: true }), react()],
-+  test: {
-+    environment: "jsdom",
-+    setupFiles: ["./src/test/setup.ts"],
-+  },
-+});
-diff --git a/apps/web/apps/web/src/components/app-identity.tsx b/apps/web/apps/web/src/components/app-identity.tsx
-new file mode 100644
---- /dev/null
-+++ b/apps/web/apps/web/src/components/app-identity.tsx
-@@
-+export function AppIdentity() {
-+  return <h1>育爱成长</h1>;
-+}
-diff --git a/apps/web/apps/web/src/components/__tests__/app-identity.test.tsx b/apps/web/apps/web/src/components/__tests__/app-identity.test.tsx
-new file mode 100644
---- /dev/null
-+++ b/apps/web/apps/web/src/components/__tests__/app-identity.test.tsx
-@@
-+import { render, screen } from "@testing-library/react";
-+import { describe, expect, it } from "vitest";
-+import { AppIdentity } from "../app-identity";
++同仓库 Pull Request 会通过 GitHub Actions 自动更新：
 +
-+describe("AppIdentity", () => {
-+  it("keeps the product name visible to users", () => {
-+    render(<AppIdentity />);
-+    expect(screen.getByRole("heading", { name: "育爱成长" })).toBeVisible();
-+  });
-+});
++```text
++https://course-homework-preview.pages.dev
++```
++
++工作流使用 GitHub Actions Secrets 保存 Cloudflare 凭据，Fork Pull Request
++不会执行部署。当前项目仅为课程测试环境；生产发布将使用独立项目、独立
++工作流和人工审批。
++
+ 代码规范检查：
+ 
+ ```bash
+diff --git a/docs/superpowers/plans/2026-07-29-cloudflare-pr-preview.md b/docs/superpowers/plans/2026-07-29-cloudflare-pr-preview.md
+deleted file mode 100644
+index d1b52f5..0000000
+--- a/docs/superpowers/plans/2026-07-29-cloudflare-pr-preview.md
++++ /dev/null
+@@ -1,120 +0,0 @@
+-# Cloudflare PR Preview Implementation Plan
+-
+-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+-
+-**Goal:** Build and verify isolated, auto-cleaned Cloudflare Pages preview environments for same-repository pull requests.
+-
+-**Architecture:** A GitHub Actions pull-request workflow runs the existing frontend gates, manages one Direct Upload Pages project per PR with Wrangler, and exposes the stable Pages URL through a GitHub deployment environment. A close event deletes the PR-specific project.
+-
+-**Tech Stack:** GitHub Actions, Node.js 22, pnpm 11.17.0, Wrangler 4, Cloudflare Pages Direct Upload, Vite.
+-
+-## Global Constraints
+-
+-- Never deploy the `main` branch or a production Pages project.
+-- Never expose Cloudflare credentials to fork pull requests.
+-- Store credentials only as GitHub Actions Secrets.
+-- Use `apps/web/pnpm-lock.yaml` with `--frozen-lockfile`.
+-- Preview project names are `course-homework-pr-<PR number>`.
+-
+----
+-
+-### Task 1: Preview workflow
+-
+-**Files:**
+-- Create: `.github/workflows/cloudflare-pr-preview.yml`
+-- Create: `scripts/validate-preview-workflow.mjs`
+-- Modify: `package.json`
+-
+-**Interfaces:**
+-- Consumes: pull request number, head repository identity, Cloudflare Secrets, `apps/web/apps/web/dist`.
+-- Produces: a GitHub deployment environment with URL `https://course-homework-pr-<number>.pages.dev`.
+-
+-- [ ] **Step 1: Write the failing validator**
+-
+-Create a validator that reads the workflow and asserts the required PR events, same-repository guard, quality commands, per-PR project naming, deploy command, and close cleanup command.
+-
+-- [ ] **Step 2: Run the validator to verify it fails**
+-
+-Run: `node scripts/validate-preview-workflow.mjs`
+-
+-Expected: non-zero exit because `.github/workflows/cloudflare-pr-preview.yml` does not exist.
+-
+-- [ ] **Step 3: Implement the workflow**
+-
+-Add `quality`, `preview`, and `cleanup` jobs. Use concurrency keyed by PR number, Node 22, pnpm 11.17.0, frozen installation, and local Wrangler CLI commands. Guard all Cloudflare jobs with:
+-
+-```yaml
+-if: github.event.pull_request.head.repo.full_name == github.repository
+-```
+-
+-- [ ] **Step 4: Add the validation command**
+-
+-Add root script:
+-
+-```json
+-"validate:preview": "node scripts/validate-preview-workflow.mjs"
+-```
+-
+-- [ ] **Step 5: Run local gates**
+-
+-Run:
+-
+-```bash
+-pnpm validate:preview
+-pnpm test
+-pnpm typecheck
+-pnpm build
+-```
+-
+-Expected: all commands exit zero.
+-
+-### Task 2: Cloudflare and GitHub configuration
+-
+-**Files:**
+-- Modify: `README.md`
+-- Modify: `apps/web/README.md`
+-
+-**Interfaces:**
+-- Consumes: a Cloudflare account with Pages Edit permission.
+-- Produces: GitHub Secrets `CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID` and variable `CLOUDFLARE_PAGES_PREFIX`.
+-
+-- [ ] **Step 1: Create a least-privilege Cloudflare API token**
+-
+-Use the Cloudflare dashboard custom-token flow with Account / Cloudflare Pages / Edit for the selected account only.
+-
+-- [ ] **Step 2: Save repository configuration**
+-
+-Write the token and account identifier using `gh secret set`; write the public prefix using `gh variable set`. Verify only the names and timestamps, never read secret values back.
+-
+-- [ ] **Step 3: Document behavior**
+-
+-Document the PR URL format, lifecycle, same-repository restriction, required secret names, and the fact that production is not deployed.
+-
+-### Task 3: End-to-end preview verification
+-
+-**Files:**
+-- Create: `.tc-flow/` run evidence through the TC Flow workflow.
+-
+-**Interfaces:**
+-- Consumes: pushed feature branch and repository Secrets.
+-- Produces: draft pull request, successful Actions run, reachable Pages preview URL, and cleanup evidence when the verification PR closes.
+-
+-- [ ] **Step 1: Push the feature branch**
+-
+-Push `tc/cloudflare-pr-preview-<contractHash>` with tracking.
+-
+-- [ ] **Step 2: Open a draft PR**
+-
+-Create a draft PR against `main` describing the workflow, credential boundary, validation commands, and cleanup semantics.
+-
+-- [ ] **Step 3: Verify Actions**
+-
+-Wait for the PR workflow. Confirm quality and preview jobs pass and retrieve the deployment environment URL.
+-
+-- [ ] **Step 4: Verify preview**
+-
+-Request the preview URL and confirm HTTP success plus the visible `育爱成长` application identity.
+-
+-- [ ] **Step 5: Preserve cleanup for normal PR lifecycle**
+-
+-Keep the implementation PR open for review. The `closed` event is the production cleanup mechanism and is not triggered early merely to demonstrate deletion.
+diff --git a/docs/superpowers/specs/2026-07-29-cloudflare-pr-preview-design.md b/docs/superpowers/specs/2026-07-29-cloudflare-pr-preview-design.md
+index 4a23637..e654fb3 100644
+--- a/docs/superpowers/specs/2026-07-29-cloudflare-pr-preview-design.md
++++ b/docs/superpowers/specs/2026-07-29-cloudflare-pr-preview-design.md
+@@ -2,26 +2,26 @@
+ 
+ ## Goal
+ 
+-Use GitHub Actions to create a real, isolated Cloudflare Pages preview environment for every same-repository pull request in `Tiancheng-Xu/course-homework`, update it on every PR commit, and remove it when the PR closes.
++Use GitHub Actions to update one minimal, stable Cloudflare Pages preview environment for same-repository pull requests in `Tiancheng-Xu/course-homework`.
+ 
+ ## Architecture
+ 
+-GitHub remains the source of truth and CI coordinator. A pull request runs the existing tests, typecheck, and Vite production build. After those gates pass, Wrangler creates or reuses a Pages Direct Upload project named `course-homework-pr-<number>` and uploads `apps/web/apps/web/dist`.
++GitHub remains the source of truth and CI coordinator. A pull request runs the existing tests, typecheck, and Vite production build. After those gates pass, Wrangler uploads `apps/web/apps/web/dist` to the dedicated Pages test project `course-homework-preview`.
+ 
+-Each PR receives a stable URL:
++The preview uses one stable URL:
+ 
+ ```text
+-https://course-homework-pr-<number>.pages.dev
++https://course-homework-preview.pages.dev
+ ```
+ 
+-Closing the PR runs a cleanup job that deletes the whole PR-specific Pages project. This avoids the Cloudflare limitation that the latest deployment of a shared branch alias cannot be deleted.
++This intentionally minimizes the first deployment. Multiple simultaneous PR-specific environments and automatic cleanup are deferred until the course needs them.
+ 
+ ## Events and permissions
+ 
+-The workflow listens to `pull_request` events:
++The workflow listens to:
+ 
+-- `opened`, `reopened`, `synchronize`: validate, build, create/update preview.
+-- `closed`: delete the PR-specific Pages project.
++- `pull_request` events `opened`, `reopened`, and `synchronize`.
++- `workflow_dispatch` for an explicit manual test run.
+ 
+ Only pull requests whose head repository is the same repository may deploy. Fork pull requests may run validation but never receive Cloudflare secrets.
+ 
+@@ -38,7 +38,7 @@ GitHub Actions stores:
+ 
+ - Secret `CLOUDFLARE_API_TOKEN`: custom Cloudflare token with Pages Edit permission for the selected account.
+ - Secret `CLOUDFLARE_ACCOUNT_ID`: the selected Cloudflare account identifier.
+-- Variable `CLOUDFLARE_PAGES_PREFIX`: `course-homework-pr`.
++- Variable `CLOUDFLARE_PAGES_PROJECT`: `course-homework-preview`.
+ 
+ Credentials never enter source files, logs, review bundles, or pull request text.
+ 
+@@ -48,20 +48,16 @@ Credentials never enter source files, logs, review bundles, or pull request text
+ 2. Install Node.js 22 and pnpm 11.17.0.
+ 3. Install the nested Better-T-Stack workspace with the frozen lockfile.
+ 4. Run tests, typecheck, and production build.
+-5. Check whether the PR-specific Pages project exists.
+-6. Create the project when missing, with `preview` as its internal production branch.
+-7. Upload `apps/web/apps/web/dist`.
+-8. Publish the stable `pages.dev` URL as the GitHub deployment environment URL.
+-9. On PR close, delete the entire PR-specific Pages project non-interactively.
++5. Upload `apps/web/apps/web/dist` to `course-homework-preview`.
++6. Publish the stable `pages.dev` URL as the GitHub deployment environment URL.
+ 
+-Concurrent runs for the same PR are cancelled so an older commit cannot overwrite a newer preview.
++Only one preview deployment runs at a time. A newer run cancels an older run so stale code cannot overwrite the stable preview.
+ 
+ ## Failure handling
+ 
+ - Quality-gate failure prevents deployment.
+ - Missing Cloudflare credentials fails before mutation with a clear message.
+-- Project creation is idempotent: an existing project is reused.
+-- Cleanup treats an already-absent project as success.
++- The Pages project is bootstrapped once and then reused.
+ - Production is never used as a fallback.
+ 
+ ## Verification
+@@ -70,7 +66,7 @@ Concurrent runs for the same PR are cancelled so an older commit cannot overwrit
+ - Run the existing tests, typecheck, and build locally.
+ - Push the feature branch and open a draft PR.
+ - Confirm the Action succeeds and the deployment URL responds.
+-- Close only a dedicated verification PR when cleanup behavior is being tested.
++- Open the stable preview and confirm the visible application identity.
+ 
+ ## Non-goals
+ 
+@@ -79,3 +75,4 @@ Concurrent runs for the same PR are cancelled so an older commit cannot overwrit
+ - Cloudflare Access protection.
+ - AWS deployment.
+ - Preview deployments for forked pull requests.
++- Per-PR isolated Pages projects and automatic cleanup.
+diff --git a/package.json b/package.json
+index 70470c5..b6ee6ec 100644
+--- a/package.json
++++ b/package.json
+@@ -5,7 +5,8 @@
+     "dev": "pnpm --dir apps/web/apps/web dev",
+     "test": "pnpm --dir apps/web/apps/web test",
+     "typecheck": "pnpm --dir apps/web/apps/web check-types",
+-    "build": "pnpm --dir apps/web/apps/web build"
++    "build": "pnpm --dir apps/web/apps/web build",
++    "validate:preview": "node scripts/validate-cloudflare-preview.mjs"
+   },
+   "packageManager": "pnpm@11.17.0"
+ }
+diff --git a/scripts/validate-cloudflare-preview.mjs b/scripts/validate-cloudflare-preview.mjs
+new file mode 100644
+index 0000000..c9c28cb
+--- /dev/null
++++ b/scripts/validate-cloudflare-preview.mjs
+@@ -0,0 +1,42 @@
++import { readFile } from "node:fs/promises";
++
++const workflowPath = new URL(
++	"../.github/workflows/cloudflare-preview.yml",
++	import.meta.url,
++);
++
++const requiredFragments = [
++	"pull_request:",
++	"workflow_dispatch:",
++	"github.event.pull_request.head.repo.full_name == github.repository",
++	"pnpm test",
++	"pnpm typecheck",
++	"pnpm build",
++	"cloudflare/wrangler-action@v3",
++	"pages deploy apps/web/apps/web/dist",
++	"${{ vars.CLOUDFLARE_PAGES_PROJECT }}",
++	"${{ secrets.CLOUDFLARE_API_TOKEN }}",
++	"${{ secrets.CLOUDFLARE_ACCOUNT_ID }}",
++	"https://course-homework-preview.pages.dev",
++];
++
++let workflow;
++
++try {
++	workflow = await readFile(workflowPath, "utf8");
++} catch (error) {
++	console.error("Cloudflare preview workflow is missing.");
++	process.exitCode = 1;
++	throw error;
++}
++
++const missing = requiredFragments.filter(
++	(fragment) => !workflow.includes(fragment),
++);
++
++if (missing.length > 0) {
++	console.error(`Workflow validation failed. Missing: ${missing.join(", ")}`);
++	process.exitCode = 1;
++} else {
++	console.log("Cloudflare preview workflow validation passed.");
++}
+diff --git a/specs/cloudflare-pr-preview/design.md b/specs/cloudflare-pr-preview/design.md
+new file mode 100644
+index 0000000..163b9af
+--- /dev/null
++++ b/specs/cloudflare-pr-preview/design.md
+@@ -0,0 +1,13 @@
++# Cloudflare PR Preview Design
++
++完整设计见：
++
++- `docs/superpowers/specs/2026-07-29-cloudflare-pr-preview-design.md`
++
++核心决策：
++
++- 使用一个稳定的 Pages 测试项目 `course-homework-preview`，优先实现最小可视环境。
++- 同仓库 PR 和手动触发均可运行测试、类型检查、构建与部署。
++- Fork PR 不执行部署，因此无法读取 Cloudflare Secrets。
++- GitHub Actions 使用仅有当前账户 Pages Write 权限的 API Token。
++- 生产发布保留为后续独立工作流和独立 Pages 项目，必须由人工触发和审批。
+diff --git a/specs/cloudflare-pr-preview/requirements.md b/specs/cloudflare-pr-preview/requirements.md
+new file mode 100644
+index 0000000..4dd84b8
+--- /dev/null
++++ b/specs/cloudflare-pr-preview/requirements.md
+@@ -0,0 +1,23 @@
++# Cloudflare PR Preview Requirements
++
++## Goal
++
++为 `course-homework` 建立由 GitHub Actions 驱动的 Cloudflare Pages PR 预览环境，同时保留独立、受人工控制的生产发布环节。
++
++## Requirements
++
++- 同仓库 Pull Request 在创建、重新打开或更新时自动执行质量检查并发布预览。
++- 所有同仓库 PR 更新同一个最小化 Cloudflare Pages 预览项目。
++- 预览地址固定为 `https://course-homework-preview.pages.dev`。
++- Fork PR 不得接触 Cloudflare 凭据。
++- Cloudflare 令牌与账户标识仅存储在 GitHub Actions Secrets 中。
++- 当前流程不得触发生产部署、修改生产域名或覆盖生产项目。
++- 文档需要清楚区分预览发布与生产发布。
++
++## Acceptance
++
++- 工作流静态验证通过。
++- Web 应用的测试、类型检查和生产构建通过。
++- 测试 PR 的 GitHub Actions 成功。
++- 测试 PR 自动刷新可访问的固定 `pages.dev` 预览地址。
++- 生产发布仍是独立、人工控制的后续环节。
+diff --git a/specs/cloudflare-pr-preview/tasks.md b/specs/cloudflare-pr-preview/tasks.md
+new file mode 100644
+index 0000000..17529f5
+--- /dev/null
++++ b/specs/cloudflare-pr-preview/tasks.md
+@@ -0,0 +1,7 @@
++# Cloudflare PR Preview Tasks
++
++1. 创建固定的 Cloudflare Pages 预览项目并完成首次可视部署。
++2. 编写可自动校验的 GitHub Actions 预览工作流。
++3. 配置 Cloudflare 最小权限令牌、GitHub Secrets 和项目名 Variable。
++4. 创建测试 PR，验证 Actions 自动刷新固定预览地址。
++5. 更新项目文档，明确预览与生产发布边界。

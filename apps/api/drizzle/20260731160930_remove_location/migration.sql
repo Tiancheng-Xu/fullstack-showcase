@@ -1,0 +1,1 @@
+ALTER TABLE `github_profiles` DROP COLUMN `location`;

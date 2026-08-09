@@ -1,11 +1,26 @@
 {
-  "name": "course-homework",
-  "private": true,
-  "scripts": {
-    "dev": "pnpm --dir apps/web/apps/web dev",
-    "test": "pnpm --dir apps/web/apps/web test",
-    "typecheck": "pnpm --dir apps/web/apps/web check-types",
-    "build": "pnpm --dir apps/web/apps/web build"
-  },
-  "packageManager": "pnpm@11.17.0"
+	"name": "course-homework",
+	"private": true,
+	"scripts": {
+		"check": "biome check scripts package.json biome.json apps/api/src apps/api/drizzle.config.ts apps/api/vitest.config.ts apps/api/tsup.config.ts apps/api/package.json apps/web/src/features/github-profile apps/web/src/routes/homework.github-profile.tsx apps/web/src/features/nurture/profile-content.tsx apps/web/vite.config.ts && pnpm --filter @course-homework/api-go check",
+		"dev": "pnpm --filter @course-homework/api db:migrate && pnpm --parallel --filter @course-homework/api --filter @course-homework/web dev",
+		"dev:go": "pnpm --filter @course-homework/api-go db:migrate && API_PROXY_TARGET=http://localhost:3002 pnpm --parallel --filter @course-homework/api-go --filter @course-homework/web dev",
+		"test": "pnpm test:structure && pnpm --filter @course-homework/api test && pnpm --filter @course-homework/api-go test && pnpm --filter @course-homework/web test",
+		"test:go": "pnpm --filter @course-homework/api-go test",
+		"test:structure": "node --test scripts/__tests__/*.test.mjs",
+		"typecheck": "pnpm --filter @course-homework/api typecheck && pnpm --filter @course-homework/api-go typecheck && pnpm --filter @course-homework/web check-types",
+		"typecheck:go": "pnpm --filter @course-homework/api-go typecheck",
+		"build": "pnpm --filter @course-homework/api build && pnpm --filter @course-homework/api-go build && pnpm --filter @course-homework/web build",
+		"build:go": "pnpm --filter @course-homework/api-go build",
+		"rag:check": "pnpm --filter @course-homework/rag-agent-orchestration check",
+		"rag:test": "pnpm --filter @course-homework/rag-agent-orchestration test",
+		"rag:typecheck": "pnpm --filter @course-homework/rag-agent-orchestration typecheck",
+		"validate:preview": "node scripts/validate-cloudflare-preview.mjs"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "^2.5.6",
+		"wrangler": "4.115.0",
+		"yaml": "^2.9.0"
+	},
+	"packageManager": "pnpm@11.17.0"
 }
