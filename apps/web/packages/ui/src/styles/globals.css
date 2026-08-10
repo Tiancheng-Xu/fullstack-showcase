@@ -31,7 +31,9 @@
 	--input: #eae8e0;
 	--ring: #42617d;
 	--surface-low: #f5f4ec;
+	--surface-container: #f0eee6;
 	--surface-high: #eae8e0;
+	--surface-highest: #e4e3db;
 	--radius: 1rem;
 	--radius-card: 2rem;
 	--shadow-card: 0 18px 40px rgb(132 84 0 / 8%);
@@ -69,7 +71,9 @@
 	--color-input: var(--input);
 	--color-ring: var(--ring);
 	--color-surface-low: var(--surface-low);
+	--color-surface-container: var(--surface-container);
 	--color-surface-high: var(--surface-high);
+	--color-surface-highest: var(--surface-highest);
 	--radius-sm: 0.5rem;
 	--radius-md: 1rem;
 	--radius-lg: 1.5rem;
@@ -105,7 +109,8 @@
 		color: var(--foreground);
 		font-family: var(--font-ui);
 		-webkit-font-smoothing: antialiased;
-		overscroll-behavior: none;
+		overflow-x: hidden;
+		overscroll-behavior-x: none;
 	}
 
 	button,

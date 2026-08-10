@@ -1,0 +1,24 @@
+{
+  "schema": "tc-flow ReviewBundle v1",
+  "sanitized": true,
+  "runId": "tc_stitch_parent_ui_20260731_afa3edc1",
+  "taskId": "SUI-005",
+  "contractHash": "afa3edc1af282aa049cb7accf261befefde00c7cede749b3334c57b984539cd9",
+  "risk": "medium",
+  "contractSummary": "Parent-facing local Mock UI only. The China-first parenting guide must combine keyword and category filtering, show article details with source, review/access dates, age range, and a medical disclaimer, and make no diagnosis or live browser-side provider calls.",
+  "task": "Restore the Stitch parenting guide and article detail route. Add explicit China-first source provenance and register future public-network providers without integrating them in the browser.",
+  "sanitizedDiff": "GuideContent now labels the guide for Chinese parents, combines category and keyword filtering, links a local featured article and every result to a detail route, links vaccine schedule to its product page, shows source names on cards, and provides an actionable empty state. GuideArticleContent displays article metadata, reviewed local prose, source link, provider purpose, source-access date, content-review date, age range, and the fixed non-diagnostic disclaimer, with a missing-item fallback. guideProviders registers four future Go adapter targets: Chinese NHC public documents, PHDA health dataset metadata API (approval required), a Chinese children's science content API (approval required), and PubMed evidence metadata. V1 never calls these services from the browser. Mock data carries source provider, URL, and accessed-at fields. Tests verify joint filtering, Chinese provenance, disclaimer, and the multi-provider registry.",
+  "evidence": [
+    "TDD RED: focused guide suite failed because guide-providers did not exist.",
+    "TDD GREEN: guide and existing local-interaction suites passed 6/6.",
+    "Full regression: 8 files, 21/21 tests passed.",
+    "Typecheck: Vite build and tsc --noEmit passed.",
+    "Production build passed.",
+    "Scoped Biome: 7 task files passed after formatting.",
+    "Safety: article copy remains reviewed local Mock content; external sources are provenance links and future adapters only; no diagnosis or silent network call."
+  ],
+  "redactions": {
+    "count": 0,
+    "types": []
+  }
+}

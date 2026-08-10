@@ -1,0 +1,44 @@
+{
+  "schema": "tc-flow Checkpoint v1",
+  "runId": "tc_stitch_parent_ui_20260731_afa3edc1",
+  "feature": "stitch-parent-ui-refresh",
+  "contractHash": "afa3edc1af282aa049cb7accf261befefde00c7cede749b3334c57b984539cd9",
+  "node": "N5",
+  "taskId": "SUI-003",
+  "input": "Growth, records, and vaccine routes from the committed Stitch/PRD mapping.",
+  "changedFiles": [
+    "apps/web/apps/web/src/features/nurture/growth-content.tsx",
+    "apps/web/apps/web/src/features/nurture/growth-records-content.tsx",
+    "apps/web/apps/web/src/features/nurture/vaccine-content.tsx",
+    "apps/web/apps/web/src/features/nurture/__tests__/growth-flows.test.tsx",
+    "apps/web/apps/web/src/features/nurture/data.ts",
+    "apps/web/apps/web/src/routes/growth.records.tsx",
+    "apps/web/apps/web/src/routes/vaccines.tsx"
+  ],
+  "repositoryState": {
+    "cumulativeTaskDiffSha256": "b3ee9f105bfe303658770259b999c4ccffdc65a8f2d43b72e6141bc6ca0bcff4",
+    "statusSha256BeforeCheckpoint": "53bd531195cf456f353faf0feb912019cbf18187d63fa90b387679d2a08c9c41"
+  },
+  "evidence": {
+    "tddRed": "Focused suite failed because growth-records-content.tsx did not exist.",
+    "tests": "6 files, 16 tests passed.",
+    "typecheck": "Vite build and tsc --noEmit passed.",
+    "build": "Production Vite build passed.",
+    "lint": "6 scoped files passed after formatting.",
+    "review": ".tc-flow/reviews/SUI-003.review-result.json",
+    "piiRedacted": 0
+  },
+  "review": {
+    "verdict": "pass",
+    "provider": "kimi",
+    "model": "kimi-k3",
+    "transport": "openai-compatible-api",
+    "requestId": "chatcmpl-6a6c42f3b723fe5928308b92",
+    "reviewerDegraded": false
+  },
+  "retries": 0,
+  "toolRequests": [],
+  "humanInterventions": [],
+  "blockers": [],
+  "events": ".tc-flow/events.jsonl"
+}

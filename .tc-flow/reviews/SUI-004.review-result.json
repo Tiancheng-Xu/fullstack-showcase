@@ -1,0 +1,37 @@
+{
+  "schema": "tc-flow ReviewResult v1",
+  "runId": "tc_stitch_parent_ui_20260731_afa3edc1",
+  "taskId": "SUI-004",
+  "contractHash": "afa3edc1af282aa049cb7accf261befefde00c7cede749b3334c57b984539cd9",
+  "risk": "medium",
+  "verdict": "pass",
+  "p0": false,
+  "provider": "deepseek",
+  "model": "deepseek-v4-pro",
+  "transport": "openai-compatible-api",
+  "requestId": "62b50238-6c3b-407c-afeb-3cbbb6ae5186",
+  "reviewerDegraded": true,
+  "stage": "task-review",
+  "modelVerdict": "pass",
+  "issues": [],
+  "p0Issues": [],
+  "summary": "The code successfully restores the Stitch moments gallery and detail screen using local bundled assets, includes accessible controls (alt text, aria-pressed), a local add placeholder with clear no-upload notice, proper routing, and missing-item fallback. All tests, type checks, and builds pass. No secret leakage, data destruction, authentication bypass, production outage, supply-chain/RCE, or out-of-contract security issues are present. The implementation fully complies with the contract.",
+  "reviewerDegradedReason": "kimi-request-failed",
+  "blockedReason": null,
+  "attempts": [
+    {
+      "provider": "kimi",
+      "model": "kimi-k3",
+      "requestId": null,
+      "status": "error",
+      "code": "PROVIDER_HTTP_ERROR",
+      "httpStatus": 429
+    },
+    {
+      "provider": "deepseek",
+      "model": "deepseek-v4-pro",
+      "requestId": "62b50238-6c3b-407c-afeb-3cbbb6ae5186",
+      "status": "pass"
+    }
+  ]
+}

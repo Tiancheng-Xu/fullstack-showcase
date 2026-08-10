@@ -3,14 +3,7 @@ import { useState } from "react";
 
 import { FloatingActionButton } from "@/components/ui/floating-action-button";
 import { Modal } from "@/components/ui/modal";
-import { initialMoments } from "./data";
-import type { Moment } from "./types";
-
-const accentClasses: Record<Moment["accent"], string> = {
-	orange: "from-primary-container to-primary",
-	blue: "from-secondary-soft to-secondary",
-	green: "from-tertiary-soft to-tertiary",
-};
+import { moments as initialMoments } from "./data";
 
 export function MomentsContent() {
 	const [moments, setMoments] = useState(initialMoments);
@@ -25,9 +18,10 @@ export function MomentsContent() {
 	}
 
 	return (
-		<div className="space-y-8">
+		<div className="space-y-7">
 			<section>
-				<h1 className="font-bold text-2xl tracking-[-0.03em]">家庭时光</h1>
+				<p className="font-semibold text-primary text-sm">成长影集</p>
+				<h1 className="mt-1 font-bold text-3xl tracking-[-0.04em]">家庭时光</h1>
 				<p className="mt-1 text-muted-foreground">
 					每一个平凡瞬间，都值得被珍藏
 				</p>
@@ -49,34 +43,43 @@ export function MomentsContent() {
 				<div className="grid grid-cols-2 gap-3">
 					{moments.map((moment, index) => (
 						<article
-							className={`relative min-h-48 overflow-hidden rounded-[2rem] bg-gradient-to-br p-4 text-white shadow-card ${
-								accentClasses[moment.accent]
-							} ${index === 0 ? "col-span-2 min-h-64" : ""}`}
+							className={`group relative min-h-52 overflow-hidden rounded-[2rem] bg-surface-low shadow-card ${
+								index === 0 ? "col-span-2 min-h-72" : ""
+							}`}
 							key={moment.id}
 						>
-							<div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
-							<Camera
-								aria-hidden="true"
-								className="absolute top-6 right-6 opacity-20"
-								size={index === 0 ? 92 : 58}
+							<img
+								alt={moment.title}
+								className="absolute inset-0 size-full object-cover transition duration-500 group-hover:scale-[1.03]"
+								src={moment.image}
 							/>
-							<div className="relative flex h-full min-h-inherit flex-col justify-end">
-								<p className="text-xs opacity-90">{moment.date}</p>
-								<h3 className="mt-1 max-w-[85%] font-bold">{moment.title}</h3>
-								<button
-									aria-label={`收藏 ${moment.title}`}
-									aria-pressed={moment.favorite}
-									className="absolute right-0 bottom-0 grid size-10 place-items-center rounded-full bg-white/20 backdrop-blur"
-									onClick={() => toggleFavorite(moment.id)}
-									type="button"
-								>
-									<Heart
-										aria-hidden="true"
-										fill={moment.favorite ? "currentColor" : "none"}
-										size={19}
-									/>
-								</button>
+							<div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/5 to-black/10" />
+							<a
+								aria-label={`查看 ${moment.title}`}
+								className="absolute inset-0 rounded-[2rem] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary/45"
+								href={`/moments/${moment.id}`}
+							>
+								<span className="sr-only">查看 {moment.title}</span>
+							</a>
+							<div className="pointer-events-none absolute inset-x-0 bottom-0 p-4 text-white">
+								<p className="text-white/85 text-xs">{moment.date}</p>
+								<h3 className="mt-1 max-w-[82%] font-bold leading-5">
+									{moment.title}
+								</h3>
 							</div>
+							<button
+								aria-label={`收藏 ${moment.title}`}
+								aria-pressed={moment.favorite}
+								className="absolute right-3 bottom-3 z-10 grid size-11 place-items-center rounded-full bg-white/20 text-white backdrop-blur-md transition active:scale-95"
+								onClick={() => toggleFavorite(moment.id)}
+								type="button"
+							>
+								<Heart
+									aria-hidden="true"
+									fill={moment.favorite ? "currentColor" : "none"}
+									size={20}
+								/>
+							</button>
 						</article>
 					))}
 				</div>

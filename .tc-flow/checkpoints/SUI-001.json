@@ -1,0 +1,46 @@
+{
+  "schema": "tc-flow Checkpoint v1",
+  "runId": "tc_stitch_parent_ui_20260731_afa3edc1",
+  "feature": "stitch-parent-ui-refresh",
+  "contractHash": "afa3edc1af282aa049cb7accf261befefde00c7cede749b3334c57b984539cd9",
+  "node": "N5",
+  "taskId": "SUI-001",
+  "input": "Latest committed Stitch snapshot and parent UI refresh contract.",
+  "changedFiles": [
+    "apps/web/apps/web/public/assets/nurture-bloom/stitch/*.jpg",
+    "apps/web/apps/web/src/components/layout/__tests__/app-shell.test.tsx",
+    "apps/web/apps/web/src/components/layout/app-shell.tsx",
+    "apps/web/apps/web/src/components/layout/bottom-nav.tsx",
+    "apps/web/apps/web/src/components/layout/top-bar.tsx",
+    "apps/web/apps/web/src/features/nurture/data.ts",
+    "apps/web/apps/web/src/features/nurture/stitch-assets.ts",
+    "apps/web/apps/web/src/features/nurture/types.ts",
+    "apps/web/apps/web/src/routes/__root.tsx",
+    "apps/web/packages/ui/src/styles/globals.css"
+  ],
+  "repositoryState": {
+    "taskDiffSha256": "f412bd9bd12e7ca3eaff60be63d6b9541463429431e83782ffeba33aad5a6066",
+    "statusSha256BeforeCheckpoint": "e0e7407d2f0299487510b82629f5d91dfaa0ecb37009b8a59a89478782d327f3"
+  },
+  "evidence": {
+    "tddRed": "Auth-route test failed because parent navigation remained mounted.",
+    "tests": "3 focused files, 7 tests passed.",
+    "typecheck": "Vite build and tsc --noEmit passed.",
+    "lint": "9 scoped files checked with no errors; 4 pre-existing reduced-motion warnings.",
+    "review": ".tc-flow/reviews/SUI-001.review-result.json",
+    "piiRedacted": 0
+  },
+  "review": {
+    "verdict": "pass",
+    "provider": "kimi",
+    "model": "kimi-k3",
+    "transport": "openai-compatible-api",
+    "requestId": "chatcmpl-6a6c3eaac05696b2de087b61",
+    "reviewerDegraded": false
+  },
+  "retries": 0,
+  "toolRequests": [],
+  "humanInterventions": [],
+  "blockers": [],
+  "events": ".tc-flow/events.jsonl"
+}

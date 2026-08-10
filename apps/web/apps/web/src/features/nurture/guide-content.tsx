@@ -1,8 +1,8 @@
 import {
+	ArrowRight,
 	CheckCircle2,
 	Search,
 	ShieldPlus,
-	Sparkles,
 	Syringe,
 } from "lucide-react";
 import { useMemo, useState } from "react";
@@ -16,6 +16,7 @@ const categories: GuideCategory[] = ["全部", "喂养", "护理", "疫苗", "�
 export function GuideContent() {
 	const [query, setQuery] = useState("");
 	const [category, setCategory] = useState<GuideCategory>("全部");
+	const featured = guideItems.find((item) => item.id === "feeding");
 	const filtered = useMemo(
 		() =>
 			guideItems.filter(
@@ -29,8 +30,11 @@ export function GuideContent() {
 	return (
 		<div className="space-y-7">
 			<section>
-				<h1 className="font-bold text-2xl tracking-[-0.03em]">育儿百科</h1>
-				<p className="mt-1 text-muted-foreground">把靠谱知识，变成安心陪伴</p>
+				<p className="font-semibold text-primary text-sm">中国家长适用</p>
+				<h1 className="mt-1 font-bold text-3xl tracking-[-0.04em]">育儿百科</h1>
+				<p className="mt-1 text-muted-foreground">
+					优先采用国内权威公开资料，每篇都标注来源
+				</p>
 			</section>
 
 			<label className="relative block">
@@ -62,29 +66,45 @@ export function GuideContent() {
 				))}
 			</div>
 
-			<section className="relative overflow-hidden rounded-[2rem] bg-error-container p-6 text-on-error-container shadow-card">
-				<div className="relative z-10 max-w-[75%]">
-					<div className="flex items-center justify-between gap-2 text-xs">
-						<StatusChip tone="warning">本月精选</StatusChip>
-						<span>3分钟阅读</span>
+			{featured ? (
+				<a
+					className="group relative block min-h-64 overflow-hidden rounded-[2rem] bg-error-container shadow-card"
+					href={`/guide/${featured.id}`}
+				>
+					<img
+						alt=""
+						className="absolute inset-0 size-full object-cover"
+						src={featured.image}
+					/>
+					<div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/35 to-transparent" />
+					<div className="relative z-10 flex min-h-64 max-w-[78%] flex-col justify-between p-6 text-white">
+						<div className="flex items-center gap-2 text-xs">
+							<StatusChip tone="warning">本月精选</StatusChip>
+							<span>{featured.readingMinutes}分钟阅读</span>
+						</div>
+						<div>
+							<h2 className="font-bold text-2xl leading-tight">
+								6个月宝宝辅食添加指南：第一口吃什么？
+							</h2>
+							<span className="mt-4 inline-flex items-center gap-1 font-bold text-sm">
+								阅读全文
+								<ArrowRight
+									aria-hidden="true"
+									className="transition group-hover:translate-x-1"
+									size={17}
+								/>
+							</span>
+						</div>
 					</div>
-					<h2 className="mt-5 font-bold text-2xl leading-tight">
-						6个月宝宝辅食添加指南：第一口吃什么？
-					</h2>
-				</div>
-				<Sparkles
-					aria-hidden="true"
-					className="absolute right-3 bottom-2 opacity-20"
-					size={96}
-				/>
-			</section>
+				</a>
+			) : null}
 
 			<section className="space-y-3">
 				<div className="flex items-center justify-between">
 					<h2 className="font-bold text-xl">疫苗接种日程</h2>
-					<button className="font-semibold text-primary text-sm" type="button">
+					<a className="font-semibold text-primary text-sm" href="/vaccines">
 						全部日程
-					</button>
+					</a>
 				</div>
 				<VaccineRow complete title="五联疫苗（第一针）" />
 				<VaccineRow complete={false} title="乙肝疫苗（第三针）" />
@@ -94,26 +114,35 @@ export function GuideContent() {
 				<h2 className="font-bold text-xl">每日小贴士</h2>
 				{filtered.length > 0 ? (
 					filtered.map((item) => (
-						<article
-							className="flex gap-4 rounded-3xl bg-card p-4 shadow-card"
+						<a
+							className="flex gap-4 rounded-3xl bg-card p-4 shadow-card transition active:scale-[0.99]"
+							href={`/guide/${item.id}`}
 							key={item.id}
 						>
 							<div className="grid size-11 shrink-0 place-items-center rounded-full bg-secondary-soft text-secondary">
 								<ShieldPlus aria-hidden="true" size={20} />
 							</div>
-							<div>
-								<p className="text-muted-foreground text-xs">{item.category}</p>
+							<div className="min-w-0">
+								<p className="text-muted-foreground text-xs">
+									{item.category} · {item.readingMinutes}分钟
+								</p>
 								<h3 className="mt-0.5 font-bold">{item.title}</h3>
 								<p className="mt-1 text-muted-foreground text-sm">
 									{item.description}
 								</p>
+								<p className="mt-2 truncate text-muted-foreground text-xs">
+									来源：{item.sourceName}
+								</p>
 							</div>
-						</article>
+						</a>
 					))
 				) : (
-					<p className="rounded-3xl bg-card p-6 text-center text-muted-foreground">
-						没有找到相关内容
-					</p>
+					<div className="rounded-3xl bg-card p-6 text-center">
+						<p className="font-bold">没有找到相关内容</p>
+						<p className="mt-1 text-muted-foreground text-sm">
+							试试缩短关键词或切换到“全部”
+						</p>
+					</div>
 				)}
 			</section>
 		</div>

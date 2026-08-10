@@ -1,0 +1,5 @@
+Growth overview now reads the shared baby profile and consistent height/weight records.
+Growth records add four-category filtering and an accessible confirmation step before local deletion.
+Vaccine schedule adds completed/upcoming state, labelled reminder switches, source labels, and a fixed medical disclaimer.
+Routes added: /growth/records and /vaccines.
+Tests cover all four record types, filtering plus deletion, and reminder toggle state.

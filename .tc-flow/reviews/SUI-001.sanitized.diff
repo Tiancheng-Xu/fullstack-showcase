@@ -1,0 +1,510 @@
+diff --git a/apps/web/apps/web/src/components/layout/app-shell.tsx b/apps/web/apps/web/src/components/layout/app-shell.tsx
+index d49b7ec..1da8a95 100644
+--- a/apps/web/apps/web/src/components/layout/app-shell.tsx
++++ b/apps/web/apps/web/src/components/layout/app-shell.tsx
+@@ -3,14 +3,31 @@ import type { PropsWithChildren } from "react";
+ import { BottomNav } from "./bottom-nav";
+ import { TopBar } from "./top-bar";
+ 
+-export function AppShell({ children }: PropsWithChildren) {
++const authPaths = new Set(["/login", "/register", "/onboarding"]);
++
++type AppShellProps = PropsWithChildren<{
++	pathname?: string;
++}>;
++
++export function AppShell({ children, pathname }: AppShellProps) {
++	const currentPath =
++		pathname ??
++		(typeof window === "undefined" ? "/growth" : window.location.pathname);
++	const isAuth = authPaths.has(currentPath);
++
+ 	return (
+ 		<div className="min-h-svh bg-background text-foreground">
+-			<TopBar />
+-			<main className="mx-auto min-h-svh w-full max-w-3xl px-5 pt-[calc(5rem+env(safe-area-inset-top,0px))] pb-[calc(6rem+env(safe-area-inset-bottom,0px))] sm:px-6">
++			<TopBar variant={isAuth ? "auth" : "app"} />
++			<main
++				className={
++					isAuth
++						? "mx-auto min-h-svh w-full max-w-lg px-6 pt-[calc(5.5rem+env(safe-area-inset-top,0px))] pb-10"
++						: "mx-auto min-h-svh w-full max-w-3xl px-5 pt-[calc(5.25rem+env(safe-area-inset-top,0px))] pb-[calc(6rem+env(safe-area-inset-bottom,0px))] sm:px-6"
++				}
++			>
+ 				{children}
+ 			</main>
+-			<BottomNav />
++			{isAuth ? null : <BottomNav />}
+ 		</div>
+ 	);
+ }
+diff --git a/apps/web/apps/web/src/components/layout/bottom-nav.tsx b/apps/web/apps/web/src/components/layout/bottom-nav.tsx
+index 9a220e7..d3c0edd 100644
+--- a/apps/web/apps/web/src/components/layout/bottom-nav.tsx
++++ b/apps/web/apps/web/src/components/layout/bottom-nav.tsx
+@@ -1,8 +1,8 @@
+ import { Link } from "@tanstack/react-router";
+-import { BookOpen, Images, Sprout, UserRound } from "lucide-react";
++import { BookOpen, ChartNoAxesCombined, Images, UserRound } from "lucide-react";
+ 
+ const items = [
+-	{ to: "/growth", label: "成长", icon: Sprout },
++	{ to: "/growth", label: "成长", icon: ChartNoAxesCombined },
+ 	{ to: "/moments", label: "时光", icon: Images },
+ 	{ to: "/guide", label: "百科", icon: BookOpen },
+ 	{ to: "/me", label: "我的", icon: UserRound },
+@@ -12,7 +12,7 @@ export function BottomNav() {
+ 	return (
+ 		<nav
+ 			aria-label="主要导航"
+-			className="fixed inset-x-0 bottom-0 z-50 border-border/45 border-t bg-background/90 pb-safe backdrop-blur-xl"
++			className="fixed inset-x-0 bottom-0 z-50 border-border/35 border-t bg-background/92 pb-safe backdrop-blur-xl"
+ 		>
+ 			<div className="mx-auto grid h-16 w-full max-w-3xl grid-cols-4 px-2">
+ 				{items.map(({ icon: Icon, label, to }) => (
+diff --git a/apps/web/apps/web/src/components/layout/top-bar.tsx b/apps/web/apps/web/src/components/layout/top-bar.tsx
+index 7023b5d..a7aa8eb 100644
+--- a/apps/web/apps/web/src/components/layout/top-bar.tsx
++++ b/apps/web/apps/web/src/components/layout/top-bar.tsx
+@@ -1,35 +1,43 @@
+ import { Bell, UserRound } from "lucide-react";
+ 
+-export function TopBar() {
++import { STITCH_ASSETS } from "@/features/nurture/stitch-assets";
++
++export function TopBar({ variant = "app" }: { variant?: "auth" | "app" }) {
+ 	return (
+-		<header className="fixed inset-x-0 top-0 z-50 border-border/45 border-b bg-background/86 pt-safe backdrop-blur-xl">
++		<header className="fixed inset-x-0 top-0 z-50 bg-background/92 pt-safe backdrop-blur-xl">
+ 			<div className="mx-auto flex h-16 w-full max-w-3xl items-center justify-between px-5 sm:px-6">
+ 				<div className="flex items-center gap-2.5">
+ 					<img
+-						alt=""
+-						className="size-10 rounded-xl object-cover"
+-						src="/assets/nurture-bloom/logo/screen.png"
++						alt="育爱成长"
++						className="size-9 rounded-xl object-cover mix-blend-multiply"
++						src={STITCH_ASSETS.logo}
+ 					/>
+ 					<span className="font-bold text-primary text-xl tracking-[-0.02em]">
+ 						育爱成长
+ 					</span>
+ 				</div>
+-				<div className="flex items-center gap-2">
+-					<button
+-						aria-label="通知"
+-						className="grid size-10 place-items-center rounded-full text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+-						type="button"
+-					>
+-						<Bell aria-hidden="true" size={21} />
+-					</button>
+-					<div
+-						aria-label="个人资料"
+-						className="grid size-9 place-items-center rounded-full bg-primary text-primary-foreground"
+-						role="img"
+-					>
+-						<UserRound aria-hidden="true" size={19} />
++				{variant === "auth" ? (
++					<span className="rounded-full bg-primary-soft px-3 py-1 font-semibold text-primary text-xs">
++						温柔记录每一步
++					</span>
++				) : (
++					<div className="flex items-center gap-2">
++						<button
++							aria-label="通知"
++							className="grid size-10 place-items-center rounded-full text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
++							type="button"
++						>
++							<Bell aria-hidden="true" size={21} />
++						</button>
++						<div
++							aria-label="个人资料"
++							className="grid size-9 place-items-center rounded-full bg-primary text-primary-foreground"
++							role="img"
++						>
++							<UserRound aria-hidden="true" size={19} />
++						</div>
+ 					</div>
+-				</div>
++				)}
+ 			</div>
+ 		</header>
+ 	);
+diff --git a/apps/web/apps/web/src/features/nurture/data.ts b/apps/web/apps/web/src/features/nurture/data.ts
+index 43fafb5..cd08c23 100644
+--- a/apps/web/apps/web/src/features/nurture/data.ts
++++ b/apps/web/apps/web/src/features/nurture/data.ts
+@@ -1,8 +1,78 @@
+-import type { DailyRecord, GuideItem, Moment } from "./types";
++import { STITCH_ASSETS } from "./stitch-assets";
++import type {
++	BabyProfile,
++	DailyRecord,
++	GuideItem,
++	Moment,
++	Vaccine,
++} from "./types";
+ 
+-export const initialRecords: DailyRecord[] = [
+-	{ id: "milk-1", kind: "喂奶", value: "180 ml", time: "2小时前" },
+-	{ id: "sleep-1", kind: "睡眠", value: "3 h", time: "今日总计" },
++export const babyProfile: BabyProfile = {
++	id: "baby-jinjin",
++	nickname: "金金",
++	birthDate: "2026-01-16",
++	ageDisplay: "6个月15天",
++	gender: "女",
++	bloodType: "O",
++	heightCm: 68,
++	weightKg: 8.5,
++	avatar: STITCH_ASSETS.babyProfile,
++};
++
++export const growthRecords: DailyRecord[] = [
++	{
++		id: "milk-1",
++		kind: "喂奶",
++		value: "180 ml",
++		time: "今天 10:30",
++		recordedAt: "2026-07-31T10:30:00-04:00",
++		note: "小家伙今天胃口很好。",
++	},
++	{
++		id: "sleep-1",
++		kind: "睡眠",
++		value: "1.5 hr",
++		time: "今天 15:00",
++		recordedAt: "2026-07-31T15:00:00-04:00",
++		note: "入睡很快，中途没有惊醒。",
++	},
++	{
++		id: "height-1",
++		kind: "身高",
++		value: "76.5 cm",
++		time: "昨天 09:00",
++		recordedAt: "2026-07-30T09:00:00-04:00",
++	},
++	{
++		id: "weight-1",
++		kind: "体重",
++		value: "10.2 kg",
++		time: "昨天 09:00",
++		recordedAt: "2026-07-30T09:00:00-04:00",
++	},
++];
++
++export const initialRecords = growthRecords;
++
++export const vaccines: Vaccine[] = [
++	{
++		id: "pentavalent-1",
++		title: "五联疫苗",
++		dose: "第 1 剂",
++		scheduledDate: "2026-03-16",
++		status: "completed",
++		reminderEnabled: false,
++		sourceName: "当地免疫规划公开资料",
++	},
++	{
++		id: "hepatitis-b-3",
++		title: "乙肝疫苗",
++		dose: "第 3 剂",
++		scheduledDate: "2026-08-03",
++		status: "upcoming",
++		reminderEnabled: true,
++		sourceName: "当地免疫规划公开资料",
++	},
+ ];
+ 
+ export const guideItems: GuideItem[] = [
+@@ -11,47 +81,104 @@ export const guideItems: GuideItem[] = [
+ 		category: "护理",
+ 		title: "如何预防感冒",
+ 		description: "换季时节，注意室内通风，适时增减衣物。",
++		sourceName: "育爱成长内容团队",
++		reviewedAt: "2026-07-28",
++		ageRange: "0–12个月",
++		disclaimer: "本文仅作育儿科普参考，不能替代医生诊断与治疗建议。",
++		readingMinutes: 3,
+ 	},
+ 	{
+ 		id: "pacifier",
+ 		category: "护理",
+ 		title: "安抚奶嘴的使用",
+ 		description: "正确使用能有效安抚宝宝情绪，但需注意清洁。",
++		sourceName: "育爱成长内容团队",
++		reviewedAt: "2026-07-26",
++		ageRange: "0–12个月",
++		disclaimer: "本文仅作育儿科普参考，不能替代医生诊断与治疗建议。",
++		readingMinutes: 4,
+ 	},
+ 	{
+ 		id: "feeding",
+ 		category: "喂养",
+ 		title: "宝宝第一口辅食",
+ 		description: "从高铁米粉开始，少量尝试并观察过敏反应。",
++		body: [
++			"辅食不是为了立刻替代母乳或配方奶，而是让宝宝逐步认识新的味道和质地。",
++			"第一次尝试可以从单一、细腻、易吞咽的食物开始，每次只增加一种新食材。",
++			"进食时让宝宝保持坐直并由成人全程陪伴，如有异常反应及时停止并咨询专业人员。",
++		],
++		image: STITCH_ASSETS.articleFeeding,
++		sourceName: "育爱成长内容团队",
++		reviewedAt: "2026-07-30",
++		ageRange: "约6个月起",
++		disclaimer: "本文仅作育儿科普参考，不能替代医生诊断与治疗建议。",
++		readingMinutes: 3,
+ 	},
+ 	{
+ 		id: "play",
+ 		category: "早教",
+ 		title: "适合六个月宝宝的游戏",
+ 		description: "用声音、颜色和触感陪宝宝探索新的世界。",
++		sourceName: "育爱成长内容团队",
++		reviewedAt: "2026-07-24",
++		ageRange: "5–8个月",
++		disclaimer: "请根据宝宝实际发展情况选择活动，并由成人全程陪伴。",
++		readingMinutes: 5,
+ 	},
+ ];
+ 
+-export const initialMoments: Moment[] = [
++export const moments: Moment[] = [
+ 	{
+ 		id: "sunshine",
+-		title: "阳光下的温暖时光",
+-		date: "2023年10月15日",
++		title: "今天笑得特别甜",
++		date: "2026年7月28日",
+ 		accent: "orange",
+ 		favorite: false,
++		image: STITCH_ASSETS.momentLaughing,
++		description: "午后的阳光刚刚好，金金看见妈妈就笑弯了眼睛。",
++		tags: ["6个月", "笑容"],
+ 	},
+ 	{
+ 		id: "smile",
+-		title: "今天笑得特别甜",
+-		date: "10月12日",
++		title: "第一次牵住妈妈的手",
++		date: "2026年7月21日",
+ 		accent: "blue",
+ 		favorite: false,
++		image: STITCH_ASSETS.momentHands,
++		description: "小小的手握得很紧，这一刻想一直记住。",
++		tags: ["亲子", "第一次"],
+ 	},
+ 	{
+ 		id: "toy",
+-		title: "第一次抓住小玩具",
+-		date: "10月08日",
++		title: "金金六个月啦",
++		date: "2026年7月16日",
+ 		accent: "green",
+ 		favorite: true,
++		image: STITCH_ASSETS.momentSixMonths,
++		description: "用一张小卡片记录第六个月的到来。",
++		tags: ["纪念日"],
++	},
++	{
++		id: "lullaby",
++		title: "睡前的摇篮曲",
++		date: "2026年7月10日",
++		accent: "blue",
++		favorite: false,
++		image: STITCH_ASSETS.momentLullaby,
++		description: "安静的夜晚，慢慢进入甜甜的梦乡。",
++		tags: ["睡前"],
++	},
++	{
++		id: "crawling",
++		title: "第一次向前爬",
++		date: "2026年7月05日",
++		accent: "orange",
++		favorite: true,
++		image: STITCH_ASSETS.momentCrawling,
++		description: "努力了好多次，终于向前挪动了一小步。",
++		tags: ["里程碑", "第一次"],
+ 	},
+ ];
++
++export const initialMoments = moments;
+diff --git a/apps/web/apps/web/src/features/nurture/types.ts b/apps/web/apps/web/src/features/nurture/types.ts
+index db58f5b..9772f83 100644
+--- a/apps/web/apps/web/src/features/nurture/types.ts
++++ b/apps/web/apps/web/src/features/nurture/types.ts
+@@ -5,6 +5,9 @@ export type DailyRecord = {
+ 	kind: RecordKind;
+ 	value: string;
+ 	time: string;
++	recordedAt?: string;
++	note?: string;
++	image?: string;
+ };
+ 
+ export type GuideCategory = "全部" | "喂养" | "护理" | "疫苗" | "早教";
+@@ -14,6 +17,13 @@ export type GuideItem = {
+ 	category: Exclude<GuideCategory, "全部">;
+ 	title: string;
+ 	description: string;
++	body?: string[];
++	image?: string;
++	sourceName?: string;
++	reviewedAt?: string;
++	ageRange?: string;
++	disclaimer?: string;
++	readingMinutes?: number;
+ };
+ 
+ export type Moment = {
+@@ -22,4 +32,29 @@ export type Moment = {
+ 	date: string;
+ 	accent: "orange" | "blue" | "green";
+ 	favorite: boolean;
++	image?: string;
++	description?: string;
++	tags?: string[];
++};
++
++export type BabyProfile = {
++	id: string;
++	nickname: string;
++	birthDate: string;
++	ageDisplay: string;
++	gender: "女" | "男" | "暂不填写";
++	bloodType: "A" | "B" | "AB" | "O" | "未知";
++	heightCm: number;
++	weightKg: number;
++	avatar: string;
++};
++
++export type Vaccine = {
++	id: string;
++	title: string;
++	dose: string;
++	scheduledDate: string;
++	status: "upcoming" | "completed";
++	reminderEnabled: boolean;
++	sourceName: string;
+ };
+diff --git a/apps/web/apps/web/src/routes/__root.tsx b/apps/web/apps/web/src/routes/__root.tsx
+index 8f954ae..9df5322 100644
+--- a/apps/web/apps/web/src/routes/__root.tsx
++++ b/apps/web/apps/web/src/routes/__root.tsx
+@@ -2,6 +2,7 @@ import {
+ 	createRootRouteWithContext,
+ 	HeadContent,
+ 	Outlet,
++	useRouterState,
+ } from "@tanstack/react-router";
+ import { Toaster } from "@web/ui/components/sonner";
+ 
+@@ -33,10 +34,14 @@ export const Route = createRootRouteWithContext<RouterAppContext>()({
+ });
+ 
+ function RootComponent() {
++	const pathname = useRouterState({
++		select: (state) => state.location.pathname,
++	});
++
+ 	return (
+ 		<>
+ 			<HeadContent />
+-			<AppShell>
++			<AppShell pathname={pathname}>
+ 				<Outlet />
+ 			</AppShell>
+ 			<Toaster richColors />
+diff --git a/apps/web/packages/ui/src/styles/globals.css b/apps/web/packages/ui/src/styles/globals.css
+index b15f7b5..33f4656 100644
+--- a/apps/web/packages/ui/src/styles/globals.css
++++ b/apps/web/packages/ui/src/styles/globals.css
+@@ -31,7 +31,9 @@
+ 	--input: #eae8e0;
+ 	--ring: #42617d;
+ 	--surface-low: #f5f4ec;
++	--surface-container: #f0eee6;
+ 	--surface-high: #eae8e0;
++	--surface-highest: #e4e3db;
+ 	--radius: 1rem;
+ 	--radius-card: 2rem;
+ 	--shadow-card: 0 18px 40px rgb(132 84 0 / 8%);
+@@ -69,7 +71,9 @@
+ 	--color-input: var(--input);
+ 	--color-ring: var(--ring);
+ 	--color-surface-low: var(--surface-low);
++	--color-surface-container: var(--surface-container);
+ 	--color-surface-high: var(--surface-high);
++	--color-surface-highest: var(--surface-highest);
+ 	--radius-sm: 0.5rem;
+ 	--radius-md: 1rem;
+ 	--radius-lg: 1.5rem;
+@@ -105,7 +109,8 @@
+ 		color: var(--foreground);
+ 		font-family: var(--font-ui);
+ 		-webkit-font-smoothing: antialiased;
+-		overscroll-behavior: none;
++		overflow-x: hidden;
++		overscroll-behavior-x: none;
+ 	}
+ 
+ 	button,
+
+--- /dev/null
++++ b/apps/web/apps/web/src/components/layout/__tests__/app-shell.test.tsx
++import { render, screen } from "@testing-library/react";
++import { beforeEach, describe, expect, it, vi } from "vitest";
++
++vi.mock("../bottom-nav", () => ({
++	BottomNav: () => <nav aria-label="主要导航">导航</nav>,
++}));
++
++import { AppShell } from "../app-shell";
++
++describe("AppShell route chrome", () => {
++	beforeEach(() => {
++		window.history.pushState({}, "", "/growth");
++	});
++
++	it("hides parent navigation on authentication routes", () => {
++		window.history.pushState({}, "", "/login");
++
++		render(<AppShell>登录表单</AppShell>);
++
++		expect(screen.getByText("登录表单")).toBeVisible();
++		expect(
++			screen.queryByRole("navigation", { name: "主要导航" }),
++		).not.toBeInTheDocument();
++	});
++
++	it("shows parent navigation on product routes", () => {
++		render(<AppShell>成长首页</AppShell>);
++
++		expect(screen.getByRole("navigation", { name: "主要导航" })).toBeVisible();
++	});
++});
++
+
+--- /dev/null
++++ b/apps/web/apps/web/src/features/nurture/stitch-assets.ts
++const base = "/assets/nurture-bloom/stitch";
++
++export const STITCH_ASSETS = {
++	logo: `${base}/logo.jpg`,
++	registerSprout: `${base}/register-sprout.jpg`,
++	onboardingBaby: `${base}/onboarding-baby.jpg`,
++	babyProfile: `${base}/baby-profile.jpg`,
++	growthFood: `${base}/growth-food.jpg`,
++	momentLaughing: `${base}/moment-laughing.jpg`,
++	momentHands: `${base}/moment-hands.jpg`,
++	momentSixMonths: `${base}/moment-six-months.jpg`,
++	momentLullaby: `${base}/moment-lullaby.jpg`,
++	momentCrawling: `${base}/moment-crawling.jpg`,
++	articleFeeding: `${base}/article-feeding.jpg`,
++	profileMother: `${base}/profile-mother.jpg`,
++	profileBaby: `${base}/profile-baby.jpg`,
++	editBaby: `${base}/edit-baby.jpg`,
++} as const;
++
+
+Binary assets added under apps/web/apps/web/public/assets/nurture-bloom/stitch/: 14 JPEG files copied from the committed Stitch snapshot; no remote URLs.

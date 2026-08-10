@@ -1,0 +1,27 @@
+{
+  "schema": "tc-flow ReviewBundle v1",
+  "sanitized": true,
+  "runId": "tc_stitch_parent_ui_20260731_afa3edc1",
+  "taskId": "SUI-007",
+  "contractHash": "afa3edc1af282aa049cb7accf261befefde00c7cede749b3334c57b984539cd9",
+  "risk": "medium",
+  "contractSummary": "Complete H5 responsive, accessibility, visual, and regression QA for the local parent product. All routes must be directly reachable, 320px and wider must have no page-level horizontal overflow, fixed navigation must not cover content, and final tests/build must pass.",
+  "task": "Run browser and automated QA, capture six 390px evidence screenshots, repair any discovered product routing issue, and document the result.",
+  "sanitizedDiff": "Browser QA discovered that four dotted detail route files were nested under list routes whose components do not render an Outlet. The files now use TanStack trailing-underscore escape naming, preserving the public URLs while making /growth/records, /moments/:id, /guide/:id, and /me/baby independent root children. A route-structure test asserts the four public paths exist at the root to prevent recurrence. Browser checks covered 12 routes at 320x700 with zero document overflow; fixed product navigation had zero bottom gap and 96px main bottom padding, while auth pages had no nav and 40px padding. Six 390x844 loaded-asset screenshots were captured. A clean browser smoke across ten routes produced no console warning or error. QA documentation records source-provider constraints and screenshot evidence.",
+  "evidence": [
+    "Route repair RED: browser direct visit to /growth/records rendered the growth parent heading instead of 成长点滴.",
+    "Route repair GREEN: route structure test passed and direct browser visits rendered 成长点滴, 阳光下的温暖时光, 宝宝第一口辅食, and 编辑资料.",
+    "Final Vitest: 10 files, 24/24 tests passed.",
+    "Final typecheck: Vite build and tsc --noEmit passed.",
+    "Final production build passed.",
+    "Biome: 54 app source files passed; reduced-motion CSS emitted four intentional no-important-style warnings and no errors.",
+    "git diff --check passed.",
+    "Responsive browser evidence: 12/12 routes had zero page-level overflow at 320px.",
+    "Visual evidence: six PNGs are exactly 390x844 with local images loaded.",
+    "Clean browser smoke had zero console warning/error."
+  ],
+  "redactions": {
+    "count": 0,
+    "types": []
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "schema": "tc-flow Checkpoint v1",
+  "runId": "tc_stitch_parent_ui_20260731_afa3edc1",
+  "feature": "stitch-parent-ui-refresh",
+  "contractHash": "afa3edc1af282aa049cb7accf261befefde00c7cede749b3334c57b984539cd9",
+  "node": "N5",
+  "taskId": "SUI-005",
+  "input": "China-first guide list/detail route and explicit public-network source clarification.",
+  "changedFiles": [
+    "apps/web/apps/web/src/features/nurture/guide-content.tsx",
+    "apps/web/apps/web/src/features/nurture/guide-article-content.tsx",
+    "apps/web/apps/web/src/features/nurture/guide-providers.ts",
+    "apps/web/apps/web/src/features/nurture/__tests__/guide-flow.test.tsx",
+    "apps/web/apps/web/src/features/nurture/types.ts",
+    "apps/web/apps/web/src/features/nurture/data.ts",
+    "apps/web/apps/web/src/routes/guide.$articleId.tsx"
+  ],
+  "repositoryState": {
+    "cumulativeTaskDiffSha256": "5630d8df1c2dde67aa6e218837d37b3dbaea38cdfefaaf8881dfd4dc77e97915",
+    "statusSha256BeforeCheckpoint": "f2e7102f2c242ecddf14374afaf895c8c7944f4bc25c66b938b422324ab42229"
+  },
+  "evidence": {
+    "tddRed": "Focused suite failed because guide-providers.ts did not exist.",
+    "tests": "8 files, 21 tests passed.",
+    "typecheck": "Vite build and tsc --noEmit passed.",
+    "build": "Production Vite build passed.",
+    "lint": "7 scoped files passed after formatting.",
+    "review": ".tc-flow/reviews/SUI-005.review-result.json",
+    "piiRedacted": 0
+  },
+  "review": {
+    "verdict": "pass",
+    "provider": "kimi",
+    "model": "kimi-k3",
+    "transport": "openai-compatible-api",
+    "requestId": "chatcmpl-6a6c451bde3cf5f5a83239aa",
+    "reviewerDegraded": false
+  },
+  "retries": 0,
+  "toolRequests": [],
+  "humanInterventions": [],
+  "blockers": [],
+  "events": ".tc-flow/events.jsonl"
+}

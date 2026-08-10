@@ -1,0 +1,34 @@
+{
+  "schema": "tc-flow ReviewResult v1",
+  "runId": "tc_stitch_parent_ui_20260731_afa3edc1",
+  "taskId": "SUI-001",
+  "contractHash": "afa3edc1af282aa049cb7accf261befefde00c7cede749b3334c57b984539cd9",
+  "risk": "medium",
+  "verdict": "pass",
+  "p0": false,
+  "provider": "kimi",
+  "model": "kimi-k3",
+  "transport": "openai-compatible-api",
+  "requestId": "chatcmpl-6a6c3eaac05696b2de087b61",
+  "reviewerDegraded": false,
+  "stage": "task-review",
+  "modelVerdict": "pass",
+  "issues": [
+    "[object Object]",
+    "[object Object]",
+    "[object Object]",
+    "[object Object]"
+  ],
+  "p0Issues": [],
+  "summary": "Change set stays within contract: local-only Stitch assets (14 JPEGs under public/, no remote URLs), typed mock data with backward-compatible aliases (initialRecords/initialMoments), additive optional type fields, semantic token additions, and route-aware chrome that hides the parent BottomNav on /login, /register, /onboarding while preserving the accessible fixed nav (aria-label, pb-safe) on product routes. Root route correctly uses useRouterState so the shell reacts to navigation; AppShell has an SSR-safe window fallback. Evidence shows focused tests (7 passing) and typecheck/build green. No secrets, no PII (all baby data is clearly fictional with 2026 mock dates), no auth logic weakened (chrome-only change), no new dependencies. Only low-severity nits: duplicated brand alt text for screen readers, a height/weight inconsistency in the mock baby profile vs. growth records, exact-match auth path detection, and a global overscroll behavior change. Safe to merge.",
+  "reviewerDegradedReason": null,
+  "blockedReason": null,
+  "attempts": [
+    {
+      "provider": "kimi",
+      "model": "kimi-k3",
+      "requestId": "chatcmpl-6a6c3eaac05696b2de087b61",
+      "status": "pass"
+    }
+  ]
+}
