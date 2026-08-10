@@ -4,7 +4,7 @@
   "runId": "tc_nurture_bloom_ui_20260729_3f7ba54d",
   "feature": "nurture-bloom-ui-foundation",
   "contractHash": "3f7ba54d134c029bc78e18aa2bb1f4e880816ddbb23345c8f6a151b15fe0ca5c",
-  "goal": "使用 Better-T-Stack 和 Stitch 视觉稿构建可交互、移动端优先的育爱成长前端作业基底，并抽取 Tailwind 全局设计令牌与可复用组件。",
+  "goal": "使用 Better-T-Stack 和 Stitch 视觉稿构建可交互、移动端优先的育爱成长前端项目基底，并抽取 Tailwind 全局设计令牌与可复用组件。",
   "nonGoals": [
     "认证",
     "数据库",

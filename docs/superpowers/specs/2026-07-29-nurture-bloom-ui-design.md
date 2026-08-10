@@ -1,8 +1,8 @@
-# Nurture & Bloom UI 作业基底设计
+# Nurture & Bloom UI 项目基底设计
 
 ## 目标
 
-以 `/Users/shier/Downloads/stitch_.zip` 中的 Stitch 视觉稿为基底，在 `/Users/shier/Desktop/course-homework` 内构建一个可交互、可扩展的 Nurture & Bloom（育爱成长）前端作业 Demo。第一阶段聚焦 UI 和本地假数据；后续按照课程进度补充认证、API、数据库和持久化能力，不重写已经完成的页面组件。
+以 Stitch 视觉稿为基底，构建一个可交互、可扩展的 Nurture & Bloom（育爱成长）前端 Demo。第一阶段聚焦 UI 和本地假数据；后续按产品里程碑补充认证、API、数据库和持久化能力，不重写已经完成的页面组件。
 
 ## 范围
 
@@ -22,7 +22,7 @@
 - 真实登录、注册、权限和会话管理。
 - 真实数据库、远程 API、文件上传和云端部署。
 - 医疗建议、成长指标诊断或任何需要专业资质的结论。
-- GitHub 推送、生产部署和超出当前 UI 作业范围的业务模块。
+- GitHub 推送、生产部署和超出当前 UI 项目范围的业务模块。
 
 ## 技术方案
 
