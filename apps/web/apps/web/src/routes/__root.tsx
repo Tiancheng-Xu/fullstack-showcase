@@ -16,11 +16,11 @@ export const Route = createRootRouteWithContext<RouterAppContext>()({
 	head: () => ({
 		meta: [
 			{
-				title: "育爱成长",
+				title: "Tiancheng Xu · Ukiyo-e Portfolio",
 			},
 			{
 				name: "description",
-				content: "温暖、轻盈的宝宝成长记录应用",
+				content: "Tiancheng Xu 的浮世绘风格项目作品集，展示真实项目、工程能力与对应工作证明。",
 			},
 		],
 		links: [

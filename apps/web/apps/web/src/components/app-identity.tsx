@@ -1,3 +1,3 @@
 export function AppIdentity() {
-	return <h1>育爱成长</h1>;
+	return <h1>Showcase Dashboard</h1>;
 }
