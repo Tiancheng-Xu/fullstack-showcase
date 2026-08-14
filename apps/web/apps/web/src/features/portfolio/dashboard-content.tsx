@@ -13,7 +13,10 @@ import {
 	UserRound,
 } from "lucide-react";
 
-import { PORTFOLIO_PROJECTS } from "@/data/portfolio-projects";
+import {
+	getProjectRenderingModes,
+	PORTFOLIO_PROJECTS,
+} from "@/data/portfolio-projects";
 import {
 	loadSyncedPortfolio,
 	mergePortfolioProjects,
@@ -22,6 +25,7 @@ import {
 export function DashboardContent() {
 	const [visibleProjects, setVisibleProjects] = useState(PORTFOLIO_PROJECTS);
 	const [syncedAt, setSyncedAt] = useState<string | null>(null);
+	const [activeSection, setActiveSection] = useState("projects");
 
 	useEffect(() => {
 		const controller = new AbortController();
@@ -36,6 +40,23 @@ export function DashboardContent() {
 				// Keep the reviewed static index when sync is unavailable.
 			});
 		return () => controller.abort();
+	}, []);
+
+	useEffect(() => {
+		const sections = ["about", "skills", "projects"]
+			.map((id) => document.getElementById(id))
+			.filter((section): section is HTMLElement => Boolean(section));
+		const observer = new IntersectionObserver(
+			(entries) => {
+				const visible = entries
+					.filter((entry) => entry.isIntersecting)
+					.sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+				if (visible?.target.id) setActiveSection(visible.target.id);
+			},
+			{ rootMargin: "-22% 0px -58%", threshold: [0.05, 0.25, 0.5] },
+		);
+		sections.forEach((section) => observer.observe(section));
+		return () => observer.disconnect();
 	}, []);
 	const skillGroups = [
 		{
@@ -124,10 +145,10 @@ export function DashboardContent() {
 							<span className="hidden md:inline">Tiancheng Xu Portfolio</span>
 						</p>
 					</div>
-					<nav className="hidden items-center gap-9 font-bold text-[13px] tracking-[0.18em] md:flex">
-						<a className="text-[#bf1737]" href="#top">DASHBOARD</a>
-						<a href="#projects">PROJECTS</a>
-						<a href="https://evidence.baby2b.online/">EVIDENCE</a>
+					<nav aria-label="作品集主导航" className="hidden items-center gap-2 font-bold text-[12px] tracking-[0.15em] md:flex">
+						<a aria-current="page" className="inline-flex min-h-11 items-center border border-[#bf1737] bg-[#bf1737] px-4 text-white shadow-[3px_3px_0_#071d34]" href="#top">DASHBOARD</a>
+						<a className="inline-flex min-h-11 items-center border border-[#c8bda9] bg-[#fbf6ea] px-4 text-[#344252] transition hover:border-[#bf1737] hover:bg-[#f3e7d7] hover:text-[#9f102a] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-[#bf1737]" href="#projects">PROJECTS</a>
+						<a className="inline-flex min-h-11 items-center border border-[#c8bda9] bg-[#fbf6ea] px-4 text-[#344252] transition hover:border-[#bf1737] hover:bg-[#f3e7d7] hover:text-[#9f102a] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-[#bf1737]" href="https://evidence.baby2b.online/">EVIDENCE</a>
 					</nav>
 					<div className="flex items-center gap-3">
 						<Search aria-hidden="true" className="hidden md:block" size={24} />
@@ -272,6 +293,21 @@ export function DashboardContent() {
 											{project.architecture}
 										</p>
 									</div>
+									{getProjectRenderingModes(project).length > 0 ? (
+										<div className="flex flex-wrap items-center gap-2" aria-label="渲染模式">
+											<span className="font-bold text-[#5b6570] text-[11px] tracking-[0.12em]">
+												RENDERING
+											</span>
+											{getProjectRenderingModes(project).map((mode) => (
+												<span
+													className="border border-[#0f2d4d] bg-[#eaf0f1] px-2.5 py-1 font-bold text-[#0f2d4d] text-xs"
+													key={mode}
+												>
+													{mode}
+												</span>
+											))}
+										</div>
+									) : null}
 									<div className="flex flex-wrap gap-2">
 										{project.skills.map((skill) => (
 											<span
@@ -313,20 +349,24 @@ export function DashboardContent() {
 				className="fixed inset-x-0 bottom-0 z-40 border-[#d8cfbd] border-t bg-[#f7f1e3]/96 px-6 py-2 backdrop-blur md:hidden"
 			>
 				<div className="mx-auto grid max-w-md grid-cols-4 gap-1">
-					{[
-						{ label: "Works", icon: PenTool, active: true, href: "#projects" },
-						{ label: "About", icon: UserRound, active: false, href: "#about" },
-						{ label: "Skills", icon: Compass, active: false, href: "#skills" },
-						{ label: "Proof", icon: BadgeCheck, active: false, href: "https://evidence.baby2b.online/" },
-					].map(({ active, href, icon: Icon, label }) => (
+						{[
+						{ id: "projects", label: "Works", icon: PenTool, href: "#projects" },
+						{ id: "about", label: "About", icon: UserRound, href: "#about" },
+						{ id: "skills", label: "Skills", icon: Compass, href: "#skills" },
+						{ id: "proof", label: "Proof", icon: BadgeCheck, href: "https://evidence.baby2b.online/" },
+					].map(({ id, href, icon: Icon, label }) => (
 						<a
-							className={`flex min-h-14 flex-col items-center justify-center gap-1 px-1 text-[11px] font-bold ${
-								active
-									? "bg-[#ff5365] text-[#071d34]"
-									: "text-[#4d5863]"
+							aria-current={activeSection === id ? "location" : undefined}
+							className={`flex min-h-14 flex-col items-center justify-center gap-1 border px-1 text-[11px] font-bold transition ${
+								activeSection === id
+									? "border-[#bf1737] bg-[#bf1737] text-white shadow-[2px_2px_0_#071d34]"
+									: "border-[#d8cfbd] bg-[#fbf6ea] text-[#4d5863] hover:border-[#bf1737] hover:bg-[#f3e7d7]"
 							}`}
 							href={href}
 							key={label}
+							onClick={() => {
+								if (id !== "proof") setActiveSection(id);
+							}}
 						>
 							<Icon aria-hidden="true" size={19} />
 							<span>{label}</span>

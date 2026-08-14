@@ -1,6 +1,5 @@
 import {
 	createRootRouteWithContext,
-	HeadContent,
 	Outlet,
 } from "@tanstack/react-router";
 import { Toaster } from "@web/ui/components/sonner";
@@ -35,7 +34,6 @@ export const Route = createRootRouteWithContext<RouterAppContext>()({
 function RootComponent() {
 	return (
 		<>
-			<HeadContent />
 			<AppShell>
 				<Outlet />
 			</AppShell>
