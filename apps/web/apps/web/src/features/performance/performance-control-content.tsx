@@ -1,5 +1,4 @@
 import {
-	ArrowLeft,
 	CircleDollarSign,
 	CloudCog,
 	LockKeyhole,
@@ -9,6 +8,7 @@ import {
 } from "lucide-react";
 
 import { PROJECTS_INDEX } from "@/data/portfolio-projects";
+import { PortfolioPageShell } from "@/features/portfolio/portfolio-page-shell";
 import { Button } from "@web/ui/components/button";
 import {
 	Card,
@@ -36,37 +36,45 @@ export function PerformanceControlContent({ projectId }: { projectId: string }) 
 
 	if (!project?.performance) {
 		return (
-			<div className="mx-auto max-w-3xl space-y-5">
-				<a className="inline-flex min-h-11 items-center gap-2 text-sm" href="/dashboard">
-					<ArrowLeft aria-hidden="true" size={16} />
-					返回看板
-				</a>
+			<PortfolioPageShell
+				current="project"
+				description="只有已登记性能观测契约的项目才能进入固定动作控制面。"
+				evidenceUrl="/dashboard"
+				eyebrow="Project Control"
+				projectHomeUrl="/dashboard"
+				title="项目不可控制"
+			>
+				<div className="mx-auto max-w-3xl">
 				<Card>
 					<CardHeader>
-						<h1 className="font-serif font-bold text-2xl">项目不可控制</h1>
+						<h2 className="font-serif font-bold text-2xl">访问范围</h2>
 						<CardDescription>
 							只有已登记性能观测契约的项目才能进入固定动作控制面。
 						</CardDescription>
 					</CardHeader>
 				</Card>
 			</div>
+			</PortfolioPageShell>
 		);
 	}
 
 	return (
+		<PortfolioPageShell
+			current="project"
+			description="只允许启动观测与安全停止两条经过审计的固定工作流；真实云端链路尚未部署，所有写入口继续失败关闭。"
+			evidenceUrl={`/evidence/${project.id}`}
+			eyebrow={`Project Control · ${project.title}`}
+			projectHomeUrl={`/performance-control?project=${project.id}`}
+			title="性能观测成本控制"
+		>
 		<div className="mx-auto max-w-5xl space-y-6">
-			<a className="inline-flex min-h-11 items-center gap-2 text-sm" href={`/evidence/${project.id}`}>
-				<ArrowLeft aria-hidden="true" size={16} />
-				返回工作证明
-			</a>
-
 			<header className="border border-[#c7ced8] bg-[#f8f3e8] p-6 sm:p-8">
 				<div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
 					<div>
 						<p className="font-bold text-xs uppercase tracking-[0.16em] text-[#5a6470]">
 							固定动作控制面 · {project.title}
 						</p>
-						<h1 className="mt-2 font-serif font-bold text-3xl">性能观测成本控制</h1>
+						<h2 className="mt-2 font-serif font-bold text-2xl">固定动作与安全边界</h2>
 						<p className="mt-3 max-w-3xl text-[#344252] text-sm leading-relaxed">
 							这里不是通用 AWS 管理控制台，只允许启动观测与安全停止两条经过审计的固定工作流。
 							入口必须受 Cloudflare Access 保护，实际资源变更由项目级 OIDC Role 执行。
@@ -118,6 +126,7 @@ export function PerformanceControlContent({ projectId }: { projectId: string }) 
 				当前页面仅发布已确认的控制契约。按钮在 Access、D1 审计、GitHub App 回调和云端清理验证全部落地前保持禁用，避免产生无法追溯的 AWS 写操作。
 			</p>
 		</div>
+		</PortfolioPageShell>
 	);
 }
 

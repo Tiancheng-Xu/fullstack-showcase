@@ -8,6 +8,7 @@ import {
 } from "lucide-react";
 
 import { PROJECTS_INDEX } from "@/data/portfolio-projects";
+import { PortfolioPageShell } from "@/features/portfolio/portfolio-page-shell";
 import { PerformanceEvidenceDiagrams } from "@/features/performance/performance-evidence-diagrams";
 import { resolvePerformanceView } from "@/features/performance/performance-state";
 import { PerformanceStatusCard } from "@/features/performance/performance-status-card";
@@ -43,16 +44,15 @@ export function EvidenceContent({ projectId }: { projectId: string }) {
 	}
 
 	return (
-		<div className="space-y-5">
-			<Link
-				className="inline-flex min-h-11 items-center gap-2 text-muted-foreground text-sm hover:text-foreground"
-				to="/dashboard"
-			>
-				<ArrowLeft aria-hidden="true" size={16} />
-				返回看板
-			</Link>
-
-			<Card>
+		<PortfolioPageShell
+			current="evidence"
+			description={project.desc}
+			evidenceUrl={project.evidenceUrl ?? `/evidence/${project.id}`}
+			eyebrow="Project Evidence"
+			projectHomeUrl={project.ownerPage ?? (project.performance ? `/performance-control?project=${project.id}` : "/dashboard")}
+			title={project.title}
+		>
+			<Card className="rounded-none border-[#c7ced8] bg-white/90 shadow-sm">
 				<CardHeader>
 					<CardTitle className="text-xl">{project.title}</CardTitle>
 					<CardDescription>{project.desc}</CardDescription>
@@ -193,6 +193,6 @@ export function EvidenceContent({ projectId }: { projectId: string }) {
 					</footer>
 				</CardContent>
 			</Card>
-		</div>
+		</PortfolioPageShell>
 	);
 }

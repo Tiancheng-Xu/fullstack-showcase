@@ -45,6 +45,7 @@ export function DashboardContent() {
 	}, []);
 
 	useEffect(() => {
+		if (typeof IntersectionObserver === "undefined") return;
 		const sections = ["about", "skills", "projects"]
 			.map((id) => document.getElementById(id))
 			.filter((section): section is HTMLElement => Boolean(section));
