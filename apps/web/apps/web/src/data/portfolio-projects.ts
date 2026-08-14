@@ -11,6 +11,7 @@ export type PortfolioProject = {
 	evidence: string[];
 	details: string[];
 	ownerPage?: string;
+	sourceUpdatedAt?: string;
 };
 
 const EVIDENCE_BASE_URL = "https://evidence.baby2b.online";
@@ -66,6 +67,26 @@ export const PORTFOLIO_PROJECTS: PortfolioProject[] = [
 			"主要沉淀发布过程中的关键日志、脚本与回滚记录。",
 			"主要难点是让证据材料和真实发布动作保持一致，避免只留下不可复现的截图。",
 		],
+	},
+	{
+		id: "portfolio-sync",
+		title: "Portfolio Sync",
+		desc: "GitHub App 与 Cloudflare Worker 驱动的作品集同步系统，把真实项目仓库的发布清单自动汇总到 Dashboard。",
+		status: "已完成",
+		progress: 100,
+		architecture: "GitHub Webhook + HMAC 验签 + 只读 Installation Token + Cloudflare Worker/KV + Dashboard 运行时合并 + 30 分钟定时兜底。",
+		evidenceUrl: EVIDENCE_BASE_URL + "/portfolio-sync/",
+		repo: "Tiancheng-Xu/fullstack-showcase/tree/main/workers/portfolio-sync-webhook",
+		skills: ["GitHub App", "Cloudflare Workers", "Workers KV", "Webhook Security"],
+		evidence: [
+			"GitHub App 仅授予仓库内容只读权限",
+			"Webhook 即时同步与定时全量刷新双链路",
+		],
+		details: [
+			"仓库存在 Baby2B 发布清单且声明 Evidence URL 时才进入作品集，避免把学习仓库和普通实验误收录。",
+			"主要难点是同时处理 webhook 验签、短期安装令牌、KV 最终一致性与主站静态回退。",
+		],
+		ownerPage: "https://portfolio-sync.baby2b.online/health",
 	},
 	{
 		id: "tc-workflow",

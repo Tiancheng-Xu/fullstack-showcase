@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import {
 	ArrowRight,
 	BadgeCheck,
@@ -14,9 +14,29 @@ import {
 } from "lucide-react";
 
 import { PORTFOLIO_PROJECTS } from "@/data/portfolio-projects";
+import {
+	loadSyncedPortfolio,
+	mergePortfolioProjects,
+} from "@/data/portfolio-sync";
 
 export function DashboardContent() {
-	const visibleProjects = PORTFOLIO_PROJECTS;
+	const [visibleProjects, setVisibleProjects] = useState(PORTFOLIO_PROJECTS);
+	const [syncedAt, setSyncedAt] = useState<string | null>(null);
+
+	useEffect(() => {
+		const controller = new AbortController();
+		loadSyncedPortfolio(controller.signal)
+			.then((envelope) => {
+				setVisibleProjects(
+					mergePortfolioProjects(PORTFOLIO_PROJECTS, envelope.projects),
+				);
+				setSyncedAt(envelope.generatedAt);
+			})
+			.catch(() => {
+				// Keep the reviewed static index when sync is unavailable.
+			});
+		return () => controller.abort();
+	}, []);
 	const skillGroups = [
 		{
 			name: "React / TypeScript",
@@ -186,6 +206,12 @@ export function DashboardContent() {
 						kicker="Project Portfolio"
 						title="项目列表"
 					/>
+					<p className="mt-3 text-[#59636d] text-xs">
+						{syncedAt
+							? "GitHub App 自动同步 · " +
+								new Date(syncedAt).toLocaleString("zh-CN")
+							: "GitHub App 即时同步 · 静态项目索引兜底"}
+					</p>
 					<div className="mt-6 grid gap-7 md:grid-cols-2 md:gap-x-8 md:gap-y-9">
 						{visibleProjects.map((project, index) => (
 							<a

@@ -1,0 +1,31 @@
+{
+  "$schema": "https://raw.githubusercontent.com/cloudflare/workers-sdk/main/packages/wrangler/config-schema.json",
+  "name": "portfolio-sync-webhook",
+  "main": "src/index.mjs",
+  "compatibility_date": "2026-08-14",
+  "compatibility_flags": ["nodejs_compat"],
+  "workers_dev": true,
+  "routes": [
+    {
+      "pattern": "portfolio-sync.baby2b.online",
+      "custom_domain": true
+    }
+  ],
+  "kv_namespaces": [
+    {
+      "binding": "PORTFOLIO",
+      "id": "2226f919581c412ebb25b57c52853371"
+    }
+  ],
+  "triggers": {
+    "crons": ["*/30 * * * *"]
+  },
+  "vars": {
+    "GITHUB_OWNER": "Tiancheng-Xu",
+    "EXCLUDED_REPOSITORIES": "fullstack-showcase,.github,web3-ai,vite,oss-contrib-agent"
+  },
+  "observability": {
+    "enabled": true,
+    "head_sampling_rate": 1
+  }
+}
