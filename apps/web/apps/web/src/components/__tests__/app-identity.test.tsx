@@ -7,6 +7,6 @@ describe("AppIdentity", () => {
 	it("keeps the product name visible to users", () => {
 		render(<AppIdentity />);
 
-		expect(screen.getByRole("heading", { name: "育爱成长" })).toBeVisible();
+		expect(screen.getByRole("heading", { name: "Showcase Dashboard" })).toBeVisible();
 	});
 });

@@ -1,0 +1,28 @@
+name: Verify Showcase Dashboard
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: fullstack-showcase-verification-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    uses: Tiancheng-Xu/.github/.github/workflows/verify-project.yml@main
+    with:
+      package-manager: pnpm
+      node-version: "22"
+      pnpm-version: "11.17.0"
+      install-command: pnpm --dir apps/web install --frozen-lockfile
+      test-command: pnpm test
+      typecheck-command: pnpm typecheck
+      build-command: pnpm build
+      publish-config-path: .github/baby2b-publish.yml
+      policy-build-output-paths: apps/web/apps/web/dist
