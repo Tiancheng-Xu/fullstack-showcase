@@ -1,0 +1,28 @@
+name: Verify Portfolio Sync Worker
+
+on:
+  pull_request:
+    paths:
+      - "workers/portfolio-sync-webhook/**"
+      - ".github/workflows/verify-portfolio-sync.yml"
+  push:
+    branches: [main]
+    paths:
+      - "workers/portfolio-sync-webhook/**"
+      - ".github/workflows/verify-portfolio-sync.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  worker-dry-run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Validate Worker bundle and configuration
+        run: npx wrangler@4.115.0 deploy --dry-run --config workers/portfolio-sync-webhook/wrangler.jsonc --outdir /tmp/portfolio-sync-worker
