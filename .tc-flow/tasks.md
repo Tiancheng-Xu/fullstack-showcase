@@ -1,6 +1,8 @@
-# nurture-bloom-ui-foundation — Tasks
+# performance-observability-control — Tasks
 
-- [x] T-001: 在 apps/web 初始化 Better-T-Stack 前端、pnpm 工作区和测试基线
-- [x] T-002: 建立 Stitch 全局设计令牌、应用壳和可复用 UI 组件
-- [x] T-003: 实现成长、时光、百科、我的四个路由与本地类型化交互
-- [x] T-004: 执行移动端视觉、交互、可访问性和完整构建 QA，并整理学习交付文档
+- [x] T-001: 定义性能状态机、快照契约和实时失败回退，并以测试锁定行为
+- [x] T-002: 实现 Dashboard 与 Evidence 共享性能状态卡、历史快照和控制入口
+- [x] T-003: 实现结构化 Evidence：作业映射、运行架构、时序、Actions、预览灰度、权限、成本和清理
+- [ ] T-004: Worker 的 D1 权威状态、R2 不可变快照和公开只读接口已实现；Access 鉴权、GitHub dispatch/webhook 与 Cron 对账待云端接入
+- [ ] T-005: 实现固定 GitHub Actions 启停、AWS 预算门禁、TTL 恢复和精确清理
+- [ ] T-006: 本地测试、构建、响应式和脱敏检查已完成；真实云启停闭环、Run 证明和最终 Evidence 回填待执行

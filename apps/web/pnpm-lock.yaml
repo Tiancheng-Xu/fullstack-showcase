@@ -70,6 +70,18 @@ importers:
         specifier: 'catalog:'
         version: 6.0.3
 
+  apps/performance-control-worker:
+    devDependencies:
+      '@types/node':
+        specifier: 'catalog:'
+        version: 22.20.1
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+      vitest:
+        specifier: ^4.1.10
+        version: 4.1.10(@types/node@22.20.1)(jsdom@30.0.0)(vite@8.1.5(@types/node@22.20.1)(jiti@2.7.0))
+
   apps/web:
     dependencies:
       '@hookform/resolvers':

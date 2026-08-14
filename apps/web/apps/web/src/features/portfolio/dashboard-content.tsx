@@ -17,6 +17,8 @@ import {
 	getProjectRenderingModes,
 	PORTFOLIO_PROJECTS,
 } from "@/data/portfolio-projects";
+import { resolvePerformanceView } from "@/features/performance/performance-state";
+import { PerformanceStatusCard } from "@/features/performance/performance-status-card";
 import {
 	loadSyncedPortfolio,
 	mergePortfolioProjects,
@@ -58,6 +60,10 @@ export function DashboardContent() {
 		sections.forEach((section) => observer.observe(section));
 		return () => observer.disconnect();
 	}, []);
+
+	const performanceProjects = visibleProjects.filter(
+		(project) => project.performance,
+	);
 	const skillGroups = [
 		{
 			name: "React / TypeScript",
@@ -221,6 +227,34 @@ export function DashboardContent() {
 					</div>
 				</section>
 
+				{performanceProjects.length > 0 ? (
+					<section className="mt-10 scroll-mt-24 md:mt-14" id="performance">
+						<SectionTitle
+							icon={<BadgeCheck aria-hidden="true" size={18} />}
+							kicker="Verified Snapshot"
+							title="性能观测与成本控制"
+						/>
+						<p className="mt-4 max-w-3xl text-[#344252] text-sm leading-relaxed">
+							观测链路停止或故障时，只展示最后一次通过校验的真实快照；没有可信快照时明确显示无数据。启停入口进入受保护控制面，不直接暴露 AWS 管理权限。
+						</p>
+						<div className="mt-5 grid gap-5">
+							{performanceProjects.map((project) => {
+								const performance = project.performance;
+								if (!performance) return null;
+
+								return (
+									<PerformanceStatusCard
+										key={project.id}
+										projectId={project.id}
+										projectName={project.title}
+										status={resolvePerformanceView(performance)}
+									/>
+								);
+							})}
+						</div>
+					</section>
+				) : null}
+
 				<section className="mt-10 scroll-mt-24 md:mt-14" id="projects">
 					<SectionTitle
 						icon={<LayoutGrid aria-hidden="true" size={18} />}
@@ -237,9 +271,8 @@ export function DashboardContent() {
 						{visibleProjects.map((project, index) => (
 							<a
 								className="group block min-w-0 overflow-hidden border border-[#c7ced8] bg-white shadow-sm transition hover:-translate-y-0.5 hover:border-[#bf1737]/50 hover:shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#bf1737]"
-								href={project.evidenceUrl}
+								href={`/evidence/${project.id}`}
 								key={project.id}
-								rel="noreferrer"
 							>
 								<div
 									className={`relative h-44 overflow-hidden bg-gradient-to-br ${visualThemes[index % visualThemes.length]} md:h-48`}

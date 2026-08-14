@@ -1,3 +1,5 @@
+import type { PerformanceProjectStatus } from "@/features/performance/performance-types";
+
 export type RenderingMode =
 	| "SSR"
 	| "Edge SSR"
@@ -7,6 +9,29 @@ export type RenderingMode =
 	| "CSR Fallback"
 	| "Client-only Web3"
 	| "Cloud Preview Pending";
+
+export type EvidenceState = "本地已实现" | "设计已确认" | "云端未部署";
+
+export type EvidenceRequirement = {
+	requirement: string;
+	implementation: string;
+	code: string;
+	proof: string;
+	state: EvidenceState;
+};
+
+export type EvidenceSection = {
+	title: string;
+	state: EvidenceState;
+	summary: string;
+	steps: string[];
+};
+
+export type EvidenceCaseStudy = {
+	stateNotice: string;
+	requirements: EvidenceRequirement[];
+	sections: EvidenceSection[];
+};
 
 export type PortfolioProject = {
 	id: string;
@@ -23,11 +48,153 @@ export type PortfolioProject = {
 	renderingModes?: RenderingMode[];
 	ownerPage?: string;
 	sourceUpdatedAt?: string;
+	performance?: PerformanceProjectStatus;
+	caseStudy?: EvidenceCaseStudy;
 };
 
 const EVIDENCE_BASE_URL = "https://evidence.baby2b.online";
 
 export const PORTFOLIO_PROJECTS: PortfolioProject[] = [
+	{
+		id: "performance-observability-control",
+		title: "性能观测与成本控制",
+		desc: "为 AWS 性能观测链路补齐可信快照、启停控制、清理验证和可追溯 Evidence。",
+		status: "进行中",
+		progress: 55,
+		architecture: "Cloudflare 状态与控制面 + GitHub Actions 固定工作流 + AWS 临时观测资源 + D1 审计状态 + R2 不可变快照。",
+		repo: "Tiancheng-Xu/course-homework",
+		skills: ["Performance SDK", "Cloudflare", "AWS", "Evidence"],
+		evidence: [
+			"停服时只展示最后一次校验通过的真实快照",
+			"启停、清理和共享资源保护边界",
+			"运行架构、发布流程、关键时序与明确非目标",
+		],
+		details: [
+			"本地状态模型、公共状态卡、Evidence 页面、D1 状态机、R2 快照校验和公开只读接口已实现并由测试约束。",
+			"控制写入口保持失败关闭；Access、GitHub App、Actions 与 AWS 观测资源仍未部署，没有真实快照时明确显示无数据，不生成演示指标。",
+		],
+		performance: {
+			projectId: "performance-observability-control",
+			projectName: "性能观测与成本控制",
+			controlState: "stopped",
+			liveHealthy: false,
+			latestSnapshot: null,
+		},
+		caseStudy: {
+			stateNotice:
+				"本地状态模型、Dashboard/Evidence、D1/R2 契约和公开只读 Worker 已实现；控制写入口保持失败关闭，Access、GitHub App、Actions 与 AWS 运行栈未部署，因此当前没有可展示的真实性能快照。",
+			requirements: [
+				{
+					requirement: "性能 SDK、日志接收、清洗与可视化",
+					implementation: "定义可验证的快照契约和公共状态卡；云端采集、队列、清洗任务按临时资源设计。",
+					code: "src/features/performance/performance-state.ts",
+					proof: "performance-state.test.ts 与页面集成测试通过后记录到交付 Evidence。",
+					state: "本地已实现",
+				},
+				{
+					requirement: "观测服务停止或故障时展示上一次结果",
+					implementation: "controlState 与 dataMode 分离；仅接受摘要、来源和百分位字段全部通过校验的快照。",
+					code: "src/features/performance/performance-status-card.tsx",
+					proof: "无快照时页面显示“暂无可信快照”，不会生成模拟数据。",
+					state: "本地已实现",
+				},
+				{
+					requirement: "Dashboard 与 Evidence 都提供启停入口",
+					implementation: "两页复用同一状态卡并指向唯一、受 Cloudflare Access 保护的控制面。",
+					code: "src/features/portfolio/dashboard-content.tsx 与 evidence-content.tsx",
+					proof: "页面级回归测试验证统一状态和入口 URL。",
+					state: "本地已实现",
+				},
+				{
+					requirement: "启停、清理、权限与成本可审计",
+					implementation: "D1 保存状态/操作记录，R2 保存不可变快照；公开接口验证摘要并支持 ETag，控制写入口在 Access 与 GitHub App 接通前失败关闭。",
+					code: "apps/performance-control-worker/src/{state-machine,snapshot,worker}.ts；GitHub Actions 工作流待部署",
+					proof: "Worker 状态机、快照和只读 API 共 13 个测试通过；真实云端 run、资源清单和清理验证待补。",
+					state: "本地已实现",
+				},
+			],
+			sections: [
+				{
+					title: "运行架构",
+					state: "设计已确认",
+					summary: "公开页面只读 D1 投影；受保护控制面经 GitHub App 触发固定工作流，AWS 运行栈复用共享网络和数据库基础设施。",
+					steps: [
+						"浏览器读取 Dashboard 或 Evidence，Cloudflare Worker 返回带 ETag 的公开状态投影。",
+						"状态卡把运行状态与数据模式分开：running 不等于一定已有快照，stopped 也可以安全展示历史快照。",
+						"AWS 临时栈只创建项目范围的 API、SQS/DLQ、ECR、一次性 ECS task、Lambda、日志和安全组。",
+						"清洗成功后写入应用级不可变 R2 快照，D1 只保存受信摘要与 latest 指针。",
+					],
+				},
+				{
+					title: "GitHub Actions 与发布",
+					state: "设计已确认",
+					summary: "Cloudflare 不持有通用 AWS 管理权限；GitHub App 只能派发仓库内固定的 validate、deploy、stop/cleanup 工作流。",
+					steps: [
+						"每次操作携带 operationId、generation 与幂等键，D1 先登记 pending。",
+						"GitHub Environment OIDC 获取短期 AWS 凭据，角色只能管理精确项目名前缀资源。",
+						"Webhook 使用 HMAC 校验，并以 operationId + generation + runId 做 CAS 更新，过期回调不能覆盖新状态。",
+						"发布证据记录 commit SHA、workflow run、资源输出与清理结果，不保存长期密钥。",
+					],
+				},
+				{
+					title: "预览环境与灰度发布",
+					state: "设计已确认",
+					summary: "页面走 Cloudflare Preview 验证；AWS 观测链路以一次性短生命周期栈验收，不为每个 PR 常驻复制昂贵服务。",
+					steps: [
+						"PR 先运行类型、单测、构建、链接与预算门禁，再发布 Cloudflare Preview。",
+						"控制面先在预览域名验证公开只读卡、Access 边界和固定工作流派发。",
+						"AWS 验收采用小流量/合成请求闭环；单个 LCP 样本必须标为 synthetic-closed-loop，不冒充生产趋势。",
+						"主版本只有在快照校验、DLQ 告警和清理验证均通过后才更新公开 latest 指针。",
+					],
+				},
+				{
+					title: "关键时序",
+					state: "设计已确认",
+					summary: "启动前先证明环境干净；停止时先封入口、再排空、留快照、删临时资源，最后才标记 stopped。",
+					steps: [
+						"启动：验证 cleanupVerified、临时栈/Schema/Role 为空 → 派发部署 → 健康检查 → running。",
+						"采集：SDK 批量上报 → 队列 → 一次性 Cleaner → 聚合校验 → R2 快照 → D1 公共投影。",
+						"停止：stopping → 禁止新写入 → 排空或按策略丢弃并记录队列/DLQ 数量 → 生成最终快照。",
+						"清理：停止 ECS → 删除项目 Schema/Role → 删除精确项目栈 → 核对 AWS/DB 为空且共享资源未变。",
+					],
+				},
+				{
+					title: "权限、网络与安全边界",
+					state: "设计已确认",
+					summary: "公开面只读、控制面经 Access；AWS 使用按项目分离的短期 OIDC 角色，显式禁止删除共享资源。",
+					steps: [
+						"控制 API 校验 Cloudflare Access JWT 的 issuer、audience、expiry 和稳定身份 allowlist。",
+						"Worker 不接收任意 AWS 参数，也不提供通用命令；只能选择允许的项目和固定动作。",
+						"运行资源位于共享私网，复用共享 NAT、子网、RDS、ECS/OIDC 基础设施，不新建长期底座。",
+						"公共审计脱敏管理员身份、私有 run URL、凭据和内部网络信息。",
+					],
+				},
+				{
+					title: "费用与共享基础设施",
+					state: "设计已确认",
+					summary: "目标是把增量费用压到按请求、按运行时长计费；长期资源统一复用，临时资源由项目工作流负责清理。",
+					steps: [
+						"复用共享 VPC、NAT、私有子网、受保护 RDS、ECS/OIDC、日志与制品基础设施。",
+						"增量资源限制为项目 API、队列、短时 Cleaner task、少量日志和快照存储。",
+						"停止入口必须先生成最终证据，再删除项目栈；共享 Foundation 永不由项目清理工作流删除。",
+						"控制页展示预计资源、运行时长、队列状态和上次清理结果，避免“停了页面但云资源仍在”。",
+					],
+				},
+				{
+					title: "明确不做",
+					state: "设计已确认",
+					summary: "第一版主动排除高固定成本、高权限或超出作业闭环的能力。",
+					steps: [
+						"不采用 Athena、Glue、Firehose：当前数据量不足以抵消目录、管道和查询运维复杂度，SQS + 一次性 Cleaner 已能完成验收。",
+						"不运行常驻 ECS：作业需要的是可复现清洗闭环，不需要为低频数据持续付费；改用按需 task。",
+						"不为每个项目创建一套 OAuth/OIDC：复用受保护的账户级 OIDC provider，只把最小权限角色按项目隔离。",
+						"不提供通用 AWS 管理控制台：避免把作业控制页变成高权限云控制面，用户只能执行固定启停动作。",
+						"不允许 AI Agent 自动删除或重放资源：删除和 DLQ 重放会改变真实状态，必须由固定工作流、门禁和人工确认执行。",
+					],
+				},
+			],
+		},
+	},
 	{
 		id: "personal-ai-agent",
 		title: "Personal AI Agent 模型训练与本地推理",
