@@ -82,7 +82,7 @@ export const PORTFOLIO_PROJECTS: PortfolioProject[] = [
 			"流程中引入 evidence-first 的交付方式",
 		],
 		details: [
-			"该条目用于展示流程编排实践与作业执行闭环。",
+			"该条目用于展示流程编排实践与 Feature 交付闭环。",
 			"主要难点是把执行记录、检查点和验收证据连接成可回看的工作流。",
 		],
 	},
