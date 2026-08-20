@@ -32,7 +32,7 @@ describe("performance observability Evidence integration", () => {
 		render(<EvidenceContent projectId="performance-observability-control" />);
 
 		for (const heading of [
-			"作业要求到证据映射",
+			"交付要求到证据映射",
 			"运行架构",
 			"GitHub Actions 与发布",
 			"预览环境与灰度发布",
