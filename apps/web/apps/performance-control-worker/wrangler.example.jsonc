@@ -1,0 +1,26 @@
+{
+	"name": "course-performance-control",
+	"main": "src/index.ts",
+	"compatibility_date": "2026-08-14",
+	"vars": {
+		"CONTROL_ENABLED": "false",
+		"ACCESS_AUD": "replace-at-deploy-time"
+	},
+	"d1_databases": [
+		{
+			"binding": "CONTROL_DB",
+			"database_name": "course-performance-control",
+			"database_id": "replace-at-deploy-time",
+			"migrations_dir": "migrations"
+		}
+	],
+	"r2_buckets": [
+		{
+			"binding": "SNAPSHOTS",
+			"bucket_name": "course-performance-snapshots"
+		}
+	],
+	"triggers": {
+		"crons": ["*/5 * * * *"]
+	}
+}

@@ -1,22 +1,14 @@
 {
   "schema": "tc-flow State v1",
-  "runId": "tc_nurture_bloom_ui_20260729_3f7ba54d",
-  "feature": "nurture-bloom-ui-foundation",
-  "contractHash": "3f7ba54d134c029bc78e18aa2bb1f4e880816ddbb23345c8f6a151b15fe0ca5c",
-  "currentNode": "N8",
-  "status": "complete",
-  "difficulty": "medium",
+  "runId": "tc_performance_observability_control_20260814_c6153557",
+  "feature": "performance-observability-control",
+  "contractHash": "c6153557d5287a0cb7bb7164df73c6961e783faec583fe791cd0fdc2be2c75a3",
+  "currentNode": "N3",
+  "status": "in_progress",
+  "difficulty": "high",
   "execution": {
-    "worker": {
-      "provider": "codex",
-      "model": "gpt-5",
-      "transport": "codex-desktop"
-    },
-    "reviewer": {
-      "provider": "kimi",
-      "model": null,
-      "transport": "openai-compatible-api"
-    },
+    "worker": {"provider": "codex", "model": "gpt-5", "transport": "codex-desktop"},
+    "reviewer": {"provider": "subagent", "model": null, "transport": "codex-collaboration"},
     "reviewerDegraded": false,
     "reviewerDegradedReason": null,
     "requiresHumanConfirmation": false
@@ -25,134 +17,31 @@
     "T-001": "completed",
     "T-002": "completed",
     "T-003": "completed",
-    "T-004": "completed"
+    "T-004": "in_progress",
+    "T-005": "pending",
+    "T-006": "in_progress"
   },
   "history": [
     {
       "node": "N1",
       "status": "completed",
-      "architecture": "monorepo",
-      "worktree": "/Users/shier/Desktop/course-homework/.tc-worktrees/nurture-bloom-ui-foundation-3f7ba54d",
-      "recovery": "restart-feature"
+      "architecture": "monorepo-with-cloudflare-control-worker",
+      "worktree": "/Users/shier/Desktop/course-homework/.tc-worktrees/performance-observability-control-c6153557",
+      "recovery": "resume-from-contract"
     },
     {
       "node": "N2",
       "status": "completed",
-      "memory": [],
-      "difficulty": "medium",
-      "strategy": "goal-hook",
-      "worker": {
-        "provider": "codex",
-        "model": "gpt-5",
-        "transport": "codex-desktop"
-      },
-      "reviewer": {
-        "provider": "kimi",
-        "model": "kimi-k3",
-        "transport": "openai-compatible-api"
-      },
+      "difficulty": "high",
+      "strategy": "tdd-and-evidence-first",
       "reviewerDegraded": false,
       "requiresHumanConfirmation": false
     },
-    {
-      "node": "N4",
-      "status": "pass",
-      "taskId": "T-001",
-      "provider": "kimi",
-      "model": "kimi-k3",
-      "transport": "openai-compatible-api",
-      "requestId": "chatcmpl-6a6a50456f9d846adf677979",
-      "reviewerDegraded": false,
-      "p0Issues": []
-    },
-    {
-      "node": "N5",
-      "status": "completed",
-      "taskId": "T-001",
-      "checkpoint": ".tc-flow/checkpoints/T-001.json",
-      "next": "N3"
-    },
-    {
-      "node": "N4",
-      "status": "pass",
-      "taskId": "T-002",
-      "provider": "kimi",
-      "model": "kimi-k3",
-      "transport": "openai-compatible-api",
-      "requestId": "chatcmpl-6a6a5202dac2ed2f42151728",
-      "reviewerDegraded": false,
-      "p0Issues": []
-    },
-    {
-      "node": "N5",
-      "status": "completed",
-      "taskId": "T-002",
-      "checkpoint": ".tc-flow/checkpoints/T-002.json",
-      "next": "N3"
-    },
-    {
-      "node": "N4",
-      "status": "pass",
-      "taskId": "T-003",
-      "provider": "kimi",
-      "model": "kimi-k3",
-      "transport": "openai-compatible-api",
-      "requestId": "chatcmpl-6a6a53d12af41a0d7dc727e8",
-      "reviewerDegraded": false,
-      "p0Issues": []
-    },
-    {
-      "node": "N5",
-      "status": "completed",
-      "taskId": "T-003",
-      "checkpoint": ".tc-flow/checkpoints/T-003.json",
-      "next": "N3"
-    },
-    {
-      "node": "N4",
-      "status": "pass",
-      "taskId": "T-004",
-      "provider": "kimi",
-      "model": "kimi-k3",
-      "transport": "openai-compatible-api",
-      "requestId": "chatcmpl-6a6a54967b45518e514ba802",
-      "reviewerDegraded": false,
-      "p0Issues": []
-    },
-    {
-      "node": "N5",
-      "status": "completed",
-      "taskId": "T-004",
-      "checkpoint": ".tc-flow/checkpoints/T-004.json",
-      "next": "N6"
-    },
-    {
-      "node": "N6",
-      "status": "pass",
-      "result": ".tc-flow/qa/feature-result.json",
-      "acceptanceCriteria": "7/7",
-      "retries": 0,
-      "next": "N7"
-    },
-    {
-      "node": "N7",
-      "status": "pass",
-      "stopHook": "ALLOW",
-      "workingTree": "matched",
-      "memoryReviewed": true,
-      "review": ".tc-flow/reviews/FEATURE-STOP.review-result.json",
-      "next": "N8"
-    },
-    {
-      "node": "N8",
-      "status": "complete",
-      "commit": "e887f1dc349275c690e4d08020ab4a2e41e6a813",
-      "push": "skipped-by-contract",
-      "testDeployment": "not-applicable",
-      "pullRequest": null,
-      "production": "not-requested",
-      "runResult": ".tc-flow/run-result.json"
-    }
-  ],
-  "retries": {}
+    {"node": "N3", "status": "started", "taskId": "T-001"},
+    {"node": "N3", "status": "completed", "taskId": "T-001"},
+    {"node": "N3", "status": "completed", "taskId": "T-002"},
+    {"node": "N3", "status": "completed", "taskId": "T-003"},
+    {"node": "N3", "status": "in_progress", "taskId": "T-004", "remaining": "cloud-access-dispatch-webhook-cron"},
+    {"node": "N3", "status": "in_progress", "taskId": "T-006", "remaining": "real-cloud-run-and-sanitized-evidence"}
+  ]
 }

@@ -26,3 +26,5 @@ jobs:
       build-command: pnpm build
       publish-config-path: .github/baby2b-publish.yml
       policy-build-output-paths: apps/web/apps/web/dist
+      static-first-output: apps/web/apps/web/dist
+      static-first-routes: /dashboard
