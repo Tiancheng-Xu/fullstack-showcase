@@ -62,7 +62,7 @@ export const PORTFOLIO_PROJECTS: PortfolioProject[] = [
 		status: "进行中",
 		progress: 55,
 		architecture: "Cloudflare 状态与控制面 + GitHub Actions 固定工作流 + AWS 临时观测资源 + D1 审计状态 + R2 不可变快照。",
-		repo: "Tiancheng-Xu/course-homework",
+		repo: "Tiancheng-Xu/fullstack-showcase",
 		skills: ["Performance SDK", "Cloudflare", "AWS", "Evidence"],
 		evidence: [
 			"停服时只展示最后一次校验通过的真实快照",
@@ -183,12 +183,12 @@ export const PORTFOLIO_PROJECTS: PortfolioProject[] = [
 				{
 					title: "明确不做",
 					state: "设计已确认",
-					summary: "第一版主动排除高固定成本、高权限或超出作业闭环的能力。",
+					summary: "第一版主动排除高固定成本、高权限或超出当前交付闭环的能力。",
 					steps: [
 						"不采用 Athena、Glue、Firehose：当前数据量不足以抵消目录、管道和查询运维复杂度，SQS + 一次性 Cleaner 已能完成验收。",
-						"不运行常驻 ECS：作业需要的是可复现清洗闭环，不需要为低频数据持续付费；改用按需 task。",
+						"不运行常驻 ECS：当前项目需要的是可复现清洗闭环，不需要为低频数据持续付费；改用按需 task。",
 						"不为每个项目创建一套 OAuth/OIDC：复用受保护的账户级 OIDC provider，只把最小权限角色按项目隔离。",
-						"不提供通用 AWS 管理控制台：避免把作业控制页变成高权限云控制面，用户只能执行固定启停动作。",
+						"不提供通用 AWS 管理控制台：避免把项目控制页变成高权限云控制面，用户只能执行固定启停动作。",
 						"不允许 AI Agent 自动删除或重放资源：删除和 DLQ 重放会改变真实状态，必须由固定工作流、门禁和人工确认执行。",
 					],
 				},

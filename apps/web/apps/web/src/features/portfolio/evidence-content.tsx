@@ -113,12 +113,12 @@ export function EvidenceContent({ projectId }: { projectId: string }) {
 								<PerformanceEvidenceDiagrams />
 							) : null}
 							<section className="space-y-3">
-								<h2 className="font-semibold text-lg">作业要求到证据映射</h2>
+								<h2 className="font-semibold text-lg">交付要求到证据映射</h2>
 								<div className="overflow-x-auto">
 									<table className="w-full min-w-[760px] border-collapse text-left text-sm">
 										<thead>
 											<tr className="bg-muted/60">
-												{["作业要求", "实现功能", "代码位置", "验证证据", "状态"].map((heading) => (
+												{["交付要求", "实现功能", "代码位置", "验证证据", "状态"].map((heading) => (
 													<th className="border border-border p-3" key={heading}>{heading}</th>
 												))}
 											</tr>

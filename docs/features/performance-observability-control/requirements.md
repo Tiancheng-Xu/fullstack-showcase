@@ -27,7 +27,7 @@
 
 ## 当前版本不做
 
-- Athena、Glue、Firehose：作业规模不足以抵消额外数据管道、权限和维护成本。
+- Athena、Glue、Firehose：当前规模不足以抵消额外数据管道、权限和维护成本。
 - 常驻 ECS：按分钟运行的一次性任务即可完成清洗，常驻服务会持续计费。
 - 每项目一套 OAuth/OIDC：复用 Cloudflare Access 与账户级 GitHub OIDC，减少配额、密钥和审计面。
 - 通用 AWS 管理控制台：只允许项目级 start/stop，避免把受约束控制面扩成高风险云控制台。

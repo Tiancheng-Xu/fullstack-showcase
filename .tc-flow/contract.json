@@ -28,11 +28,11 @@
     "infra/",
     "scripts/",
     "README.md",
-    "HOMEWORKS.md"
+    "AGENTS.md"
   ],
   "allowedReadPaths": [
     ".",
-    "/Users/shier/Desktop/一灯学习笔记",
+    "Tiancheng-Xu/personal-skills",
     "/Users/shier/.codex/aws-shared-foundation.yaml"
   ],
   "allowedTools": [
@@ -68,7 +68,7 @@
       "id": "T-003",
       "role": "frontend",
       "risk": "medium",
-      "desc": "实现结构化 Evidence：作业映射、运行架构、时序、Actions、预览灰度、权限、成本和清理",
+      "desc": "实现结构化 Evidence：交付要求映射、运行架构、时序、Actions、预览灰度、权限、成本和清理",
       "deps": ["T-002"]
     },
     {
