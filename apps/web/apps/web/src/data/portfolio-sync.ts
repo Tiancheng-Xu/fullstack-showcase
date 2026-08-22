@@ -29,14 +29,13 @@ function isProject(value: unknown): value is PortfolioProject {
 }
 
 export async function loadSyncedPortfolio(signal?: AbortSignal) {
-	const endpoint =
-		import.meta.env.VITE_PORTFOLIO_SYNC_URL || DEFAULT_SYNC_URL;
+	const endpoint = import.meta.env.VITE_PORTFOLIO_SYNC_URL || DEFAULT_SYNC_URL;
 	const response = await fetch(endpoint, {
 		headers: { Accept: "application/json" },
 		signal,
 	});
 	if (!response.ok) {
-		throw new Error("Portfolio sync unavailable (" + response.status + ")");
+		throw new Error(`Portfolio sync unavailable (${response.status})`);
 	}
 
 	const value = (await response.json()) as Partial<PortfolioSyncEnvelope>;
@@ -59,7 +58,9 @@ export function mergePortfolioProjects(
 	curated: PortfolioProject[],
 	synced: PortfolioProject[],
 ) {
-	const remoteByKey = new Map(synced.map((project) => [projectKey(project), project]));
+	const remoteByKey = new Map(
+		synced.map((project) => [projectKey(project), project]),
+	);
 	const consumed = new Set<string>();
 	const merged = curated.map((local) => {
 		const remote =
@@ -72,8 +73,8 @@ export function mergePortfolioProjects(
 			...local,
 			status: remote.status,
 			progress: remote.progress,
-			evidenceUrl: remote.evidenceUrl,
-			ownerPage: remote.ownerPage,
+			evidenceUrl: remote.evidenceUrl || local.evidenceUrl,
+			ownerPage: remote.ownerPage || local.ownerPage,
 			sourceUpdatedAt: remote.sourceUpdatedAt,
 		};
 	});
