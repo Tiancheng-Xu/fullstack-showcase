@@ -6,7 +6,18 @@ describe("static-first Dashboard", () => {
 		const result = await renderDashboardRoute("/dashboard");
 		expect(result.markup).toContain("Showcase Dashboard");
 		expect(result.markup).toContain("Portfolio Sync");
-		expect(result.markup).toContain("查看完整工作证明");
+		expect(result.markup).toContain(
+			"Personal AI Agent 模型训练与本地推理：工作证明",
+		);
+		expect(result.hydrationHtml).toContain("$_TSR");
+	});
+
+	it("renders the performance control deep link with its real project content", async () => {
+		const result = await renderDashboardRoute(
+			"/performance-control?project=performance-observability-control",
+		);
+		expect(result.markup).toContain("性能观测成本控制");
+		expect(result.markup).toContain("安全启动");
 		expect(result.hydrationHtml).toContain("$_TSR");
 	});
 });
