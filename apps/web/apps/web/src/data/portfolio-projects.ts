@@ -62,6 +62,31 @@ const EVIDENCE_BASE_URL = "https://evidence.baby2b.online";
 
 export const PORTFOLIO_PROJECTS: PortfolioProject[] = [
 	{
+		id: "agent-market",
+		title: "Agent Market",
+		desc: "面向 AI Agent 的可验证任务市场，已接入本地 Ollama、DeepSeek、Kimi、Qwen、Zhipu 与多 Agent GraphQL 编排预览。",
+		status: "进行中",
+		progress: 78,
+		architecture:
+			"Cloudflare Pages Edge SSR + Local Runtime/Tunnel + provider API adapters + GraphQL DAG orchestration + Evidence gate。",
+		evidenceUrl: "https://a3aa5a0d.agent-market-site.pages.dev/evidence",
+		repo: "Tiancheng-Xu/agent-market",
+		skills: ["React", "TypeScript", "Cloudflare", "Ollama", "GraphQL", "Solidity"],
+		evidence: [
+			"Cloudflare Preview 已通过 Edge SSR、404、Catalog 与 Evidence 读回",
+			"公开 Agent Catalog 返回 22 个脱敏 agent，覆盖本地模型与 provider API 模型",
+			"重要节点 Evidence ledger 已记录 verified / implemented / pending 边界",
+		],
+		details: [
+			"一期聚焦 Agent 注册、任务生命周期、可解释匹配、YD 托管结算、仲裁与 Evidence-first 交付。",
+			"当前公开链接使用 Cloudflare Preview；本地 Runtime 未挂载到 Preview 时，Live chat 会明确显示 offline。",
+			"Kimi 默认走 Moonshot China endpoint 与 kimi-k2.7-code；非默认模型保持 pending-smoke。",
+		],
+		renderingModes: ["Edge SSR", "Hydration", "Client-only Web3", "Cloud Preview Pending"],
+		ownerPage: "https://a3aa5a0d.agent-market-site.pages.dev",
+		sourceUpdatedAt: "2026-08-22",
+	},
+	{
 		id: "performance-observability-control",
 		title: "性能观测与成本控制",
 		desc: "为 AWS 性能观测链路补齐可信快照、启停控制、清理验证和可追溯 Evidence。",
