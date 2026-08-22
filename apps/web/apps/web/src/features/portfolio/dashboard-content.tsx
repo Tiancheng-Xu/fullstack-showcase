@@ -377,23 +377,13 @@ export function DashboardContent() {
 												{project.architecture}
 											</p>
 										</div>
-										{getProjectRenderingModes(project).length > 0 ? (
-											<fieldset className="flex flex-wrap items-center gap-2">
-												<legend className="font-bold text-[#5b6570] text-[11px] tracking-[0.12em]">
-													RENDERING
-												</legend>
-												{getProjectRenderingModes(project).map((mode) => (
-													<span
-														className="border border-[#0f2d4d] bg-[#eaf0f1] px-2.5 py-1 font-bold text-[#0f2d4d] text-xs"
-														key={mode}
-													>
-														{mode}
-													</span>
-												))}
-											</fieldset>
-										) : null}
 										<div className="flex flex-wrap gap-2">
-											{project.skills.map((skill) => (
+											{[
+												...new Set([
+													...getProjectRenderingModes(project),
+													...project.skills,
+												]),
+											].map((skill) => (
 												<span
 													className="border border-[#d8cfbd] bg-[#fbf8ef] px-2.5 py-1 text-xs"
 													key={skill}
