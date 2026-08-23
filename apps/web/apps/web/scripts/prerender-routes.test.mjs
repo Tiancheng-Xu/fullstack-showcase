@@ -1,4 +1,6 @@
 import { describe, expect, it } from "vitest";
+import { readFileSync } from "node:fs";
+import { resolve } from "node:path";
 
 import {
 	createCsrFallbackHtml,
@@ -49,5 +51,23 @@ describe("static-first route delivery", () => {
 		expect(html).toContain('src="/assets/app.js"');
 		expect(html).not.toContain('http-equiv="refresh"');
 		expect(html).toContain('<html lang="zh-CN">');
+	});
+
+	it("redirects legacy project and Dashboard evidence paths to their current owners", () => {
+		const redirects = readFileSync(
+			resolve(process.cwd(), "public/_redirects"),
+			"utf8",
+		);
+
+		for (const rule of [
+			"/evidence/personal-ai-agent https://personal-ai-agent.baby2b.online/evidence/ 301",
+			"/evidence/agent-market https://agent-market.baby2b.online/evidence/ 301",
+			"/evidence/babysteps https://babysteps.baby2b.online/evidence/ 301",
+			"/github-profile-studio https://baby2b.online/evidence/github-profile-studio 301",
+			"/portfolio-sync https://baby2b.online/evidence/portfolio-sync 301",
+			"/tc-workflow https://baby2b.online/evidence/tc-workflow 301",
+		]) {
+			expect(redirects).toContain(rule);
+		}
 	});
 });
