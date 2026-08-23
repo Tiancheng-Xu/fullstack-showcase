@@ -22,7 +22,7 @@
   },
   "vars": {
     "GITHUB_OWNER": "Tiancheng-Xu",
-    "EXCLUDED_REPOSITORIES": "fullstack-showcase,.github,web3-ai,vite,oss-contrib-agent"
+    "EXCLUDED_REPOSITORIES": "fullstack-showcase,baby2b-online-deployment-evidence,.github,web3-ai,vite,oss-contrib-agent"
   },
   "observability": {
     "enabled": true,
