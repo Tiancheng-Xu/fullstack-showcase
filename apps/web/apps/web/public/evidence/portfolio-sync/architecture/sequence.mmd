@@ -1,0 +1,22 @@
+sequenceDiagram
+  participant R as Project repository
+  participant G as GitHub App
+  participant W as Cloudflare Worker
+  participant A as GitHub API
+  participant K as Workers KV
+  participant D as Dashboard
+  R->>G: Push to default branch or repository change
+  G->>W: Signed webhook with delivery id
+  W->>W: Limit body and verify HMAC-SHA256
+  W->>A: App JWT, then request contents:read installation token
+  A-->>W: Short-lived installation token
+  W->>A: List repositories and read publish manifests
+  A-->>W: Repository metadata and allowlisted files
+  W->>W: Exclude learning, showcase, fork, archived, or invalid entries
+  W->>K: Write complete schemaVersion=1 snapshot
+  D->>W: GET /projects.json
+  W->>K: Read latest snapshot
+  K-->>D: Sanitized project cards and generatedAt
+  alt Worker, GitHub, or KV unavailable
+    D->>D: Keep reviewed static project index
+  end

@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+  <title id="title">GitHub Profile Studio repository architecture</title>
+  <desc id="desc">React workspace connects to interchangeable Hono and Go APIs, macOS Keychain, GitHub REST API, and SQLite.</desc>
+  <rect width="1600" height="900" fill="#f7f1e3"/>
+  <text x="90" y="100" font-family="Georgia,serif" font-size="54" font-weight="700" fill="#071d34">GitHub Profile Studio</text>
+  <text x="92" y="150" font-family="sans-serif" font-size="24" fill="#53606c">Local-first public profile workspace · repository architecture</text>
+  <g font-family="sans-serif" text-anchor="middle">
+    <rect x="80" y="260" width="270" height="150" fill="#fff" stroke="#bf1737" stroke-width="4"/>
+    <text x="215" y="325" font-size="30" font-weight="700" fill="#071d34">React 19</text>
+    <text x="215" y="365" font-size="20" fill="#53606c">TanStack Router · Tailwind</text>
+    <rect x="500" y="210" width="300" height="150" fill="#fff" stroke="#0f6c73" stroke-width="4"/>
+    <text x="650" y="275" font-size="30" font-weight="700" fill="#071d34">Hono / Node API</text>
+    <text x="650" y="315" font-size="20" fill="#53606c">Drizzle contract</text>
+    <rect x="500" y="430" width="300" height="150" fill="#fff" stroke="#0f6c73" stroke-width="4"/>
+    <text x="650" y="495" font-size="30" font-weight="700" fill="#071d34">Go API</text>
+    <text x="650" y="535" font-size="20" fill="#53606c">Compatible JSON contract</text>
+    <rect x="950" y="160" width="300" height="130" fill="#fff" stroke="#c29346" stroke-width="4"/>
+    <text x="1100" y="220" font-size="28" font-weight="700" fill="#071d34">macOS Keychain</text>
+    <text x="1100" y="258" font-size="19" fill="#53606c">Credential stays server-side</text>
+    <rect x="950" y="350" width="300" height="130" fill="#fff" stroke="#c29346" stroke-width="4"/>
+    <text x="1100" y="410" font-size="28" font-weight="700" fill="#071d34">GitHub REST API</text>
+    <text x="1100" y="448" font-size="19" fill="#53606c">Public field allowlist</text>
+    <rect x="950" y="540" width="300" height="130" fill="#fff" stroke="#c29346" stroke-width="4"/>
+    <text x="1100" y="600" font-size="28" font-weight="700" fill="#071d34">SQLite</text>
+    <text x="1100" y="638" font-size="19" fill="#53606c">Shared idempotent migrations</text>
+  </g>
+  <g stroke="#071d34" stroke-width="5" fill="none" marker-end="url(#arrow)">
+    <path d="M350 335 H500"/><path d="M350 335 C420 335 420 505 500 505"/>
+    <path d="M800 285 C870 285 880 225 950 225"/><path d="M800 505 C870 505 870 225 950 225"/>
+    <path d="M800 285 C870 285 880 415 950 415"/><path d="M800 505 C870 505 880 415 950 415"/>
+    <path d="M800 285 C870 285 880 605 950 605"/><path d="M800 505 C870 505 880 605 950 605"/>
+  </g>
+  <defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#071d34"/></marker></defs>
+  <rect x="80" y="750" width="1170" height="80" fill="#071d34"/>
+  <text x="110" y="800" font-family="sans-serif" font-size="24" fill="#fff">Browser has no token input or VITE credential channel · public deployment is not yet verified</text>
+</svg>
+

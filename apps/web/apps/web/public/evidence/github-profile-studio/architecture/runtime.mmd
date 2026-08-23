@@ -1,0 +1,26 @@
+flowchart LR
+  Browser["React 19 profile workspace"] -->|same-origin /api| Contract["Shared JSON contract"]
+  Contract --> Node["Hono / Node API"]
+  Contract --> Go["Go API"]
+  Node --> Keychain["macOS Keychain credential provider"]
+  Go --> Keychain
+  Node --> GitHub["GitHub REST API public profile"]
+  Go --> GitHub
+  Node --> DB["SQLite + Drizzle migrations"]
+  Go --> DB
+  GitHub --> Allowlist["Public field allowlist"]
+  Allowlist --> Contract
+  DB --> Contract
+  Contract -->|safe error envelope| Browser
+
+  subgraph LocalTrust["Local trusted runtime"]
+    Node
+    Go
+    Keychain
+    DB
+  end
+
+  subgraph BrowserBoundary["Browser boundary"]
+    Browser
+  end
+

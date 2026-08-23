@@ -79,7 +79,7 @@ export function DashboardContent() {
 		},
 		{
 			name: "Cloudflare Pages",
-			source: "Baby2B Deployment Evidence",
+			source: "Portfolio Sync、Static-First Delivery",
 		},
 		{
 			name: "TC Flow",
@@ -105,11 +105,6 @@ export function DashboardContent() {
 			title: "GitHub Profile Studio",
 			meta: "React、TypeScript、数据驱动页面",
 			body: "用路由、卡片模型和 evidence 数据索引组织作品展示；难点在于保持项目叙事、证据入口和响应式界面一致。",
-		},
-		{
-			title: "Baby2B Deployment Evidence",
-			meta: "Cloudflare Pages、发布验证、日志归档",
-			body: "沉淀部署过程、验证结果和回滚记录；难点在于让公开证据与真实发布动作对应，避免不可复现的展示材料。",
 		},
 		{
 			title: "TC Workflow",
@@ -177,7 +172,7 @@ export function DashboardContent() {
 						</a>
 						<a
 							className="inline-flex min-h-11 items-center border border-[#c8bda9] bg-[#fbf6ea] px-4 text-[#344252] transition hover:border-[#bf1737] hover:bg-[#f3e7d7] hover:text-[#9f102a] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#bf1737] focus-visible:outline-offset-3"
-							href="https://evidence.baby2b.online/"
+							href="/dashboard#projects"
 						>
 							EVIDENCE
 						</a>
@@ -432,7 +427,7 @@ export function DashboardContent() {
 						>
 							GITHUB
 						</a>
-						<a href="https://evidence.baby2b.online/">EVIDENCE</a>
+						<a href="/dashboard#projects">EVIDENCE</a>
 						<a href="#top">BACK TO TOP</a>
 					</div>
 					<p className="text-[#5a6470] text-xs">
@@ -459,7 +454,7 @@ export function DashboardContent() {
 							id: "proof",
 							label: "Proof",
 							icon: BadgeCheck,
-							href: "https://evidence.baby2b.online/",
+							href: "/dashboard#projects",
 						},
 					].map(({ id, href, icon: Icon, label }) => (
 						<a

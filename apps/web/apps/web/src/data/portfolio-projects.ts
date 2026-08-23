@@ -58,7 +58,7 @@ export type ProjectPageLink = {
 	href: string;
 };
 
-const EVIDENCE_BASE_URL = "https://evidence.baby2b.online";
+const DASHBOARD_EVIDENCE_BASE_URL = "https://baby2b.online/evidence";
 
 export const PORTFOLIO_PROJECTS: PortfolioProject[] = [
 	{
@@ -69,7 +69,7 @@ export const PORTFOLIO_PROJECTS: PortfolioProject[] = [
 		progress: 78,
 		architecture:
 			"Cloudflare Pages Edge SSR + Local Runtime/Tunnel + provider API adapters + GraphQL DAG orchestration + Evidence gate。",
-		evidenceUrl: "https://evidence.baby2b.online/agent-market/",
+		evidenceUrl: "https://agent-market.baby2b.online/evidence/",
 		repo: "Tiancheng-Xu/agent-market",
 		skills: ["React", "TypeScript", "Cloudflare", "Ollama", "GraphQL", "Solidity"],
 		evidence: [
@@ -94,7 +94,7 @@ export const PORTFOLIO_PROJECTS: PortfolioProject[] = [
 		progress: 55,
 		architecture:
 			"Cloudflare 状态与控制面 + GitHub Actions 固定工作流 + AWS 临时观测资源 + D1 审计状态 + R2 不可变快照。",
-		evidenceUrl: "/evidence/performance-observability-control",
+		evidenceUrl: `${DASHBOARD_EVIDENCE_BASE_URL}/performance-observability-control`,
 		repo: "Tiancheng-Xu/fullstack-showcase",
 		skills: ["Performance SDK", "Cloudflare", "AWS", "Evidence"],
 		evidence: [
@@ -248,7 +248,7 @@ export const PORTFOLIO_PROJECTS: PortfolioProject[] = [
 		progress: 100,
 		architecture:
 			"数据审计 → SFT 320/40/40 → 单节点双 RTX 5090 D NF4 QLoRA → 冻结评测 → Adapter 合并 → F16→Q4_K_M GGUF → SHA-256 → Mac/Ollama 离线验收。",
-		evidenceUrl: `${EVIDENCE_BASE_URL}/personal-ai-agent/`,
+		evidenceUrl: "https://personal-ai-agent.baby2b.online/evidence/",
 		repo: "Tiancheng-Xu/personal-ai-agent",
 		skills: [
 			"Qwen3-8B",
@@ -273,6 +273,29 @@ export const PORTFOLIO_PROJECTS: PortfolioProject[] = [
 		renderingModes: ["CSR"],
 	},
 	{
+		id: "fullstack-showcase",
+		title: "Showcase Dashboard",
+		desc: "汇总真实项目、项目自有 Evidence、自动同步状态与静态首屏交付的个人作品看板。",
+		status: "已完成",
+		progress: 100,
+		architecture:
+			"人工审核静态索引 + GitHub App/Cloudflare Worker 动态补充 + React SSG/Hydration + 项目自有 Evidence 深链 + 旧域名兼容重定向。",
+		evidenceUrl: `${DASHBOARD_EVIDENCE_BASE_URL}/fullstack-showcase`,
+		repo: "Tiancheng-Xu/fullstack-showcase",
+		skills: ["React", "TypeScript", "SSG", "Hydration", "Cloudflare Pages"],
+		evidence: [
+			"静态索引与水合后 URL 保持一致，远端旧索引不能覆盖人工审核链接",
+			"Dashboard 与内部 Evidence 生成可读 SSG HTML，并保留纯 CSR 降级",
+			"项目自有 Evidence、旧域名重定向和发布清单由共享 Gate 约束",
+		],
+		details: [
+			"Dashboard 展示已完成与进行中项目，状态和进度可同步，项目身份、标题、架构和 Evidence URL 由本地审核索引兜底。",
+			"主要难点是避免 SSR 静态链接、水合后远端索引和旧 Evidence Hub 三套来源产生漂移。",
+		],
+		ownerPage: "https://baby2b.online/dashboard/",
+		renderingModes: ["SSG", "Hydration", "CSR Fallback"],
+	},
+	{
 		id: "github-profile-studio",
 		title: "GitHub Profile Studio",
 		desc: "本地优先的 GitHub 公开资料工作台，前后端与双运行时已完成，公网部署仍在规划。",
@@ -280,7 +303,7 @@ export const PORTFOLIO_PROJECTS: PortfolioProject[] = [
 		progress: 85,
 		architecture:
 			"React/TanStack Router + Hono/Node 或 Go 双后端 + GitHub REST API + SQLite/Drizzle + macOS 钥匙串。",
-		evidenceUrl: `${EVIDENCE_BASE_URL}/github-profile-studio/`,
+		evidenceUrl: `${DASHBOARD_EVIDENCE_BASE_URL}/github-profile-studio`,
 		repo: "Tiancheng-Xu/github-profile-studio",
 		skills: ["React", "TypeScript", "Vite", "证据化交付"],
 		evidence: ["本地全栈与双后端实现", "安全边界、测试与 CI 可审查"],
@@ -289,24 +312,7 @@ export const PORTFOLIO_PROJECTS: PortfolioProject[] = [
 			"主要难点是让 Node 与 Go 后端保持同一 API/迁移契约，并确保凭据永不进入浏览器或公开错误。",
 		],
 		renderingModes: ["CSR"],
-	},
-	{
-		id: "baby2b-deployment-evidence",
-		title: "Baby2B Evidence Hub",
-		desc: "集中发布真实项目的工作证明、架构说明、验证结果与交付限制。",
-		status: "已完成",
-		progress: 100,
-		architecture:
-			"发布流水线入口 + 日志与回滚记录 + 结果归档，形成可追溯的交付闭环。",
-		evidenceUrl: `${EVIDENCE_BASE_URL}/`,
-		repo: "Tiancheng-Xu/baby2b-online-deployment-evidence",
-		skills: ["Cloudflare Pages", "部署验证", "交付文档", "日志归档"],
-		evidence: ["发布流程文档", "部署结果与验证记录"],
-		details: [
-			"主要沉淀发布过程中的关键日志、脚本与回滚记录。",
-			"主要难点是让证据材料和真实发布动作保持一致，避免只留下不可复现的截图。",
-		],
-		renderingModes: ["SSG", "Hydration", "CSR Fallback"],
+		ownerPage: "https://github.com/Tiancheng-Xu/github-profile-studio",
 	},
 	{
 		id: "portfolio-sync",
@@ -316,7 +322,7 @@ export const PORTFOLIO_PROJECTS: PortfolioProject[] = [
 		progress: 100,
 		architecture:
 			"GitHub Webhook + HMAC 验签 + 只读 Installation Token + Cloudflare Worker/KV + Dashboard 运行时合并 + 30 分钟定时兜底。",
-		evidenceUrl: `${EVIDENCE_BASE_URL}/portfolio-sync/`,
+		evidenceUrl: `${DASHBOARD_EVIDENCE_BASE_URL}/portfolio-sync`,
 		repo: "Tiancheng-Xu/fullstack-showcase/tree/main/workers/portfolio-sync-webhook",
 		skills: [
 			"GitHub App",
@@ -332,7 +338,7 @@ export const PORTFOLIO_PROJECTS: PortfolioProject[] = [
 			"仓库存在 Baby2B 发布清单且声明 Evidence URL 时才进入作品集，避免把学习仓库和普通实验误收录。",
 			"主要难点是同时处理 webhook 验签、短期安装令牌、KV 最终一致性与主站静态回退。",
 		],
-		ownerPage: "https://portfolio-sync.baby2b.online/health",
+		ownerPage: "https://portfolio-sync.baby2b.online/",
 	},
 	{
 		id: "tc-workflow",
@@ -342,7 +348,7 @@ export const PORTFOLIO_PROJECTS: PortfolioProject[] = [
 		progress: 100,
 		architecture:
 			"N1-N8 节点主链 + Task Review Gate + P0/PII/Fallback/Human Gate + Checkpoint/RunResult 持久化。",
-		evidenceUrl: `${EVIDENCE_BASE_URL}/tc-workflow/`,
+		evidenceUrl: `${DASHBOARD_EVIDENCE_BASE_URL}/tc-workflow`,
 		repo: "Tiancheng-Xu/personal-skills/tree/main/skills/tc-flow",
 		skills: ["TC Flow", "任务编排", "上下文治理", "验收闭环"],
 		evidence: [
@@ -353,6 +359,7 @@ export const PORTFOLIO_PROJECTS: PortfolioProject[] = [
 			"该条目用于展示流程编排实践与 Feature 交付闭环。",
 			"主要难点是把执行记录、检查点和验收证据连接成可回看的工作流。",
 		],
+		ownerPage: "https://github.com/Tiancheng-Xu/personal-skills/tree/main/skills/tc-flow",
 	},
 	{
 		id: "babysteps",
@@ -362,7 +369,7 @@ export const PORTFOLIO_PROJECTS: PortfolioProject[] = [
 		progress: 100,
 		architecture:
 			"Cloudflare Pages Advanced Worker Edge SSR → marker/path/version 水合门禁 → client-only 身份/钱包/Web3/性能 SDK → pure CSR fallback；built Worker 运行矩阵进入共享 Gate。",
-		evidenceUrl: `${EVIDENCE_BASE_URL}/babysteps/`,
+		evidenceUrl: "https://babysteps.baby2b.online/evidence/",
 		repo: "Tiancheng-Xu/babysteps",
 		skills: [
 			"Static-First Delivery",

@@ -171,6 +171,29 @@ async function refreshPortfolio(env, installationId, trigger) {
 	}
 }
 
+export function isProjectOwnedEvidenceUrl(evidenceUrl, slug, productionUrl) {
+	try {
+		const evidence = new URL(evidenceUrl);
+		const production = productionUrl ? new URL(productionUrl) : null;
+		if (
+			evidence.protocol !== "https:" ||
+			evidence.hostname === "evidence.baby2b.online"
+		) {
+			return false;
+		}
+		if (evidence.hostname === "baby2b.online") {
+			return evidence.pathname === `/evidence/${slug}`;
+		}
+		return Boolean(
+			evidence.hostname.endsWith(".baby2b.online") &&
+				production?.hostname === evidence.hostname &&
+				evidence.pathname === "/evidence/",
+		);
+	} catch {
+		return false;
+	}
+}
+
 async function projectFromRepository(repo, token) {
 	const manifestText = await repositoryFile(
 		repo.full_name,
@@ -184,7 +207,11 @@ async function projectFromRepository(repo, token) {
 	if (
 		manifest["schema-version"] !== "1" ||
 		!manifest.slug ||
-		!evidenceUrl?.startsWith("https://evidence.baby2b.online/")
+		!isProjectOwnedEvidenceUrl(
+			evidenceUrl,
+			manifest.slug,
+			manifest["production-url"],
+		)
 	) {
 		throw new Error("publish manifest rejected by portfolio contract");
 	}

@@ -1,0 +1,11 @@
+flowchart LR
+  Change["Pull request or main push"] --> Checkout["Checkout"]
+  Checkout --> Setup["Node 22, pnpm 11, Go toolchain"]
+  Setup --> Install["Locked dependency install"]
+  Install --> Check["Biome and Go formatting checks"]
+  Check --> Tests["Structure, Node API, Go API and React tests"]
+  Tests --> Types["Node, Go and Web type checks"]
+  Types --> Build["API, Go binary and Web production builds"]
+  Build --> Verified["Repository implementation verified"]
+  Verified -. no deploy step .-> Pending["Public runtime remains unverified"]
+

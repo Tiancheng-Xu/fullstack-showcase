@@ -1,0 +1,14 @@
+flowchart LR
+  N1["N1 初始化预检"] --> N2["N2 路由与模型"]
+  N2 --> N3["N3 Contract 冻结与执行"]
+  N3 --> N4["N4 Task Review Gate"]
+  N4 -->|allow| N5["N5 Task Checkpoint"]
+  N4 -->|repair <= 3| N3
+  N4 -->|P0 / PII / BLOCK| Stop["停止并保留证据"]
+  N5 -->|仍有 Task| N3
+  N5 -->|全部完成| N6["N6 Feature QA"]
+  N6 --> N7["N7 Context + Stop Hook"]
+  N7 -->|ALLOW| N8["N8 测试交付与 RunResult"]
+  N7 -->|BLOCK / policy failure| Stop
+  N8 --> PR["PR + 测试环境"]
+  PR --> Human["生产发布人工确认"]

@@ -21,6 +21,22 @@ describe("static-first route delivery", () => {
 					url: "/evidence/performance-observability-control",
 					output: "evidence/performance-observability-control/index.html",
 				}),
+				expect.objectContaining({
+					url: "/evidence/github-profile-studio",
+					output: "evidence/github-profile-studio/index.html",
+				}),
+				expect.objectContaining({
+					url: "/evidence/fullstack-showcase",
+					output: "evidence/fullstack-showcase/index.html",
+				}),
+				expect.objectContaining({
+					url: "/evidence/portfolio-sync",
+					output: "evidence/portfolio-sync/index.html",
+				}),
+				expect.objectContaining({
+					url: "/evidence/tc-workflow",
+					output: "evidence/tc-workflow/index.html",
+				}),
 			]),
 		);
 	});

@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700" viewBox="0 0 1200 700">
+  <rect width="1200" height="700" fill="#f8f0df"/><rect x="48" y="44" width="1104" height="612" rx="28" fill="#fffaf0" stroke="#203b36" stroke-width="4"/>
+  <style>.title{font:700 46px Georgia,serif;fill:#183d35}.project{font:700 25px Arial,sans-serif;fill:#a63b2b}.meta{font:17px ui-monospace,monospace;fill:#33443f}.foot{font:16px ui-monospace,monospace;fill:#5d665f}</style>
+  <text x="90" y="120" class="title">Portfolio Sync · Published Project Index</text>
+  <text x="90" y="170" class="foot">generatedAt: 2026-08-14T04:10:56.574Z · projectCount: 3 · warningCount: 0</text>
+  <text x="110" y="260" class="project">Baby2b Online Deployment Evidence</text><text x="110" y="295" class="meta">Tiancheng-Xu/baby2b-online-deployment-evidence  →  https://evidence.baby2b.online/</text>
+<text x="110" y="365" class="project">Babysteps</text><text x="110" y="400" class="meta">Tiancheng-Xu/babysteps  →  https://evidence.baby2b.online/babysteps/</text>
+<text x="110" y="470" class="project">Personal Ai Agent</text><text x="110" y="505" class="meta">Tiancheng-Xu/personal-ai-agent  →  https://evidence.baby2b.online/personal-ai-agent/</text>
+  <line x1="90" y1="575" x2="1110" y2="575" stroke="#d7c5a4" stroke-width="2"/>
+  <text x="90" y="615" class="foot">Source: https://portfolio-sync.baby2b.online/projects.json · SHA-256: 927df23c1b216a06e74f1ccc5b49c3fb674576be4abc0ec6d887c136dba2fba4</text>
+</svg>

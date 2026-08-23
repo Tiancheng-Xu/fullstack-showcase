@@ -1,8 +1,13 @@
 # Portfolio project metadata contract
 
 Portfolio Sync only publishes repositories containing
-.github/baby2b-publish.yml with schema-version 1 and an evidence-url under
-https://evidence.baby2b.online/.
+.github/baby2b-publish.yml with schema-version 1 and a project-owned Evidence
+URL. Deployed applications use `https://<slug>.baby2b.online/evidence/` on the
+same host as their production URL. Skills, internal services, and projects
+without an independent site use `https://baby2b.online/evidence/<slug>` so the
+TanStack dynamic route and its prerendered HTML use the same canonical path.
+The legacy `https://evidence.baby2b.online/` host is redirect-only and is not a
+valid source URL for new project metadata.
 
 Repositories may add .github/portfolio-project.json with these fields:
 

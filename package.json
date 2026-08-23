@@ -3,7 +3,7 @@
   "private": true,
   "scripts": {
     "dev": "pnpm --dir apps/web/apps/web dev",
-    "test": "pnpm --dir apps/web/apps/web test",
+		"test": "pnpm --dir apps/web/apps/web test && pnpm --dir workers/portfolio-sync-webhook test",
     "typecheck": "pnpm --dir apps/web/apps/web check-types",
     "build": "pnpm --dir apps/web/apps/web build"
   },

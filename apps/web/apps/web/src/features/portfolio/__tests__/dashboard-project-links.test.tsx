@@ -21,7 +21,7 @@ describe("Dashboard project links", () => {
 			}),
 		).toHaveAttribute(
 			"href",
-			"https://evidence.baby2b.online/personal-ai-agent/",
+			"https://personal-ai-agent.baby2b.online/evidence/",
 		);
 		expect(
 			projectList.getByRole("link", {
@@ -35,7 +35,10 @@ describe("Dashboard project links", () => {
 			projectList.getByRole("link", {
 				name: "性能观测与成本控制：工作证明",
 			}),
-		).toHaveAttribute("href", "/evidence/performance-observability-control");
+		).toHaveAttribute(
+			"href",
+			"https://baby2b.online/evidence/performance-observability-control",
+		);
 
 		expect(projects?.querySelectorAll('a[href="/dashboard"]')).toHaveLength(0);
 	});

@@ -6,5 +6,5 @@ build-command: pnpm build
 output-directory: apps/web/apps/web/dist
 pages-project: fullstack-showcase
 production-url: https://baby2b.online/
-evidence-url: https://evidence.baby2b.online/fullstack-showcase/
+evidence-url: https://baby2b.online/evidence/fullstack-showcase
 backup-url: https://tiancheng-showcase-dashboard.pages.dev/

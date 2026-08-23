@@ -9,11 +9,17 @@ describe("portfolio production contracts", () => {
 		const babySteps = PORTFOLIO_PROJECTS.find(
 			(project) => project.id === "babysteps",
 		);
+		const showcase = PORTFOLIO_PROJECTS.find(
+			(project) => project.id === "fullstack-showcase",
+		);
 		expect(agentMarket?.ownerPage).toBe("https://agent-market.baby2b.online/");
-		expect(agentMarket?.evidenceUrl).toBe("https://evidence.baby2b.online/agent-market/");
+		expect(agentMarket?.evidenceUrl).toBe("https://agent-market.baby2b.online/evidence/");
 		expect(babySteps?.title).toBe("BabySteps");
 		expect(babySteps?.skills).toContain("Static-First Delivery");
-		expect(babySteps?.evidenceUrl).toBe("https://evidence.baby2b.online/babysteps/");
+		expect(babySteps?.evidenceUrl).toBe("https://babysteps.baby2b.online/evidence/");
+		expect(showcase?.evidenceUrl).toBe(
+			"https://baby2b.online/evidence/fullstack-showcase",
+		);
 	});
 
 	it("uses the shared ultrawide frame", () => {

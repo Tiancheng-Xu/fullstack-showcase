@@ -1,0 +1,25 @@
+flowchart LR
+  Repo["Project repository"] -->|Push / Repository event| GitHub["GitHub App"]
+  GitHub -->|Signed webhook| Gate["Cloudflare Worker webhook gate"]
+  Gate -->|HMAC valid| Auth["App JWT to read-only installation token"]
+  Auth --> Scan["Repository and publish manifest scan"]
+  Scan --> Filter["Allowlist, Evidence URL, fork and archive filter"]
+  Filter -->|Complete snapshot| KV["Workers KV portfolio:index"]
+  KV --> API["Public projects.json and health"]
+  API --> Dashboard["Baby2B portfolio Dashboard"]
+  Static["Reviewed static project index"] --> Dashboard
+  Cron["Cloudflare Cron every 30 minutes"] --> Scan
+  Gate -->|Invalid signature / oversized body| Reject["Reject and log category only"]
+  Scan -->|GitHub or parse failure| Keep["Keep last-known-good KV snapshot"]
+  Keep --> API
+
+  subgraph Private["Private trust boundary"]
+    Auth
+    Scan
+  end
+
+  subgraph Public["Public data boundary"]
+    KV
+    API
+    Dashboard
+  end
