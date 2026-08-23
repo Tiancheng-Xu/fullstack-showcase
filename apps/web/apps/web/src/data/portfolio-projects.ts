@@ -69,7 +69,7 @@ export const PORTFOLIO_PROJECTS: PortfolioProject[] = [
 		progress: 78,
 		architecture:
 			"Cloudflare Pages Edge SSR + Local Runtime/Tunnel + provider API adapters + GraphQL DAG orchestration + Evidence gate。",
-		evidenceUrl: "https://a3aa5a0d.agent-market-site.pages.dev/evidence",
+		evidenceUrl: "https://evidence.baby2b.online/agent-market/",
 		repo: "Tiancheng-Xu/agent-market",
 		skills: ["React", "TypeScript", "Cloudflare", "Ollama", "GraphQL", "Solidity"],
 		evidence: [
@@ -83,7 +83,7 @@ export const PORTFOLIO_PROJECTS: PortfolioProject[] = [
 			"Kimi 默认走 Moonshot China endpoint 与 kimi-k2.7-code；非默认模型保持 pending-smoke。",
 		],
 		renderingModes: ["Edge SSR", "Hydration", "Client-only Web3", "Cloud Preview Pending"],
-		ownerPage: "https://a3aa5a0d.agent-market-site.pages.dev",
+		ownerPage: "https://agent-market.baby2b.online/",
 		sourceUpdatedAt: "2026-08-22",
 	},
 	{
@@ -355,16 +355,17 @@ export const PORTFOLIO_PROJECTS: PortfolioProject[] = [
 		],
 	},
 	{
-		id: "static-first-delivery",
-		title: "Static-First Delivery",
-		desc: "以 BabySteps 生产项目验证 Edge SSR、安全摘要壳、精确水合、浏览器能力激活与一次性纯 CSR 降级。",
+		id: "babysteps",
+		title: "BabySteps",
+		desc: "家庭成长 DApp，并以真实生产链验证 Edge SSR、安全摘要壳、精确水合、浏览器能力激活与一次性纯 CSR 降级。",
 		status: "已完成",
 		progress: 100,
 		architecture:
 			"Cloudflare Pages Advanced Worker Edge SSR → marker/path/version 水合门禁 → client-only 身份/钱包/Web3/性能 SDK → pure CSR fallback；built Worker 运行矩阵进入共享 Gate。",
-		evidenceUrl: `${EVIDENCE_BASE_URL}/static-first-delivery/`,
+		evidenceUrl: `${EVIDENCE_BASE_URL}/babysteps/`,
 		repo: "Tiancheng-Xu/babysteps",
 		skills: [
+			"Static-First Delivery",
 			"Edge SSR",
 			"React Hydration",
 			"Cloudflare Pages",
