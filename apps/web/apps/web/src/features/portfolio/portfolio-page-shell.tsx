@@ -1,6 +1,8 @@
 import { BadgeCheck, LayoutGrid, PenTool, UserRound } from "lucide-react";
 import type { ReactNode } from "react";
 
+import { PORTFOLIO_FRAME_CLASS } from "@/features/portfolio/portfolio-layout";
+
 type PortfolioPage = "portfolio" | "project" | "evidence";
 
 export function PortfolioPageShell({
@@ -39,7 +41,7 @@ export function PortfolioPageShell({
 			/>
 
 			<header className="relative border-[#071d34] border-b bg-[#fbf6ea]/95">
-				<div className="mx-auto flex min-h-16 w-full max-w-6xl items-center justify-between gap-4 px-4 py-2 sm:px-8">
+				<div className={`${PORTFOLIO_FRAME_CLASS} flex min-h-16 items-center justify-between gap-4 py-2`}>
 					<a className="flex min-h-11 items-center gap-3 font-serif font-bold" href="/dashboard">
 						<span className="grid size-9 place-items-center border border-[#d9ccb5] bg-[#eef0ec] text-[#bf1737]">
 							<PenTool aria-hidden="true" size={17} />
@@ -66,7 +68,7 @@ export function PortfolioPageShell({
 				</div>
 			</header>
 
-			<main className="relative mx-auto w-full max-w-6xl px-4 py-8 sm:px-8 md:py-12">
+			<main className={`${PORTFOLIO_FRAME_CLASS} relative py-8 md:py-12`}>
 				<header className="border-[#d8cfbd] border-b pb-6">
 					<p className="font-bold text-[#bf1737] text-xs uppercase tracking-[0.18em]">{eyebrow}</p>
 					<h1 className="mt-3 font-serif font-bold text-3xl leading-tight md:text-5xl">{title}</h1>
@@ -78,7 +80,7 @@ export function PortfolioPageShell({
 			</main>
 
 			<footer className="relative border-[#c8c0b0] border-t bg-[#ebe6da]">
-				<div className="mx-auto flex min-h-24 w-full max-w-6xl flex-col items-center justify-between gap-4 px-4 py-7 text-center sm:px-8 md:flex-row md:text-left">
+				<div className={`${PORTFOLIO_FRAME_CLASS} flex min-h-24 flex-col items-center justify-between gap-4 py-7 text-center md:flex-row md:text-left`}>
 					<div className="flex items-center gap-3 font-bold text-sm">
 						<PenTool aria-hidden="true" className="text-[#bf1737]" size={18} />
 						<span>TIANCHENG XU · PROJECT DELIVERY</span>

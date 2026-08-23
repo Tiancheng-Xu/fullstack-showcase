@@ -13,9 +13,10 @@ export async function renderDashboardRoute(pathname: string) {
     await router.serverSsr?.dehydrate();
     const markup = renderToString(<RouterServer router={router} />);
     router.serverSsr?.setRenderFinished();
+    const hydrationHtml = router.serverSsr?.takeBufferedHtml() ?? "";
     return {
       markup,
-      hydrationHtml: router.serverSsr?.takeBufferedHtml() ?? "",
+      hydrationHtml: hydrationHtml.replaceAll("\0", "\\u0000"),
     };
   } finally {
     router.serverSsr?.cleanup();

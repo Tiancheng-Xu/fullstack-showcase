@@ -23,6 +23,7 @@ import {
 } from "@/data/portfolio-sync";
 import { resolvePerformanceView } from "@/features/performance/performance-state";
 import { PerformanceStatusCard } from "@/features/performance/performance-status-card";
+import { PORTFOLIO_FRAME_CLASS } from "@/features/portfolio/portfolio-layout";
 
 export function DashboardContent() {
 	const [visibleProjects, setVisibleProjects] = useState(PORTFOLIO_PROJECTS);
@@ -140,7 +141,7 @@ export function DashboardContent() {
 				className="relative border-[#071d34] border-b bg-[#fbf6ea]/92"
 				id="top"
 			>
-				<div className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between px-4 sm:px-8">
+				<div className={`${PORTFOLIO_FRAME_CLASS} flex h-16 items-center justify-between`}>
 					<div className="flex min-w-0 items-center gap-3">
 						<button
 							aria-label="打开菜单"
@@ -196,7 +197,7 @@ export function DashboardContent() {
 				</div>
 			</header>
 
-			<main className="relative mx-auto w-full max-w-6xl px-4 py-8 sm:px-8 md:py-12">
+			<main className={`${PORTFOLIO_FRAME_CLASS} relative py-8 md:py-12`}>
 				<section
 					className="mx-auto max-w-3xl scroll-mt-24 text-center"
 					id="about"
@@ -418,7 +419,7 @@ export function DashboardContent() {
 			</main>
 
 			<footer className="relative mt-6 border-[#c8c0b0] border-t bg-[#ebe6da]">
-				<div className="mx-auto flex min-h-24 w-full max-w-6xl flex-col items-center justify-center gap-4 px-4 py-7 text-center sm:px-8 md:flex-row md:justify-between md:text-left">
+				<div className={`${PORTFOLIO_FRAME_CLASS} flex min-h-24 flex-col items-center justify-center gap-4 py-7 text-center md:flex-row md:justify-between md:text-left`}>
 					<div className="flex items-center gap-3 font-bold text-sm">
 						<PenTool aria-hidden="true" className="text-[#bf1737]" size={18} />
 						<span>UKIYO-E PORTFOLIO · TIANCHENG XU</span>

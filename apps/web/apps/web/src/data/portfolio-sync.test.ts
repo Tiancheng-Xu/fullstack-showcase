@@ -37,4 +37,28 @@ describe("mergePortfolioProjects", () => {
 			}),
 		]);
 	});
+
+	it("keeps BabySteps as the project identity when merging its rendering evidence", () => {
+		const local = {
+			...project,
+			id: "babysteps",
+			title: "BabySteps",
+			repo: "Tiancheng-Xu/babysteps",
+			skills: ["Static-First Delivery", "Edge SSR"],
+		};
+		const remote = {
+			...project,
+			id: "babysteps",
+			title: "Babysteps",
+			repo: "Tiancheng-Xu/babysteps",
+		};
+
+		expect(mergePortfolioProjects([local], [remote])).toEqual([
+			expect.objectContaining({
+				id: "babysteps",
+				title: "BabySteps",
+				skills: ["Static-First Delivery", "Edge SSR"],
+			}),
+		]);
+	});
 });

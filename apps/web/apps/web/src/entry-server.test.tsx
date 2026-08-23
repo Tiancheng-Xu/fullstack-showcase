@@ -10,6 +10,8 @@ describe("static-first Dashboard", () => {
 			"Personal AI Agent 模型训练与本地推理：工作证明",
 		);
 		expect(result.hydrationHtml).toContain("$_TSR");
+		expect(result.hydrationHtml).not.toContain("\0");
+		expect(result.hydrationHtml).toContain("\\u0000");
 	});
 
 	it("renders the performance control deep link with its real project content", async () => {
