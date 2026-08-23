@@ -1,0 +1,415 @@
+{
+  "schemaVersion": 2,
+  "slug": "tc-workflow",
+  "title": "TC Flow 2.1",
+  "subtitle": "Feature Worktree + Review Gate Skill",
+  "status": "Skill 静态 Evidence，不是已部署应用",
+  "summary": "TC Flow 2.1 是 Tiancheng Xu 的本地 Feature 交付 Skill：用独立 Worktree、冻结 Contract、Task Review、P0/PII/Fallback/Human 门禁、Checkpoint、Feature QA 和 RunResult，把一次开发从需求输入推进到可审查交付。",
+  "model": "tc-flow skill v2.1.0",
+  "kicker": "STATIC SKILL EVIDENCE · TC FLOW 2.1",
+  "scope": "公开仓库资料 + 脱敏架构说明",
+  "heroAsset": "tc-flow-2-1-babystep-architecture.png",
+  "urls": {
+    "dashboard": "https://baby2b.online/",
+    "project": "https://github.com/Tiancheng-Xu/personal-skills/tree/main/skills/tc-flow",
+    "evidence": "https://evidence.baby2b.online/tc-workflow/",
+    "repository": "https://github.com/Tiancheng-Xu/personal-skills/tree/main/skills/tc-flow"
+  },
+  "theme": {
+    "primary": "#f4b63f"
+  },
+  "metrics": {
+    "flowNodes": 8,
+    "reviewGates": 4,
+    "maxRepairRounds": 3,
+    "stableSamplePercent": 20
+  },
+  "metricCards": [
+    {
+      "label": "FLOW NODES",
+      "value": "8",
+      "detail": "N1 到 N8 固定顺序",
+      "meaning": "一次 Feature 不靠临场发挥，而是从预检、执行、审查、QA 到交付逐级推进。"
+    },
+    {
+      "label": "REVIEW GATES",
+      "value": "4",
+      "detail": "P0 / PII / Fallback / Human",
+      "meaning": "严重缺陷、敏感信息、模型降级和生产动作都有明确阻断点。"
+    },
+    {
+      "label": "REPAIR LIMIT",
+      "value": "3",
+      "detail": "P0 与 QA Repair 上限",
+      "meaning": "反复修不好的问题不会被包装成通过，而是保留证据后交给人工决策。"
+    },
+    {
+      "label": "LOW-RISK SAMPLE",
+      "value": "20%",
+      "detail": "低风险稳定抽样 Review",
+      "meaning": "轻量任务可以提速，但仍保留独立审查的抽样压力。"
+    }
+  ],
+  "promotionItems": [
+    {
+      "label": "交付形态",
+      "value": "Skill / Workflow"
+    },
+    {
+      "label": "生产发布",
+      "value": "manual-pending"
+    }
+  ],
+  "experiments": {},
+  "story": {
+    "goal": "把一次软件 Feature 开发拆成可恢复、可审查、可阻断的流程，避免 Agent 在需求、权限、证据和发布边界上失控。",
+    "result": "该页面只证明 TC Flow 2.1 的架构和公开 Skill 资料已整理为 Evidence；它不是某个线上应用的运行监控，也不虚构部署日志。",
+    "steps": [
+      "N1 先确认输入、项目规则、仓库身份和 Worktree 干净度，防止覆盖他人改动。",
+      "N3 到 N5 围绕单个 Task 循环：冻结 Contract，执行最小任务，通过 Review 后才写 Checkpoint。",
+      "N6 到 N7 做整体验收、记忆写入、Stop Hook 和仓库策略审计，避免局部通过但整体不可交付。",
+      "N8 只做到提交、测试环境、PR 和 RunResult；生产发布保留人工确认。"
+    ],
+    "terms": [
+      {
+        "name": "Skill",
+        "meaning": "Codex 可调用的一组本地规则和脚本，不等同于已经上线的 Web 应用。"
+      },
+      {
+        "name": "Contract",
+        "meaning": "冻结后的目标、非目标、允许路径、工具、验收标准和跨仓约束。"
+      },
+      {
+        "name": "Review Bundle",
+        "meaning": "只包含当前 Task、脱敏 diff 和测试证据的审查材料，避免把原始项目上下文发出去。"
+      },
+      {
+        "name": "RunResult",
+        "meaning": "记录节点历史、Review、QA、提交、测试部署和生产状态的最终交付摘要。"
+      }
+    ]
+  },
+  "diagrams": [
+    {
+      "id": "n1-n8",
+      "eyebrow": "MAIN FLOW",
+      "title": "N1-N8 Feature 交付主链路",
+      "plain": "先定边界，再做任务；每个任务审过才算完成，最后只交付到人工可接管的位置。",
+      "summary": "架构图中的 8 个竖向节点是 TC Flow 的主路径：初始化、路由、Contract、Review、Checkpoint、QA、Stop Hook、RunResult。页面文字保留每个节点的职责，避免只看图看不懂流程。",
+      "nodes": [
+        {
+          "id": "N1",
+          "label": "初始化预检",
+          "detail": "解析 Feature 输入、扫描 Specs 与项目规则、校验 Git/Hash/Drift，并创建独立 Feature Worktree。",
+          "purpose": "在写代码前确认任务、仓库和执行环境可信，避免覆盖现有改动或在错误仓库开工。",
+          "input": "读取 Feature 请求、Specs、AGENTS/项目规则、Git 状态与远端身份；生成 runId、contractHash 并建立隔离 Worktree。",
+          "pass": "输入可解析，规则齐全，仓库身份正确，Worktree 隔离成功，基线 Hash 与工作树状态已记录。",
+          "block": "缺少关键规格、仓库或作者身份不符、存在无法隔离的工作树漂移、中央策略不可用时停止。",
+          "status": "done"
+        },
+        {
+          "id": "N2",
+          "label": "路由与模型",
+          "detail": "按风险和复杂度选择 inline、goal-hook 或 subagent，并固定 Worker / Reviewer 隔离策略。",
+          "purpose": "让任务难度、模型能力、审查独立性和工具权限匹配，避免低配误判或同一执行者自批。",
+          "input": "评估范围、风险、跨仓依赖和预计轮次；选择 Worker、独立 Reviewer、Fallback、Skill 与 Tool。",
+          "pass": "难度等级、执行模式、模型路由、Reviewer 身份和降级路径写入 Contract，职责彼此隔离。",
+          "block": "Reviewer 无法独立、Fallback 身份不可验证、所需工具越权或高风险任务没有人工门禁时停止。",
+          "status": "done"
+        },
+        {
+          "id": "N3",
+          "label": "Contract 冻结与执行",
+          "detail": "冻结目标、Scope、Acceptance、Files、Tools 和 Task Plan；只实现当前可独立 Review 的 Task。",
+          "purpose": "把模糊需求转成可审查的边界，并确保每次只执行一个能够独立验收的 Task。",
+          "input": "冻结 Goal、Non-goals、Scope、Acceptance、允许文件、网络与工具；形成依赖有序的 Task Plan 后执行当前 Task。",
+          "pass": "Contract Hash 稳定，当前 Task 的实现与测试证据满足 Acceptance，改动全部位于允许范围。",
+          "block": "发现范围漂移、未授权文件或网络访问、Contract 被静默修改、当前 Task 无法独立验证时退回重冻。",
+          "status": "done"
+        },
+        {
+          "id": "N4",
+          "label": "Task Review Gate",
+          "detail": "Worker 自审后生成 allowlist Review Bundle，经 PII 脱敏、Kimi 主审、DeepSeek 显式降级与 P0 归一化。",
+          "purpose": "用独立审查阻止缺陷、敏感信息和虚假证据进入 Checkpoint 或后续交付。",
+          "input": "Worker 自检，构造仅含当前 Task 的脱敏 Review Bundle，记录 provider/model/requestId 并交给独立 Reviewer。",
+          "pass": "Reviewer 返回 allow，PII 扫描通过，证据可追溯且无 P0；普通问题最多允许 3 轮 repair。",
+          "block": "任何 P0 立即 BLOCK；PII 无法脱敏、Review 身份不可信、3 轮修复仍失败或 Reviewer 重复 ERROR 时停止。",
+          "status": "done"
+        },
+        {
+          "id": "N5",
+          "label": "Task Checkpoint",
+          "detail": "只有 Review 通过才标记当前 Task 完成，并保存 node history、checkpoint 和 resume token。",
+          "purpose": "把已审查状态持久化，让流程可恢复，同时防止未审任务被误记为完成。",
+          "input": "读取 N4 allow 结果、测试证据、变更 Hash 和节点历史；追加 events 并写入 checkpoint/resume token。",
+          "pass": "当前 Task 唯一地标记完成，Review 与验证命令可追溯，Checkpoint 与候选树 Hash 一致。",
+          "block": "没有 allow、证据缺失、Hash 漂移、节点历史不可追加或存在未解决 Blocker 时不得写完成状态。",
+          "status": "done"
+        },
+        {
+          "id": "N6",
+          "label": "Feature QA",
+          "detail": "所有 Task 通过后做完整用户路径、契约、回归、安全、兼容和 Evidence 质量验收。",
+          "purpose": "验证多个局部通过的 Task 组合后仍形成可用、安全且不回归的完整 Feature。",
+          "input": "运行真实用户路径、前后端契约、回归、安全、兼容、响应式和 Evidence 检查，并记录实际输出。",
+          "pass": "整条用户路径与所有契约通过，无 P0，Evidence 与实现一致；非 P0 问题最多修复 3 轮。",
+          "block": "关键路径失败、接口或 Schema 不兼容、安全边界破坏、Evidence 造假或 3 轮 QA 仍失败时停止。",
+          "status": "done"
+        },
+        {
+          "id": "N7",
+          "label": "Context + Stop Hook",
+          "detail": "写入 Feature/Run 记忆，审查整棵 Worktree，执行仓库策略；ALLOW 才能进入交付。",
+          "purpose": "在提交前对整个候选树做最后一次上下文、策略和 P0 审计，而不是只相信单个 Task 结果。",
+          "input": "写 Feature/Run Memory，生成整棵 Worktree 的脱敏 diff，运行中央 repository-policy 并触发 Stop Hook Review。",
+          "pass": "工作树无漂移，仓库策略通过，Stop Hook 返回 ALLOW，记忆不含 PII，所有 Review/QA 证据齐全。",
+          "block": "策略失败、BLOCK/repair、未暂存漂移、PII 泄漏或 Stop Hook 连续两次 ERROR 时禁止 Commit。",
+          "status": "done"
+        },
+        {
+          "id": "N8",
+          "label": "测试交付 RunResult",
+          "detail": "同步文档、提交、推送、测试环境验证、创建 PR，并把生产状态标记为 manual-pending。",
+          "purpose": "交付可审查、可回滚、可复现的提交与测试环境，并把生产决定留给可信人工。",
+          "input": "同步文档后重跑策略，使用 Owner 身份 Commit/Push；部署测试环境，执行 Smoke/Contract/E2E，创建 PR 与 RunResult。",
+          "pass": "所有改动仓库推送成功，测试环境验证通过，PR 与提交 Hash 可追溯，RunResult 完整且生产为 manual-pending。",
+          "block": "任一仓库推送或测试失败、提交身份不符、远端 Gate 不通过、尝试自动生产发布或销毁资源时停止。",
+          "status": "done"
+        }
+      ]
+    },
+    {
+      "id": "gates",
+      "eyebrow": "TRUST BOUNDARIES",
+      "title": "门禁与异常处理",
+      "plain": "能阻断的地方必须真的阻断，不能靠一句“已检查”跳过去。",
+      "summary": "四类门禁负责把高风险问题停在本地：P0 立即阻断、PII 脱敏后送审、Fallback 记录真实模型身份、Human Gate 保留生产与高风险确认。",
+      "nodes": [
+        {
+          "id": "P0",
+          "label": "P0 Gate",
+          "detail": "Worker 自检或 Reviewer 发现严重问题时立即 block，最多 3 轮 repair，失败后保存本地 Issue。",
+          "status": "done"
+        },
+        {
+          "id": "PII",
+          "label": "PII Gate",
+          "detail": "Review Bundle 出站前扫描密钥、令牌、个人信息、内部地址和敏感字段；无法安全脱敏则停止。",
+          "status": "done"
+        },
+        {
+          "id": "Fallback",
+          "label": "Fallback Trust Gate",
+          "detail": "Kimi 不可用才降级 DeepSeek；保留 provider、model、requestId、attempts 和 degraded reason。",
+          "status": "done"
+        },
+        {
+          "id": "Human",
+          "label": "Human Gate",
+          "detail": "high/extreme 降级通过、权限扩大、销毁操作和生产发布都必须由可信人工确认。",
+          "status": "done"
+        }
+      ]
+    },
+    {
+      "id": "multi-repo-delivery",
+      "eyebrow": "MULTI-REPO DELIVERY",
+      "title": "多仓 Git 与测试交付",
+      "plain": "前端、后端或其他仓库可以一起跑，但必须共用同一个 runId 和 contractHash。",
+      "summary": "多仓流程强调同一身份、同一契约、分仓提交和测试环境优先；只有所有有改动仓库推送成功，才允许测试环境部署。",
+      "nodes": [
+        {
+          "id": "same-run",
+          "label": "同一 runId / contractHash",
+          "detail": "多仓库共享一次 Feature 身份，避免前后端证据对不上。",
+          "status": "done"
+        },
+        {
+          "id": "review-qa",
+          "label": "Review + QA 通过",
+          "detail": "每仓 Task Review 与整体验收都通过后，才进入提交与推送。",
+          "status": "done"
+        },
+        {
+          "id": "commit-push",
+          "label": "Commit + Push",
+          "detail": "只提交 Feature 清单内文件，不混入用户其他改动。",
+          "status": "done"
+        },
+        {
+          "id": "test-env",
+          "label": "仅测试环境",
+          "detail": "自动流程只触发测试环境、Smoke、Contract 和 E2E 验证。",
+          "status": "done"
+        },
+        {
+          "id": "pr",
+          "label": "PR + manual production",
+          "detail": "创建 PR 后等待人工合并；生产发布状态保持 manual-pending。",
+          "status": "pending"
+        }
+      ]
+    },
+    {
+      "id": "persistent-state",
+      "eyebrow": "RECOVERY STATE",
+      "title": "持久化状态与恢复边界",
+      "plain": "流程可以恢复，但不能盲目信任旧状态；发现漂移就从当前 Feature 重跑。",
+      "summary": "TC Flow 把 Contract、State、Events、Checkpoint、Review Artifacts、Project Memory 和 RunResult 分开保存；恢复前重新校验 Git、规则、路径和 Hash。",
+      "nodes": [
+        {
+          "id": "contract",
+          "label": "Contract.json",
+          "detail": "冻结目标、非目标、Scope、工具、验收和跨仓约束。",
+          "status": "done"
+        },
+        {
+          "id": "events",
+          "label": "Node History",
+          "detail": "append-only 记录节点历史，避免覆盖旧证据。",
+          "status": "done"
+        },
+        {
+          "id": "checkpoint",
+          "label": "Checkpoint",
+          "detail": "保存当前 Task、Review、验证命令、重试和恢复 Token。",
+          "status": "done"
+        },
+        {
+          "id": "reviews",
+          "label": "Review Artifacts",
+          "detail": "保留脱敏 diff、Review Bundle、结果和降级证据。",
+          "status": "done"
+        },
+        {
+          "id": "memory",
+          "label": "Project Memory",
+          "detail": "只记录可复用决策、踩坑和恢复注意事项，不保存原始聊天或敏感数据。",
+          "status": "done"
+        },
+        {
+          "id": "run-result",
+          "label": "RunResult.json",
+          "detail": "汇总节点历史、仓库、Review、QA、测试交付和生产状态。",
+          "status": "done"
+        }
+      ]
+    }
+  ],
+  "incidents": [
+    {
+      "id": "I01",
+      "title": "Reviewer 身份不能靠宿主口头保证",
+      "plain": "如果不知道真正是谁审的，Review 证据就不可审计。",
+      "symptom": "旧式 workflow host 只能返回笼统 agent 结果，无法证明 Kimi 或 DeepSeek 的真实模型身份。",
+      "cause": "宿主 DSL 不暴露可验证的 provider、model、requestId 和 transport。",
+      "fix": "2.1 使用直连 Review Runner；结果记录每次 attempt 的 provider/model/requestId，并禁止 legacy host 冒充 Reviewer。",
+      "recheck": "公开资料中的 Review 路由和架构说明均保留真实身份字段，不展示任何私钥或本机凭据。"
+    },
+    {
+      "id": "I02",
+      "title": "Review 前必须先脱敏",
+      "plain": "代码可以给模型审，但不该把敏感材料一起送出去。",
+      "symptom": "Task diff 可能包含令牌、私有地址、客户信息或内部字段。",
+      "cause": "直接发送原始工作区会扩大数据暴露面，也会让 Reviewer 看到 Contract 外上下文。",
+      "fix": "只生成 allowlist Review Bundle，并在本地扫描敏感模式；无法安全脱敏时 block。",
+      "recheck": "该 Evidence 页面只公开仓库链接、流程说明和图片 SHA，不包含本机路径、密钥变量值或私有运行日志。"
+    },
+    {
+      "id": "I03",
+      "title": "恢复不能越过工作树漂移",
+      "plain": "恢复流程时，旧 Checkpoint 不能覆盖新出现的他人改动。",
+      "symptom": "Feature 中断后，仓库规则、路径、Hash 或工作区文件可能已经变化。",
+      "cause": "如果只看任务勾选状态，Agent 可能跳过已经失效的上下文。",
+      "fix": "N1 重新校验 Git、规则、Contract、Tasks、路径和工作区漂移；无法确认归属时从当前 Feature 重跑。",
+      "recheck": "N1-N8 文字说明和持久化状态图都明确 checkpoint 只在一致状态下恢复。"
+    },
+    {
+      "id": "I04",
+      "title": "生产发布不应自动化放行",
+      "plain": "测试环境可以自动跑，生产环境必须由人接管。",
+      "symptom": "完成实现后容易把部署、合并、生产切流都视为同一个自动动作。",
+      "cause": "生产权限、销毁操作和高风险降级确认都超出普通 Task 自动化边界。",
+      "fix": "N8 只自动化提交、推送、测试环境验证、PR 和 RunResult；生产状态写为 manual-pending。",
+      "recheck": "页面状态、限制和多仓交付图都明确它是 Skill Evidence，非线上应用运行证明。"
+    }
+  ],
+  "proof": [
+    {
+      "id": "E01",
+      "title": "TC Flow 2.1 主架构图",
+      "description": "公开页面使用经确认的 BabyStep 风格架构图作为主视觉；图中保留 N1-N8、门禁、多仓交付和持久化状态，不用装饰替代节点说明。",
+      "status": "verified",
+      "asset": "tc-flow-2-1-babystep-architecture.png",
+      "lookFor": "顶部 N1-N8 主链路、右侧四类 Gate、中部 Task P0 block、下方多仓 Git 与持久化状态",
+      "proves": "Evidence 页面展示的是完整流程架构，而不是单张泛化插画或虚构运行截图"
+    }
+  ],
+  "assets": [
+    {
+      "id": "tc-flow-architecture",
+      "file": "tc-flow-2-1-babystep-architecture.png",
+      "title": "TC Flow 2.1 BabyStep 风格主架构图",
+      "alt": "TC Flow 2.1 架构图，展示 N1 到 N8 节点、P0 PII Fallback Human 门禁、多仓 Git 测试交付和持久化状态",
+      "sha256": "242739bb1b600f77ec9d4310e00c279333eb277268443ac38a65e1ed0e707089",
+      "bytes": 2643817
+    }
+  ],
+  "integrity": {
+    "architectureImageSha256": "242739bb1b600f77ec9d4310e00c279333eb277268443ac38a65e1ed0e707089"
+  },
+  "integrityLabel": "PUBLIC ASSET SHA-256",
+  "limitations": [
+    "TC Flow 2.1 是本地 Skill 与 workflow 规则，不是已部署应用；本页面不声称存在在线运行实例、监控数据或真实用户流量。",
+    "公开 Evidence 只展示脱敏后的架构、规则和资产完整性；Review Runner 的真实请求、密钥来源和本地日志不进入公开页面。",
+    "生产发布在 TC Flow 中始终是 manual-pending；自动流程只覆盖测试环境、PR 和 RunResult。",
+    "本页证明的是 Skill 架构与交付边界，不能替代某个具体 Feature 的 run-result、测试输出或部署验收记录。"
+  ],
+  "architecture": {
+    "runtime": {
+      "status": "implemented",
+      "source": "architecture/runtime.mmd",
+      "description": "N1-N8 Task loop, independent review, P0/PII blocking, repository policy, test delivery, and manual production boundary."
+    },
+    "githubActions": {
+      "status": "not_applicable",
+      "note": "TC Flow is a local Skill. A consuming project may use GitHub Actions, but the Skill itself is not deployed by an application workflow."
+    },
+    "preview": {
+      "status": "not_applicable",
+      "note": "The Skill has no independently running preview environment; test deployments belong to the Feature repositories that invoke it."
+    },
+    "sequence": {
+      "status": "implemented",
+      "source": "architecture/sequence.mmd",
+      "description": "Human, Worker, independent Reviewer, and repository policy interactions for one reviewed Task and final delivery."
+    },
+    "canary": {
+      "status": "not_applicable",
+      "note": "There is no versioned online runtime to canary; production actions remain behind the Human Gate."
+    }
+  },
+  "meaningfulSteps": [
+    {
+      "title": "Freeze and review one Task",
+      "purpose": "Keep each implementation unit bounded, independently reviewable, and recoverable.",
+      "designReason": "A frozen Contract and independent redacted review prevent silent scope drift and self-approval.",
+      "scope": "N1-N5; contract.json; Review Bundle; PII/P0 gates; checkpoint and node history.",
+      "expected": "Only a Task with an allow result is marked complete and persisted as a checkpoint.",
+      "risks": "Unredacted review material or an untrusted fallback could disclose sensitive context or create a false approval.",
+      "observed": "The published Skill defines allow, repair, block, PII, fallback identity, and checkpoint boundaries for every Task.",
+      "proof": "TC Flow repository documentation plus the N1-N8 structured gate descriptions and architecture asset on this Evidence page."
+    },
+    {
+      "title": "Audit and hand off the Feature",
+      "purpose": "Deliver a traceable PR and test result without silently publishing production.",
+      "designReason": "The full candidate tree must pass Feature QA, Stop Hook, and the central repository policy after documentation sync.",
+      "scope": "N6-N8; Feature QA; project/run memory; repository-policy audit; commit/push; test deployment; PR; RunResult.",
+      "expected": "The test environment and PR reference the verified commit while production remains manual-pending.",
+      "risks": "Tree drift after QA, an invalid commit identity, or automatic production deployment would bypass the final trust boundary.",
+      "observed": "The Skill explicitly blocks commit on policy failure and reserves production, destructive, and privilege-expanding actions for a trusted human.",
+      "proof": "N6-N8 gate descriptions, multi-repository delivery diagram, persistent-state section, and documented Human Gate."
+    }
+  ]
+}

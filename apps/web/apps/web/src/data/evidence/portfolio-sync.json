@@ -1,0 +1,396 @@
+{
+  "schemaVersion": 2,
+  "slug": "portfolio-sync",
+  "title": "Portfolio Sync",
+  "subtitle": "GitHub App + Cloudflare Worker Project Index",
+  "status": "即时同步服务与静态回退工作证明",
+  "summary": "Portfolio Sync 是 Tiancheng Xu 的作品集同步系统：GitHub App 监听真实项目仓库变化，Cloudflare Worker 校验 webhook 后使用短期只读安装令牌扫描发布清单，把合格项目写入 Workers KV；Dashboard 读取动态索引，并在服务异常时保留静态项目卡片。",
+  "model": "portfolio-sync v1.0.0",
+  "kicker": "EVENT-DRIVEN PORTFOLIO EVIDENCE",
+  "scope": "GitHub App、Webhook、Cloudflare Worker/KV、Dashboard 运行时合并",
+  "heroAsset": "portfolio-sync-projects.svg",
+  "urls": {
+    "dashboard": "https://baby2b.online/",
+    "project": "https://github.com/Tiancheng-Xu/fullstack-showcase/tree/main/workers/portfolio-sync-webhook",
+    "evidence": "https://evidence.baby2b.online/portfolio-sync/",
+    "repository": "https://github.com/Tiancheng-Xu/fullstack-showcase"
+  },
+  "theme": {
+    "primary": "#f4b63f"
+  },
+  "metrics": {
+    "githubWritePermissions": 0,
+    "scheduledFallbackMinutes": 30,
+    "publicSchemaVersion": 1,
+    "kvPropagationUpperSeconds": 60
+  },
+  "metricCards": [
+    {
+      "label": "WRITE PERMISSIONS",
+      "value": "0",
+      "detail": "GitHub Contents: read-only",
+      "meaning": "同步器可以读取发布清单，但不能修改源码、提交、分支或工作流。"
+    },
+    {
+      "label": "EVENT PATH",
+      "value": "即时",
+      "detail": "Push / Repository webhook",
+      "meaning": "项目默认分支或仓库元数据变化会立即触发刷新，不必等待人工维护 Dashboard。"
+    },
+    {
+      "label": "FALLBACK",
+      "value": "30 min",
+      "detail": "Cloudflare Cron 全量刷新",
+      "meaning": "Webhook 漏投、重复或临时失败后，定时扫描会重新建立完整项目索引。"
+    },
+    {
+      "label": "STATIC SAFETY",
+      "value": "1",
+      "detail": "主站保留审核后的静态索引",
+      "meaning": "Worker、GitHub、KV 或网络异常不会让作品集项目列表变为空白。"
+    }
+  ],
+  "promotionItems": [
+    {
+      "label": "公开数据接口",
+      "value": "https://portfolio-sync.baby2b.online/projects.json"
+    },
+    {
+      "label": "运行状态",
+      "value": "https://portfolio-sync.baby2b.online/health"
+    }
+  ],
+  "experiments": {},
+  "story": {
+    "goal": "让真实项目仓库成为作品集项目卡片的事实来源，同时避免给自动化系统源码写权限或把私有仓库内容发布到浏览器。",
+    "result": "项目建立了事件驱动刷新、30 分钟定时补偿和 Dashboard 静态回退三层机制；只有声明 Baby2B 发布清单与 Evidence URL 的仓库才进入公开索引。",
+    "steps": [
+      "GitHub App 安装在 Tiancheng-Xu 仓库范围内，只申请 Contents read-only，并向 Worker 投递 Push、Repository 与安装事件。",
+      "Worker 在读取 JSON 前校验 X-Hub-Signature-256；签名失败、超大请求或非法 JSON 立即拒绝。",
+      "Worker 使用 App 私钥生成 JWT，再换取最长一小时的 Installation Token，扫描发布清单和可选项目元数据。",
+      "过滤器排除学习仓库、Showcase、共享配置、Fork、归档仓库和没有 Evidence URL 的仓库。",
+      "完整扫描成功后一次性写入 KV；Dashboard 校验 schemaVersion 后合并动态卡片，失败则保留静态索引。",
+      "Cloudflare Cron 每 30 分钟重跑全量扫描，修复 webhook 漏投、重复事件和短暂外部故障。"
+    ],
+    "terms": [
+      {
+        "name": "GitHub App",
+        "meaning": "面向仓库安装的集成身份，可使用最小权限和短期 Installation Token，不依赖长期个人 PAT。"
+      },
+      {
+        "name": "Webhook signature",
+        "meaning": "GitHub 用共享密钥生成的 HMAC-SHA256 摘要；Worker 必须验签后才处理事件。"
+      },
+      {
+        "name": "Publish manifest",
+        "meaning": "项目仓库的 .github/baby2b-publish.yml，声明 slug、生产地址、Evidence 地址和发布边界。"
+      },
+      {
+        "name": "Static fallback",
+        "meaning": "随 Dashboard 构建发布的审核索引；动态同步不可用时仍能正常展示既有项目。"
+      }
+    ]
+  },
+  "meaningfulSteps": [
+    {
+      "title": "建立最小权限的即时同步链路",
+      "purpose": "让项目增改在数秒内进入作品集索引，同时避免给自动化系统任何仓库写权限。",
+      "designReason": "GitHub App 的只读 Installation Token 比跨仓库 PAT 更容易收窄权限、轮换和审计；Webhook 只负责触发，Worker 才负责读取与筛选。",
+      "scope": "GitHub App 安装、Push/Repository 事件、HMAC-SHA256 验签、App JWT、contents:read Installation Token。",
+      "expected": "有效事件触发一次完整仓库扫描；伪造、过大或格式错误的事件在进入业务逻辑前被拒绝。",
+      "risks": "Webhook secret 或 App 私钥泄漏、默认分支判断错误、把私有仓库内容直接序列化到公开响应。",
+      "observed": "生产 Worker 已接受签名安装事件，health 返回 ready、3 个项目、0 条警告，GitHub 权限显示 contents:read。",
+      "proof": "Portfolio Sync Runtime Health 快照、Worker 源码与 GitHub App 最小权限配置。"
+    },
+    {
+      "title": "生成可恢复的公开项目索引",
+      "purpose": "只发布明确接入 Baby2B 契约的项目，并确保同步服务异常时主站仍有可用项目列表。",
+      "designReason": "完整扫描后原子覆盖 KV 可避免半份索引；30 分钟 Cron 修复漏投；Dashboard 静态索引消除动态服务单点故障。",
+      "scope": "baby2b-publish.yml、portfolio-project.json、排除规则、Workers KV、projects.json、Dashboard schema 校验与静态回退。",
+      "expected": "学习仓库、Showcase、Fork、归档或无 Evidence URL 的仓库不进入索引；有效项目保留项目页与 Evidence 双向链接。",
+      "risks": "KV 最终一致导致短暂旧读、错误清单覆盖上一次有效数据、动态字段破坏 Dashboard 渲染。",
+      "observed": "生产 projects.json 生成 3 个通过契约的项目，warningCount 为 0，并记录 generatedAt 与每个 Evidence URL。",
+      "proof": "Published Project Index 快照、运行架构图、时序图和 Dashboard 静态回退实现。"
+    }
+  ],
+  "architecture": {
+    "runtime": {
+      "status": "implemented",
+      "source": "architecture/runtime.mmd",
+      "description": "Repository event、GitHub App、签名门禁、只读扫描、发布过滤、KV、公开 API、Dashboard 与静态回退的完整运行链。"
+    },
+    "githubActions": {
+      "status": "implemented",
+      "source": "architecture/github-actions.mmd",
+      "description": "Pull request 与主分支执行 Worker dry-run；工作流实现在 fullstack-showcase/.github/workflows/verify-portfolio-sync.yml，Cloudflare Worker 的生产发布仍由明确授权的 Wrangler 操作完成。"
+    },
+    "preview": {
+      "status": "unverified",
+      "note": "没有独立 Preview Worker；Workers.dev 与自定义域名指向同一生产版本，公开 health 与 projects.json 由 proof 运行快照复验。"
+    },
+    "sequence": {
+      "status": "implemented",
+      "source": "architecture/sequence.mmd",
+      "description": "从默认分支事件到短期令牌、全量扫描、KV 快照和 Dashboard 回退的关键时序。"
+    },
+    "canary": {
+      "status": "unverified",
+      "note": "当前为单 Worker 版本发布，尚未实现按流量比例的独立 canary；最后有效快照和静态索引承担故障回退。"
+    }
+  },
+  "diagrams": [
+    {
+      "id": "event-flow",
+      "eyebrow": "RUNTIME EVENT FLOW",
+      "title": "仓库变化到 Dashboard 的即时链路",
+      "plain": "仓库一变化，GitHub 通知 Worker；Worker 只读项目清单，更新公开卡片数据，主站下一次读取即可看到。",
+      "summary": "主链路没有跨仓库写入：GitHub App 只发送事件并提供只读短期令牌，Cloudflare Worker 负责筛选和生成索引，Dashboard 只消费公开 JSON。",
+      "nodes": [
+        {
+          "id": "E1",
+          "label": "Repository event",
+          "detail": "默认分支 Push、仓库编辑、归档状态或 App 安装范围变化。",
+          "purpose": "把项目增改从人工维护动作变成可观察事件。",
+          "input": "GitHub webhook payload、事件类型、delivery id、HMAC 签名。",
+          "pass": "事件来自已安装 App，Push 指向默认分支且仓库未被排除。",
+          "block": "Fork、归档、学习仓库、Showcase 或非默认分支 Push 不触发公开刷新。",
+          "status": "done"
+        },
+        {
+          "id": "E2",
+          "label": "Webhook Gate",
+          "detail": "限制请求大小，校验 X-Hub-Signature-256，再解析 JSON。",
+          "purpose": "阻止伪造请求、篡改载荷和过大请求进入同步逻辑。",
+          "input": "原始请求字节、签名头和 Worker Secret。",
+          "pass": "HMAC-SHA256 验证成功且请求不超过 2 MB。",
+          "block": "缺签名、签名错误、非法 JSON 或过大请求返回 4xx。",
+          "status": "done"
+        },
+        {
+          "id": "E3",
+          "label": "Read-only scan",
+          "detail": "App JWT 换取一小时内有效的 Installation Token，读取仓库列表和发布清单。",
+          "purpose": "允许扫描私有真实项目，但不给同步器任何源码写入能力。",
+          "input": "App ID、PKCS#8 私钥、installation id 与 Contents: read 权限。",
+          "pass": "令牌权限被显式收窄到 contents:read，仓库列表读取成功。",
+          "block": "私钥、安装身份或 GitHub API 失败时保留上一次 KV 索引。",
+          "status": "done"
+        },
+        {
+          "id": "E4",
+          "label": "Manifest filter",
+          "detail": "验证 baby2b-publish.yml，并合并可选 portfolio-project.json。",
+          "purpose": "让仓库自己声明 Evidence 和展示信息，同时避免自动曝光所有仓库。",
+          "input": "发布 slug、生产地址、Evidence URL、状态、进度、架构和技能。",
+          "pass": "schema-version 为 1，Evidence URL 位于 evidence.baby2b.online。",
+          "block": "清单缺失、格式错误、visible=false 或命中排除规则时不进入索引。",
+          "status": "done"
+        },
+        {
+          "id": "E5",
+          "label": "Workers KV",
+          "detail": "完整扫描结束后一次性写入 schemaVersion=1 的项目索引。",
+          "purpose": "提供低延迟公共读取，并避免半完成扫描覆盖可用数据。",
+          "input": "经过过滤的完整项目卡片与生成时间。",
+          "pass": "写入 projectCount、projects、generatedAt 和 warningCount。",
+          "block": "扫描抛错时不执行写入，最后一次成功快照继续服务。",
+          "status": "done"
+        },
+        {
+          "id": "E6",
+          "label": "Dashboard merge",
+          "detail": "主站校验远端 envelope 后覆盖状态与链接，并追加新项目。",
+          "purpose": "实现自动更新，同时保留人工整理的项目叙事和故障回退。",
+          "input": "静态项目索引 + portfolio-sync /projects.json。",
+          "pass": "schemaVersion、项目字段和 Evidence URL 全部有效。",
+          "block": "请求或校验失败时忽略远端数据，继续显示静态项目。",
+          "status": "done"
+        }
+      ]
+    },
+    {
+      "id": "scheduled-recovery",
+      "eyebrow": "RECOVERY FLOW",
+      "title": "30 分钟补偿与最后有效快照",
+      "plain": "即时通知可能漏掉，但不会永久不同步；定时任务会重新扫一遍全部已安装仓库。",
+      "summary": "Cron 与 webhook 调用同一个全量刷新函数。重复事件只会生成同一份结果，失败刷新不会破坏最后一次有效快照。",
+      "nodes": [
+        {
+          "id": "R1",
+          "label": "Cron Trigger",
+          "detail": "每 30 分钟读取已保存的 installation id。",
+          "status": "done"
+        },
+        {
+          "id": "R2",
+          "label": "Full rescan",
+          "detail": "重新列出所有已安装仓库，不依赖某一次 webhook payload。",
+          "status": "done"
+        },
+        {
+          "id": "R3",
+          "label": "Atomic snapshot",
+          "detail": "所有候选仓库处理结束后才覆盖 portfolio:index。",
+          "status": "done"
+        },
+        {
+          "id": "R4",
+          "label": "Last-known-good",
+          "detail": "GitHub 或解析失败时保留最后一次成功索引。",
+          "status": "done"
+        },
+        {
+          "id": "R5",
+          "label": "Static fallback",
+          "detail": "即使 KV 没有快照，Dashboard 仍显示随构建发布的项目。",
+          "status": "done"
+        }
+      ]
+    },
+    {
+      "id": "trust-boundaries",
+      "eyebrow": "TRUST BOUNDARIES",
+      "title": "密钥、私有仓库与公开数据边界",
+      "plain": "能读源码的身份不能写源码；能看公开项目卡片的浏览器永远拿不到 GitHub 密钥。",
+      "summary": "App 私钥和 webhook secret 只存在于 Worker Secret；KV 只保存准备公开的卡片字段，日志只记录计数、触发类型和错误类别。",
+      "nodes": [
+        {
+          "id": "T1",
+          "label": "GitHub boundary",
+          "detail": "App 安装权限为代码与元数据只读，写权限数量为 0。",
+          "status": "done"
+        },
+        {
+          "id": "T2",
+          "label": "Worker secret boundary",
+          "detail": "App ID、PKCS#8 私钥与 HMAC secret 不写入 Git、KV 或响应。",
+          "status": "done"
+        },
+        {
+          "id": "T3",
+          "label": "Publication allowlist",
+          "detail": "只有发布清单明确声明的 Evidence 项目才序列化。",
+          "status": "done"
+        },
+        {
+          "id": "T4",
+          "label": "Browser boundary",
+          "detail": "浏览器只读取项目卡片 JSON 和脱敏健康状态。",
+          "status": "done"
+        },
+        {
+          "id": "T5",
+          "label": "Log boundary",
+          "detail": "结构化日志记录数量和结果，不记录 Token、私钥或源文件内容。",
+          "status": "done"
+        }
+      ]
+    }
+  ],
+  "incidents": [
+    {
+      "id": "I01",
+      "title": "跨仓库即时触发不该依赖长期 PAT",
+      "plain": "同步很快不代表要把个人长期 Token 发到每个仓库。",
+      "symptom": "定时扫描安全但有延迟；在每个仓库保存 PAT 可以即时触发，却扩大泄漏与轮换成本。",
+      "cause": "普通 GITHUB_TOKEN 只对当前仓库有效，跨仓库写操作需要额外身份。",
+      "fix": "改用只读 GitHub App webhook；Worker 直接更新 KV，避免跨仓库写入和 Actions 写权限。",
+      "recheck": "App 安装页显示 Read access to code and metadata；Evidence 指标记录 GitHub 写权限为 0。"
+    },
+    {
+      "id": "I02",
+      "title": "自动发现不能等于公开所有仓库",
+      "plain": "能看见仓库，不代表它应该出现在作品集。",
+      "symptom": "账户包含学习仓库、Fork、共享配置和未准备公开的私人项目。",
+      "cause": "仅根据仓库存在或更新时间生成卡片会产生误收录和隐私风险。",
+      "fix": "要求有效 baby2b-publish.yml 与 Evidence URL，并增加排除表、visible=false、Fork/归档过滤。",
+      "recheck": "projects.json 只包含通过发布契约的项目卡片，不返回被过滤仓库名称或源文件。"
+    },
+    {
+      "id": "I03",
+      "title": "即时链路不能成为主站单点故障",
+      "plain": "同步服务挂了，作品集仍然必须可看。",
+      "symptom": "若 Dashboard 完全依赖远端接口，GitHub、Worker 或 KV 故障会造成空列表。",
+      "cause": "动态数据源被错误地当作唯一渲染输入。",
+      "fix": "保留随主站构建的静态索引，只在远端 envelope 完整通过校验后合并。",
+      "recheck": "同步请求失败分支不修改 visibleProjects；主站继续渲染 PORTFOLIO_PROJECTS。"
+    },
+    {
+      "id": "I04",
+      "title": "KV 是最终一致而不是全球瞬时一致",
+      "plain": "Webhook 可以数秒处理，但不同地区看到新值可能仍有短暂差异。",
+      "symptom": "Worker 已写入新快照，某些边缘节点可能短时间读取旧值。",
+      "cause": "Workers KV 为全球分布式最终一致存储，写入传播存在延迟。",
+      "fix": "接口缓存限制为 30 秒，页面显示 generatedAt，并把全球可见目标写成约 60 秒而不是虚构零延迟。",
+      "recheck": "health 返回 generatedAt 与 projectCount，可区分事件接收和全球读取传播时间。"
+    }
+  ],
+  "proof": [
+    {
+      "id": "P01",
+      "title": "Webhook 与只读扫描实现",
+      "description": "Worker 源码包含请求大小限制、HMAC 验签、App JWT、Installation Token 权限收窄、仓库扫描与结构化日志。",
+      "status": "verified",
+      "asset": "portfolio-sync-projects.svg",
+      "lookFor": "fullstack-showcase/workers/portfolio-sync-webhook/src/index.mjs",
+      "proves": "同步不是前端 Mock；事件校验、GitHub 身份和索引生成均有可审查实现。"
+    },
+    {
+      "id": "P02",
+      "title": "Cloudflare 资源与恢复配置",
+      "description": "Wrangler 配置声明专用 KV、30 分钟 Cron、自定义域名、排除规则与 Observability。",
+      "status": "verified",
+      "asset": "portfolio-sync-health.svg",
+      "lookFor": "fullstack-showcase/workers/portfolio-sync-webhook/wrangler.jsonc",
+      "proves": "存储、调度、域名和运行日志边界可由配置复现。"
+    },
+    {
+      "id": "P03",
+      "title": "Dashboard 静态回退",
+      "description": "同步客户端校验远端 envelope，合并项目状态与链接；请求失败时不替换静态索引。",
+      "status": "verified",
+      "asset": "portfolio-sync-projects.svg",
+      "lookFor": "apps/web/apps/web/src/data/portfolio-sync.ts 与 dashboard-content.tsx",
+      "proves": "自动同步不会把主站可用性绑定到单一外部接口。"
+    },
+    {
+      "id": "P04",
+      "title": "线上状态复验",
+      "description": "公开 health 与 projects.json 显示最近生成时间、项目数量、警告数量和脱敏项目卡片。",
+      "status": "verified",
+      "asset": "portfolio-sync-health.svg",
+      "lookFor": "打开 https://portfolio-sync.baby2b.online/health 和 /projects.json",
+      "proves": "可以区分代码存在、Worker 可达和实际项目索引已生成三个状态。"
+    }
+  ],
+  "assets": [
+    {
+      "id": "portfolio-sync-health",
+      "file": "portfolio-sync-health.svg",
+      "title": "Portfolio Sync 生产健康状态快照",
+      "alt": "Portfolio Sync 生产接口运行快照，显示 ready、生成时间、项目数、警告数、只读权限和定时补偿周期",
+      "sha256": "dffe2de88f7fe337a0d5f29099cfc1febfe5d81836b3e1982255743762b6d0c3",
+      "bytes": 1577
+    },
+    {
+      "id": "portfolio-sync-projects",
+      "file": "portfolio-sync-projects.svg",
+      "title": "Portfolio Sync 生产项目索引快照",
+      "alt": "Portfolio Sync 生产项目索引，列出通过发布契约的项目仓库与对应 Evidence URL",
+      "sha256": "61600b4ecb9a73c5d948b1ac5608be5ef0624b4e39aba6f17d6d018223ed5db3",
+      "bytes": 1504
+    }
+  ],
+  "integrity": {
+    "healthSnapshotSha256": "dffe2de88f7fe337a0d5f29099cfc1febfe5d81836b3e1982255743762b6d0c3",
+    "projectIndexSnapshotSha256": "61600b4ecb9a73c5d948b1ac5608be5ef0624b4e39aba6f17d6d018223ed5db3"
+  },
+  "integrityLabel": "PUBLIC RUNTIME EVIDENCE",
+  "limitations": [
+    "Workers KV 为最终一致存储：Webhook 通常数秒处理，但不同地区读取新值最多可能延迟约 60 秒。",
+    "只有含有效 Baby2B 发布清单和 Evidence URL 的仓库会自动出现；未接入发布契约的仓库不会被推断或曝光。",
+    "仓库架构等丰富文案应由各项目的 .github/portfolio-project.json 提供；缺失时仅使用保守默认说明。",
+    "30 分钟 Cron 是补偿机制，不保证 GitHub 或 Cloudflare 大规模故障期间立即恢复。",
+    "Evidence 公开运行状态和脱敏项目卡片，不公开 App 私钥、webhook secret、Installation Token、私有源码或被过滤仓库清单。"
+  ]
+}

@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700" viewBox="0 0 1200 700">
+  <rect width="1200" height="700" fill="#f8f0df"/><rect x="48" y="44" width="1104" height="612" rx="28" fill="#fffaf0" stroke="#203b36" stroke-width="4"/>
+  <style>.title{font:700 48px Georgia,serif;fill:#183d35}.label{font:700 22px Arial,sans-serif;fill:#a63b2b}.value{font:600 30px Arial,sans-serif;fill:#1f2b28}.meta{font:18px ui-monospace,monospace;fill:#5d665f}</style>
+  <text x="90" y="125" class="title">Portfolio Sync · Runtime Health</text>
+  <text x="90" y="190" class="label">STATUS</text><text x="310" y="190" class="value">ready</text>
+  <text x="90" y="250" class="label">GENERATED AT</text><text x="310" y="250" class="value">2026-08-14T04:10:56.574Z</text>
+  <text x="90" y="310" class="label">PROJECTS</text><text x="310" y="310" class="value">3</text>
+  <text x="600" y="310" class="label">WARNINGS</text><text x="830" y="310" class="value">0</text>
+  <text x="90" y="370" class="label">PERMISSIONS</text><text x="310" y="370" class="value">contents:read</text>
+  <text x="90" y="430" class="label">FALLBACK</text><text x="310" y="430" class="value">*/30 * * * *</text>
+  <line x1="90" y1="490" x2="1110" y2="490" stroke="#d7c5a4" stroke-width="2"/>
+  <text x="90" y="540" class="meta">Source: https://portfolio-sync.baby2b.online/health</text>
+  <text x="90" y="580" class="meta">Response SHA-256: 9204faf3997dd8be821be1a3b35408a006f75e0a23e1682c610055a07265cd60</text>
+  <text x="90" y="620" class="meta">Captured from the public production endpoint.</text>
+</svg>

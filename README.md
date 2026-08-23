@@ -9,9 +9,10 @@
 | Personal AI Agent | [Tiancheng-Xu/personal-ai-agent](https://github.com/Tiancheng-Xu/personal-ai-agent) | Private | Qwen3-8B QLoRA、冻结评测、GGUF、Mac Ollama 已完成；RAG / Rerank / Mastra / LangGraph 进行中 |
 | GitHub Profile Studio | [Tiancheng-Xu/github-profile-studio](https://github.com/Tiancheng-Xu/github-profile-studio) | Public | 本地全栈实现与可视验收已完成 |
 | Web3 AI | [Tiancheng-Xu/web3-ai](https://github.com/Tiancheng-Xu/web3-ai) | Private | Web3 项目独立维护 |
-| Baby2B Deployment Evidence | [Tiancheng-Xu/baby2b-online-deployment-evidence](https://github.com/Tiancheng-Xu/baby2b-online-deployment-evidence) | Private | 部署证据与发布流程独立维护 |
 
 Private 仓库只对授权账号可见；Dashboard 不复制私有源码、训练数据、模型权重或凭据。
+
+每个已部署项目在自己的生产域名提供 `/evidence/`；未独立部署的 Skill、同步服务和内部能力由本 Dashboard 的 `/evidence/:projectId` 承载。旧 `evidence.baby2b.online` 仅保留兼容重定向，不再作为独立作品项目。
 
 > 历史 `apps/web` 是仓库改为 Dashboard 前留下的 UI 基底，暂时保留现场。后续迁移必须在独立仓库完成验证后再删除，不能直接破坏历史提交。
 

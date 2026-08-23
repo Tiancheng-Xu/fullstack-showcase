@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "check": "npx wrangler@4.115.0 deploy --dry-run --config wrangler.jsonc --outdir .wrangler-dry-run",
-    "deploy": "npx wrangler@4.115.0 deploy --config wrangler.jsonc"
+    "deploy": "npx wrangler@4.115.0 deploy --config wrangler.jsonc",
+    "test": "node --test src/index.test.mjs"
   }
 }

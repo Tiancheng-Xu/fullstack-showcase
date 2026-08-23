@@ -1,0 +1,10 @@
+flowchart LR
+  PR["Pull request or main push"] --> Workflow["verify-portfolio-sync workflow"]
+  Workflow --> Checkout["Checkout repository"]
+  Checkout --> Wrangler["Wrangler deploy dry-run"]
+  Wrangler --> Gate{"Bundle and configuration valid?"}
+  Gate -->|yes| Pass["Repository check passes"]
+  Gate -->|no| Block["Block merge or release"]
+  Human["Explicit production authorization"] --> Deploy["Wrangler production deploy"]
+  Deploy --> Worker["Cloudflare Worker version"]
+  Worker --> Domain["portfolio-sync.baby2b.online"]

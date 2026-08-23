@@ -61,4 +61,32 @@ describe("mergePortfolioProjects", () => {
 			}),
 		]);
 	});
+
+	it("keeps curated project-owned links when the remote index is stale", () => {
+		const remote = {
+			...project,
+			evidenceUrl: "https://evidence.baby2b.online/example/",
+			ownerPage: "https://old-preview.pages.dev/",
+		};
+
+		expect(mergePortfolioProjects([project], [remote])).toEqual([
+			expect.objectContaining({
+				evidenceUrl: project.evidenceUrl,
+				ownerPage: project.ownerPage,
+			}),
+		]);
+	});
+
+	it("does not append the retired standalone Evidence Hub from a stale index", () => {
+		const retired = {
+			...project,
+			id: "baby2b-online-deployment-evidence",
+			title: "Baby2b Online Deployment Evidence",
+			repo: "Tiancheng-Xu/baby2b-online-deployment-evidence",
+			evidenceUrl: "https://evidence.baby2b.online/",
+			ownerPage: "https://evidence.baby2b.online/",
+		};
+
+		expect(mergePortfolioProjects([project], [retired])).toEqual([project]);
+	});
 });

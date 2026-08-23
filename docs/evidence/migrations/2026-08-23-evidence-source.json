@@ -1,0 +1,211 @@
+{
+  "schemaVersion": 2,
+  "sourceRepository": "Tiancheng-Xu/baby2b-online-deployment-evidence",
+  "sourceCommit": "0d4e161eaf18c85a114eafd50133c612b277f2f4",
+  "generatedAt": "2026-08-23T00:00:00.000Z",
+  "targetRepository": "Tiancheng-Xu/fullstack-showcase",
+  "cases": [
+    {
+      "slug": "github-profile-studio",
+      "title": "GitHub Profile Studio",
+      "sourceManifest": "public/cases/github-profile-studio/evidence.json",
+      "sourceManifestBytes": 16329,
+      "sourceManifestSha256": "73042bb5884aa740c7c474f94baab031fab8cd0a38998b27753433145f250e32",
+      "targetUrl": "https://baby2b.online/evidence/github-profile-studio/",
+      "assets": [
+        {
+          "sourcePath": "public/cases/github-profile-studio/architecture/github-actions.mmd",
+          "targetPath": "apps/web/apps/web/public/evidence/github-profile-studio/architecture/github-actions.mmd",
+          "bytes": 549,
+          "sha256": "4fdb22c71bdf9bf0cdad413d6cccfa81646ee6aa5545dcfc920532e8176fa826"
+        },
+        {
+          "sourcePath": "public/cases/github-profile-studio/architecture/runtime.mmd",
+          "targetPath": "apps/web/apps/web/public/evidence/github-profile-studio/architecture/runtime.mmd",
+          "bytes": 669,
+          "sha256": "5aaa7d8425c18d2cc2add6111c8f28cc89a8abfde9a0bef01cdbf155ad947231"
+        },
+        {
+          "sourcePath": "public/cases/github-profile-studio/architecture/sequence.mmd",
+          "targetPath": "apps/web/apps/web/public/evidence/github-profile-studio/architecture/sequence.mmd",
+          "bytes": 748,
+          "sha256": "c77f72cb35a04d1dc573127bd471c63fac7812a55c275a6bc008e9e2148d273c"
+        },
+        {
+          "sourcePath": "public/cases/github-profile-studio/assets/delivery-status.svg",
+          "targetPath": "apps/web/apps/web/public/evidence/github-profile-studio/assets/delivery-status.svg",
+          "bytes": 2099,
+          "sha256": "742030c46fd917051b5b45cd04ae1c3df901c2c343a94fcbda26d59873c0925c"
+        },
+        {
+          "sourcePath": "public/cases/github-profile-studio/assets/repository-architecture.svg",
+          "targetPath": "apps/web/apps/web/public/evidence/github-profile-studio/assets/repository-architecture.svg",
+          "bytes": 3256,
+          "sha256": "30d4f974829b1b863d2297e16d8016cf379749a682821e9e6102d215cf3ba60a"
+        }
+      ],
+      "manifestTargetPath": "apps/web/apps/web/public/evidence/github-profile-studio/evidence.json",
+      "sourceBoundary": {
+        "status": "本地实现完成 · 公网部署尚未验证",
+        "limitations": [
+          "当前没有可验证公网项目 URL；Evidence 只能证明仓库实现、测试、构建和架构，不能证明线上可用性。",
+          "macOS Keychain 使当前服务端运行方式依赖本机环境；云端部署前需要重新设计身份和密钥边界。",
+          "Evidence 未发布真实用户资料、凭据、SQLite 数据、命令输出、本机路径或私有 GitHub 响应。",
+          "AWS、容器、TLS、监控、备份和回滚仍是规划项；完成后必须补充实际资源、日志与清理证据。",
+          "Dashboard 进度 85% 表示本地产品和质量链已完成，剩余部分主要是公网运行设计、部署和生产验收。"
+        ],
+        "integrity": {
+          "architectureSha256": "30d4f974829b1b863d2297e16d8016cf379749a682821e9e6102d215cf3ba60a",
+          "deliveryStatusSha256": "742030c46fd917051b5b45cd04ae1c3df901c2c343a94fcbda26d59873c0925c"
+        },
+        "publicUrls": {
+          "dashboard": "https://baby2b.online/dashboard",
+          "project": "https://github.com/Tiancheng-Xu/github-profile-studio",
+          "evidence": "https://evidence.baby2b.online/github-profile-studio/",
+          "repository": "https://github.com/Tiancheng-Xu/github-profile-studio"
+        },
+        "proofStatuses": [
+          "verified-repository"
+        ],
+        "preservationAssertions": {
+          "statusMustNotUpgrade": true,
+          "limitationsMustNotNarrow": true,
+          "integrityMustMatchSource": true,
+          "publicUrlsMustRemainUnchanged": true
+        }
+      }
+    },
+    {
+      "slug": "portfolio-sync",
+      "title": "Portfolio Sync",
+      "sourceManifest": "public/cases/portfolio-sync/evidence.json",
+      "sourceManifestBytes": 20882,
+      "sourceManifestSha256": "af7270ee051b5f45009453cae60961de035206e0ce173f90501e3a469c123f26",
+      "targetUrl": "https://baby2b.online/evidence/portfolio-sync/",
+      "assets": [
+        {
+          "sourcePath": "public/cases/portfolio-sync/architecture/github-actions.mmd",
+          "targetPath": "apps/web/apps/web/public/evidence/portfolio-sync/architecture/github-actions.mmd",
+          "bytes": 529,
+          "sha256": "316f7fa795702948716b2b2016e46c1f6221a4886b865187a6fb0d66f4909ac8"
+        },
+        {
+          "sourcePath": "public/cases/portfolio-sync/architecture/runtime.mmd",
+          "targetPath": "apps/web/apps/web/public/evidence/portfolio-sync/architecture/runtime.mmd",
+          "bytes": 954,
+          "sha256": "1955ef5eee04c819332e07cf70030af3d71b4a6839790e005a6d95465b749049"
+        },
+        {
+          "sourcePath": "public/cases/portfolio-sync/architecture/sequence.mmd",
+          "targetPath": "apps/web/apps/web/public/evidence/portfolio-sync/architecture/sequence.mmd",
+          "bytes": 879,
+          "sha256": "6a5b31681695a43c6cda4c7f5bde19ec701e2d329889d748ddd5a51776c6171e"
+        },
+        {
+          "sourcePath": "public/cases/portfolio-sync/assets/portfolio-sync-health.svg",
+          "targetPath": "apps/web/apps/web/public/evidence/portfolio-sync/assets/portfolio-sync-health.svg",
+          "bytes": 1577,
+          "sha256": "dffe2de88f7fe337a0d5f29099cfc1febfe5d81836b3e1982255743762b6d0c3"
+        },
+        {
+          "sourcePath": "public/cases/portfolio-sync/assets/portfolio-sync-projects.svg",
+          "targetPath": "apps/web/apps/web/public/evidence/portfolio-sync/assets/portfolio-sync-projects.svg",
+          "bytes": 1504,
+          "sha256": "61600b4ecb9a73c5d948b1ac5608be5ef0624b4e39aba6f17d6d018223ed5db3"
+        }
+      ],
+      "manifestTargetPath": "apps/web/apps/web/public/evidence/portfolio-sync/evidence.json",
+      "sourceBoundary": {
+        "status": "即时同步服务与静态回退工作证明",
+        "limitations": [
+          "Workers KV 为最终一致存储：Webhook 通常数秒处理，但不同地区读取新值最多可能延迟约 60 秒。",
+          "只有含有效 Baby2B 发布清单和 Evidence URL 的仓库会自动出现；未接入发布契约的仓库不会被推断或曝光。",
+          "仓库架构等丰富文案应由各项目的 .github/portfolio-project.json 提供；缺失时仅使用保守默认说明。",
+          "30 分钟 Cron 是补偿机制，不保证 GitHub 或 Cloudflare 大规模故障期间立即恢复。",
+          "Evidence 公开运行状态和脱敏项目卡片，不公开 App 私钥、webhook secret、Installation Token、私有源码或被过滤仓库清单。"
+        ],
+        "integrity": {
+          "healthSnapshotSha256": "dffe2de88f7fe337a0d5f29099cfc1febfe5d81836b3e1982255743762b6d0c3",
+          "projectIndexSnapshotSha256": "61600b4ecb9a73c5d948b1ac5608be5ef0624b4e39aba6f17d6d018223ed5db3"
+        },
+        "publicUrls": {
+          "dashboard": "https://baby2b.online/",
+          "project": "https://github.com/Tiancheng-Xu/fullstack-showcase/tree/main/workers/portfolio-sync-webhook",
+          "evidence": "https://evidence.baby2b.online/portfolio-sync/",
+          "repository": "https://github.com/Tiancheng-Xu/fullstack-showcase"
+        },
+        "proofStatuses": [
+          "verified"
+        ],
+        "preservationAssertions": {
+          "statusMustNotUpgrade": true,
+          "limitationsMustNotNarrow": true,
+          "integrityMustMatchSource": true,
+          "publicUrlsMustRemainUnchanged": true
+        }
+      }
+    },
+    {
+      "slug": "tc-workflow",
+      "title": "TC Flow 2.1",
+      "sourceManifest": "public/cases/tc-workflow/evidence.json",
+      "sourceManifestBytes": 22741,
+      "sourceManifestSha256": "bb338a36c85c0b61e8267d2ede0ff058b2234812206562443976b712caa27aa8",
+      "targetUrl": "https://baby2b.online/evidence/tc-workflow/",
+      "assets": [
+        {
+          "sourcePath": "public/cases/tc-workflow/architecture/runtime.mmd",
+          "targetPath": "apps/web/apps/web/public/evidence/tc-workflow/architecture/runtime.mmd",
+          "bytes": 541,
+          "sha256": "6969b9848b3984045f2f5ff99dcd61a26b9630b57590e0dfb5a4a3e7c61a257d"
+        },
+        {
+          "sourcePath": "public/cases/tc-workflow/architecture/sequence.mmd",
+          "targetPath": "apps/web/apps/web/public/evidence/tc-workflow/architecture/sequence.mmd",
+          "bytes": 579,
+          "sha256": "71d1667b94920fd676b1216f24ccb33c111cefb1e409adce8e5a478efe9ca9cf"
+        },
+        {
+          "sourcePath": "public/cases/tc-workflow/assets/tc-flow-2-1-babystep-architecture.png",
+          "targetPath": "apps/web/apps/web/public/evidence/tc-workflow/assets/tc-flow-2-1-babystep-architecture.png",
+          "bytes": 2643817,
+          "sha256": "242739bb1b600f77ec9d4310e00c279333eb277268443ac38a65e1ed0e707089"
+        }
+      ],
+      "manifestTargetPath": "apps/web/apps/web/public/evidence/tc-workflow/evidence.json",
+      "sourceBoundary": {
+        "status": "Skill 静态 Evidence，不是已部署应用",
+        "limitations": [
+          "TC Flow 2.1 是本地 Skill 与 workflow 规则，不是已部署应用；本页面不声称存在在线运行实例、监控数据或真实用户流量。",
+          "公开 Evidence 只展示脱敏后的架构、规则和资产完整性；Review Runner 的真实请求、密钥来源和本地日志不进入公开页面。",
+          "生产发布在 TC Flow 中始终是 manual-pending；自动流程只覆盖测试环境、PR 和 RunResult。",
+          "本页证明的是 Skill 架构与交付边界，不能替代某个具体 Feature 的 run-result、测试输出或部署验收记录。"
+        ],
+        "integrity": {
+          "architectureImageSha256": "242739bb1b600f77ec9d4310e00c279333eb277268443ac38a65e1ed0e707089"
+        },
+        "publicUrls": {
+          "dashboard": "https://baby2b.online/",
+          "project": "https://github.com/Tiancheng-Xu/personal-skills/tree/main/skills/tc-flow",
+          "evidence": "https://evidence.baby2b.online/tc-workflow/",
+          "repository": "https://github.com/Tiancheng-Xu/personal-skills/tree/main/skills/tc-flow"
+        },
+        "proofStatuses": [
+          "verified"
+        ],
+        "preservationAssertions": {
+          "statusMustNotUpgrade": true,
+          "limitationsMustNotNarrow": true,
+          "integrityMustMatchSource": true,
+          "publicUrlsMustRemainUnchanged": true
+        }
+      }
+    }
+  ],
+  "notes": [],
+  "pathRules": {
+    "servedPublicRoot": "apps/web/apps/web/public",
+    "targetPathMustStartWith": "apps/web/apps/web/public/evidence/",
+    "duplicatePrefixSegments": 2
+  }
+}

@@ -54,6 +54,15 @@ function projectKey(project: PortfolioProject) {
 	return project.repo || project.id;
 }
 
+function isRetiredEvidenceHubProject(project: PortfolioProject) {
+	return Boolean(
+		project.repo === "Tiancheng-Xu/baby2b-online-deployment-evidence" ||
+			project.id === "baby2b-online-deployment-evidence" ||
+			project.id === "baby2b-deployment-evidence" ||
+			project.evidenceUrl?.startsWith("https://evidence.baby2b.online"),
+	);
+}
+
 export function mergePortfolioProjects(
 	curated: PortfolioProject[],
 	synced: PortfolioProject[],
@@ -73,14 +82,19 @@ export function mergePortfolioProjects(
 			...local,
 			status: remote.status,
 			progress: remote.progress,
-			evidenceUrl: remote.evidenceUrl || local.evidenceUrl,
-			ownerPage: remote.ownerPage || local.ownerPage,
+			evidenceUrl: local.evidenceUrl || remote.evidenceUrl,
+			ownerPage: local.ownerPage || remote.ownerPage,
 			sourceUpdatedAt: remote.sourceUpdatedAt,
 		};
 	});
 
 	for (const project of synced) {
-		if (!consumed.has(projectKey(project))) merged.push(project);
+		if (
+			!consumed.has(projectKey(project)) &&
+			!isRetiredEvidenceHubProject(project)
+		) {
+			merged.push(project);
+		}
 	}
 	return merged;
 }

@@ -1,0 +1,18 @@
+sequenceDiagram
+  participant U as Human
+  participant W as Worker
+  participant R as Independent Reviewer
+  participant P as Repository Policy
+  U->>W: Freeze Feature Contract
+  W->>W: Implement and self-review one Task
+  W->>R: Send allowlisted, redacted Review Bundle
+  alt Review allow
+    R-->>W: allow
+    W->>W: Persist Task Checkpoint
+  else P0, PII, or unresolved defect
+    R-->>W: repair or block
+    W->>W: Stop or repair within limit
+  end
+  W->>P: Audit full candidate tree
+  P-->>W: ALLOW or BLOCK
+  W-->>U: PR, test evidence, RunResult; production manual-pending

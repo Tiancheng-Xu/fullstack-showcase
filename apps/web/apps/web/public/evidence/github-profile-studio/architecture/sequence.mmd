@@ -1,0 +1,23 @@
+sequenceDiagram
+  participant U as User
+  participant W as React workspace
+  participant A as Hono or Go API
+  participant K as macOS Keychain
+  participant G as GitHub REST API
+  participant D as SQLite
+
+  U->>W: Open local profile workspace
+  W->>A: GET /api/github-profile
+  A->>K: Read credential through fixed service/account arguments
+  K-->>A: Credential stays inside server process
+  A->>G: Request authenticated public profile
+  G-->>A: Public profile response
+  A->>A: Keep allowlisted fields only
+  A->>D: Read latest saved profile
+  A-->>W: Safe profile JSON
+  U->>W: Edit display name and bio
+  W->>A: POST validated editable fields
+  A->>D: Idempotent upsert
+  D-->>A: Saved profile
+  A-->>W: Safe result without credential or stack
+

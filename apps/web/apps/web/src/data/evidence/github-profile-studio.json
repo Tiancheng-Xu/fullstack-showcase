@@ -1,0 +1,324 @@
+{
+  "schemaVersion": 2,
+  "slug": "github-profile-studio",
+  "title": "GitHub Profile Studio",
+  "subtitle": "Local-first GitHub Public Profile Workspace",
+  "status": "本地实现完成 · 公网部署尚未验证",
+  "summary": "GitHub Profile Studio 是 Tiancheng Xu 的本地优先 GitHub 公开资料工作台。React 前端通过同源 API 使用 Hono/Node 或 Go 双后端，从 macOS 钥匙串读取服务端凭据，只保留公开资料白名单字段，并以共享迁移幂等写入 SQLite。仓库测试、类型与构建链已建立，但当前没有可验证的公网运行环境。",
+  "model": "github-profile-studio repository v1",
+  "kicker": "LOCAL-FIRST FULLSTACK EVIDENCE",
+  "scope": "React workspace、Hono/Node API、Go API、GitHub REST API、SQLite/Drizzle、macOS Keychain、CI",
+  "heroAsset": "repository-architecture.svg",
+  "urls": {
+    "dashboard": "https://baby2b.online/dashboard",
+    "project": "https://github.com/Tiancheng-Xu/github-profile-studio",
+    "evidence": "https://evidence.baby2b.online/github-profile-studio/",
+    "repository": "https://github.com/Tiancheng-Xu/github-profile-studio"
+  },
+  "theme": {
+    "primary": "#27d7b0",
+    "secondary": "#f1bd57"
+  },
+  "metrics": {
+    "apiRuntimes": 2,
+    "browserCredentialChannels": 0,
+    "publicRuntimeVerified": 0,
+    "repositoryQualityCommands": 4
+  },
+  "metricCards": [
+    {
+      "label": "API RUNTIMES",
+      "value": "2",
+      "detail": "Hono / Node + Go",
+      "meaning": "两个后端实现同一 JSON 和迁移契约，前端无需知道当前运行时。"
+    },
+    {
+      "label": "BROWSER TOKENS",
+      "value": "0",
+      "detail": "无 token 输入框或 VITE 凭据通道",
+      "meaning": "GitHub 凭据只在本地服务端通过固定钥匙串身份读取。"
+    },
+    {
+      "label": "DATA STORE",
+      "value": "SQLite",
+      "detail": "Drizzle 与 Go 共享迁移账本",
+      "meaning": "同一 GitHub 身份幂等更新，两个后端不会维护分叉 Schema。"
+    },
+    {
+      "label": "PUBLIC RUNTIME",
+      "value": "PENDING",
+      "detail": "仓库明确记录尚未部署",
+      "meaning": "CI 与构建成功不等于生产上线，公网 URL、日志和回滚证据仍待补充。"
+    }
+  ],
+  "promotionItems": [
+    {
+      "label": "Repository",
+      "value": "https://github.com/Tiancheng-Xu/github-profile-studio"
+    },
+    {
+      "label": "Current delivery state",
+      "value": "Local implementation complete; public deployment planned"
+    }
+  ],
+  "experiments": {},
+  "story": {
+    "goal": "在不把 GitHub 凭据交给浏览器的前提下，读取、审阅并保存公开个人资料，同时验证 Node 与 Go 两种服务端实现能共享同一产品契约。",
+    "result": "仓库完成 React 工作台、双后端、SQLite 迁移、安全错误封装和自动化质量链；Evidence 将仓库可证明范围与未部署边界分开呈现。",
+    "steps": [
+      "React 工作台只调用同源 /api，不提供 token 输入或 VITE 凭据变量。",
+      "Hono/Node 与 Go 后端使用固定服务名和账户参数从 macOS 钥匙串读取凭据。",
+      "服务端调用 GitHub REST API，并只保留登录名、头像、公开主页、仓库数、关注者和创建时间等允许字段。",
+      "用户只能编辑显示名称和简介；Node 与 Go 使用共享 SQL 迁移和幂等 upsert。",
+      "结构、安全、API、迁移和前端测试在 GitHub Actions 中与类型检查、生产构建一并执行。",
+      "仓库没有部署步骤和可验证公网资源，因此项目保持进行中，Evidence 不宣称线上可用。"
+    ],
+    "terms": [
+      {
+        "name": "Local-first",
+        "meaning": "凭据和 SQLite 数据保留在用户本机；当前实现不是云端多租户服务。"
+      },
+      {
+        "name": "Field allowlist",
+        "meaning": "服务端只从 GitHub 响应选择明确允许公开和持久化的字段，忽略私有邮箱、组织与仓库内容。"
+      },
+      {
+        "name": "Dual runtime",
+        "meaning": "Hono/Node 与 Go 提供兼容 API、错误和数据库行为，前端通过代理目标切换。"
+      },
+      {
+        "name": "Safe error envelope",
+        "meaning": "客户端只收到稳定错误代码和用户提示，不包含凭据、命令输出、堆栈或本机路径。"
+      }
+    ]
+  },
+  "meaningfulSteps": [
+    {
+      "title": "建立浏览器与本地凭据的硬边界",
+      "purpose": "读取 GitHub 公开资料，但不让凭据进入前端 bundle、表单、日志或错误响应。",
+      "designReason": "本地工作台已有 macOS 钥匙串能力，服务端固定身份读取比环境变量和浏览器输入更容易限制暴露面。",
+      "scope": "钥匙串 provider、同源 /api、GitHub client、字段白名单、安全错误映射与结构扫描测试。",
+      "expected": "浏览器只看到公开资料和可编辑字段；缺凭据、鉴权失败、限流和超时返回安全错误。",
+      "risks": "命令输出泄漏凭据、VITE 变量进入 bundle、上游响应携带未批准字段。",
+      "observed": "仓库含 Node 与 Go 钥匙串测试、GitHub 白名单测试和禁止浏览器 token 通道的结构门禁。",
+      "proof": "repository-architecture.svg、README 安全边界与两套 provider/client 测试。"
+    },
+    {
+      "title": "让 Node 与 Go 共用产品和迁移契约",
+      "purpose": "切换服务端运行时时保持前端、JSON、SQLite 和错误行为一致。",
+      "designReason": "共享契约与迁移账本能防止双实现逐步分叉，而不是只保证两个服务都能启动。",
+      "scope": "Hono routes、Go httpapi、共享 SQL migrations、幂等 repository、前端代理目标和 CI。",
+      "expected": "两个后端都能读取、保存同一资料记录，迁移可重复执行并拒绝已应用脚本被篡改。",
+      "risks": "字符串长度语义、NULL、迁移 ledger 或错误码在两种语言中不同。",
+      "observed": "仓库测试覆盖 JavaScript 字符串语义、共享 ledger、并发 upsert、安全日志与 API 错误契约。",
+      "proof": "repository-architecture.svg、delivery-status.svg 与仓库自动化测试目录。"
+    }
+  ],
+  "architecture": {
+    "runtime": {
+      "status": "implemented",
+      "source": "architecture/runtime.mmd",
+      "description": "React、共享 API 契约、Hono/Go 双后端、钥匙串、GitHub REST 与 SQLite 的本地运行链。"
+    },
+    "githubActions": {
+      "status": "implemented",
+      "source": "architecture/github-actions.mmd",
+      "description": "CI 安装 Node/Go 工具链，执行检查、测试、类型与三类生产构建，但不执行部署。"
+    },
+    "preview": {
+      "status": "unavailable",
+      "note": "仓库没有可验证 Preview URL；公开 Evidence 只描述本地实现和仓库质量证据。"
+    },
+    "sequence": {
+      "status": "implemented",
+      "source": "architecture/sequence.mmd",
+      "description": "从浏览器请求、钥匙串读取、GitHub 白名单、SQLite upsert 到安全响应的关键时序。"
+    },
+    "canary": {
+      "status": "not_applicable",
+      "note": "当前没有生产部署或流量入口，因此 canary 不适用；上线设计完成后再补充。"
+    }
+  },
+  "diagrams": [
+    {
+      "id": "local-runtime",
+      "eyebrow": "LOCAL RUNTIME ARCHITECTURE",
+      "title": "React、双后端与本地安全边界",
+      "plain": "浏览器只访问同源 API；凭据、GitHub 请求和 SQLite 都留在本地服务端。",
+      "summary": "React 工作台不接触 token。Hono/Node 与 Go 通过同一 API 契约连接钥匙串、GitHub REST 和 SQLite，并返回经过字段白名单和错误封装的数据。",
+      "nodes": [
+        {
+          "id": "L1",
+          "label": "React workspace",
+          "detail": "展示公开资料，只允许编辑显示名称和简介。",
+          "purpose": "提供统一交互，不承担凭据或上游 API 访问。",
+          "input": "同源安全 JSON。",
+          "pass": "无 token 输入框、无 VITE 凭据变量。",
+          "block": "任何浏览器凭据通道都由结构测试阻断。",
+          "status": "done"
+        },
+        {
+          "id": "L2",
+          "label": "Shared API contract",
+          "detail": "Node 和 Go 使用兼容路由、JSON、验证和错误代码。",
+          "purpose": "允许运行时切换而不修改前端。",
+          "input": "GET/POST GitHub profile requests。",
+          "pass": "两套测试覆盖相同合法和错误路径。",
+          "block": "契约或字符串语义差异必须先修复。",
+          "status": "done"
+        },
+        {
+          "id": "L3",
+          "label": "Keychain boundary",
+          "detail": "固定服务名和账户参数读取本地凭据。",
+          "purpose": "避免凭据进入仓库、环境文件、终端参数或浏览器。",
+          "input": "本机钥匙串项。",
+          "pass": "输出有界且错误不包含凭据。",
+          "block": "缺失或取消时返回安全应用错误。",
+          "status": "done"
+        },
+        {
+          "id": "L4",
+          "label": "GitHub allowlist",
+          "detail": "只保留产品需要的公开资料字段。",
+          "purpose": "防止上游响应变化扩大公开和持久化范围。",
+          "input": "GitHub authenticated profile response。",
+          "pass": "必需字段完整且类型有效。",
+          "block": "畸形或缺字段响应映射为稳定错误。",
+          "status": "done"
+        },
+        {
+          "id": "L5",
+          "label": "SQLite migration contract",
+          "detail": "Drizzle 与 Go 使用同一迁移目录和 ledger。",
+          "purpose": "保证双运行时读取同一数据库。",
+          "input": "共享 SQL migration 与 GitHub identity。",
+          "pass": "迁移幂等、upsert 不重复身份。",
+          "block": "已应用迁移被修改或 Schema 不完整时拒绝启动。",
+          "status": "done"
+        }
+      ]
+    },
+    {
+      "id": "delivery-boundary",
+      "eyebrow": "DELIVERY BOUNDARY",
+      "title": "仓库实现与公网部署必须分开验收",
+      "plain": "代码、测试和 CI 已经存在，但没有公网地址就不能宣称产品已上线。",
+      "summary": "CI 证明仓库可以检查、测试、类型验证和构建；它没有部署步骤、云资源和线上日志，因此项目状态保持进行中。",
+      "nodes": [
+        {
+          "id": "D1",
+          "label": "Repository source",
+          "detail": "React、Node、Go、迁移、安全文档和测试可审查。",
+          "status": "done"
+        },
+        {
+          "id": "D2",
+          "label": "CI quality chain",
+          "detail": "检查、测试、类型和三类 build 在 PR/main 执行。",
+          "status": "done"
+        },
+        {
+          "id": "D3",
+          "label": "Local runtime",
+          "detail": "README 提供 Node 和 Go 两种本地启动方式。",
+          "status": "done"
+        },
+        {
+          "id": "D4",
+          "label": "Public deployment",
+          "detail": "公网 URL、云资源、TLS、日志和回滚证据尚未建立。",
+          "status": "pending"
+        }
+      ]
+    }
+  ],
+  "incidents": [
+    {
+      "id": "I01",
+      "title": "双后端最容易在边缘语义分叉",
+      "plain": "返回同样字段不代表两个实现真的兼容。",
+      "symptom": "字符串 trim/length、NULL、错误码和迁移账本可能在 JavaScript 与 Go 中产生不同结果。",
+      "cause": "两种语言的标准库和序列化默认行为不同。",
+      "fix": "为共享契约补充跨语言语义测试，并让两端使用同一 SQL migration ledger。",
+      "recheck": "仓库包含 JavaScript 字符串语义、共享 ledger、幂等 upsert 和 HTTP 契约测试。"
+    },
+    {
+      "id": "I02",
+      "title": "本地凭据能力不能泄漏到浏览器",
+      "plain": "钥匙串更安全，但错误处理或构建变量仍可能形成旁路。",
+      "symptom": "前端环境变量、命令 stderr、堆栈或请求日志可能暴露凭据与本机信息。",
+      "cause": "仅把 token 移出代码不足以定义完整信任边界。",
+      "fix": "移除浏览器凭据通道，对 keychain 输出设限，错误统一映射，日志只记 method/route/status/duration。",
+      "recheck": "结构测试扫描前端和公开文档；Node/Go provider 与日志测试检查不泄漏。"
+    },
+    {
+      "id": "I03",
+      "title": "CI 通过不等于生产上线",
+      "plain": "构建成功只能证明可构建，不能证明公网可用。",
+      "symptom": "旧 Dashboard 把项目标为已完成，但仓库 README 明确写着公网运行环境尚未部署。",
+      "cause": "展示状态把仓库完成度和部署完成度混成一个信号。",
+      "fix": "Dashboard 改为进行中 85%，Evidence 单列未验证的 preview/canary 与部署限制。",
+      "recheck": "项目卡与 Evidence 都不再声明公网已上线。"
+    }
+  ],
+  "proof": [
+    {
+      "id": "P01",
+      "title": "仓库实现架构",
+      "description": "基于 README、运行时目录和测试契约整理 React、双后端、钥匙串、GitHub REST 与 SQLite 关系。",
+      "status": "verified-repository",
+      "asset": "repository-architecture.svg",
+      "lookFor": "浏览器边界、Hono/Go 双 API、钥匙串、GitHub 白名单和共享 SQLite。",
+      "proves": "Evidence 架构对应真实仓库组件，而不是泛化前后端示意图。"
+    },
+    {
+      "id": "P02",
+      "title": "安全与质量证据范围",
+      "description": "仓库脚本编排结构测试、Node API、Go API、前端测试、类型和生产构建；CI 使用只读内容权限。",
+      "status": "verified-repository",
+      "asset": "delivery-status.svg",
+      "lookFor": "左侧列出已验证实现和质量链，右侧明确公网运行证据缺失。",
+      "proves": "当前证据没有把仓库 CI 夸大为生产部署。"
+    },
+    {
+      "id": "P03",
+      "title": "公网状态边界",
+      "description": "README 当前状态明确记录 AWS/容器仍在规划、公网运行环境尚未部署。",
+      "status": "verified-repository",
+      "asset": "delivery-status.svg",
+      "lookFor": "NOT YET VERIFIED 区域中的 Public runtime、cloud resources、logs 与 rollback。",
+      "proves": "Dashboard 的进行中状态和 Evidence 限制与项目自己的公开文档一致。"
+    }
+  ],
+  "assets": [
+    {
+      "id": "repository-architecture",
+      "file": "repository-architecture.svg",
+      "title": "GitHub Profile Studio 仓库架构",
+      "alt": "React、Hono Node、Go、macOS Keychain、GitHub REST API 和 SQLite 的本地架构图",
+      "sha256": "30d4f974829b1b863d2297e16d8016cf379749a682821e9e6102d215cf3ba60a",
+      "bytes": 3256
+    },
+    {
+      "id": "delivery-status",
+      "file": "delivery-status.svg",
+      "title": "GitHub Profile Studio 交付状态边界",
+      "alt": "左侧为仓库已验证能力，右侧为尚未验证的公网部署、日志和回滚证据",
+      "sha256": "742030c46fd917051b5b45cd04ae1c3df901c2c343a94fcbda26d59873c0925c",
+      "bytes": 2099
+    }
+  ],
+  "integrity": {
+    "architectureSha256": "30d4f974829b1b863d2297e16d8016cf379749a682821e9e6102d215cf3ba60a",
+    "deliveryStatusSha256": "742030c46fd917051b5b45cd04ae1c3df901c2c343a94fcbda26d59873c0925c"
+  },
+  "integrityLabel": "公开仓库结构与交付状态证据",
+  "limitations": [
+    "当前没有可验证公网项目 URL；Evidence 只能证明仓库实现、测试、构建和架构，不能证明线上可用性。",
+    "macOS Keychain 使当前服务端运行方式依赖本机环境；云端部署前需要重新设计身份和密钥边界。",
+    "Evidence 未发布真实用户资料、凭据、SQLite 数据、命令输出、本机路径或私有 GitHub 响应。",
+    "AWS、容器、TLS、监控、备份和回滚仍是规划项；完成后必须补充实际资源、日志与清理证据。",
+    "Dashboard 进度 85% 表示本地产品和质量链已完成，剩余部分主要是公网运行设计、部署和生产验收。"
+  ]
+}
