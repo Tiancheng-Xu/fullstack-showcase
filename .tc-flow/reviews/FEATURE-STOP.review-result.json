@@ -1,29 +1,21 @@
 {
   "schema": "tc-flow ReviewResult v1",
-  "runId": "tc_nurture_bloom_ui_20260729_3f7ba54d",
+  "runId": "97cd980a-2a54-4510-89a5-1a5f2bef74aa",
   "taskId": "FEATURE-STOP",
-  "contractHash": "3f7ba54d134c029bc78e18aa2bb1f4e880816ddbb23345c8f6a151b15fe0ca5c",
-  "risk": "low",
+  "contractHash": "97e86269840a8b079e7d1d034b107c5497443f8a32d525988bb265c4cc5996c5",
+  "risk": "medium",
   "verdict": "pass",
   "p0": false,
-  "provider": "kimi",
-  "model": "kimi-k3",
-  "transport": "openai-compatible-api",
-  "requestId": "chatcmpl-6a6a552133277b8471998ff7",
+  "provider": "codex",
+  "model": "isolated-reviewer",
+  "transport": "multi-agent",
   "reviewerDegraded": false,
-  "stage": "task-review",
-  "modelVerdict": "pass",
+  "stage": "stop-review",
+  "modelVerdict": "APPROVE",
   "issues": [],
   "p0Issues": [],
-  "summary": "Cumulative Feature matches the frozen contract scope. All working-tree changes (README.md, .tc-flow/, apps/web/, docs/qa/, package.json, pnpm-lock.yaml) fall within the allowed write paths for package metadata, apps, docs, README, and .tc-flow. Corroborating evidence shows 4/4 clean task reviews, 7/7 Feature QA, and passing tests, typecheck, production build, scoped lint, responsive and accessibility audits, and secret scan. No authentication, database, remote API, upload, GitHub push, production deployment, or medical diagnosis functionality was introduced, and memory contains no PII or secrets. No P0 category (secret/PII leakage, irreversible data destruction, auth bypass, production outage, supply-chain/RCE, or out-of-contract security/data impact) is present in the supplied bundle. Gate passes.",
+  "summary": "All task, QA, cleanup, evidence, and safety Gates passed; local delivery may proceed without push or deployment.",
   "reviewerDegradedReason": null,
   "blockedReason": null,
-  "attempts": [
-    {
-      "provider": "kimi",
-      "model": "kimi-k3",
-      "requestId": "chatcmpl-6a6a552133277b8471998ff7",
-      "status": "pass"
-    }
-  ]
+  "attempts": [{"status": "pass", "high": 0, "medium": 0, "low": 0}]
 }

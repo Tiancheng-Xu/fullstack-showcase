@@ -1,47 +1,124 @@
 {
   "schema": "tc-flow State v1",
-  "runId": "tc_performance_observability_control_20260814_c6153557",
-  "feature": "performance-observability-control",
-  "contractHash": "c6153557d5287a0cb7bb7164df73c6961e783faec583fe791cd0fdc2be2c75a3",
-  "currentNode": "N3",
+  "runId": "97cd980a-2a54-4510-89a5-1a5f2bef74aa",
+  "feature": "cosmos-local-chain",
+  "contractHash": "97e86269840a8b079e7d1d034b107c5497443f8a32d525988bb265c4cc5996c5",
+  "currentNode": "N8",
   "status": "in_progress",
-  "difficulty": "high",
+  "difficulty": "medium",
   "execution": {
-    "worker": {"provider": "codex", "model": "gpt-5", "transport": "codex-desktop"},
-    "reviewer": {"provider": "subagent", "model": null, "transport": "codex-collaboration"},
+    "worker": {
+      "provider": "codex",
+      "transport": "codex-desktop"
+    },
+    "reviewer": {
+      "provider": "codex",
+      "transport": "isolated-subagent"
+    },
     "reviewerDegraded": false,
-    "reviewerDegradedReason": null,
     "requiresHumanConfirmation": false
   },
   "tasks": {
     "T-001": "completed",
     "T-002": "completed",
     "T-003": "completed",
-    "T-004": "in_progress",
-    "T-005": "pending",
-    "T-006": "in_progress"
+    "T-004": "completed"
   },
   "history": [
     {
       "node": "N1",
       "status": "completed",
-      "architecture": "monorepo-with-cloudflare-control-worker",
-      "worktree": "/Users/shier/Desktop/course-homework/.tc-worktrees/performance-observability-control-c6153557",
-      "recovery": "resume-from-contract"
+      "architecture": "monorepo-local-cosmos-chain",
+      "worktree": "/Users/shier/Desktop/.tc-worktrees/fullstack-showcase-cosmos-local-chain-97e86269",
+      "recovery": "restart-feature"
     },
     {
       "node": "N2",
       "status": "completed",
-      "difficulty": "high",
-      "strategy": "tdd-and-evidence-first",
-      "reviewerDegraded": false,
-      "requiresHumanConfirmation": false
+      "difficulty": "medium",
+      "strategy": "inline-tdd-with-isolated-review"
     },
-    {"node": "N3", "status": "started", "taskId": "T-001"},
-    {"node": "N3", "status": "completed", "taskId": "T-001"},
-    {"node": "N3", "status": "completed", "taskId": "T-002"},
-    {"node": "N3", "status": "completed", "taskId": "T-003"},
-    {"node": "N3", "status": "in_progress", "taskId": "T-004", "remaining": "cloud-access-dispatch-webhook-cron"},
-    {"node": "N3", "status": "in_progress", "taskId": "T-006", "remaining": "real-cloud-run-and-sanitized-evidence"}
+    {
+      "node": "N5",
+      "status": "completed",
+      "taskId": "T-001",
+      "checkpoint": ".tc-flow/checkpoints/T-001.json"
+    },
+    {
+      "node": "N3",
+      "status": "started",
+      "taskId": "T-002"
+    },
+    {
+      "node": "N4",
+      "status": "repair",
+      "taskId": "T-002",
+      "rounds": 7
+    },
+    {
+      "node": "N4",
+      "status": "pass",
+      "taskId": "T-002"
+    },
+    {
+      "node": "N5",
+      "status": "completed",
+      "taskId": "T-002",
+      "checkpoint": ".tc-flow/checkpoints/T-002.json"
+    },
+    {
+      "node": "N3",
+      "status": "started",
+      "taskId": "T-003"
+    },
+    {
+      "node": "N4",
+      "status": "repair",
+      "taskId": "T-003",
+      "rounds": 1
+    },
+    {
+      "node": "N4",
+      "status": "pass",
+      "taskId": "T-003"
+    },
+    {
+      "node": "N5",
+      "status": "completed",
+      "taskId": "T-003",
+      "checkpoint": ".tc-flow/checkpoints/T-003.json"
+    },
+    {
+      "node": "N3",
+      "status": "started",
+      "taskId": "T-004"
+    },
+    {
+      "node": "N4",
+      "status": "repair",
+      "taskId": "T-004",
+      "rounds": 1
+    },
+    {
+      "node": "N4",
+      "status": "pass",
+      "taskId": "T-004"
+    },
+    {
+      "node": "N5",
+      "status": "completed",
+      "taskId": "T-004",
+      "checkpoint": ".tc-flow/checkpoints/T-004.json"
+    },
+    {
+      "node": "N6",
+      "status": "pass",
+      "acceptanceCriteria": "8/8"
+    },
+    {
+      "node": "N7",
+      "status": "ALLOW",
+      "stopHook": ".tc-flow/stop-hook-result.json"
+    }
   ]
 }

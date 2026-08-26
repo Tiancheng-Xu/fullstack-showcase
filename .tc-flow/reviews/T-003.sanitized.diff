@@ -1,18 +1,5 @@
-diff --git a/apps/web/apps/web/src/features/nurture b/apps/web/apps/web/src/features/nurture
-+Typed local domain models and fixture data for daily records, guide items, and family moments.
-+GrowthContent recreates metrics, milestones, vaccine reminder, daily records, and a local add-record modal.
-+MomentsContent recreates family stats, memory cards, local favorite toggles, and a non-uploading add-memory modal.
-+GuideContent recreates search, category filters, featured content, vaccine schedule, and filtered tips.
-+ProfileContent recreates caregiver identity, badges, baby profile, cloud usage, settings, and local reminder toggle.
-+Interaction tests cover adding a growth record, filtering guide content, and toggling a favorite.
-
-diff --git a/apps/web/apps/web/src/routes b/apps/web/apps/web/src/routes
-+Root redirects to /growth.
-+Added /growth, /moments, /guide, and /me typed TanStack Router routes.
-+Root shell now uses the Nurture Bloom AppShell and Chinese metadata.
-
-diff --git a/apps/web/apps/web/src/components/layout/bottom-nav.tsx b/apps/web/apps/web/src/components/layout/bottom-nav.tsx
-+Navigation uses typed TanStack Router links with active-page semantics.
-
-diff --git a/apps/web/apps/web/src/components/ui/floating-action-button.tsx b/apps/web/apps/web/src/components/ui/floating-action-button.tsx
-+Floating action button accepts an optional contextual icon while retaining the default plus icon.
+diff --git a/apps/cosmos-local-chain b/apps/cosmos-local-chain
++Added a real Alice-to-Bob MsgSend with strict response validation.
++Verified block identity, raw transaction SHA-256, later blocks, and exact balance deltas.
++Published exactly eight sanitized JSON files as one evidence generation.
++Added malformed-response and stale-evidence replacement tests.

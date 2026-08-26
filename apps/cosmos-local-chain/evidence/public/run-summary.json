@@ -1,0 +1,33 @@
+{
+  "schema": "cosmos-local-chain-evidence-v1",
+  "chain_id": "babysteps-local-1",
+  "transfer": {
+    "from": "alice",
+    "to": "bob",
+    "amount_ubaby": 25000000,
+    "fee_ubaby": 500
+  },
+  "transaction": {
+    "hash": "A4EA2B7FD1F058EC345DBFD46BC4B1BDF13F0562A06E3A6D9F8E83D4F03AFD8B",
+    "height": 2,
+    "code": 0
+  },
+  "heights": {
+    "before": 1,
+    "transaction": 2,
+    "after": 3
+  },
+  "deltas": {
+    "validator_ubaby": 0,
+    "alice_ubaby": -25000500,
+    "bob_ubaby": 25000000
+  },
+  "block_proof": {
+    "raw_tx_sha256": "A4EA2B7FD1F058EC345DBFD46BC4B1BDF13F0562A06E3A6D9F8E83D4F03AFD8B",
+    "matches": true
+  },
+  "reused_evm_evidence": {
+    "project": "BabySteps Sepolia RPC and The Graph",
+    "commit": "d728315f1c34bd76377f2b302f9cc6f1ed9e3167"
+  }
+}

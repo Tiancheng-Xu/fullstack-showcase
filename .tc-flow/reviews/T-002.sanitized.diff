@@ -1,29 +1,4 @@
-diff --git a/apps/web/packages/ui/src/styles/globals.css b/apps/web/packages/ui/src/styles/globals.css
-+Tailwind v4 theme exposes semantic Nurture Bloom tokens for warm background, primary orange, secondary blue, tertiary green, cards, borders, typography, radii, shadows, safe areas, focus visibility, and reduced motion.
-
-diff --git a/apps/web/apps/web/src/components/layout/app-shell.tsx b/apps/web/apps/web/src/components/layout/app-shell.tsx
-+Reusable mobile-first shell composes fixed TopBar, main content region, BottomNav, and optional floating action.
-
-diff --git a/apps/web/apps/web/src/components/layout/top-bar.tsx b/apps/web/apps/web/src/components/layout/top-bar.tsx
-+Accessible top bar uses a bundled local Stitch logo and notification/profile controls.
-
-diff --git a/apps/web/apps/web/src/components/layout/bottom-nav.tsx b/apps/web/apps/web/src/components/layout/bottom-nav.tsx
-+Four-item Chinese navigation exposes current-page state and responsive safe-area spacing.
-
-diff --git a/apps/web/apps/web/src/components/ui/modal.tsx b/apps/web/apps/web/src/components/ui/modal.tsx
-+Labelled modal dialog supports close button, backdrop dismissal, Escape dismissal, and does not mount when closed.
-
-diff --git a/apps/web/apps/web/src/components/ui/section-header.tsx b/apps/web/apps/web/src/components/ui/section-header.tsx
-+Reusable section title and optional accessible action button.
-
-diff --git a/apps/web/apps/web/src/components/ui/status-chip.tsx b/apps/web/apps/web/src/components/ui/status-chip.tsx
-+Reusable semantic status chip supports info, success, warning, and neutral tones.
-
-diff --git a/apps/web/apps/web/src/components/ui/floating-action-button.tsx b/apps/web/apps/web/src/components/ui/floating-action-button.tsx
-+Reusable labelled floating action button.
-
-diff --git a/apps/web/apps/web/src/components/ui/__tests__/ui-components.test.tsx b/apps/web/apps/web/src/components/ui/__tests__/ui-components.test.tsx
-+Tests section actions, modal accessibility and visibility lifecycle, and status-chip semantics.
-
-diff --git a/apps/web/apps/web/public/assets/nurture-bloom b/apps/web/apps/web/public/assets/nurture-bloom
-+Bundled logo and hero image extracted locally from the provided Stitch archive.
+diff --git a/apps/cosmos-local-chain b/apps/cosmos-local-chain
++Configured one validator and three test-keyring accounts with exact genesis allocations.
++Added loopback-only API, RPC, and P2P listeners with guarded lifecycle scripts.
++Added ownership, process-instance, atomic-lock, symlink, cleanup, and port-release tests.

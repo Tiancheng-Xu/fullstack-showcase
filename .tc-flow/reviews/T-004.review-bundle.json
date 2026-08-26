@@ -1,27 +1,22 @@
 {
   "schema": "tc-flow ReviewBundle v1",
   "sanitized": true,
-  "runId": "tc_nurture_bloom_ui_20260729_3f7ba54d",
+  "runId": "97cd980a-2a54-4510-89a5-1a5f2bef74aa",
   "taskId": "T-004",
-  "contractHash": "3f7ba54d134c029bc78e18aa2bb1f4e880816ddbb23345c8f6a151b15fe0ca5c",
-  "risk": "low",
-  "contractSummary": "Complete a frontend-only, local-state UI foundation and leave a clear learning handoff for later course-driven backend work. Do not deploy or push.",
-  "task": "Perform final mobile, desktop, interaction, accessibility, security, and build QA; document runtime commands, architecture boundaries, evidence, known limitations, and future extension points.",
-  "sanitizedDiff": "See .tc-flow/reviews/T-004.sanitized.diff. Added a project runtime guide, durable QA evidence, and root documentation links.",
+  "contractHash": "97e86269840a8b079e7d1d034b107c5497443f8a32d525988bb265c4cc5996c5",
+  "risk": "medium",
+  "contractSummary": "Deliver reproducible Chinese local-chain documentation and complete all deterministic safety and evidence Gates without deployment or push.",
+  "task": "Document the local chain, evidence, and query boundaries; run full local QA; remove stale TC Flow metadata; leave no running node or secret material.",
+  "sanitizedDiff": ".tc-flow/reviews/T-004.sanitized.diff",
   "evidence": [
-    "Final Vitest: 3 test files and 8 tests passed.",
-    "Final typecheck: Vite route generation/build and TypeScript --noEmit passed.",
-    "Final production build passed with route-level chunks.",
-    "Scoped Biome check exited successfully; four intentional reduced-motion override warnings are documented and non-blocking.",
-    "Four-route accessibility audit: one h1 per page, no unnamed buttons, no images missing alt attributes, main landmark present.",
-    "Four-route responsive audit at 390x844: no horizontal overflow and no browser console issues.",
-    "Desktop audit at 1280x800: content container measured 768px and remained centered.",
-    "Secret scan found no private-key, AWS access-key, password, or secret patterns in application source.",
-    "Project guide explicitly states no backend, auth, database, remote API, upload, deployment, or GitHub push in phase one.",
-    "Worker self-review p0Issues: []"
+    "Final make test passed after reviewer repairs.",
+    "Generated Cosmos chain go test ./... passed.",
+    "Transaction committed at height 2 and a later block reached height 3.",
+    "Exactly eight public JSON files passed format and content checks.",
+    "Ports 1317, 26656, and 26657 were released.",
+    "Public secret, private-path, policy-term, stale-feature, Bash 4 syntax, and whitespace scans passed.",
+    "README documents lsof and uses no Bash 4-only implementation requirement.",
+    "Independent re-review verdict: APPROVE."
   ],
-  "redactions": {
-    "count": 0,
-    "types": []
-  }
+  "redactions": {"count": 0, "types": []}
 }

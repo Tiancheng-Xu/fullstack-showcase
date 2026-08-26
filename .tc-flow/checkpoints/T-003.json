@@ -1,36 +1,37 @@
 {
   "schema": "tc-flow Checkpoint v1",
-  "runId": "tc_nurture_bloom_ui_20260729_3f7ba54d",
-  "feature": "nurture-bloom-ui-foundation",
-  "contractHash": "3f7ba54d134c029bc78e18aa2bb1f4e880816ddbb23345c8f6a151b15fe0ca5c",
+  "runId": "97cd980a-2a54-4510-89a5-1a5f2bef74aa",
+  "feature": "cosmos-local-chain",
+  "contractHash": "97e86269840a8b079e7d1d034b107c5497443f8a32d525988bb265c4cc5996c5",
   "node": "N5",
   "taskId": "T-003",
-  "inputSummary": "Four typed TanStack Router pages with local add, search, filter, favorite, modal, and settings interactions.",
+  "inputSummary": "Real Alice-to-Bob transfer with committed transaction, block-byte hash proof, later block, balance deltas, and sanitized evidence.",
   "changedPaths": [
-    "apps/web/apps/web/src/features/nurture/",
-    "apps/web/apps/web/src/routes/",
-    "apps/web/apps/web/src/components/layout/bottom-nav.tsx",
-    "apps/web/apps/web/src/components/ui/floating-action-button.tsx",
+    "apps/cosmos-local-chain/scripts/evidence-lib.sh",
+    "apps/cosmos-local-chain/scripts/run-demo.sh",
+    "apps/cosmos-local-chain/tests/evidence-validation-contract.sh",
+    "apps/cosmos-local-chain/tests/transfer-contract.sh",
+    "apps/cosmos-local-chain/evidence/public/",
+    "apps/cosmos-local-chain/Makefile",
     ".tc-flow/"
   ],
-  "repositoryStatusHash": "dedfedfd6e6502b36532b49c82a4f2146b2288fbfc92e1bcc5303a60d941e9eb",
+  "repositoryStatusHash": "93742a9ddd701cca6fc03cf295075b06eb8ef96ea0649dd4ad6f962f42f4a1cd",
   "evidence": {
-    "tddRed": "Interaction test suite failed before growth, guide, and moments modules existed.",
-    "test": "3 test files and 8 tests passed.",
-    "typecheck": "Vite route generation/build and TypeScript --noEmit passed.",
-    "build": "Vite production build passed with route-level chunks.",
-    "lint": "Scoped Biome check passed.",
-    "visual": "Four routes checked at 390x844; growth also checked at 1280x800; browser console was clean.",
+    "test": "make test passed; real transfer committed at height 2 and a later block reached height 3.",
+    "transaction": "Exactly one Alice-to-Bob MsgSend for 25000000ubaby with a 500ubaby fee and numeric code 0.",
+    "block": "Expected chain ID and height matched; SHA-256 reproduced from .data.txs[] matched the transaction hash.",
+    "balances": "Alice -25000500ubaby, Bob +25000000ubaby, validator liquid balance unchanged.",
+    "publication": "Exactly eight validated JSON files replace the public evidence directory as one generation.",
+    "security": "Malformed responses fail closed and public evidence contains no secret-bearing fields.",
     "review": ".tc-flow/reviews/T-003.review-result.json",
     "piiRedacted": 0
   },
-  "retries": 0,
+  "retries": 1,
   "toolRequests": [],
-  "interventions": [],
+  "interventions": [
+    "Repaired five review findings covering publication, block extraction, response codes, MsgSend semantics, and arithmetic input safety."
+  ],
   "blockers": [],
   "events": ".tc-flow/events.jsonl",
-  "next": {
-    "node": "N3",
-    "taskId": "T-004"
-  }
+  "next": {"node": "N3", "taskId": "T-004"}
 }

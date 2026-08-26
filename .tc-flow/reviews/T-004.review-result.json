@@ -1,33 +1,25 @@
 {
   "schema": "tc-flow ReviewResult v1",
-  "runId": "tc_nurture_bloom_ui_20260729_3f7ba54d",
+  "runId": "97cd980a-2a54-4510-89a5-1a5f2bef74aa",
   "taskId": "T-004",
-  "contractHash": "3f7ba54d134c029bc78e18aa2bb1f4e880816ddbb23345c8f6a151b15fe0ca5c",
-  "risk": "low",
+  "contractHash": "97e86269840a8b079e7d1d034b107c5497443f8a32d525988bb265c4cc5996c5",
+  "risk": "medium",
   "verdict": "pass",
   "p0": false,
-  "provider": "kimi",
-  "model": "kimi-k3",
-  "transport": "openai-compatible-api",
-  "requestId": "chatcmpl-6a6a54967b45518e514ba802",
+  "provider": "codex",
+  "model": "isolated-reviewer",
+  "transport": "multi-agent",
   "reviewerDegraded": false,
   "stage": "task-review",
-  "modelVerdict": "pass",
-  "issues": [
-    "[object Object]",
-    "[object Object]",
-    "[object Object]"
-  ],
+  "modelVerdict": "APPROVE",
+  "issues": [],
   "p0Issues": [],
-  "summary": "Contract-conformant frontend-only QA and documentation task with no deploy or push, matching the phase-one boundary. Evidence shows green Vitest (3 files/8 tests), clean typecheck and production build with route-level chunks, scoped Biome passing with four documented non-blocking warnings, clean four-route accessibility and 390x844 responsive audits, centered 768px desktop container, and a secret scan with no key/password/secret patterns. No P0 conditions (no secrets/PII leakage, no destructive operations, no auth or backend surface, no supply-chain/RCE vectors) are present in the supplied bundle. Pass, with minor notes on diff visibility, reduced-motion overrides, and evidence freshness.",
+  "summary": "Approved after removing the Bash 4-only expansion and documenting lsof; reproduction, evidence, metadata, and no-deployment boundaries are consistent.",
   "reviewerDegradedReason": null,
   "blockedReason": null,
   "attempts": [
-    {
-      "provider": "kimi",
-      "model": "kimi-k3",
-      "requestId": "chatcmpl-6a6a54967b45518e514ba802",
-      "status": "pass"
-    }
+    {"status": "request_changes", "high": 1, "medium": 1, "scope": "macOS Bash compatibility and missing lsof dependency"},
+    {"status": "repair", "scope": "portable tr normalization and complete dependency documentation"},
+    {"status": "pass", "high": 0, "medium": 0, "low": 0}
   ]
 }

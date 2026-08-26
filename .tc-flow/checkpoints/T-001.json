@@ -1,31 +1,30 @@
 {
   "schema": "tc-flow Checkpoint v1",
-  "runId": "tc_nurture_bloom_ui_20260729_3f7ba54d",
-  "feature": "nurture-bloom-ui-foundation",
-  "contractHash": "3f7ba54d134c029bc78e18aa2bb1f4e880816ddbb23345c8f6a151b15fe0ca5c",
+  "runId": "97cd980a-2a54-4510-89a5-1a5f2bef74aa",
+  "feature": "cosmos-local-chain",
+  "contractHash": "97e86269840a8b079e7d1d034b107c5497443f8a32d525988bb265c4cc5996c5",
   "node": "N5",
   "taskId": "T-001",
-  "inputSummary": "Frontend-only Better-T-Stack scaffold under apps/web with root developer commands and Vitest baseline.",
+  "inputSummary": "Project-private Ignite v29.8.0 and a generated Cosmos SDK v0.53.6 local chain skeleton.",
   "changedPaths": [
-    "package.json",
-    "pnpm-lock.yaml",
-    "apps/web/",
+    "apps/cosmos-local-chain/",
     ".tc-flow/"
   ],
-  "repositoryStatusHash": "dedfedfd6e6502b36532b49c82a4f2146b2288fbfc92e1bcc5303a60d941e9eb",
+  "repositoryStatusHash": "b6539e7427d29313dbebfa7df6f526208b9a4213b3b7d6ec4ff067da5b0a0889",
   "evidence": {
-    "tddRed": "Vitest failed because app-identity was missing.",
-    "test": "1 test file and 1 test passed.",
-    "typecheck": "Vite build and TypeScript --noEmit passed.",
-    "build": "Vite production build passed.",
-    "lint": "Scoped Biome check passed for 5 task-owned files.",
-    "security": "No private-key or AWS access-key patterns found.",
+    "tddRed": "toolchain-contract.sh failed because the bootstrap target did not exist.",
+    "contractTest": "PASS: pinned Ignite and generated chain dependencies.",
+    "test": "cosmos-chain make test passed with go vet and all generated Go packages.",
+    "security": "No generated workflow files, unsafe remote installer pipeline, floating govulncheck target, private keys, or credentials.",
     "review": ".tc-flow/reviews/T-001.review-result.json",
     "piiRedacted": 0
   },
-  "retries": 0,
+  "retries": 2,
   "toolRequests": [],
-  "interventions": [],
+  "interventions": [
+    "Corrected upstream Ignite v29.8.0 release metadata by building the verified tag commit with the v29 version symbol.",
+    "Clarified that specs/cosmos-local-chain is part of the user-approved frozen contract."
+  ],
   "blockers": [],
   "events": ".tc-flow/events.jsonl",
   "next": {
