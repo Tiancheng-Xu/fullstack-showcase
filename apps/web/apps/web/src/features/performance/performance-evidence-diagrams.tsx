@@ -11,7 +11,7 @@ import {
 	Workflow,
 } from "lucide-react";
 
-type ProofState = "本地已实现" | "设计已确认" | "共享已核实" | "云端未部署";
+type ProofState = "本地已实现" | "设计已确认" | "共享已核实" | "云端未部署" | "云端已验证";
 
 type FlowStep = {
 	detail: string;
@@ -41,7 +41,7 @@ const RUNTIME_LANES: Array<{
 			{ label: "Cloudflare Access", detail: "JWT 与操作者白名单", state: "云端未部署" },
 			{ label: "成本控制页", detail: "固定动作 + 风险提示", state: "本地已实现" },
 			{ label: "GitHub App", detail: "仅触发允许的工作流", state: "云端未部署" },
-			{ label: "GitHub Actions", detail: "项目 OIDC Role", state: "云端未部署" },
+			{ label: "GitHub Actions", detail: "项目 OIDC Role", state: "云端已验证" },
 		],
 	},
 	{
@@ -49,10 +49,10 @@ const RUNTIME_LANES: Array<{
 		description: "浏览器 SDK 只上报允许字段；异步队列隔离业务，DLQ、日志和最终快照保留可审计结果。",
 		steps: [
 			{ label: "性能 SDK", detail: "Web Vitals / 路由 / 错误", state: "设计已确认" },
-			{ label: "HTTP API + Lambda", detail: "校验、限流、去敏", state: "云端未部署" },
-			{ label: "SQS / DLQ", detail: "缓冲、重试、故障证据", state: "云端未部署" },
-			{ label: "一次性 ECS Cleaner", detail: "按需聚合，不常驻", state: "云端未部署" },
-			{ label: "CloudWatch + R2", detail: "日志、告警、可信快照", state: "云端未部署" },
+			{ label: "HTTP API + Lambda", detail: "校验、接收、查询", state: "云端已验证" },
+			{ label: "SQS / DLQ", detail: "缓冲与失败边界", state: "云端已验证" },
+			{ label: "一次性 ECS Cleaner", detail: "按需聚合，不常驻", state: "云端已验证" },
+			{ label: "历史快照", detail: "Artifact 校验后公开", state: "云端已验证" },
 		],
 	},
 	{
@@ -69,18 +69,18 @@ const RUNTIME_LANES: Array<{
 
 const DELIVERY_STEPS: FlowStep[] = [
 	{ label: "Pull Request", detail: "变更进入独立预览", state: "设计已确认" },
-	{ label: "GitHub Actions", detail: "测试、类型、构建、预算门禁", state: "设计已确认" },
+	{ label: "GitHub Actions", detail: "测试、类型、构建、预算门禁", state: "云端已验证" },
 	{ label: "Cloudflare Preview", detail: "预览 Dashboard / Evidence", state: "云端未部署" },
-	{ label: "合成闭环", detail: "受控流量，不冒充生产趋势", state: "设计已确认" },
-	{ label: "快照验收", detail: "Schema、样本、SHA、摘要", state: "设计已确认" },
-	{ label: "灰度与清理验证", detail: "晋级或回滚，临时资源归零", state: "云端未部署" },
+	{ label: "合成闭环", detail: "受控流量，不冒充生产趋势", state: "云端已验证" },
+	{ label: "快照验收", detail: "Schema、样本、SHA、摘要", state: "云端已验证" },
+	{ label: "清理验证", detail: "Schema、Stack、Cluster 归零", state: "云端已验证" },
 ];
 
 const LIFECYCLE_PHASES = [
 	{
 		icon: ShieldCheck,
 		name: "安全启动",
-		state: "设计已确认" as const,
+		state: "云端已验证" as const,
 		steps: [
 			"先验证上次清理完成，共享资源健康且未发生漂移。",
 			"通过 Access 与固定 GitHub Actions 工作流创建项目临时资源。",
@@ -90,7 +90,7 @@ const LIFECYCLE_PHASES = [
 	{
 		icon: Activity,
 		name: "采集与聚合",
-		state: "设计已确认" as const,
+		state: "云端已验证" as const,
 		steps: [
 			"SDK 批量上报允许字段，Lambda 校验后写入 SQS。",
 			"一次性 Cleaner 聚合 p50 / p75 / p95 与错误数。",
@@ -100,7 +100,7 @@ const LIFECYCLE_PHASES = [
 	{
 		icon: Square,
 		name: "安全停止",
-		state: "设计已确认" as const,
+		state: "云端已验证" as const,
 		steps: [
 			"先停止接收新事件，再记录主队列与 DLQ 深度。",
 			"生成最终不可覆盖快照，Dashboard / Evidence 切到 historical。",
@@ -237,6 +237,8 @@ function FlowSteps({ steps }: { steps: FlowStep[] }) {
 function StateBadge({ state }: { state: ProofState }) {
 	const tone = state === "本地已实现"
 		? "border-emerald-300 bg-emerald-50 text-emerald-950"
+		: state === "云端已验证"
+			? "border-teal-400 bg-teal-50 text-teal-950"
 		: state === "共享已核实"
 			? "border-blue-300 bg-blue-50 text-blue-950"
 			: state === "云端未部署"

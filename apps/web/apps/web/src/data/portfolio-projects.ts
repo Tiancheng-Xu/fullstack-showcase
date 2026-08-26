@@ -10,7 +10,11 @@ export type RenderingMode =
 	| "Client-only Web3"
 	| "Cloud Preview Pending";
 
-export type EvidenceState = "本地已实现" | "设计已确认" | "云端未部署";
+export type EvidenceState =
+	| "本地已实现"
+	| "设计已确认"
+	| "云端未部署"
+	| "云端已验证";
 
 export type EvidenceRequirement = {
 	requirement: string;
@@ -89,33 +93,69 @@ export const PORTFOLIO_PROJECTS: PortfolioProject[] = [
 	{
 		id: "performance-observability-control",
 		title: "性能观测与成本控制",
-		desc: "为 AWS 性能观测链路补齐可信快照、启停控制、清理验证和可追溯 Evidence。",
+		desc: "以 BabySteps 完成 AWS 临时性能观测、真实聚合与精确清理，并保留可信历史快照和可追溯 Evidence。",
 		status: "进行中",
-		progress: 55,
+		progress: 70,
 		architecture:
 			"Cloudflare 状态与控制面 + GitHub Actions 固定工作流 + AWS 临时观测资源 + D1 审计状态 + R2 不可变快照。",
 		evidenceUrl: `${DASHBOARD_EVIDENCE_BASE_URL}/performance-observability-control`,
 		repo: "Tiancheng-Xu/fullstack-showcase",
 		skills: ["Performance SDK", "Cloudflare", "AWS", "Evidence"],
 		evidence: [
-			"停服时只展示最后一次校验通过的真实快照",
+			"Run 32917816824 完成真实事件、ECS Cleaner、聚合查询与资源归零",
+			"停服时只展示最后一次校验通过的真实快照，不冒充实时趋势",
 			"启停、清理和共享资源保护边界",
 			"运行架构、发布流程、关键时序与明确非目标",
 		],
 		details: [
 			"本地状态模型、公共状态卡、Evidence 页面、D1 状态机、R2 快照校验和公开只读接口已实现并由测试约束。",
-			"控制写入口保持失败关闭；Access、GitHub App、Actions 与 AWS 观测资源仍未部署，没有真实快照时明确显示无数据，不生成演示指标。",
+			"BabySteps 已通过 GitHub OIDC 在 AWS us-east-1 创建 21 个临时资源，接收 1 条 LCP 事件并由 ECS Cleaner 产出 p50/p75/p95 聚合。",
+			"项目 Schema 与 Stack 已精确删除，剩余项目 ECS Cluster 为 0；固定启停控制仍保持失败关闭，尚未作为常驻服务上线。",
 		],
 		performance: {
 			projectId: "performance-observability-control",
 			projectName: "性能观测与成本控制",
 			controlState: "stopped",
 			liveHealthy: false,
-			latestSnapshot: null,
+			latestSnapshot: {
+				captureId: "aws-run-32917816824",
+				capturedAt: "2026-08-26T01:16:35.548Z",
+				window: "1h-controlled",
+				kind: "synthetic-closed-loop",
+				source: {
+					repository: "Tiancheng-Xu/babysteps",
+					commitSha: "b23894d4704eb60dc85c782ea7d9af8edeb2d135",
+					workflowRunId: "32917816824",
+					sdkVersion: "commit:b23894d4704e",
+					cleanerVersion: "commit:b23894d4704e",
+				},
+				method: { percentile: "nearest-rank", sampleRate: 1 },
+				metrics: [
+					{
+						name: "LCP",
+						unit: "ms",
+						page: "/performance",
+						route: "/performance",
+						sampleCount: 1,
+						p50: 321,
+						p75: 321,
+						p95: 321,
+						errorCount: 0,
+					},
+				],
+				filters: {
+					environment: "evidence",
+					projectId: "performance-observability-control",
+					cleanup: "verified",
+				},
+				schemaVersion: "performance-snapshot/v1",
+				digest:
+					"sha256:4885194788b38b9314ff74ec1a97701efebdb0d5adc51871eb20047ccf152bca",
+			},
 		},
 		caseStudy: {
 			stateNotice:
-				"本地状态模型、Dashboard/Evidence、D1/R2 契约和公开只读 Worker 已实现；控制写入口保持失败关闭，Access、GitHub App、Actions 与 AWS 运行栈未部署，因此当前没有可展示的真实性能快照。",
+				"BabySteps AWS 临时观测链已完成一次真实云端闭环并精确清理；当前展示的是单样本合成历史快照，不是生产趋势。固定启停控制、Cloudflare Access 与 GitHub App 回调仍未上线，写入口继续失败关闭。",
 			requirements: [
 				{
 					requirement: "性能 SDK、日志接收、清洗与可视化",
@@ -123,16 +163,16 @@ export const PORTFOLIO_PROJECTS: PortfolioProject[] = [
 						"定义可验证的快照契约和公共状态卡；云端采集、队列、清洗任务按临时资源设计。",
 					code: "src/features/performance/performance-state.ts",
 					proof:
-						"performance-state.test.ts 与页面集成测试通过后记录到交付 Evidence。",
-					state: "本地已实现",
+						"GitHub Run 32917816824 接收 1 条 LCP 事件，经 SQS、ECS Cleaner、PostgreSQL 与 Query Lambda 返回聚合。",
+					state: "云端已验证",
 				},
 				{
 					requirement: "观测服务停止或故障时展示上一次结果",
 					implementation:
 						"controlState 与 dataMode 分离；仅接受摘要、来源和百分位字段全部通过校验的快照。",
 					code: "src/features/performance/performance-status-card.tsx",
-					proof: "无快照时页面显示“暂无可信快照”，不会生成模拟数据。",
-					state: "本地已实现",
+					proof: "AWS Stack 清理后页面展示 Run 32917816824 的 historical 快照，并明确标注单样本边界。",
+					state: "云端已验证",
 				},
 				{
 					requirement: "Dashboard 与 Evidence 都提供启停入口",
@@ -148,8 +188,8 @@ export const PORTFOLIO_PROJECTS: PortfolioProject[] = [
 						"D1 保存状态/操作记录，R2 保存不可变快照；公开接口验证摘要并支持 ETag，控制写入口在 Access 与 GitHub App 接通前失败关闭。",
 					code: "apps/performance-control-worker/src/{state-machine,snapshot,worker}.ts；GitHub Actions 工作流待部署",
 					proof:
-						"Worker 状态机、快照和只读 API 共 13 个测试通过；真实云端 run、资源清单和清理验证待补。",
-					state: "本地已实现",
+						"Run 32917816824 记录 21 个临时资源、Cleaner exitCode=0、Schema 第一次删除成功、Stack 删除成功、剩余 Cluster=0。",
+					state: "云端已验证",
 				},
 			],
 			sections: [

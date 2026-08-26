@@ -13,6 +13,10 @@ export function PerformanceStatusCard({
 }) {
 	const metric = status.snapshot?.metrics[0] ?? null;
 	const isHistorical = status.dataMode === "historical";
+	const source = status.snapshot?.source;
+	const runUrl = source
+		? `https://github.com/${source.repository}/actions/runs/${source.workflowRunId}`
+		: null;
 
 	return (
 		<article className="border border-[#c7ced8] bg-white/90 p-5 shadow-sm">
@@ -38,8 +42,9 @@ export function PerformanceStatusCard({
 			</div>
 
 			{metric ? (
-				<div className="mt-5 grid gap-3 sm:grid-cols-3">
+				<div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
 					<Metric label={`${metric.name} p50`} value={`${metric.p50} ${metric.unit}`} />
+					<Metric label={`${metric.name} p75`} value={`${metric.p75} ${metric.unit}`} />
 					<Metric label={`${metric.name} p95`} value={`${metric.p95} ${metric.unit}`} />
 					<Metric label="样本数" value={String(metric.sampleCount)} />
 				</div>
@@ -50,9 +55,16 @@ export function PerformanceStatusCard({
 			)}
 
 			<div className="mt-5 flex flex-col gap-3 border-[#d8cfbd] border-t pt-4 sm:flex-row sm:items-center sm:justify-between">
-				<p className="text-[#5a6470] text-xs">
-					数据模式：{status.dataMode} · 快照：{status.snapshot?.captureId ?? "无"}
-				</p>
+				<div className="space-y-1 text-[#5a6470] text-xs">
+					<p>数据模式：{status.dataMode} · 快照：{status.snapshot?.captureId ?? "无"}</p>
+					{status.snapshot ? <p>采集时间：<time dateTime={status.snapshot.capturedAt}>{status.snapshot.capturedAt}</time></p> : null}
+					{runUrl && source ? (
+						<a className="inline-flex min-h-11 items-center gap-2 font-bold text-[#0f2d4d] underline-offset-4 hover:underline" href={runUrl} rel="noreferrer" target="_blank">
+							Run #{source.workflowRunId} · commit {source.commitSha.slice(0, 12)}
+							<ExternalLink aria-hidden="true" size={13} />
+						</a>
+					) : null}
+				</div>
 				<a
 					className="inline-flex min-h-11 items-center justify-center gap-2 bg-[#0f2d4d] px-4 py-3 font-bold text-sm text-white"
 					href={`/performance-control?project=${encodeURIComponent(projectId)}`}

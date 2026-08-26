@@ -1,6 +1,6 @@
 # 性能观测与成本控制 Evidence
 
-> 状态：本地页面、D1 状态机、R2 快照契约和公开只读 Worker 已实现；控制写入口保持失败关闭，Cloudflare Access、GitHub App 和 AWS 启停闭环尚未部署。本文只记录项目相关、可复核且有意义的工程步骤。云端真实 Run、资源清单和截图必须在实际执行后补入，不能用设计稿代替。
+> 状态：本地页面、D1 状态机、R2 快照契约和公开只读 Worker 已实现；BabySteps AWS 临时性能链已通过 Run 32917816824 完成一次真实云端闭环并精确清理。固定启停控制、Cloudflare Access 和 GitHub App 回调尚未上线，控制写入口继续失败关闭。
 
 ## 1. 目标与验收边界
 
@@ -327,3 +327,11 @@ snapshots/<projectSlug>/latest.json
 | 不采用 Athena/Glue/Firehose、常驻 ECS、每项目 OAuth/OIDC、通用 AWS 控制台和 AI 自动删除/重放 | 第 10 节 | 决策与原因已记录 |
 | Evidence 只保留有意义步骤，排除登录、远程连接及 Evidence 工具自身排障 | 第 12 节 | 文档规则已落实 |
 | 每次设计调整都必须同步更新项目 Evidence，而不是只保留在聊天记录 | 第 12、13 节 | 已建立收录清单；后续随实现持续维护 |
+
+## 14. 2026-08-26 真实 AWS 闭环
+
+- GitHub Actions：[Run 32917816824](https://github.com/Tiancheng-Xu/babysteps/actions/runs/32917816824)，提交 `b23894d4704eb60dc85c782ea7d9af8edeb2d135`，区域 `us-east-1`。
+- 临时资源：CloudFormation 创建 21 个项目资源，包含 HTTP API、2 个 Lambda、SQS/DLQ、ECR、ECS Cluster/Task Definition、日志组、项目 Secret、安全组与最小权限角色。
+- 真实数据链：接收 1 条受控 LCP 事件；ECS Cleaner `exitCode=0`；查询结果为 `sampleCount=1`、`p50=321ms`、`p75=321ms`、`p95=321ms`、`errorRate=0`。
+- 精确清理：项目 Schema 第一次删除成功；项目 Stack 删除成功；剩余项目 ECS Cluster 为 0；共享 Foundation 保持受保护。
+- 证据边界：该结果证明临时链路和清理生命周期可运行，不证明长期生产流量规模，也不表示固定启停控制已经上线。生产页只能把它展示为 `synthetic-closed-loop` 历史快照。
