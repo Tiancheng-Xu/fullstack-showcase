@@ -3,8 +3,10 @@ export type ControlState =
 	| "stopped"
 	| "starting"
 	| "running"
+	| "degraded"
 	| "stopping"
-	| "failed";
+	| "failed"
+	| "cleanup_required";
 export type DataMode = "live" | "historical" | "unavailable";
 
 export interface ProjectState {
@@ -15,6 +17,7 @@ export interface ProjectState {
 	operationId?: string;
 	idempotencyKey?: string;
 	workflowRunId?: string;
+	operationAction?: ControlAction;
 	cleanupVerified: boolean;
 	expiresAt?: string;
 	updatedAt: string;
@@ -47,14 +50,15 @@ export type ControlRequestResult =
 				| "cleanup_not_verified"
 				| "operation_in_progress"
 				| "already_stopped"
-				| "not_running";
+				| "not_running"
+				| "idempotency_action_conflict";
 	  };
 
 export interface WorkflowCallback {
 	operationId: string;
 	generation: number;
 	workflowRunId: string;
-	status: "running" | "stopped" | "failed";
+	status: "running" | "degraded" | "stopped" | "failed";
 	occurredAt: string;
 	cleanupVerified?: boolean;
 	dataMode?: DataMode;
@@ -85,6 +89,7 @@ export const createInitialProjectState = (
 const activeStates: ReadonlySet<ControlState> = new Set([
 	"starting",
 	"running",
+	"degraded",
 	"stopping",
 ]);
 
@@ -112,6 +117,9 @@ export const requestControlOperation = (
 		state.idempotencyKey === request.idempotencyKey &&
 		state.operationId
 	) {
+		if (state.operationAction && state.operationAction !== request.action) {
+			return { kind: "rejected", reason: "idempotency_action_conflict" };
+		}
 		return {
 			kind: "duplicate",
 			state,
@@ -130,12 +138,12 @@ export const requestControlOperation = (
 		if (state.controlState === "stopped") {
 			return { kind: "rejected", reason: "already_stopped" };
 		}
-		if (!activeStates.has(state.controlState) && state.controlState !== "failed") {
+		if (!activeStates.has(state.controlState) && state.controlState !== "failed" && state.controlState !== "cleanup_required") {
 			return { kind: "rejected", reason: "not_running" };
 		}
 	}
 
-	const generation = state.generation + 1;
+	const generation = request.action === "start" ? state.generation + 1 : state.generation;
 	const operation: ControlOperation = {
 		operationId: request.operationId,
 		projectSlug: state.projectSlug,
@@ -150,6 +158,7 @@ export const requestControlOperation = (
 		controlState: request.action === "start" ? "starting" : "stopping",
 		generation,
 		operationId: request.operationId,
+		operationAction: request.action,
 		idempotencyKey: request.idempotencyKey,
 		workflowRunId: undefined,
 		cleanupVerified: request.action === "start" ? false : state.cleanupVerified,
@@ -191,11 +200,11 @@ export const applyWorkflowCallback = (
 		kind: "applied",
 		state: {
 			...state,
-			controlState: callback.status,
+			controlState: callback.status === "failed" ? "cleanup_required" : callback.status,
 			dataMode,
 			workflowRunId: callback.workflowRunId,
 			cleanupVerified,
-			expiresAt: undefined,
+			expiresAt: callback.status === "running" || callback.status === "degraded" ? state.expiresAt : undefined,
 			updatedAt: callback.occurredAt,
 		},
 	};
@@ -216,7 +225,7 @@ export const reconcileExpiredOperation = (
 
 	return {
 		...state,
-		controlState: "failed",
+		controlState: "cleanup_required",
 		cleanupVerified: false,
 		expiresAt: undefined,
 		updatedAt: now,

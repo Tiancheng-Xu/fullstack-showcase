@@ -1,42 +1,14 @@
 {
-  "goal": "Build a reproducible local Cosmos SDK chain demo with genesis wallets token distribution bank transfer transaction query and block production evidence",
-  "context": {
-    "aiEngineering": false,
-    "allowedWritePaths": [
-      "apps/cosmos-local-chain/",
-      "docs/superpowers/",
-      "specs/cosmos-local-chain/",
-      ".tc-flow/"
-    ],
-    "feature": "cosmos-local-chain",
-    "network": "Official documentation and Go module downloads only; no paid RPC cloud resources deployment push or production actions",
-    "nonGoals": [
-      "EVM contract redeployment",
-      "Sepolia RPC replacement",
-      "Graph indexing reimplementation",
-      "cloud validator or public testnet"
-    ],
-    "runId": "97cd980a-2a54-4510-89a5-1a5f2bef74aa",
-    "sourceBranch": "origin/main",
-    "version": 2
-  },
-  "allowedTools": [
-    "apply_patch",
-    "bash",
-    "curl",
-    "git",
-    "go",
-    "ignite",
-    "jq",
-    "make"
-  ],
-  "acceptanceCriteria": [
-    "A reproducible local Cosmos SDK chain starts with an explicit chain ID and genesis",
-    "Validator Alice and Bob accounts receive explicit genesis allocations without exposing mnemonics or private keys",
-    "Alice sends ubaby to Bob and evidence captures balances transaction hash transaction query and containing block",
-    "A later block height proves continuing block production",
-    "Scripts stop cleanly and generated runtime state is excluded from Git",
-    "Existing BabySteps Sepolia RPC and Graph evidence remains unchanged and is referenced by immutable commit"
-  ],
-  "contractHash": "97e86269840a8b079e7d1d034b107c5497443f8a32d525988bb265c4cc5996c5"
+  "schemaVersion": 1,
+  "runId": "d35c7307-4a53-4b75-9d51-b7d9e5002026",
+  "feature": "performance-mfa-control",
+  "version": 1,
+  "contractHash": "b7d9e5003a74291de098ddbd6e2af9730b25782a43acc6422c56ce347a99a575",
+  "goal": "Expose a fail-closed Baby2B performance control plane protected by Cloudflare Access independent MFA and backed by fixed BabySteps GitHub Actions.",
+  "nonGoals": ["Device posture as an authorization factor", "Custom MFA or WebAuthn implementation inside the Worker", "Arbitrary repository, workflow, AWS command, duration, region, or stack inputs", "Exposing Access JWTs, GitHub App credentials, callback secrets, or raw operator identity", "Changing unrelated Dashboard projects or retired Evidence infrastructure"],
+  "repositories": ["/Users/shier/Desktop/repos/babysteps/.worktrees/performance-mfa-control-b7d9e500", "/Users/shier/Desktop/.tc-worktrees/fullstack-showcase-performance-mfa-control-b7d9e500"],
+  "allowedWritePaths": ["apps/web/apps/performance-control-worker/", "apps/web/apps/web/src/features/performance/", "apps/web/apps/web/src/data/portfolio-projects.ts", "apps/web/apps/web/src/routes/performance-control.tsx", "docs/", ".github/", ".tc-flow/"],
+  "networkScope": ["Cloudflare Access and Worker services for baby2b.online", "GitHub App installation restricted to Tiancheng-Xu/babysteps Actions dispatch", "Public read-only Dashboard status and protected control endpoints"],
+  "acceptanceCriteria": ["Public status and snapshot reads remain available without MFA", "All control session, start, and stop routes require a verified Cloudflare Access JWT for the exact allowlisted operator", "Cloudflare Access independent MFA is the authentication authority; the Worker does not implement custom MFA", "Mutations require same-origin requests, a single-use nonce, and an idempotency key", "The Worker dispatches only the fixed BabySteps workflow through a repository-scoped GitHub App installation token", "D1 records generation, operation, expiry, sanitized actor hash, cost estimate, callback, and cleanup state", "R2 stores only validated immutable snapshots and D1 exposes their verified projection", "The page shows 45-minute TTL, USD 0.20 cap, truthful pending/running/cleanup-required states, and disables unsafe actions", "Evidence records architecture, sequence, auth boundary, recovery, tests, limitations, and sanitized production proof"],
+  "production": "explicitly-authorized-after-gates"
 }

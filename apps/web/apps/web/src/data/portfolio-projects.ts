@@ -95,7 +95,7 @@ export const PORTFOLIO_PROJECTS: PortfolioProject[] = [
 		title: "性能观测与成本控制",
 		desc: "以 BabySteps 完成 AWS 临时性能观测、真实聚合与精确清理，并保留可信历史快照和可追溯 Evidence。",
 		status: "进行中",
-		progress: 70,
+		progress: 85,
 		architecture:
 			"Cloudflare 状态与控制面 + GitHub Actions 固定工作流 + AWS 临时观测资源 + D1 审计状态 + R2 不可变快照。",
 		evidenceUrl: `${DASHBOARD_EVIDENCE_BASE_URL}/performance-observability-control`,
@@ -108,7 +108,7 @@ export const PORTFOLIO_PROJECTS: PortfolioProject[] = [
 			"运行架构、发布流程、关键时序与明确非目标",
 		],
 		details: [
-			"本地状态模型、公共状态卡、Evidence 页面、D1 状态机、R2 快照校验和公开只读接口已实现并由测试约束。",
+			"本地已实现 Access JWT 独立校验、单次 nonce、幂等控制、固定 BabySteps workflow 派发、HMAC 回调和不可变 R2 快照；生产 Access/GitHub/Cloudflare 配置仍待云端验收。",
 			"BabySteps 已通过 GitHub OIDC 在 AWS us-east-1 创建 21 个临时资源，接收 1 条 LCP 事件并由 ECS Cleaner 产出 p50/p75/p95 聚合。",
 			"项目 Schema 与 Stack 已精确删除，剩余项目 ECS Cluster 为 0；固定启停控制仍保持失败关闭，尚未作为常驻服务上线。",
 		],
@@ -155,7 +155,7 @@ export const PORTFOLIO_PROJECTS: PortfolioProject[] = [
 		},
 		caseStudy: {
 			stateNotice:
-				"BabySteps AWS 临时观测链已完成一次真实云端闭环并精确清理；当前展示的是单样本合成历史快照，不是生产趋势。固定启停控制、Cloudflare Access 与 GitHub App 回调仍未上线，写入口继续失败关闭。",
+				"BabySteps AWS 临时观测链已完成一次真实云端闭环并精确清理；当前展示的是单样本合成历史快照，不是生产趋势。MFA 控制面已完成本地实现，Cloudflare Access、D1/R2 与 GitHub App 仍待生产配置和云端验收。",
 			requirements: [
 				{
 					requirement: "性能 SDK、日志接收、清洗与可视化",

@@ -1,10 +1,20 @@
-import { render, screen, within } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { act, fireEvent, render, screen, waitFor, within } from "@testing-library/react";
+import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { PerformanceControlContent } from "../performance-control-content";
 
 describe("PerformanceControlContent", () => {
-	it("shows the verified historical AWS run without pretending fixed controls are live", () => {
+	afterEach(() => vi.unstubAllGlobals());
+
+	it("enables the safe start action after MFA and shows truthful cost and TTL", async () => {
+		const fetchMock = vi.fn(async (input: string | URL | Request, init?: RequestInit) => {
+			const url = String(input);
+			if (url.includes("/status")) return new Response(JSON.stringify({ projectSlug: "performance-observability-control", controlState: "stopped", dataMode: "historical", cleanupVerified: true, expiresAt: null, estimatedCostUsd: 0.2, maximumRuntimeMinutes: 45 }));
+			if (url.includes("/session")) return new Response(JSON.stringify({ nonce: "nonce-1", expiresAt: "2099-01-01T00:00:00.000Z", mfaVerified: true, maximumRuntimeMinutes: 45, estimatedCostUsd: 0.2 }));
+			if (url.includes("/start") && init?.method === "POST") return new Response(JSON.stringify({ controlState: "starting", expiresAt: "2099-01-01T00:45:00.000Z" }), { status: 202 });
+			throw new Error(`unexpected fetch ${url}`);
+		});
+		vi.stubGlobal("fetch", fetchMock);
 		render(
 			<PerformanceControlContent projectId="performance-observability-control" />,
 		);
@@ -27,11 +37,16 @@ describe("PerformanceControlContent", () => {
 			"https://github.com/Tiancheng-Xu/babysteps/actions/runs/32917816824",
 		);
 
+		expect(await screen.findByText("MFA 已验证")).toBeVisible();
+		expect(screen.getByText("预计增量费用上限：USD 0.20")).toBeVisible();
+		expect(screen.getByText("最长运行：45 分钟")).toBeVisible();
 		const startButton = screen.getByRole("button", { name: "启动性能观测" });
 		const stopButton = screen.getByRole("button", { name: "安全停止性能观测" });
-		expect(startButton).toBeDisabled();
+		expect(startButton).toBeEnabled();
 		expect(stopButton).toBeDisabled();
-		expect(screen.getAllByText(/固定启停控制尚未部署/)).not.toHaveLength(0);
+		fireEvent.click(startButton);
+		await waitFor(() => expect(fetchMock.mock.calls.some(([url]) => String(url).includes("/start"))).toBe(true));
+		expect(await screen.findByText(/启动请求已受理/)).toBeVisible();
 	});
 
 	it("rejects unknown projects without exposing a generic AWS control panel", () => {
@@ -39,5 +54,37 @@ describe("PerformanceControlContent", () => {
 
 		expect(screen.getByRole("heading", { name: "项目不可控制" })).toBeVisible();
 		expect(screen.queryByRole("button", { name: "启动性能观测" })).toBeNull();
+	});
+
+	it("polls active states every five seconds and refreshes immediately at TTL zero", async () => {
+		vi.useFakeTimers();
+		let statusCalls = 0;
+		vi.stubGlobal("fetch", vi.fn(async (input: string | URL | Request) => {
+			const url = String(input);
+			if (url.includes("/status")) {
+				statusCalls += 1;
+				return new Response(JSON.stringify({ controlState: "running", dataMode: "live", cleanupVerified: false, expiresAt: new Date(Date.now() + 1_000).toISOString(), estimatedCostUsd: 0.2, maximumRuntimeMinutes: 45 }));
+			}
+			return new Response(JSON.stringify({ nonce: "nonce-active", expiresAt: new Date(Date.now() + 300_000).toISOString(), mfaVerified: true, estimatedCostUsd: 0.2, maximumRuntimeMinutes: 45 }));
+		}));
+		render(<PerformanceControlContent projectId="performance-observability-control" />);
+		await act(async () => Promise.resolve());
+		expect(statusCalls).toBe(1);
+		await act(async () => { vi.advanceTimersByTime(1_000); await Promise.resolve(); });
+		expect(statusCalls).toBe(2);
+		await act(async () => { vi.advanceTimersByTime(5_000); await Promise.resolve(); });
+		expect(statusCalls).toBeGreaterThanOrEqual(3);
+		vi.useRealTimers();
+	});
+
+	it("allows an MFA operator to stop a degraded run", async () => {
+		vi.stubGlobal("fetch", vi.fn(async (input: string | URL | Request) => {
+			const url = String(input);
+			if (url.includes("/status")) return new Response(JSON.stringify({ controlState: "degraded", cleanupVerified: false, expiresAt: null, estimatedCostUsd: 0.2, maximumRuntimeMinutes: 45 }));
+			return new Response(JSON.stringify({ nonce: "nonce-degraded", expiresAt: "2099-01-01T00:00:00.000Z", mfaVerified: true, estimatedCostUsd: 0.2, maximumRuntimeMinutes: 45 }));
+		}));
+		render(<PerformanceControlContent projectId="performance-observability-control" />);
+		expect(await screen.findByText("MFA 已验证")).toBeVisible();
+		expect(screen.getByRole("button", { name: "安全停止性能观测" })).toBeEnabled();
 	});
 });
