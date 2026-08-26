@@ -19,7 +19,8 @@ describe("performance observability Evidence integration", () => {
 		expect(
 			screen.getAllByRole("heading", { name: "性能观测与成本控制" }),
 		).not.toHaveLength(0);
-		expect(screen.getByText("暂无可信快照")).toBeVisible();
+		expect(screen.getByText("历史快照")).toBeVisible();
+		expect(screen.getAllByText("321 ms")).toHaveLength(3);
 		expect(
 			screen.getByRole("link", { name: /进入成本控制/ }),
 		).toHaveAttribute(
@@ -48,6 +49,7 @@ describe("performance observability Evidence integration", () => {
 		expect(screen.getByText(/常驻 ECS/)).toBeVisible();
 		expect(screen.getByText(/AI Agent 自动删除或重放资源/)).toBeVisible();
 		expect(screen.getAllByText(/云端未部署/)).not.toHaveLength(0);
+		expect(screen.getAllByText(/云端已验证/)).not.toHaveLength(0);
 		for (const diagramHeading of [
 			"运行架构图",
 			"GitHub Actions、预览与灰度",

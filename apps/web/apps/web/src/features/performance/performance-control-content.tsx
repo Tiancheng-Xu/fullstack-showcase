@@ -8,6 +8,8 @@ import {
 } from "lucide-react";
 
 import { PROJECTS_INDEX } from "@/data/portfolio-projects";
+import { resolvePerformanceView } from "@/features/performance/performance-state";
+import { PerformanceStatusCard } from "@/features/performance/performance-status-card";
 import { PortfolioPageShell } from "@/features/portfolio/portfolio-page-shell";
 import { Button } from "@web/ui/components/button";
 import {
@@ -57,17 +59,40 @@ export function PerformanceControlContent({ projectId }: { projectId: string }) 
 			</PortfolioPageShell>
 		);
 	}
+	const performanceView = resolvePerformanceView(project.performance);
+	const latestSource = performanceView.snapshot?.source;
 
 	return (
 		<PortfolioPageShell
 			current="project"
-			description="只允许启动观测与安全停止两条经过审计的固定工作流；真实云端链路尚未部署，所有写入口继续失败关闭。"
+			description="AWS 临时观测链已完成真实闭环并精确清理；固定启停控制尚未部署，所有写入口继续失败关闭。"
 			evidenceUrl={`/evidence/${project.id}`}
 			eyebrow={`Project Control · ${project.title}`}
 			projectHomeUrl={`/performance-control?project=${project.id}`}
 			title="性能观测成本控制"
 		>
 		<div className="mx-auto max-w-5xl space-y-6">
+			<PerformanceStatusCard
+				projectId={project.id}
+				projectName={project.title}
+				status={performanceView}
+			/>
+			{latestSource ? (
+				<section className="border border-emerald-300 bg-emerald-50 p-5 text-emerald-950">
+					<h2 className="font-serif font-bold text-xl">最近一次云端验收已完成并清理</h2>
+					<p className="mt-2 text-sm leading-relaxed">
+						BabySteps 通过 GitHub OIDC 在 AWS us-east-1 创建临时观测链，完成受控事件、ECS Cleaner 与聚合查询后删除项目 Schema 和 Stack；剩余项目 ECS Cluster 为 0。
+					</p>
+					<a
+						className="mt-4 inline-flex min-h-11 items-center gap-2 border border-emerald-800 px-4 py-3 font-bold text-sm"
+						href={`https://github.com/${latestSource.repository}/actions/runs/${latestSource.workflowRunId}`}
+						rel="noreferrer"
+						target="_blank"
+					>
+						查看 GitHub Run #{latestSource.workflowRunId}
+					</a>
+				</section>
+			) : null}
 			<header className="border border-[#c7ced8] bg-[#f8f3e8] p-6 sm:p-8">
 				<div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
 					<div>
@@ -82,7 +107,7 @@ export function PerformanceControlContent({ projectId }: { projectId: string }) 
 					</div>
 					<span className="inline-flex min-h-11 items-center gap-2 border border-amber-300 bg-amber-50 px-3 py-2 font-bold text-amber-950 text-xs">
 						<LockKeyhole aria-hidden="true" size={16} />
-						云端控制尚未部署
+						临时云端已验证 · 固定控制待部署
 					</span>
 				</div>
 			</header>
@@ -123,7 +148,7 @@ export function PerformanceControlContent({ projectId }: { projectId: string }) 
 			</section>
 
 			<p className="border border-dashed border-[#c7ced8] bg-white/80 p-4 text-[#4d5863] text-sm leading-relaxed">
-				当前页面仅发布已确认的控制契约。按钮在 Access、D1 审计、GitHub App 回调和云端清理验证全部落地前保持禁用，避免产生无法追溯的 AWS 写操作。
+				最近一次临时云端闭环已经验证并清理；下方按钮仍在 Access、D1 审计和 GitHub App 固定派发全部上线前保持禁用，避免把一次性验收误写成常驻控制服务。
 			</p>
 		</div>
 		</PortfolioPageShell>
@@ -164,7 +189,7 @@ function LifecycleCard({
 					{icon}
 					{buttonLabel}
 				</Button>
-				<p className="text-center text-muted-foreground text-xs">云端控制尚未部署</p>
+				<p className="text-center text-muted-foreground text-xs">固定启停控制尚未部署</p>
 			</CardContent>
 		</Card>
 	);
