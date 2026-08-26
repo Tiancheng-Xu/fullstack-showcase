@@ -134,8 +134,8 @@ jobs:
       - name: Launch one temporary paid node
         id: launch
         env:
-          VPC_ID: ${{ secrets.AWS_COSMOS_VPC_ID }}
           SUBNET_ID: ${{ secrets.AWS_COSMOS_PUBLIC_SUBNET_ID }}
+          SECURITY_GROUP_ID: ${{ secrets.AWS_COSMOS_SECURITY_GROUP_ID }}
           INSTANCE_PROFILE: ${{ secrets.AWS_COSMOS_INSTANCE_PROFILE }}
         run: |
           set -Eeuo pipefail
@@ -143,26 +143,19 @@ jobs:
             --filters 'Name=name,Values=al2023-ami-2023.*-x86_64' 'Name=state,Values=available' \
             --query 'Images | sort_by(@,&CreationDate)[-1].ImageId' --output text)"
           test "$ami" != "None"
-          sg="$(aws ec2 create-security-group \
-            --group-name "tc-cosmos-${GITHUB_RUN_ID}" \
-            --description 'Temporary no-ingress Cosmos evidence node' \
-            --vpc-id "$VPC_ID" \
-            --tag-specifications "ResourceType=security-group,Tags=[{Key=Project,Value=cosmos-local-chain},{Key=Lifecycle,Value=temporary},{Key=PublicUse,Value=false},{Key=GitHubRunId,Value=${GITHUB_RUN_ID}}]" \
-            --query GroupId --output text)"
           instance="$(aws ec2 run-instances \
             --image-id "$ami" --instance-type "$INSTANCE_TYPE" \
             --iam-instance-profile "Name=$INSTANCE_PROFILE" \
             --user-data "file://$RUNNER_TEMP/node-bootstrap.sh" \
             --metadata-options 'HttpTokens=required,HttpEndpoint=enabled' \
             --instance-initiated-shutdown-behavior stop \
-            --network-interfaces "DeviceIndex=0,AssociatePublicIpAddress=true,SubnetId=$SUBNET_ID,Groups=$sg" \
+            --network-interfaces "DeviceIndex=0,AssociatePublicIpAddress=true,SubnetId=$SUBNET_ID,Groups=$SECURITY_GROUP_ID" \
             --block-device-mappings 'DeviceName=/dev/xvda,Ebs={VolumeSize=20,VolumeType=gp3,DeleteOnTermination=true,Encrypted=true}' \
             --tag-specifications \
               "ResourceType=instance,Tags=[{Key=Name,Value=tc-cosmos-paid-node-${GITHUB_RUN_ID}},{Key=Project,Value=cosmos-local-chain},{Key=Lifecycle,Value=temporary},{Key=PublicUse,Value=false},{Key=GitHubRunId,Value=${GITHUB_RUN_ID}}]" \
               "ResourceType=volume,Tags=[{Key=Project,Value=cosmos-local-chain},{Key=Lifecycle,Value=temporary},{Key=PublicUse,Value=false},{Key=GitHubRunId,Value=${GITHUB_RUN_ID}}]" \
             --query 'Instances[0].InstanceId' --output text)"
           echo "instance=$instance" >> "$GITHUB_OUTPUT"
-          echo "security_group=$sg" >> "$GITHUB_OUTPUT"
           aws ec2 wait instance-running --instance-ids "$instance"
 
       - name: Wait for evidence marker
