@@ -1,0 +1,42 @@
+{
+  "schema": "tc-flow RunResult v1",
+  "runId": "97cd980a-2a54-4510-89a5-1a5f2bef74aa",
+  "feature": "cosmos-local-chain",
+  "contractHash": "97e86269840a8b079e7d1d034b107c5497443f8a32d525988bb265c4cc5996c5",
+  "status": "complete",
+  "nodes": {
+    "N1": "completed",
+    "N2": "completed",
+    "N3-N5": "4/4 tasks completed and independently reviewed",
+    "N6": "pass (8/8 acceptance criteria)",
+    "N7": "ALLOW",
+    "N8": "local feature commit; integration pending user choice"
+  },
+  "repository": {
+    "path": ".",
+    "role": "monorepo",
+    "branch": "tc/cosmos-local-chain-97e86269",
+    "featureCommit": "236d93cb1be32bfa2887d2be12cc0bf6562afe38",
+    "integration": "pending user choice",
+    "push": "not performed",
+    "pullRequest": null
+  },
+  "verification": {
+    "makeTest": "pass",
+    "goTest": "pass",
+    "evidenceJson": "8/8 valid",
+    "portsReleased": [1317, 26656, 26657],
+    "featureQA": ".tc-flow/qa/feature-result.json",
+    "stopHook": ".tc-flow/stop-hook-result.json"
+  },
+  "reviewer": {
+    "provider": "codex",
+    "model": "isolated-reviewer",
+    "degraded": false,
+    "p0Issues": []
+  },
+  "testDeployment": "not applicable; local chain only",
+  "production": "not requested",
+  "retries": 2,
+  "blockers": []
+}

@@ -4,7 +4,7 @@
   "feature": "cosmos-local-chain",
   "contractHash": "97e86269840a8b079e7d1d034b107c5497443f8a32d525988bb265c4cc5996c5",
   "currentNode": "N8",
-  "status": "in_progress",
+  "status": "complete",
   "difficulty": "medium",
   "execution": {
     "worker": {
@@ -119,6 +119,12 @@
       "node": "N7",
       "status": "ALLOW",
       "stopHook": ".tc-flow/stop-hook-result.json"
+    },
+    {
+      "node": "N8",
+      "status": "completed",
+      "delivery": "local-feature-commit",
+      "integration": "pending-user-choice"
     }
   ]
 }

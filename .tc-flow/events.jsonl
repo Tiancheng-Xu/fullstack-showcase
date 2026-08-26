@@ -19,3 +19,4 @@
 {"timestamp":"2026-08-26T00:20:05Z","runId":"97cd980a-2a54-4510-89a5-1a5f2bef74aa","node":"N5","taskId":"T-004","status":"completed","checkpoint":".tc-flow/checkpoints/T-004.json"}
 {"timestamp":"2026-08-26T00:20:05Z","runId":"97cd980a-2a54-4510-89a5-1a5f2bef74aa","node":"N6","status":"pass","acceptanceCriteria":"8/8"}
 {"timestamp":"2026-08-26T00:20:05Z","runId":"97cd980a-2a54-4510-89a5-1a5f2bef74aa","node":"N7","status":"ALLOW","stopHook":".tc-flow/stop-hook-result.json"}
+{"timestamp":"2026-08-26T00:20:05Z","runId":"97cd980a-2a54-4510-89a5-1a5f2bef74aa","node":"N8","status":"completed","featureCommit":"236d93cb1be32bfa2887d2be12cc0bf6562afe38","integration":"pending-user-choice"}
