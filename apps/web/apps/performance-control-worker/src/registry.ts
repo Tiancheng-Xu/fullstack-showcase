@@ -2,21 +2,21 @@ export interface RegisteredPerformanceProject {
 	projectSlug: string;
 	repository: string;
 	githubEnvironment: string;
-	startWorkflow: string;
-	stopWorkflow: string;
+	workflow: string;
 	awsResourcePrefix: string;
 	maximumRuntimeMinutes: number;
+	estimatedCostUsd: number;
 }
 
 const projects: Record<string, RegisteredPerformanceProject> = {
 	"performance-observability-control": {
 		projectSlug: "performance-observability-control",
-		repository: "Tiancheng-Xu/course-homework",
+		repository: "Tiancheng-Xu/babysteps",
 		githubEnvironment: "aws-performance",
-		startWorkflow: "performance-start.yml",
-		stopWorkflow: "performance-stop.yml",
-		awsResourcePrefix: "course-performance-",
+		workflow: "aws-performance-control.yml",
+		awsResourcePrefix: "babysteps-performance-",
 		maximumRuntimeMinutes: 45,
+		estimatedCostUsd: 0.2,
 	},
 };
 

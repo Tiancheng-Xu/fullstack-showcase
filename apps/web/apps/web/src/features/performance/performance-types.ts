@@ -3,6 +3,8 @@ export type PerformanceControlState =
 	| "running"
 	| "stopping"
 	| "stopped"
+	| "failed"
+	| "cleanup_required"
 	| "degraded"
 	| "unknown";
 

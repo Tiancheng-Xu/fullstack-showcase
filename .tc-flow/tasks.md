@@ -1,6 +1,4 @@
-# cosmos-local-chain - Tasks
+# Performance MFA Control Tasks
 
-- [x] T-001: 固定项目私有 Ignite 工具链，生成 Cosmos SDK 链源码并建立脚本行为测试基线
-- [x] T-002: 配置单验证人创世状态、三个钱包角色和安全的本地启动/停止流程
-- [x] T-003: 实现 Alice 到 Bob 的真实转账、交易/区块查询与脱敏证据导出
-- [x] T-004: 执行完整本地链 QA、秘密扫描、清理验证并补齐中文复现文档
+- [ ] Atomic review unit T-101 + T-102 + T-103: failing security tests, Worker/D1/R2/GitHub control implementation, and truthful control-page behavior must move through red, green, and independent review together. Local green evidence does not mark any member complete before the reviewer passes the whole unit.
+- [ ] T-104: Add sanitized architecture, sequence, security, cost, recovery, and production Evidence plus deterministic release gates.

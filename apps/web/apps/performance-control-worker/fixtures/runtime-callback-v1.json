@@ -1,0 +1,12 @@
+{
+  "schemaVersion": "1.0",
+  "deliveryId": "fixture-delivery-control-1",
+  "source": "control",
+  "operationId": "fixture-operation-control-1",
+  "generation": 1,
+  "workflowRunId": "fixture-workflow-run-1",
+  "status": "running",
+  "occurredAt": "2026-08-26T12:00:00.000Z",
+  "cleanupVerified": false,
+  "zeroResidualVerified": false
+}

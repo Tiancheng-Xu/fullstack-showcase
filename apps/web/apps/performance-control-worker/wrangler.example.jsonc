@@ -2,10 +2,20 @@
 	"name": "course-performance-control",
 	"main": "src/index.ts",
 	"compatibility_date": "2026-08-14",
+	"compatibility_flags": ["nodejs_compat"],
 	"vars": {
 		"CONTROL_ENABLED": "false",
-		"ACCESS_AUD": "replace-at-deploy-time"
+		"CONTROL_ORIGIN": "https://baby2b.online",
+		"ACCESS_ISSUER": "https://replace.cloudflareaccess.com",
+		"ACCESS_AUD": "replace-at-deploy-time",
+		"ACCESS_OPERATOR_SUB": "replace-at-deploy-time",
+		"GITHUB_APP_ID": "replace-at-deploy-time",
+		"GITHUB_APP_INSTALLATION_ID": "replace-at-deploy-time"
 	},
+	// Required Worker secrets (names only):
+	// ACCESS_OPERATOR_EMAIL
+	// GITHUB_APP_PRIVATE_KEY
+	// CALLBACK_HMAC_SECRET
 	"d1_databases": [
 		{
 			"binding": "CONTROL_DB",
@@ -22,5 +32,9 @@
 	],
 	"triggers": {
 		"crons": ["*/5 * * * *"]
+	},
+	"observability": {
+		"enabled": true,
+		"head_sampling_rate": 0.1
 	}
 }

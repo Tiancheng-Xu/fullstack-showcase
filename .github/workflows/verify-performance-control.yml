@@ -1,0 +1,40 @@
+name: Verify performance control
+
+on:
+  pull_request:
+    paths:
+      - "apps/web/apps/performance-control-worker/**"
+      - "apps/web/apps/web/src/features/performance/**"
+      - ".github/workflows/verify-performance-control.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: apps/web
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11.17.0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+          cache-dependency-path: apps/web/pnpm-lock.yaml
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm --filter @course/performance-control-worker test
+      - run: pnpm --filter @course/performance-control-worker check-types
+      - name: Generate disabled production config
+        run: node apps/performance-control-worker/scripts/generate-production-config.mjs --ci > apps/performance-control-worker/wrangler.production.generated.jsonc
+      - name: Apply D1 migrations locally
+        run: pnpm dlx wrangler@4.38.0 d1 migrations apply course-performance-control --local --config apps/performance-control-worker/wrangler.production.generated.jsonc --persist-to /tmp/performance-control-d1
+      - name: Validate Worker bindings and bundle
+        run: pnpm dlx wrangler@4.38.0 deploy --dry-run --config apps/performance-control-worker/wrangler.production.generated.jsonc --outdir /tmp/performance-control-worker-dry-run
+      - run: pnpm --filter web test -- src/features/performance/__tests__
+      - run: pnpm --dir apps/web check-types
