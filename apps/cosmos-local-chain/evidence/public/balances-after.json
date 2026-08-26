@@ -1,0 +1,19 @@
+{
+  "chain_id": "babysteps-local-1",
+  "height": 3,
+  "denom": "ubaby",
+  "accounts": {
+    "validator": {
+      "address": "baby1gtfylal99hnudvrmh6t3nw30tn2cyp0ke6wq03",
+      "amount": "500000000"
+    },
+    "alice": {
+      "address": "baby12rzewdkdysg3d0539u9lxar0zxaw6fztmuluf6",
+      "amount": "474999500"
+    },
+    "bob": {
+      "address": "baby160mcfgqpx2kc2h6mmkqkkc84wq778shg5l4w2s",
+      "amount": "125000000"
+    }
+  }
+}

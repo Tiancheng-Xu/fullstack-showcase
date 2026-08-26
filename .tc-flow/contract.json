@@ -1,105 +1,42 @@
 {
-  "schema": "tc-flow Contract v1",
-  "version": 1,
-  "runId": "tc_performance_observability_control_20260814_c6153557",
-  "feature": "performance-observability-control",
-  "contractHash": "c6153557d5287a0cb7bb7164df73c6961e783faec583fe791cd0fdc2be2c75a3",
-  "goal": "在 Dashboard 和 Evidence 提供同源、安全、低成本的性能观测状态、历史快照兜底与项目级启停控制，并把完整架构和验证证据整理进 Evidence。",
-  "nonGoals": [
-    "通用 AWS 管理控制台",
-    "浏览器直连 AWS 或 GitHub 管理 API",
-    "Athena Glue Firehose 数据湖链路",
-    "常驻 ECS 服务",
-    "每项目独立 OAuth 或 OIDC Provider",
-    "AI Agent 自动删除或重放云资源",
-    "伪造性能指标或运行证据"
-  ],
-  "repositories": [
-    {
-      "path": ".",
-      "role": "central-dashboard-and-evidence",
-      "branch": "tc/performance-observability-control-c6153557"
-    }
-  ],
-  "allowedWritePaths": [
-    ".tc-flow/",
-    "apps/web/",
-    "docs/",
-    "infra/",
-    "scripts/",
-    "README.md",
-    "AGENTS.md"
-  ],
-  "allowedReadPaths": [
-    ".",
-    "Tiancheng-Xu/personal-skills",
-    "/Users/shier/.codex/aws-shared-foundation.yaml"
-  ],
+  "goal": "Build a reproducible local Cosmos SDK chain demo with genesis wallets token distribution bank transfer transaction query and block production evidence",
+  "context": {
+    "aiEngineering": false,
+    "allowedWritePaths": [
+      "apps/cosmos-local-chain/",
+      "docs/superpowers/",
+      "specs/cosmos-local-chain/",
+      ".tc-flow/"
+    ],
+    "feature": "cosmos-local-chain",
+    "network": "Official documentation and Go module downloads only; no paid RPC cloud resources deployment push or production actions",
+    "nonGoals": [
+      "EVM contract redeployment",
+      "Sepolia RPC replacement",
+      "Graph indexing reimplementation",
+      "cloud validator or public testnet"
+    ],
+    "runId": "97cd980a-2a54-4510-89a5-1a5f2bef74aa",
+    "sourceBranch": "origin/main",
+    "version": 2
+  },
   "allowedTools": [
-    "Read",
-    "Edit",
-    "Write",
-    "Bash",
-    "pnpm",
-    "Vitest",
-    "Playwright",
-    "Wrangler",
-    "AWS CLI",
-    "GitHub CLI",
-    "TC Flow"
-  ],
-  "network": "允许 npm、Cloudflare、GitHub 与 AWS；云端写入仅限已批准的共享身份和项目临时资源，生产发布仍需最终门禁。",
-  "tasks": [
-    {
-      "id": "T-001",
-      "role": "frontend",
-      "risk": "medium",
-      "desc": "定义性能状态机、快照契约和实时失败回退，并以测试锁定行为",
-      "deps": []
-    },
-    {
-      "id": "T-002",
-      "role": "frontend",
-      "risk": "medium",
-      "desc": "实现 Dashboard 与 Evidence 共享性能状态卡、历史快照和控制入口",
-      "deps": ["T-001"]
-    },
-    {
-      "id": "T-003",
-      "role": "frontend",
-      "risk": "medium",
-      "desc": "实现结构化 Evidence：交付要求映射、运行架构、时序、Actions、预览灰度、权限、成本和清理",
-      "deps": ["T-002"]
-    },
-    {
-      "id": "T-004",
-      "role": "backend",
-      "risk": "high",
-      "desc": "实现 Worker 的 D1 权威状态、R2 不可变快照、Access 鉴权、GitHub dispatch webhook 和 Cron 对账",
-      "deps": ["T-001"]
-    },
-    {
-      "id": "T-005",
-      "role": "devops",
-      "risk": "high",
-      "desc": "实现固定 GitHub Actions 启停、AWS 预算门禁、TTL 恢复和精确清理",
-      "deps": ["T-004"]
-    },
-    {
-      "id": "T-006",
-      "role": "other",
-      "risk": "high",
-      "desc": "完成本地门禁、真实云启停闭环、脱敏证据和最终 Evidence 回填",
-      "deps": ["T-003", "T-005"]
-    }
+    "apply_patch",
+    "bash",
+    "curl",
+    "git",
+    "go",
+    "ignite",
+    "jq",
+    "make"
   ],
   "acceptanceCriteria": [
-    "Dashboard 和 Evidence 显示同一真实控制状态与数据模式",
-    "实时链停止或故障时展示最后可信快照并明确非实时",
-    "无快照时显示可信空状态且不生成示例指标",
-    "Access、幂等、generation 和 CAS 阻止未授权、重复和乱序操作",
-    "停止流程验证项目临时资源为空且共享资源保持不变",
-    "Evidence 包含对话确认的设计、完整架构、时序、Actions、预览灰度、权限、成本、清理和不采用方案",
-    "测试、类型、构建、链接、响应式、敏感内容和预算门禁通过"
-  ]
+    "A reproducible local Cosmos SDK chain starts with an explicit chain ID and genesis",
+    "Validator Alice and Bob accounts receive explicit genesis allocations without exposing mnemonics or private keys",
+    "Alice sends ubaby to Bob and evidence captures balances transaction hash transaction query and containing block",
+    "A later block height proves continuing block production",
+    "Scripts stop cleanly and generated runtime state is excluded from Git",
+    "Existing BabySteps Sepolia RPC and Graph evidence remains unchanged and is referenced by immutable commit"
+  ],
+  "contractHash": "97e86269840a8b079e7d1d034b107c5497443f8a32d525988bb265c4cc5996c5"
 }

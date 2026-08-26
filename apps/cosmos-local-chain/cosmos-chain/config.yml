@@ -1,0 +1,20 @@
+version: 1
+validation: sovereign
+default_denom: ubaby
+build:
+  binary: babysteps-chaind
+accounts:
+  - name: validator
+    coins:
+      - 1000000000ubaby
+  - name: alice
+    coins:
+      - 500000000ubaby
+  - name: bob
+    coins:
+      - 100000000ubaby
+genesis:
+  chain_id: babysteps-local-1
+validators:
+  - name: validator
+    bonded: 500000000ubaby

@@ -1,0 +1,59 @@
+{
+  "header": {
+    "version": {
+      "block": "11",
+      "app": "0"
+    },
+    "chain_id": "babysteps-local-1",
+    "height": "2",
+    "time": "2026-08-26T00:18:20.622388Z",
+    "last_block_id": {
+      "hash": "MNE7mYk0jd8+iOek3IjHLdiYtEAYyPdA0A33XfWYy4s=",
+      "part_set_header": {
+        "total": 1,
+        "hash": "MRAw1QoHe2yYagp8pe73JdyBYKv+Zie9AuuPhjEOnAE="
+      }
+    },
+    "last_commit_hash": "lg3G+eS/50OXvDPbbsLwTK5N33QM97RU2/+Sx9W5hcs=",
+    "data_hash": "NCNvZhcdnyfFWKrk0Se3BEwXtHwAIFfc3n3np6NcT+w=",
+    "validators_hash": "uGjGwRlt8fuEX+q4bBBuiuv6ZYr0AgYc67/AcsUQe24=",
+    "next_validators_hash": "uGjGwRlt8fuEX+q4bBBuiuv6ZYr0AgYc67/AcsUQe24=",
+    "consensus_hash": "BICRvH3cKD93v7+R1zxE2ljD34qcvIZ0Bdi389qtoi8=",
+    "app_hash": "+imSr+upEBA8DaU4LaRL+ZoSot/C0jLMDJkGcW5HwC0=",
+    "last_results_hash": "47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=",
+    "evidence_hash": "47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=",
+    "proposer_address": "d2mpgg1emZ89YiqPDcGXDOKvpcM="
+  },
+  "data": {
+    "txs": [
+      "CpABCo0BChwvY29zbW9zLmJhbmsudjFiZXRhMS5Nc2dTZW5kEm0KK2JhYnkxMnJ6ZXdka2R5c2czZDA1Mzl1OWx4YXIwenhhdzZmenRtdWx1ZjYSK2JhYnkxNjBtY2ZncXB4MmtjMmg2bW1rcWtrYzg0d3E3NzhzaGc1bDR3MnMaEQoFdWJhYnkSCDI1MDAwMDAwEmQKTgpGCh8vY29zbW9zLmNyeXB0by5zZWNwMjU2azEuUHViS2V5EiMKIQImfXma16IMI7kt2TmnU2JWibzqHOHf/RKb/dZ3/DDoRxIECgIIARISCgwKBXViYWJ5EgM1MDAQwJoMGkCaqqrkQRApfNqFRaqNRqh7FTfU9pQpMVvjeYi+6YUWCGM8+sISviCspgy26g/DbGBvZ/V7APrpvwC0PzLYH0s2"
+    ]
+  },
+  "evidence": {
+    "evidence": []
+  },
+  "last_commit": {
+    "height": "1",
+    "round": 0,
+    "block_id": {
+      "hash": "MNE7mYk0jd8+iOek3IjHLdiYtEAYyPdA0A33XfWYy4s=",
+      "part_set_header": {
+        "total": 1,
+        "hash": "MRAw1QoHe2yYagp8pe73JdyBYKv+Zie9AuuPhjEOnAE="
+      }
+    },
+    "signatures": [
+      {
+        "block_id_flag": "BLOCK_ID_FLAG_COMMIT",
+        "validator_address": "d2mpgg1emZ89YiqPDcGXDOKvpcM=",
+        "timestamp": "2026-08-26T00:18:20.622388Z",
+        "signature": "RNj3Qb1czyqEePP87PiDYpFJnyTwhxuBp6WlZ0LaUyiqwz9XUkXB211tFu6MfNSeu0/F2K8VagswYj7HOPr5Bw=="
+      }
+    ]
+  },
+  "proof": {
+    "queried_tx_hash": "A4EA2B7FD1F058EC345DBFD46BC4B1BDF13F0562A06E3A6D9F8E83D4F03AFD8B",
+    "raw_tx_sha256": "A4EA2B7FD1F058EC345DBFD46BC4B1BDF13F0562A06E3A6D9F8E83D4F03AFD8B",
+    "matches": true
+  }
+}

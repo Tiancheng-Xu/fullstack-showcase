@@ -1,24 +1,18 @@
 {
   "schema": "tc-flow ReviewBundle v1",
   "sanitized": true,
-  "runId": "tc_nurture_bloom_ui_20260729_3f7ba54d",
+  "runId": "97cd980a-2a54-4510-89a5-1a5f2bef74aa",
   "taskId": "FEATURE-STOP",
-  "contractHash": "3f7ba54d134c029bc78e18aa2bb1f4e880816ddbb23345c8f6a151b15fe0ca5c",
-  "risk": "low",
-  "contractSummary": "Final working-tree gate for a local-only frontend Feature. Allowed paths are package metadata, apps, docs, README/HOMEWORKS, gitignore, and .tc-flow. GitHub push and production deployment are non-goals.",
-  "task": "Review the cumulative Feature against the frozen contract, task reviews, 7/7 Feature QA, memory, allowed write paths, and security boundaries. Return pass only if the working tree matches scope and contains no P0 issue.",
-  "sanitizedDiff": "Cumulative Feature contains Better-T-Stack metadata under apps/web, a TanStack Router React application, semantic Tailwind v4 theme, local Stitch assets, shared UI primitives, four local-state routes, 8 passing tests, runtime and QA documentation, and TC Flow evidence. Git status is limited to README.md, .tc-flow/, apps/web/, docs/qa/, package.json, and pnpm-lock.yaml; all are contract-allowed.",
+  "contractHash": "97e86269840a8b079e7d1d034b107c5497443f8a32d525988bb265c4cc5996c5",
+  "risk": "medium",
+  "contractSummary": "Allow local delivery only after all task reviews, deterministic QA, cleanup, and secret boundaries pass.",
+  "task": "Evaluate final stop policy for the local Cosmos feature.",
+  "sanitizedDiff": "T-001 through T-004 review summaries and Feature QA result.",
   "evidence": [
-    "Four task reviews passed with no P0 issues and no reviewer degradation.",
-    "Feature QA passed 7/7 acceptance criteria.",
-    "Final tests, typecheck, production build, scoped lint, responsive browser audit, accessibility audit, and secret scan passed.",
-    "Actual working-tree top-level changes are all within the frozen allowedWritePaths.",
-    "No authentication, database, remote API, upload, GitHub push, production deployment, or medical diagnosis was introduced.",
-    "Memory reviewed and written without PII or secrets.",
-    "Worker self-review p0Issues: []"
+    "Four task checkpoints belong to the current run and contract.",
+    "T-003 and T-004 independent reviews ended APPROVE.",
+    "Feature QA passed 8 of 8 acceptance criteria.",
+    "No P0 findings, running node, open listener, secret evidence, deployment, push, cloud, or paid resource."
   ],
-  "redactions": {
-    "count": 0,
-    "types": []
-  }
+  "redactions": {"count": 0, "types": []}
 }

@@ -1,14 +1,7 @@
-# TC Flow Run Memory
+# cosmos-local-chain run memory
 
-- Run: `tc_nurture_bloom_ui_20260729_3f7ba54d`
-- Feature: `nurture-bloom-ui-foundation`
-- Contract: `3f7ba54d134c029bc78e18aa2bb1f4e880816ddbb23345c8f6a151b15fe0ca5c`
-- Nodes: N1 restart-feature; N2 goal-hook routing; T-001 through T-004 N3-N5; N6 pass.
-- Reviews: four Kimi task reviews passed; reviewer degradation false; P0 issues none.
-- QA: 7/7 acceptance criteria passed; frontend pass; backend and remote contract not applicable.
-- Retries: 0.
-- Tool requests: none.
-- Human interventions: initial frontend-first scope and design confirmation only.
-- Notable fixes: modal accessibility, test cleanup, route typing, neutral status-chip type.
-- Deployment: not requested and prohibited by Contract.
-- GitHub push: not requested and prohibited by Contract.
+- Run ID: `97cd980a-2a54-4510-89a5-1a5f2bef74aa`
+- Contract hash: `97e86269840a8b079e7d1d034b107c5497443f8a32d525988bb265c4cc5996c5`
+- Scope: project-private Ignite toolchain, generated Cosmos SDK chain, local wallet allocation, real transfer, block proof, and sanitized evidence.
+- Safety boundary: loopback-only listeners, ignored local keyring, no cloud resources, no paid node, no deployment, and no push.
+- Reused evidence: BabySteps EVM commit `d728315f1c34bd76377f2b302f9cc6f1ed9e3167` remains immutable.
