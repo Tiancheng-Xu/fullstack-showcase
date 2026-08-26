@@ -1,0 +1,233 @@
+name: Cosmos paid node evidence
+
+on:
+  workflow_dispatch:
+    inputs:
+      approval_reference:
+        description: Human approval reference for this temporary paid run
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: cosmos-paid-node-evidence
+  cancel-in-progress: false
+
+jobs:
+  run-and-stop:
+    if: github.ref == 'refs/heads/cosmos-paid-node-20260826'
+    runs-on: ubuntu-latest
+    timeout-minutes: 75
+    permissions:
+      contents: read
+      id-token: write
+    env:
+      AWS_REGION: us-east-1
+      INSTANCE_TYPE: t3.medium
+      EVIDENCE_PREFIX: cosmos-local-chain/20260826/run-${{ github.run_id }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure short-lived AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_COSMOS_ROLE_ARN }}
+          aws-region: us-east-1
+
+      - name: Enforce budget and authorization gates
+        env:
+          APPROVAL_REFERENCE: ${{ inputs.approval_reference }}
+        run: |
+          set -Eeuo pipefail
+          test -n "$APPROVAL_REFERENCE"
+          account="$(aws sts get-caller-identity --query Account --output text)"
+          budget="$(aws budgets describe-budget --account-id "$account" --budget-name 'My Monthly Cost Budget')"
+          limit="$(jq -r '.Budget.BudgetLimit.Amount | tonumber' <<<"$budget")"
+          actual="$(jq -r '.Budget.CalculatedSpend.ActualSpend.Amount | tonumber' <<<"$budget")"
+          jq -en --argjson limit "$limit" --argjson actual "$actual" \
+            '$limit == 40 and $actual < 39'
+          test "$INSTANCE_TYPE" = "t3.medium"
+
+      - name: Build private node bootstrap
+        env:
+          EVIDENCE_BUCKET: ${{ secrets.AWS_COSMOS_ARTIFACT_BUCKET }}
+        run: |
+          cat > "$RUNNER_TEMP/node-bootstrap.sh" <<USERDATA
+          #!/usr/bin/env bash
+          set -Eeuo pipefail
+          exec > >(tee -a /var/log/cosmos-bootstrap.log) 2>&1
+
+          EVIDENCE_BUCKET="$EVIDENCE_BUCKET"
+          EVIDENCE_PREFIX="$EVIDENCE_PREFIX"
+          APP_DIR=/opt/fullstack-showcase/apps/cosmos-local-chain
+          EVIDENCE_DIR=/var/tmp/cosmos-evidence
+          OUTCOME=failure
+          mkdir -p "\$EVIDENCE_DIR"
+
+          finish() {
+            code=\$?
+            set +e
+            if [[ -d "\$APP_DIR" ]]; then
+              bash "\$APP_DIR/scripts/stop-local.sh" >"\$EVIDENCE_DIR/chain-stop.log" 2>&1
+              cp "\$APP_DIR/evidence/public/"*.json "\$EVIDENCE_DIR/" 2>/dev/null
+              cp "\$APP_DIR/.local/chain.log" "\$EVIDENCE_DIR/chain.log" 2>/dev/null
+              cp "\$APP_DIR/.local/ignite.log" "\$EVIDENCE_DIR/ignite.log" 2>/dev/null
+            fi
+            cp /var/log/cloud-init-output.log "\$EVIDENCE_DIR/cloud-init-output.log" 2>/dev/null
+            cp /var/log/cosmos-bootstrap.log "\$EVIDENCE_DIR/cosmos-bootstrap.log" 2>/dev/null
+            stopped_ports=true
+            for port in 1317 26656 26657; do
+              if lsof -nP -iTCP:"\$port" -sTCP:LISTEN >/dev/null 2>&1; then
+                stopped_ports=false
+              fi
+            done
+            jq -n --arg outcome "\$OUTCOME" --argjson exit_code "\$code" \
+              --argjson stopped_ports "\$stopped_ports" \
+              '{schema:"cosmos-paid-node-run-v1",outcome:\$outcome,exit_code:\$exit_code,chain_ports_released:\$stopped_ports,instance_shutdown_requested:true}' \
+              >"\$EVIDENCE_DIR/cloud-run-summary.json"
+            aws s3 cp "\$EVIDENCE_DIR/" "s3://\$EVIDENCE_BUCKET/\$EVIDENCE_PREFIX/" \
+              --recursive --only-show-errors
+            aws s3 cp "\$EVIDENCE_DIR/cloud-run-summary.json" \
+              "s3://\$EVIDENCE_BUCKET/\$EVIDENCE_PREFIX/complete.json" --only-show-errors
+            sync
+            shutdown -h now
+            exit "\$code"
+          }
+          trap finish EXIT
+
+          shutdown -h +70
+          dnf install -y git jq openssl perl perl-Digest-SHA lsof make gcc gcc-c++ procps-ng tar gzip
+          command -v aws >/dev/null || dnf install -y awscli2
+
+          GO_VERSION=1.25.10
+          cd /tmp
+          curl -fsSLO "https://go.dev/dl/go\${GO_VERSION}.linux-amd64.tar.gz"
+          curl -fsSLO "https://go.dev/dl/go\${GO_VERSION}.linux-amd64.tar.gz.sha256"
+          printf '%s  %s\n' "\$(cat "go\${GO_VERSION}.linux-amd64.tar.gz.sha256")" \
+            "go\${GO_VERSION}.linux-amd64.tar.gz" | sha256sum -c -
+          tar -C /usr/local -xzf "go\${GO_VERSION}.linux-amd64.tar.gz"
+          export PATH=/usr/local/go/bin:\$PATH
+
+          git init /opt/fullstack-showcase
+          git -C /opt/fullstack-showcase remote add origin https://github.com/Tiancheng-Xu/fullstack-showcase.git
+          git -C /opt/fullstack-showcase fetch --depth 1 origin 868d7392ac15e4bdec5d680cb2f1dbf1d89c28ef
+          git -C /opt/fullstack-showcase checkout --detach FETCH_HEAD
+
+          {
+            printf 'source_commit=%s\n' "\$(git -C /opt/fullstack-showcase rev-parse HEAD)"
+            go version
+            uname -a
+          } >"\$EVIDENCE_DIR/toolchain.txt"
+
+          cd "\$APP_DIR"
+          bash scripts/start-local.sh | tee "\$EVIDENCE_DIR/chain-start.log"
+          curl -fsS http://127.0.0.1:26657/status >"\$EVIDENCE_DIR/rpc-status-running.json"
+          lsof -nP -iTCP:1317 -iTCP:26656 -iTCP:26657 -sTCP:LISTEN \
+            >"\$EVIDENCE_DIR/listeners-running.txt"
+          bash scripts/run-demo.sh | tee "\$EVIDENCE_DIR/transfer-result.txt"
+          OUTCOME=success
+          USERDATA
+          chmod 700 "$RUNNER_TEMP/node-bootstrap.sh"
+
+      - name: Launch one temporary paid node
+        id: launch
+        env:
+          VPC_ID: ${{ secrets.AWS_COSMOS_VPC_ID }}
+          SUBNET_ID: ${{ secrets.AWS_COSMOS_PUBLIC_SUBNET_ID }}
+          INSTANCE_PROFILE: ${{ secrets.AWS_COSMOS_INSTANCE_PROFILE }}
+        run: |
+          set -Eeuo pipefail
+          ami="$(aws ec2 describe-images --owners amazon \
+            --filters 'Name=name,Values=al2023-ami-2023.*-x86_64' 'Name=state,Values=available' \
+            --query 'Images | sort_by(@,&CreationDate)[-1].ImageId' --output text)"
+          test "$ami" != "None"
+          sg="$(aws ec2 create-security-group \
+            --group-name "tc-cosmos-${GITHUB_RUN_ID}" \
+            --description 'Temporary no-ingress Cosmos evidence node' \
+            --vpc-id "$VPC_ID" \
+            --tag-specifications "ResourceType=security-group,Tags=[{Key=Project,Value=cosmos-local-chain},{Key=Lifecycle,Value=temporary},{Key=PublicUse,Value=false},{Key=GitHubRunId,Value=${GITHUB_RUN_ID}}]" \
+            --query GroupId --output text)"
+          instance="$(aws ec2 run-instances \
+            --image-id "$ami" --instance-type "$INSTANCE_TYPE" \
+            --iam-instance-profile "Name=$INSTANCE_PROFILE" \
+            --user-data "file://$RUNNER_TEMP/node-bootstrap.sh" \
+            --metadata-options 'HttpTokens=required,HttpEndpoint=enabled' \
+            --instance-initiated-shutdown-behavior stop \
+            --network-interfaces "DeviceIndex=0,AssociatePublicIpAddress=true,SubnetId=$SUBNET_ID,Groups=$sg" \
+            --block-device-mappings 'DeviceName=/dev/xvda,Ebs={VolumeSize=20,VolumeType=gp3,DeleteOnTermination=true,Encrypted=true}' \
+            --tag-specifications \
+              "ResourceType=instance,Tags=[{Key=Name,Value=tc-cosmos-paid-node-${GITHUB_RUN_ID}},{Key=Project,Value=cosmos-local-chain},{Key=Lifecycle,Value=temporary},{Key=PublicUse,Value=false},{Key=GitHubRunId,Value=${GITHUB_RUN_ID}}]" \
+              "ResourceType=volume,Tags=[{Key=Project,Value=cosmos-local-chain},{Key=Lifecycle,Value=temporary},{Key=PublicUse,Value=false},{Key=GitHubRunId,Value=${GITHUB_RUN_ID}}]" \
+            --query 'Instances[0].InstanceId' --output text)"
+          echo "instance=$instance" >> "$GITHUB_OUTPUT"
+          echo "security_group=$sg" >> "$GITHUB_OUTPUT"
+          aws ec2 wait instance-running --instance-ids "$instance"
+
+      - name: Wait for evidence marker
+        id: evidence
+        env:
+          EVIDENCE_BUCKET: ${{ secrets.AWS_COSMOS_ARTIFACT_BUCKET }}
+        run: |
+          set -Eeuo pipefail
+          for attempt in $(seq 1 140); do
+            if aws s3 cp "s3://$EVIDENCE_BUCKET/$EVIDENCE_PREFIX/complete.json" \
+              "$RUNNER_TEMP/complete.json" --only-show-errors 2>/dev/null; then
+              cat "$RUNNER_TEMP/complete.json"
+              exit 0
+            fi
+            sleep 30
+          done
+          exit 1
+
+      - name: Stop the paid node
+        if: always() && steps.launch.outputs.instance != ''
+        env:
+          INSTANCE_ID: ${{ steps.launch.outputs.instance }}
+        run: |
+          state="$(aws ec2 describe-instances --instance-ids "$INSTANCE_ID" \
+            --query 'Reservations[0].Instances[0].State.Name' --output text)"
+          if [[ "$state" != "stopped" && "$state" != "stopping" ]]; then
+            aws ec2 stop-instances --instance-ids "$INSTANCE_ID" >/dev/null
+          fi
+          aws ec2 wait instance-stopped --instance-ids "$INSTANCE_ID"
+
+      - name: Download sanitized evidence
+        if: always()
+        env:
+          EVIDENCE_BUCKET: ${{ secrets.AWS_COSMOS_ARTIFACT_BUCKET }}
+          INSTANCE_ID: ${{ steps.launch.outputs.instance }}
+          APPROVAL_REFERENCE: ${{ inputs.approval_reference }}
+        run: |
+          mkdir -p evidence
+          aws s3 cp "s3://$EVIDENCE_BUCKET/$EVIDENCE_PREFIX/" evidence/ \
+            --recursive --only-show-errors || true
+          if [[ -n "$INSTANCE_ID" ]]; then
+            state="$(aws ec2 describe-instances --instance-ids "$INSTANCE_ID" \
+              --query 'Reservations[0].Instances[0].State.Name' --output text)"
+            approval_sha256="$(printf '%s' "$APPROVAL_REFERENCE" | sha256sum | cut -d' ' -f1)"
+            jq -n --arg run_id "$GITHUB_RUN_ID" --arg state "$state" \
+              --arg approval_sha256 "$approval_sha256" \
+              '{schema:"cosmos-paid-node-infrastructure-v1",github_run_id:$run_id,instance_type:"t3.medium",root_volume:{type:"gp3",size_gib:20,encrypted:true},network:{public_ipv4:true,inbound_rules:0,rpc_scope:"instance-loopback-only"},final_instance_state:$state,approval_reference_sha256:$approval_sha256}' \
+              > evidence/infrastructure.json
+          fi
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cosmos-paid-node-evidence-${{ github.run_id }}
+          path: evidence
+          retention-days: 30
+
+      - name: Require successful chain proof and stopped instance
+        if: always()
+        env:
+          INSTANCE_ID: ${{ steps.launch.outputs.instance }}
+        run: |
+          test -n "$INSTANCE_ID"
+          test "$(jq -r .outcome evidence/cloud-run-summary.json)" = success
+          test "$(jq -r .chain_ports_released evidence/cloud-run-summary.json)" = true
+          test "$(find evidence -maxdepth 1 -name '*.json' -type f | wc -l)" -ge 10
+          test "$(aws ec2 describe-instances --instance-ids "$INSTANCE_ID" \
+            --query 'Reservations[0].Instances[0].State.Name' --output text)" = stopped
