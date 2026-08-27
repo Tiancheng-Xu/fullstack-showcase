@@ -43,10 +43,6 @@ export interface WorkerEnv {
 	SNAPSHOTS: R2BucketLike;
 	CONTROL_ENABLED?: string;
 	CONTROL_ORIGIN?: string;
-	ACCESS_ISSUER?: string;
-	ACCESS_AUD?: string;
-	ACCESS_OPERATOR_SUB?: string;
-	ACCESS_OPERATOR_EMAIL?: string;
 	TOTP_SECRET?: string;
 	GITHUB_APP_ID?: string;
 	GITHUB_APP_INSTALLATION_ID?: string;

@@ -33,7 +33,7 @@ jobs:
       - name: Generate disabled production config
         run: node apps/performance-control-worker/scripts/generate-production-config.mjs --ci > apps/performance-control-worker/wrangler.production.generated.jsonc
       - name: Apply D1 migrations locally
-        run: pnpm dlx wrangler@4.38.0 d1 migrations apply course-performance-control --local --config apps/performance-control-worker/wrangler.production.generated.jsonc --persist-to /tmp/performance-control-d1
+        run: pnpm dlx wrangler@4.38.0 d1 migrations apply baby2b-performance-control --local --config apps/performance-control-worker/wrangler.production.generated.jsonc --persist-to /tmp/performance-control-d1
       - name: Validate Worker bindings and bundle
         run: pnpm dlx wrangler@4.38.0 deploy --dry-run --config apps/performance-control-worker/wrangler.production.generated.jsonc --outdir /tmp/performance-control-worker-dry-run
       - run: pnpm --filter web test -- src/features/performance/__tests__
