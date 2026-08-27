@@ -1,3 +1,19 @@
+export interface PerformanceRouteMetric {
+	route: string;
+	sampleCount: number;
+	p50: number;
+	p75: number;
+	p95: number;
+}
+
+export interface PerformanceTrendMetric {
+	bucketStart: number;
+	sampleCount: number;
+	p50: number;
+	p75: number;
+	p95: number;
+}
+
 export interface PerformanceMetric {
 	name: string;
 	unit: string;
@@ -8,15 +24,16 @@ export interface PerformanceMetric {
 	p75: number;
 	p95: number;
 	errorCount: number;
+	category?: "web-vital" | "metric" | "resource" | "error" | "custom" | "web3";
+	routes?: PerformanceRouteMetric[];
+	trend?: PerformanceTrendMetric[];
 }
 
-export interface PerformanceSnapshot {
-	schemaVersion: 1;
+interface PerformanceSnapshotBase {
 	projectSlug: string;
 	captureId: string;
 	capturedAt: string;
 	kind: "synthetic-closed-loop" | "production-window";
-	window: { from: string; to: string };
 	repository: string;
 	commitSha: string;
 	workflowRunId: string;
@@ -28,11 +45,37 @@ export interface PerformanceSnapshot {
 	metrics: PerformanceMetric[];
 }
 
+export interface PerformanceSnapshotV1 extends PerformanceSnapshotBase {
+	schemaVersion: 1;
+	window: { from: string; to: string };
+}
+
+export interface PerformanceSnapshotV2 extends PerformanceSnapshotBase {
+	schemaVersion: 2;
+	window: { preset: "1h" | "24h" | "7d"; from: string; to: string };
+	summary: {
+		totalEvents: number;
+		errorCount: number;
+		errorRate: number;
+		metricCount: number;
+		routeCount: number;
+		latestEventAt: number | null;
+	};
+	operation: {
+		estimatedIncrementalCostUsd: number;
+		maximumIncrementalCostUsd: number;
+		ttlMinutes: number;
+		observedRuntimeMinutes: number;
+	};
+}
+
+export type PerformanceSnapshot = PerformanceSnapshotV1 | PerformanceSnapshotV2;
+
 const safeSegment = /^[a-z0-9][a-z0-9._-]{0,127}$/i;
 const commitSha = /^[a-f0-9]{40}$/;
 const forbiddenKey = /(authorization|cookie|password|secret|token|private.?key)/i;
-
 const isTimestamp = (value: string) => Number.isFinite(Date.parse(value));
+const finiteNonNegative = (value: number) => Number.isFinite(value) && value >= 0;
 
 const containsForbiddenKey = (value: unknown): boolean => {
 	if (!value || typeof value !== "object") return false;
@@ -40,6 +83,18 @@ const containsForbiddenKey = (value: unknown): boolean => {
 		([key, nested]) => forbiddenKey.test(key) || containsForbiddenKey(nested),
 	);
 };
+
+const validPercentiles = (value: {
+	sampleCount: number;
+	p50: number;
+	p75: number;
+	p95: number;
+}) =>
+	Number.isInteger(value.sampleCount) &&
+	value.sampleCount > 0 &&
+	[value.p50, value.p75, value.p95].every(finiteNonNegative) &&
+	value.p50 <= value.p75 &&
+	value.p75 <= value.p95;
 
 export const immutableSnapshotKey = (snapshot: PerformanceSnapshot) =>
 	`performance/${snapshot.projectSlug}/captures/${snapshot.captureId}.json`;
@@ -51,11 +106,9 @@ export const assertSnapshotPublishable = (
 	snapshot: PerformanceSnapshot,
 	context: { immutableObjectExists: boolean },
 ) => {
-	if (context.immutableObjectExists) {
-		throw new Error("immutable_snapshot_already_exists");
-	}
+	if (context.immutableObjectExists) throw new Error("immutable_snapshot_already_exists");
 	if (
-		snapshot.schemaVersion !== 1 ||
+		(snapshot.schemaVersion !== 1 && snapshot.schemaVersion !== 2) ||
 		!safeSegment.test(snapshot.projectSlug) ||
 		!safeSegment.test(snapshot.captureId) ||
 		!isTimestamp(snapshot.capturedAt) ||
@@ -73,26 +126,52 @@ export const assertSnapshotPublishable = (
 		snapshot.sampleRate > 1 ||
 		snapshot.metrics.length === 0 ||
 		containsForbiddenKey(snapshot)
-	) {
-		throw new Error("invalid_snapshot_contract");
-	}
+	) throw new Error("invalid_snapshot_contract");
 
 	for (const metric of snapshot.metrics) {
-		const validMetric =
-			metric.name.length > 0 &&
-			metric.unit.length > 0 &&
-			metric.page.length > 0 &&
-			metric.route.length > 0 &&
-			Number.isInteger(metric.sampleCount) &&
-			metric.sampleCount > 0 &&
-			Number.isInteger(metric.errorCount) &&
-			metric.errorCount >= 0 &&
-			metric.errorCount <= metric.sampleCount &&
-			[metric.p50, metric.p75, metric.p95].every(
-				(value) => Number.isFinite(value) && value >= 0,
-			) &&
-			metric.p50 <= metric.p75 &&
-			metric.p75 <= metric.p95;
-		if (!validMetric) throw new Error("invalid_metric_sample");
+		if (
+			!metric.name ||
+			!metric.unit ||
+			!metric.page ||
+			!metric.route ||
+			!validPercentiles(metric) ||
+			!Number.isInteger(metric.errorCount) ||
+			metric.errorCount < 0 ||
+			metric.errorCount > metric.sampleCount
+		) throw new Error("invalid_metric_sample");
+		for (const route of metric.routes ?? []) {
+			if (!route.route || !validPercentiles(route)) throw new Error("invalid_metric_route");
+		}
+		let previousBucket = -1;
+		for (const point of metric.trend ?? []) {
+			if (!validPercentiles(point) || point.bucketStart <= previousBucket) {
+				throw new Error("invalid_metric_trend");
+			}
+			previousBucket = point.bucketStart;
+		}
+	}
+
+	if (snapshot.schemaVersion === 2) {
+		const { operation, summary } = snapshot;
+		if (
+			!Number.isInteger(summary.totalEvents) ||
+			summary.totalEvents < 1 ||
+			!Number.isInteger(summary.errorCount) ||
+			summary.errorCount < 0 ||
+			summary.errorCount > summary.totalEvents ||
+			!finiteNonNegative(summary.errorRate) ||
+			summary.errorRate > 1 ||
+			summary.metricCount !== snapshot.metrics.length ||
+			!Number.isInteger(summary.routeCount) ||
+			summary.routeCount < 0 ||
+			(summary.latestEventAt !== null && !finiteNonNegative(summary.latestEventAt)) ||
+			!finiteNonNegative(operation.estimatedIncrementalCostUsd) ||
+			!finiteNonNegative(operation.maximumIncrementalCostUsd) ||
+			operation.estimatedIncrementalCostUsd > operation.maximumIncrementalCostUsd ||
+			!Number.isInteger(operation.ttlMinutes) ||
+			operation.ttlMinutes < 1 ||
+			!finiteNonNegative(operation.observedRuntimeMinutes) ||
+			operation.observedRuntimeMinutes > operation.ttlMinutes
+		) throw new Error("invalid_snapshot_v2_contract");
 	}
 };
