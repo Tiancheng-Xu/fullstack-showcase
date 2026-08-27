@@ -76,4 +76,17 @@ describe("performance control deployment gates", () => {
 		]);
 		expect(output).not.toContain("ACCESS_");
 	});
+
+	it("keeps the remote gate on the canonical Baby2B D1 name", () => {
+		const workflow = readFileSync(
+			resolve(root, "../../../../.github/workflows/verify-performance-control.yml"),
+			"utf8",
+		);
+		expect(workflow).toContain(
+			"d1 migrations apply baby2b-performance-control",
+		);
+		expect(workflow).not.toContain(
+			"d1 migrations apply course-performance-control",
+		);
+	});
 });
