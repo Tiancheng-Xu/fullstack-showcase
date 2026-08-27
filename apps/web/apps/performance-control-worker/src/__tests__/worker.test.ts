@@ -34,6 +34,7 @@ const env = (options?: {
 }): WorkerEnv => ({
 	CONTROL_ENABLED: "true",
 	CONTROL_ORIGIN: "https://control.example",
+	TOTP_SECRET: "JBSWY3DPEHPK3PXP",
 	ACCESS_ISSUER: "https://team.cloudflareaccess.com",
 	ACCESS_AUD: "access-audience",
 	ACCESS_OPERATOR_SUB: "operator-123",
@@ -81,18 +82,36 @@ const accessToken = (overrides: Record<string, unknown> = {}) => {
 	return `${header}.${payload}.${signature}`;
 };
 
+const decodeBase32 = (value: string) => {
+	const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567";
+	let bits = "";
+	for (const character of value) bits += alphabet.indexOf(character).toString(2).padStart(5, "0");
+	return Buffer.from(Array.from({ length: Math.floor(bits.length / 8) }, (_, index) => Number.parseInt(bits.slice(index * 8, index * 8 + 8), 2)));
+};
+
+const currentTotp = () => {
+	const counter = BigInt(Math.floor(Date.now() / 30_000));
+	const message = Buffer.alloc(8);
+	message.writeBigUInt64BE(counter);
+	const digest = createHmac("sha1", decodeBase32("JBSWY3DPEHPK3PXP")).update(message).digest();
+	const offset = digest[digest.length - 1] & 0x0f;
+	const binary = ((digest[offset] & 0x7f) << 24) | (digest[offset + 1] << 16) | (digest[offset + 2] << 8) | digest[offset + 3];
+	return String(binary % 1_000_000).padStart(6, "0");
+};
+
 const controlRequest = (
 	path: string,
 	init: RequestInit = {},
 ) =>
 	new Request(`https://control.example${path}`, {
+		...init,
 		method: "POST",
 		headers: {
 			origin: "https://control.example",
+			"x-control-totp": currentTotp(),
 			"cf-access-jwt-assertion": accessToken(),
 			...init.headers,
 		},
-		...init,
 	});
 
 afterEach(() => vi.unstubAllGlobals());
@@ -206,7 +225,7 @@ describe("performance control worker public reads", () => {
 });
 
 describe("performance control worker writes", () => {
-	it("keeps public reads open but rejects control sessions without an Access assertion", async () => {
+	it("keeps public reads open but rejects control sessions without a TOTP code", async () => {
 		const response = await handleRequest(
 			new Request(
 				"https://control.example/api/performance/control/session?project=performance-observability-control",
@@ -216,35 +235,23 @@ describe("performance control worker writes", () => {
 		);
 
 		expect(response.status).toBe(401);
-		expect(await response.json()).toEqual({ error: "access_required" });
+		expect(await response.json()).toEqual({ error: "totp_required" });
 	});
 
-	it("verifies Access signature, issuer, audience, expiry and the single operator allowlist", async () => {
-		vi.stubGlobal("fetch", vi.fn(async () => new Response(JSON.stringify({ keys: [{ ...publicJwk, kid: "access-key-1", alg: "RS256", use: "sig" }] }))));
-
-		for (const token of [
-			accessToken({ iss: "https://attacker.example" }),
-			accessToken({ aud: ["wrong-audience"] }),
-			accessToken({ exp: 1 }),
-			accessToken({ sub: "another-operator" }),
-			accessToken({ email: "another@example.com" }),
-			accessToken({ type: "org" }),
-			accessToken({ nbf: Math.floor(Date.now() / 1000) + 120 }),
-			accessToken({ sub: undefined }),
-			`${accessToken().split(".").slice(0, 2).join(".")}.AAAA`,
-		]) {
+	it("rejects a malformed or incorrect TOTP code", async () => {
+		for (const code of ["12345", "abcdef", "000000"]) {
 			const response = await handleRequest(
 				controlRequest("/api/performance/control/session?project=performance-observability-control", {
-					headers: { origin: "https://control.example", "cf-access-jwt-assertion": token },
+					headers: { "x-control-totp": code },
 				}),
 				env(),
 			);
-			expect([401, 403]).toContain(response.status);
+			expect(response.status).toBe(401);
+			expect(await response.json()).toEqual({ error: "totp_invalid" });
 		}
 	});
 
-	it("issues one short-lived nonce only after valid Access MFA authentication", async () => {
-		vi.stubGlobal("fetch", vi.fn(async () => new Response(JSON.stringify({ keys: [{ ...publicJwk, kid: "access-key-1", alg: "RS256", use: "sig" }] }))));
+	it("issues one short-lived nonce only after valid TOTP authentication", async () => {
 		const response = await handleRequest(
 			controlRequest("/api/performance/control/session?project=performance-observability-control"),
 			env(),

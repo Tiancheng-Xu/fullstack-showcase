@@ -108,7 +108,7 @@ export const PORTFOLIO_PROJECTS: PortfolioProject[] = [
 			"运行架构、发布流程、关键时序与明确非目标",
 		],
 		details: [
-			"本地已实现 Access JWT 独立校验、单次 nonce、幂等控制、固定 BabySteps workflow 派发、HMAC 回调和不可变 R2 快照；生产 Access/GitHub/Cloudflare 配置仍待云端验收。",
+			"控制面改为站内 TOTP 动态码、单次 nonce、幂等控制、固定 BabySteps workflow 派发、HMAC 回调和不可变 R2 快照；生产 GitHub App 与 AWS 权限仍待云端验收。",
 			"BabySteps 已通过 GitHub OIDC 在 AWS us-east-1 创建 21 个临时资源，接收 1 条 LCP 事件并由 ECS Cleaner 产出 p50/p75/p95 聚合。",
 			"项目 Schema 与 Stack 已精确删除，剩余项目 ECS Cluster 为 0；固定启停控制仍保持失败关闭，尚未作为常驻服务上线。",
 		],
@@ -155,7 +155,7 @@ export const PORTFOLIO_PROJECTS: PortfolioProject[] = [
 		},
 		caseStudy: {
 			stateNotice:
-				"BabySteps AWS 临时观测链已完成一次真实云端闭环并精确清理；当前展示的是单样本合成历史快照，不是生产趋势。MFA 控制面已完成本地实现，Cloudflare Access、D1/R2 与 GitHub App 仍待生产配置和云端验收。",
+				"BabySteps AWS 临时观测链已完成一次真实云端闭环并精确清理；当前展示的是单样本合成历史快照，不是生产趋势。TOTP 控制面、D1 与 R2 已落地，GitHub App 与 AWS 权限仍待生产验收。",
 			requirements: [
 				{
 					requirement: "性能 SDK、日志接收、清洗与可视化",
@@ -177,7 +177,7 @@ export const PORTFOLIO_PROJECTS: PortfolioProject[] = [
 				{
 					requirement: "Dashboard 与 Evidence 都提供启停入口",
 					implementation:
-						"两页复用同一状态卡并指向唯一、受 Cloudflare Access 保护的控制面。",
+						"两页复用同一状态卡并指向唯一、由站内 TOTP 与单次 nonce 保护的控制面。",
 					code: "src/features/portfolio/dashboard-content.tsx 与 evidence-content.tsx",
 					proof: "页面级回归测试验证统一状态和入口 URL。",
 					state: "本地已实现",
@@ -185,7 +185,7 @@ export const PORTFOLIO_PROJECTS: PortfolioProject[] = [
 				{
 					requirement: "启停、清理、权限与成本可审计",
 					implementation:
-						"D1 保存状态/操作记录，R2 保存不可变快照；公开接口验证摘要并支持 ETag，控制写入口在 Access 与 GitHub App 接通前失败关闭。",
+						"D1 保存状态、TOTP 错误计数与操作记录，R2 保存不可变快照；公开接口验证摘要并支持 ETag，控制写入口在 GitHub App 接通前失败关闭。",
 					code: "apps/performance-control-worker/src/{state-machine,snapshot,worker}.ts；GitHub Actions 工作流待部署",
 					proof:
 						"Run 32917816824 记录 21 个临时资源、Cleaner exitCode=0、Schema 第一次删除成功、Stack 删除成功、剩余 Cluster=0。",
