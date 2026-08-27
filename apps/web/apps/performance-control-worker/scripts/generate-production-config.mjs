@@ -13,6 +13,8 @@ const config = {
 	$schema: "../../node_modules/wrangler/config-schema.json",
 	name: "baby2b-performance-control",
 	main: "src/index.ts",
+	workers_dev: false,
+	preview_urls: false,
 	compatibility_date: "2026-08-26",
 	compatibility_flags: ["nodejs_compat"],
 	vars: {

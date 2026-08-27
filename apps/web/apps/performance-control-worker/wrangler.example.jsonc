@@ -1,6 +1,8 @@
 {
 	"name": "baby2b-performance-control",
 	"main": "src/index.ts",
+	"workers_dev": false,
+	"preview_urls": false,
 	"compatibility_date": "2026-08-14",
 	"compatibility_flags": ["nodejs_compat"],
 	"vars": {
