@@ -11,6 +11,7 @@ import {
 	type ControlAction,
 	type ProjectState,
 } from "./state-machine";
+import { verifyTotpCode } from "./totp";
 
 export interface D1RunResultLike {
 	success?: boolean;
@@ -46,6 +47,7 @@ export interface WorkerEnv {
 	ACCESS_AUD?: string;
 	ACCESS_OPERATOR_SUB?: string;
 	ACCESS_OPERATOR_EMAIL?: string;
+	TOTP_SECRET?: string;
 	GITHUB_APP_ID?: string;
 	GITHUB_APP_INSTALLATION_ID?: string;
 	GITHUB_APP_PRIVATE_KEY?: string;
@@ -73,14 +75,10 @@ interface NonceRow {
 	consumed_at: string | null;
 	expires_at: string;
 }
-interface AccessClaims {
-	iss: string;
-	aud: string | string[];
-	exp: number;
-	nbf: number;
-	type: string;
-	sub: string;
-	email: string;
+interface TotpAttemptRow {
+	failure_count: number;
+	window_started_at: string;
+	locked_until: string | null;
 }
 const digestPattern = /^[a-f0-9]{64}$/;
 const idempotencyPattern = /^[A-Za-z0-9._:-]{8,128}$/;
@@ -117,81 +115,55 @@ const configured = (env: WorkerEnv) =>
 	env.CONTROL_ENABLED === "true" &&
 	Boolean(
 		env.CONTROL_ORIGIN &&
-			env.ACCESS_ISSUER &&
-			env.ACCESS_AUD &&
-			env.ACCESS_OPERATOR_EMAIL &&
+			env.TOTP_SECRET &&
 			env.GITHUB_APP_ID &&
 			env.GITHUB_APP_INSTALLATION_ID &&
 			env.GITHUB_APP_PRIVATE_KEY &&
 			env.CALLBACK_HMAC_SECRET,
 	);
 
+const recordTotpFailure = async (env: WorkerEnv) => {
+	const now = new Date();
+	let previous: TotpAttemptRow | null = null;
+	try {
+		previous = await env.CONTROL_DB.prepare(
+			"SELECT failure_count, window_started_at, locked_until FROM totp_attempts WHERE scope='operator'",
+		).first<TotpAttemptRow>();
+	} catch {
+		return json({ error: "totp_verification_unavailable" }, { status: 503 });
+	}
+	const windowStartedAt = previous ? Date.parse(previous.window_started_at) : 0;
+	const inWindow = Number.isFinite(windowStartedAt) && now.getTime() - windowStartedAt < 5 * 60_000;
+	const failureCount = inWindow ? (previous?.failure_count ?? 0) + 1 : 1;
+	const startedAt = inWindow && previous ? previous.window_started_at : now.toISOString();
+	const lockedUntil = failureCount >= 5 ? new Date(now.getTime() + 10 * 60_000).toISOString() : null;
+	try {
+		await env.CONTROL_DB.prepare(
+			`INSERT INTO totp_attempts (scope, failure_count, window_started_at, locked_until)
+			 VALUES ('operator', ?1, ?2, ?3)
+			 ON CONFLICT(scope) DO UPDATE SET failure_count=?1, window_started_at=?2, locked_until=?3`,
+		)
+			.bind(failureCount, startedAt, lockedUntil)
+			.run();
+	} catch {
+		return json({ error: "totp_verification_unavailable" }, { status: 503 });
+	}
+	return lockedUntil
+		? json({ error: "totp_rate_limited" }, { status: 429 })
+		: json({ error: "totp_invalid" }, { status: 401 });
+};
+
 const verifyAccess = async (
 	request: Request,
 	env: WorkerEnv,
 ): Promise<{ actorHash: string } | Response> => {
-	const assertion = request.headers.get("cf-access-jwt-assertion");
-	if (!assertion) return json({ error: "access_required" }, { status: 401 });
-	if (!env.ACCESS_ISSUER || !env.ACCESS_AUD || !env.ACCESS_OPERATOR_EMAIL) {
+	const code = request.headers.get("x-control-totp") ?? "";
+	if (!code) return json({ error: "totp_required" }, { status: 401 });
+	if (!env.TOTP_SECRET) {
 		return json({ error: "control_not_configured" }, { status: 503 });
 	}
-	try {
-		const parts = assertion.split(".");
-		if (parts.length !== 3) throw new Error("invalid_jwt");
-		const header = JSON.parse(
-			new TextDecoder().decode(decodeBase64Url(parts[0])),
-		) as { alg?: string; kid?: string };
-		const claims = JSON.parse(
-			new TextDecoder().decode(decodeBase64Url(parts[1])),
-		) as AccessClaims;
-		if (header.alg !== "RS256" || !header.kid) throw new Error("invalid_alg");
-		const response = await fetch(
-			`${env.ACCESS_ISSUER.replace(/\/$/, "")}/cdn-cgi/access/certs`,
-		);
-		if (!response.ok) throw new Error("jwks_unavailable");
-		const jwks = (await response.json()) as {
-			keys: (JsonWebKey & { kid?: string })[];
-		};
-		const jwk = jwks.keys.find((candidate) => candidate.kid === header.kid);
-		if (!jwk) throw new Error("unknown_kid");
-		const key = await crypto.subtle.importKey(
-			"jwk",
-			jwk,
-			{ name: "RSASSA-PKCS1-v1_5", hash: "SHA-256" },
-			false,
-			["verify"],
-		);
-		const signatureValid = await crypto.subtle.verify(
-			"RSASSA-PKCS1-v1_5",
-			key,
-			decodeBase64Url(parts[2]),
-			encoder.encode(`${parts[0]}.${parts[1]}`),
-		);
-		const audiences = Array.isArray(claims.aud) ? claims.aud : [claims.aud];
-		const now = Math.floor(Date.now() / 1000);
-		if (
-			!signatureValid ||
-			claims.iss !== env.ACCESS_ISSUER ||
-			!audiences.includes(env.ACCESS_AUD) ||
-			!Number.isFinite(claims.exp) ||
-			claims.type !== "app" ||
-			!Number.isFinite(claims.nbf) ||
-			claims.nbf > now + clockSkewSeconds ||
-			claims.exp <= now - clockSkewSeconds
-		) {
-			throw new Error("invalid_claims");
-		}
-		if (
-			claims.email !== env.ACCESS_OPERATOR_EMAIL ||
-			!env.ACCESS_OPERATOR_SUB ||
-			claims.sub !== env.ACCESS_OPERATOR_SUB
-		) {
-			return json({ error: "operator_not_allowed" }, { status: 403 });
-		}
-		return { actorHash: await sha256(`${claims.email}:${claims.sub}`) };
-	} catch {
-		return json({ error: "invalid_access_assertion" }, { status: 401 });
-	}
+	if (!(await verifyTotpCode(env.TOTP_SECRET, code))) return recordTotpFailure(env);
+	return { actorHash: await sha256(`totp:${env.TOTP_SECRET}`) };
 };
 
 const publicStatus = async (url: URL, env: WorkerEnv) => {

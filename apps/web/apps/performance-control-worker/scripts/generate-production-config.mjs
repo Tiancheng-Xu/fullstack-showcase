@@ -7,6 +7,8 @@ const required = (name, fallback) => {
   return value;
 };
 
+const totpSecret = process.env.TOTP_SECRET || (ci ? "JBSWY3DPEHPK3PXP" : "");
+
 const config = {
   $schema: "../../node_modules/wrangler/config-schema.json",
   name: "course-performance-control",
@@ -16,10 +18,7 @@ const config = {
   vars: {
     CONTROL_ENABLED: "false",
     CONTROL_ORIGIN: required("CONTROL_ORIGIN", "https://baby2b.online"),
-    ACCESS_ISSUER: required("ACCESS_ISSUER", "https://ci.cloudflareaccess.com"),
-    ACCESS_AUD: required("ACCESS_AUD", "ci-access-audience"),
-    ACCESS_OPERATOR_SUB: required("ACCESS_OPERATOR_SUB", "ci-operator-sub"),
-    GITHUB_APP_ID: required("GITHUB_APP_ID", "1"),
+		GITHUB_APP_ID: required("GITHUB_APP_ID", "1"),
     GITHUB_APP_INSTALLATION_ID: required("GITHUB_APP_INSTALLATION_ID", "1"),
   },
   d1_databases: [{
@@ -41,9 +40,7 @@ if (enableControl) {
   const productionComplete =
     !ci &&
     config.vars.CONTROL_ORIGIN === "https://baby2b.online" &&
-    /^https:\/\/[a-z0-9-]+\.cloudflareaccess\.com$/.test(config.vars.ACCESS_ISSUER) &&
-    config.vars.ACCESS_AUD.length >= 8 &&
-    config.vars.ACCESS_OPERATOR_SUB.length >= 8 &&
+		/^[A-Z2-7]{16,128}$/.test(totpSecret) &&
     /^[1-9][0-9]*$/.test(config.vars.GITHUB_APP_ID) &&
     /^[1-9][0-9]*$/.test(config.vars.GITHUB_APP_INSTALLATION_ID) &&
     /^[0-9a-f]{8}-[0-9a-f-]{27}$/i.test(d1Id) &&

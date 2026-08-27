@@ -8,7 +8,7 @@ import { describe, expect, it } from "vitest";
 const root = resolve(import.meta.dirname, "../..");
 
 describe("performance control deployment gates", () => {
-	it("keeps the deployed 0001 migration immutable and adds a 0002 upgrade", () => {
+	it("keeps deployed migrations immutable and adds a TOTP throttle migration", () => {
 		const original = readFileSync(resolve(root, "migrations/0001_performance_control.sql"), "utf8");
 		expect(original).not.toContain("cleanup_required");
 		expect(original).not.toContain("control_nonces");
@@ -19,6 +19,9 @@ describe("performance control deployment gates", () => {
 		expect(upgrade).not.toContain("backfill-required:");
 		expect(upgrade).toContain("legacy_snapshot_sha256");
 		expect(upgrade).toContain("snapshot_sha256");
+		const totp = readFileSync(resolve(root, "migrations/0003_totp_auth.sql"), "utf8");
+		expect(totp).toContain("totp_attempts");
+		expect(totp).toContain("locked_until");
 	});
 
 	it("migrates a digest-only legacy snapshot as unavailable audit evidence", () => {
@@ -43,9 +46,7 @@ describe("performance control deployment gates", () => {
 			env: {
 				...process.env,
 				CONTROL_ORIGIN: "https://baby2b.online",
-				ACCESS_ISSUER: "https://team.cloudflareaccess.com",
-				ACCESS_AUD: "production-audience",
-				ACCESS_OPERATOR_SUB: "production-operator-sub",
+				TOTP_SECRET: "JBSWY3DPEHPK3PXP",
 				GITHUB_APP_ID: "12345",
 				GITHUB_APP_INSTALLATION_ID: "67890",
 				D1_DATABASE_NAME: "course-performance-control",
@@ -54,6 +55,7 @@ describe("performance control deployment gates", () => {
 			},
 		});
 		expect((JSON.parse(output) as { vars: { CONTROL_ENABLED: string } }).vars.CONTROL_ENABLED).toBe("true");
+		expect(output).not.toContain("JBSWY3DPEHPK3PXP");
 	});
 
 	it("generates a deterministic production config that remains disabled", () => {
