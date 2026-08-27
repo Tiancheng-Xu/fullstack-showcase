@@ -6,7 +6,7 @@ import { PerformanceControlContent } from "../performance-control-content";
 describe("PerformanceControlContent", () => {
 	afterEach(() => vi.unstubAllGlobals());
 
-	it("enables the safe start action after MFA and shows truthful cost and TTL", async () => {
+	it("requests a single-use nonce only after the operator enters TOTP", async () => {
 		const fetchMock = vi.fn(async (input: string | URL | Request, init?: RequestInit) => {
 			const url = String(input);
 			if (url.includes("/status")) return new Response(JSON.stringify({ projectSlug: "performance-observability-control", controlState: "stopped", dataMode: "historical", cleanupVerified: true, expiresAt: null, estimatedCostUsd: 0.2, maximumRuntimeMinutes: 45 }));
@@ -22,7 +22,7 @@ describe("PerformanceControlContent", () => {
 		expect(
 			screen.getByRole("heading", { name: "性能观测成本控制" }),
 		).toBeVisible();
-		expect(screen.getAllByText(/Cloudflare Access/)).not.toHaveLength(0);
+		expect(screen.getAllByText(/TOTP/)).not.toHaveLength(0);
 		expect(screen.getByText(/固定 GitHub Actions 工作流/)).toBeVisible();
 		expect(screen.getByRole("heading", { name: "安全启动" })).toBeVisible();
 		expect(screen.getByRole("heading", { name: "安全停止" })).toBeVisible();
@@ -37,15 +37,20 @@ describe("PerformanceControlContent", () => {
 			"https://github.com/Tiancheng-Xu/babysteps/actions/runs/32917816824",
 		);
 
-		expect(await screen.findByText("MFA 已验证")).toBeVisible();
+		expect(fetchMock.mock.calls.some(([url]) => String(url).includes("/session"))).toBe(false);
 		expect(screen.getByText("预计增量费用上限：USD 0.20")).toBeVisible();
 		expect(screen.getByText("最长运行：45 分钟")).toBeVisible();
 		const startButton = screen.getByRole("button", { name: "启动性能观测" });
 		const stopButton = screen.getByRole("button", { name: "安全停止性能观测" });
-		expect(startButton).toBeEnabled();
+		expect(startButton).toBeDisabled();
 		expect(stopButton).toBeDisabled();
+		fireEvent.change(screen.getByLabelText("6 位动态验证码"), { target: { value: "123456" } });
+		await waitFor(() => expect(startButton).toBeEnabled());
 		fireEvent.click(startButton);
+		await waitFor(() => expect(fetchMock.mock.calls.some(([url]) => String(url).includes("/session"))).toBe(true));
 		await waitFor(() => expect(fetchMock.mock.calls.some(([url]) => String(url).includes("/start"))).toBe(true));
+		const sessionCall = fetchMock.mock.calls.find(([url]) => String(url).includes("/session"));
+		expect(new Headers(sessionCall?.[1]?.headers).get("x-control-totp")).toBe("123456");
 		expect(await screen.findByText(/启动请求已受理/)).toBeVisible();
 	});
 
@@ -65,7 +70,7 @@ describe("PerformanceControlContent", () => {
 				statusCalls += 1;
 				return new Response(JSON.stringify({ controlState: "running", dataMode: "live", cleanupVerified: false, expiresAt: new Date(Date.now() + 1_000).toISOString(), estimatedCostUsd: 0.2, maximumRuntimeMinutes: 45 }));
 			}
-			return new Response(JSON.stringify({ nonce: "nonce-active", expiresAt: new Date(Date.now() + 300_000).toISOString(), mfaVerified: true, estimatedCostUsd: 0.2, maximumRuntimeMinutes: 45 }));
+			throw new Error(`unexpected fetch ${url}`);
 		}));
 		render(<PerformanceControlContent projectId="performance-observability-control" />);
 		await act(async () => Promise.resolve());
@@ -84,7 +89,7 @@ describe("PerformanceControlContent", () => {
 			return new Response(JSON.stringify({ nonce: "nonce-degraded", expiresAt: "2099-01-01T00:00:00.000Z", mfaVerified: true, estimatedCostUsd: 0.2, maximumRuntimeMinutes: 45 }));
 		}));
 		render(<PerformanceControlContent projectId="performance-observability-control" />);
-		expect(await screen.findByText("MFA 已验证")).toBeVisible();
-		expect(screen.getByRole("button", { name: "安全停止性能观测" })).toBeEnabled();
+		fireEvent.change(screen.getByLabelText("6 位动态验证码"), { target: { value: "123456" } });
+		await waitFor(() => expect(screen.getByRole("button", { name: "安全停止性能观测" })).toBeEnabled());
 	});
 });

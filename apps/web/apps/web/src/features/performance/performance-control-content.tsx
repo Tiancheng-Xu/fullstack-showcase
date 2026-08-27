@@ -23,7 +23,7 @@ import {
 
 const START_STEPS = [
 	"确认上一次临时 Stack、项目 Schema、项目角色和临时队列已经清理干净。",
-	"由 Cloudflare Access 独立 MFA 校验唯一操作者，再签发一次性控制 nonce。",
+	"由站内 TOTP 动态码校验唯一操作者，再签发一次性控制 nonce。",
 	"Worker 每次签发 GitHub App JWT、交换短期 installation token，只派发 BabySteps 的 aws-performance-control.yml。",
 	"45 分钟 TTL 或 USD 0.20 费用上限触发停止与清理，故障时失败关闭。",
 ];
@@ -61,39 +61,20 @@ const defaultStatus: PublicControlStatus = {
 export function PerformanceControlContent({ projectId }: { projectId: string }) {
 	const project = PROJECTS_INDEX[projectId];
 	const [status, setStatus] = useState(defaultStatus);
-	const [session, setSession] = useState<ControlSession | null>(null);
-	const [notice, setNotice] = useState("正在校验 Cloudflare Access MFA 会话…");
+	const [totpCode, setTotpCode] = useState("");
+	const [notice, setNotice] = useState("请输入验证器中的 6 位动态码");
 	const [pending, setPending] = useState<"start" | "stop" | null>(null);
 	const [now, setNow] = useState(() => Date.now());
 
 	useEffect(() => {
 		if (!project?.performance) return;
 		const query = `?project=${encodeURIComponent(projectId)}`;
-		void Promise.all([
-			fetch(`/api/performance/status${query}`).then(async (response) => {
+		void fetch(`/api/performance/status${query}`)
+			.then(async (response) => {
 				if (!response.ok) throw new Error("status_unavailable");
 				setStatus((await response.json()) as PublicControlStatus);
-			}),
-			fetch(`/api/performance/control/session${query}`, {
-				method: "POST",
-				headers: { accept: "application/json" },
-			}).then(async (response) => {
-				if (!response.ok) {
-					throw new Error(
-						response.status === 401 ? "access_required" : "session_unavailable",
-					);
-				}
-				setSession((await response.json()) as ControlSession);
-				setNotice("MFA 已验证");
-			}),
-		]).catch((error: unknown) => {
-			setSession(null);
-			setNotice(
-				error instanceof Error && error.message === "access_required"
-					? "需要通过 Cloudflare Access 独立 MFA"
-					: "控制会话不可用，写操作保持关闭",
-			);
-		});
+			})
+			.catch(() => setNotice("状态读取失败，写操作保持关闭"));
 	}, [project?.performance, projectId]);
 
 	useEffect(() => {
@@ -178,19 +159,19 @@ export function PerformanceControlContent({ projectId }: { projectId: string }) 
 	const performanceView = resolvePerformanceView(project.performance);
 	const latestSource = performanceView.snapshot?.source;
 	const canStart =
-		Boolean(session?.mfaVerified) &&
+		/^\d{6}$/u.test(totpCode) &&
 		status.controlState === "stopped" &&
 		status.cleanupVerified &&
 		!pending;
 	const canStop =
-		Boolean(session?.mfaVerified) &&
+		/^\d{6}$/u.test(totpCode) &&
 		["starting", "running", "degraded", "failed", "cleanup_required"].includes(
 			status.controlState,
 		) &&
 		!pending;
 
 	const requestControl = async (action: "start" | "stop") => {
-		if (!session) return;
+		if (!/^\d{6}$/u.test(totpCode)) return;
 		setPending(action);
 		setNotice(
 			action === "start"
@@ -198,12 +179,27 @@ export function PerformanceControlContent({ projectId }: { projectId: string }) 
 				: "正在提交停止与清理请求…",
 		);
 		try {
+			const sessionResponse = await fetch(
+				`/api/performance/control/session?project=${encodeURIComponent(projectId)}`,
+				{
+					method: "POST",
+					headers: {
+						accept: "application/json",
+						"x-control-totp": totpCode,
+					},
+				},
+			);
+			const sessionBody = (await sessionResponse.json()) as ControlSession & {
+				error?: string;
+			};
+			if (!sessionResponse.ok) throw new Error(sessionBody.error ?? "session_unavailable");
 			const response = await fetch(
 				`/api/performance/control/${action}?project=${encodeURIComponent(projectId)}`,
 				{
 					method: "POST",
 					headers: {
-						"x-control-nonce": session.nonce,
+						"x-control-nonce": sessionBody.nonce,
+						"x-control-totp": totpCode,
 						"idempotency-key": crypto.randomUUID(),
 					},
 				},
@@ -213,15 +209,19 @@ export function PerformanceControlContent({ projectId }: { projectId: string }) 
 			};
 			if (!response.ok) throw new Error(body.error ?? "control_failed");
 			setStatus((current) => ({ ...current, ...body }));
-			setSession(null);
+			setTotpCode("");
 			setNotice(
 				action === "start"
 					? "启动请求已受理，等待固定工作流回调"
 					: "停止与清理请求已受理",
 			);
-		} catch {
-			setSession(null);
-			setNotice("操作未完成；状态未被伪造，请重新通过 MFA 获取单次会话");
+		} catch (error) {
+			setTotpCode("");
+			setNotice(
+				error instanceof Error && error.message === "totp_rate_limited"
+					? "验证码错误次数过多，请稍后重试"
+					: "验证码无效或操作未完成；状态未被伪造",
+			);
 		} finally {
 			setPending(null);
 		}
@@ -230,7 +230,7 @@ export function PerformanceControlContent({ projectId }: { projectId: string }) 
 	return (
 		<PortfolioPageShell
 			current="project"
-			description="公开状态和可信历史快照保持可读；资源写操作由 Cloudflare Access 独立 MFA、单次 nonce 与固定 GitHub workflow 共同保护。"
+			description="公开状态和可信历史快照保持可读；资源写操作由站内 TOTP、单次 nonce 与固定 GitHub workflow 共同保护。"
 			evidenceUrl={`/evidence/${project.id}`}
 			eyebrow={`Project Control · ${project.title}`}
 			projectHomeUrl={`/performance-control?project=${project.id}`}
@@ -289,6 +289,23 @@ export function PerformanceControlContent({ projectId }: { projectId: string }) 
 						<p>最长运行：{status.maximumRuntimeMinutes} 分钟</p>
 						<p>{remaining ? `剩余时间：${remaining}` : "倒计时：未运行"}</p>
 					</div>
+					<label className="mt-5 block max-w-sm" htmlFor="performance-totp">
+						<span className="block font-bold text-sm">6 位动态验证码</span>
+						<input
+							aria-label="6 位动态验证码"
+							autoComplete="one-time-code"
+							className="mt-2 min-h-11 w-full border border-[#7c8794] bg-white px-4 font-mono text-lg tracking-[0.3em] outline-none focus:border-[#bf1737] focus:ring-2 focus:ring-[#bf1737]/20"
+							disabled={pending !== null}
+							id="performance-totp"
+							inputMode="numeric"
+							maxLength={6}
+							onChange={(event) => setTotpCode(event.target.value.replace(/\D/gu, "").slice(0, 6))}
+							placeholder="000000"
+							type="text"
+							value={totpCode}
+						/>
+						<span className="mt-2 block text-[#5a6470] text-xs">验证码仅发送到同源 Worker，不写入日志或浏览器存储。</span>
+					</label>
 				</header>
 
 				{status.controlState === "cleanup_required" ||
@@ -321,7 +338,7 @@ export function PerformanceControlContent({ projectId }: { projectId: string }) 
 
 				<section className="grid gap-4 md:grid-cols-3">
 					<BoundaryCard
-						body="Cloudflare Access 校验 JWT 签名、iss、aud、exp 和唯一 operator allowlist。"
+						body="Worker 校验 RFC 6238 TOTP 动态码，错误尝试进入 D1 计数与限流；密钥只保存在 Worker Secret。"
 						icon={<ShieldCheck aria-hidden="true" size={19} />}
 						title="MFA 与身份"
 					/>
