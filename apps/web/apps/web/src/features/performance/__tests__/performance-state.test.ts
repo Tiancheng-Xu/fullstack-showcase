@@ -40,11 +40,69 @@ const snapshot: PerformanceSnapshot = {
 	digest: "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
 };
 
+const snapshotV2: PerformanceSnapshot = {
+	schemaVersion: 2,
+	projectSlug: "performance-observability-control",
+	captureId: "capture-20260827-001",
+	capturedAt: "2026-08-27T00:30:00.000Z",
+	kind: "synthetic-closed-loop",
+	window: {
+		preset: "1h",
+		from: "2026-08-27T00:00:00.000Z",
+		to: "2026-08-27T01:00:00.000Z",
+	},
+	repository: "Tiancheng-Xu/babysteps",
+	commitSha: "0123456789abcdef0123456789abcdef01234567",
+	workflowRunId: "33037553599",
+	sdkVersion: "2.0.0",
+	cleanerVersion: "2.0.0",
+	percentileMethod: "nearest-rank",
+	sampleRate: 1,
+	filters: { environment: "production", window: "1h" },
+	summary: {
+		totalEvents: 4,
+		errorCount: 1,
+		errorRate: 0.25,
+		metricCount: 1,
+		routeCount: 1,
+		latestEventAt: 1_787_773_600_000,
+	},
+	operation: {
+		estimatedIncrementalCostUsd: 0.12,
+		maximumIncrementalCostUsd: 0.2,
+		ttlMinutes: 45,
+		observedRuntimeMinutes: 15,
+	},
+	metrics: [
+		{
+			name: "LCP",
+			category: "web-vital",
+			unit: "ms",
+			page: "all",
+			route: "all",
+			sampleCount: 3,
+			p50: 900,
+			p75: 1100,
+			p95: 1400,
+			errorCount: 0,
+			routes: [{ route: "/", sampleCount: 3, p50: 900, p75: 1100, p95: 1400 }],
+			trend: [{ bucketStart: 1_787_770_000_000, sampleCount: 3, p50: 900, p75: 1100, p95: 1400 }],
+		},
+	],
+};
+
 describe("validatePerformanceSnapshot", () => {
 	it("accepts a complete immutable snapshot contract", () => {
 		expect(validatePerformanceSnapshot(snapshot)).toEqual({
 			ok: true,
 			snapshot,
+		});
+	});
+
+	it("accepts a complete multi-metric v2 snapshot contract", () => {
+		expect(validatePerformanceSnapshot(snapshotV2)).toEqual({
+			ok: true,
+			snapshot: snapshotV2,
 		});
 	});
 

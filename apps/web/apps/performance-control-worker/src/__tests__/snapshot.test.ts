@@ -37,6 +37,52 @@ const snapshot: PerformanceSnapshot = {
 	],
 };
 
+const snapshotV2 = {
+	...snapshot,
+	schemaVersion: 2 as const,
+	window: {
+		preset: "1h" as const,
+		from: snapshot.window.from,
+		to: snapshot.window.to,
+	},
+	summary: {
+		totalEvents: 4,
+		errorCount: 0,
+		errorRate: 0,
+		metricCount: 1,
+		routeCount: 1,
+		latestEventAt: Date.parse(snapshot.capturedAt),
+	},
+	operation: {
+		estimatedIncrementalCostUsd: 0.12,
+		maximumIncrementalCostUsd: 0.2,
+		ttlMinutes: 45,
+		observedRuntimeMinutes: 5,
+	},
+	metrics: snapshot.metrics.map((metric) => ({
+		...metric,
+		category: "web-vital" as const,
+		routes: [
+			{
+				route: metric.route,
+				sampleCount: metric.sampleCount,
+				p50: metric.p50,
+				p75: metric.p75,
+				p95: metric.p95,
+			},
+		],
+		trend: [
+			{
+				bucketStart: Date.parse(snapshot.window.from),
+				sampleCount: metric.sampleCount,
+				p50: metric.p50,
+				p75: metric.p75,
+				p95: metric.p95,
+			},
+		],
+	})),
+};
+
 describe("immutable performance snapshots", () => {
 	it("uses immutable capture keys and a separate latest pointer", () => {
 		expect(immutableSnapshotKey(snapshot)).toBe(
@@ -50,6 +96,12 @@ describe("immutable performance snapshots", () => {
 	it("accepts a complete, internally ordered snapshot", () => {
 		expect(() =>
 			assertSnapshotPublishable(snapshot, { immutableObjectExists: false }),
+		).not.toThrow();
+	});
+
+	it("accepts an auditable multi-metric v2 snapshot", () => {
+		expect(() =>
+			assertSnapshotPublishable(snapshotV2, { immutableObjectExists: false }),
 		).not.toThrow();
 	});
 

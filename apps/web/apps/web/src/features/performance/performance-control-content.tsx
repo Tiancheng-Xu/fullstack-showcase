@@ -11,7 +11,10 @@ import {
 import { PROJECTS_INDEX } from "@/data/portfolio-projects";
 import { resolvePerformanceView } from "@/features/performance/performance-state";
 import { PerformanceStatusCard } from "@/features/performance/performance-status-card";
-import type { PerformanceControlState } from "@/features/performance/performance-types";
+import {
+	performanceSnapshotSource,
+	type PerformanceControlState,
+} from "@/features/performance/performance-types";
 import { PortfolioPageShell } from "@/features/portfolio/portfolio-page-shell";
 import { Button } from "@web/ui/components/button";
 import {
@@ -157,7 +160,9 @@ export function PerformanceControlContent({ projectId }: { projectId: string }) 
 	}
 
 	const performanceView = resolvePerformanceView(project.performance);
-	const latestSource = performanceView.snapshot?.source;
+	const latestSource = performanceView.snapshot
+		? performanceSnapshotSource(performanceView.snapshot)
+		: null;
 	const canStart =
 		/^\d{6}$/u.test(totpCode) &&
 		status.controlState === "stopped" &&
