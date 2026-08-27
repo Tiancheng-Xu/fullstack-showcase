@@ -15,9 +15,7 @@ describe("PerformanceControlContent", () => {
 			throw new Error(`unexpected fetch ${url}`);
 		});
 		vi.stubGlobal("fetch", fetchMock);
-		render(
-			<PerformanceControlContent projectId="performance-observability-control" />,
-		);
+		render(<PerformanceControlContent projectId="babysteps" />);
 
 		expect(
 			screen.getByRole("heading", { name: "性能观测成本控制" }),
@@ -26,6 +24,13 @@ describe("PerformanceControlContent", () => {
 		expect(screen.getByText(/固定 GitHub Actions 工作流/)).toBeVisible();
 		expect(screen.getByRole("heading", { name: "安全启动" })).toBeVisible();
 		expect(screen.getByRole("heading", { name: "安全停止" })).toBeVisible();
+		expect(
+			screen.getByRole("link", { name: /BabySteps/ }),
+		).toHaveAttribute("aria-current", "page");
+		expect(screen.getByRole("link", { name: /Agent Market/ })).toHaveAttribute(
+			"href",
+			"/performance-control/agent-market",
+		);
 		expect(screen.getAllByText(/共享 VPC、NAT、RDS/)).not.toHaveLength(0);
 		expect(screen.getByText("历史快照")).toBeVisible();
 		expect(screen.getAllByText("321 ms")).toHaveLength(3);
@@ -48,6 +53,11 @@ describe("PerformanceControlContent", () => {
 		await waitFor(() => expect(startButton).toBeEnabled());
 		fireEvent.click(startButton);
 		await waitFor(() => expect(fetchMock.mock.calls.some(([url]) => String(url).includes("/session"))).toBe(true));
+		expect(
+			fetchMock.mock.calls.every(([url]) =>
+				String(url).includes("project=performance-observability-control"),
+			),
+		).toBe(true);
 		await waitFor(() => expect(fetchMock.mock.calls.some(([url]) => String(url).includes("/start"))).toBe(true));
 		const sessionCall = fetchMock.mock.calls.find(([url]) => String(url).includes("/session"));
 		expect(new Headers(sessionCall?.[1]?.headers).get("x-control-totp")).toBe("123456");
@@ -61,6 +71,20 @@ describe("PerformanceControlContent", () => {
 		expect(screen.queryByRole("button", { name: "启动性能观测" })).toBeNull();
 	});
 
+	it("lists a planned application without inventing metrics or enabling controls", () => {
+		const fetchMock = vi.fn();
+		vi.stubGlobal("fetch", fetchMock);
+		render(<PerformanceControlContent projectId="agent-market" />);
+
+		expect(screen.getByText("观测接入尚未完成")).toBeVisible();
+		expect(screen.getByText("暂无可信快照")).toBeVisible();
+		expect(screen.queryByRole("button", { name: "启动性能观测" })).toBeNull();
+		expect(
+			screen.getByRole("link", { name: /Agent Market/ }),
+		).toHaveAttribute("aria-current", "page");
+		expect(fetchMock).not.toHaveBeenCalled();
+	});
+
 	it("polls active states every five seconds and refreshes immediately at TTL zero", async () => {
 		vi.useFakeTimers();
 		let statusCalls = 0;
@@ -72,7 +96,7 @@ describe("PerformanceControlContent", () => {
 			}
 			throw new Error(`unexpected fetch ${url}`);
 		}));
-		render(<PerformanceControlContent projectId="performance-observability-control" />);
+		render(<PerformanceControlContent projectId="babysteps" />);
 		await act(async () => Promise.resolve());
 		expect(statusCalls).toBe(1);
 		await act(async () => { vi.advanceTimersByTime(1_000); await Promise.resolve(); });
@@ -88,7 +112,7 @@ describe("PerformanceControlContent", () => {
 			if (url.includes("/status")) return new Response(JSON.stringify({ controlState: "degraded", cleanupVerified: false, expiresAt: null, estimatedCostUsd: 0.2, maximumRuntimeMinutes: 45 }));
 			return new Response(JSON.stringify({ nonce: "nonce-degraded", expiresAt: "2099-01-01T00:00:00.000Z", mfaVerified: true, estimatedCostUsd: 0.2, maximumRuntimeMinutes: 45 }));
 		}));
-		render(<PerformanceControlContent projectId="performance-observability-control" />);
+		render(<PerformanceControlContent projectId="babysteps" />);
 		fireEvent.change(screen.getByLabelText("6 位动态验证码"), { target: { value: "123456" } });
 		await waitFor(() => expect(screen.getByRole("button", { name: "安全停止性能观测" })).toBeEnabled());
 	});

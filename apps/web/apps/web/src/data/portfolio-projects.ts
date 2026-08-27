@@ -1,4 +1,8 @@
 import type { PerformanceProjectStatus } from "@/features/performance/performance-types";
+import {
+	performanceApplicationIdForControlProject,
+	performanceControlPath,
+} from "./performance-applications";
 
 export type RenderingMode =
 	| "SSR"
@@ -456,7 +460,9 @@ export function getProjectPageLinks(
 		links.push({
 			id: "control",
 			label: "控制面",
-			href: `/performance-control?project=${project.id}`,
+			href: performanceControlPath(
+				performanceApplicationIdForControlProject(project.id),
+			),
 		});
 	}
 	if (project.ownerPage) {

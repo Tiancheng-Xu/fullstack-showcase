@@ -29,7 +29,7 @@ describe("Dashboard project links", () => {
 			}),
 		).toHaveAttribute(
 			"href",
-			"/performance-control?project=performance-observability-control",
+			"/performance-control/babysteps",
 		);
 		expect(
 			projectList.getByRole("link", {

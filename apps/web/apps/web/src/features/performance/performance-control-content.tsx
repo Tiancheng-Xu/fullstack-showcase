@@ -9,6 +9,11 @@ import {
 } from "lucide-react";
 
 import { PROJECTS_INDEX } from "@/data/portfolio-projects";
+import {
+	getPerformanceApplication,
+	PERFORMANCE_APPLICATIONS,
+	performanceControlPath,
+} from "@/data/performance-applications";
 import { resolvePerformanceView } from "@/features/performance/performance-state";
 import { PerformanceStatusCard } from "@/features/performance/performance-status-card";
 import {
@@ -62,7 +67,14 @@ const defaultStatus: PublicControlStatus = {
 };
 
 export function PerformanceControlContent({ projectId }: { projectId: string }) {
-	const project = PROJECTS_INDEX[projectId];
+	const application = getPerformanceApplication(projectId);
+	const project = application
+		? PROJECTS_INDEX[application.portfolioProjectId]
+		: undefined;
+	const controlProjectId = application?.controlProjectId ?? null;
+	const controlProject = controlProjectId
+		? PROJECTS_INDEX[controlProjectId]
+		: undefined;
 	const [status, setStatus] = useState(defaultStatus);
 	const [totpCode, setTotpCode] = useState("");
 	const [notice, setNotice] = useState("请输入验证器中的 6 位动态码");
@@ -70,15 +82,18 @@ export function PerformanceControlContent({ projectId }: { projectId: string }) 
 	const [now, setNow] = useState(() => Date.now());
 
 	useEffect(() => {
-		if (!project?.performance) return;
-		const query = `?project=${encodeURIComponent(projectId)}`;
+		setStatus(defaultStatus);
+		setTotpCode("");
+		setNotice("请输入验证器中的 6 位动态码");
+		if (!controlProject?.performance || !controlProjectId) return;
+		const query = `?project=${encodeURIComponent(controlProjectId)}`;
 		void fetch(`/api/performance/status${query}`)
 			.then(async (response) => {
 				if (!response.ok) throw new Error("status_unavailable");
 				setStatus((await response.json()) as PublicControlStatus);
 			})
 			.catch(() => setNotice("状态读取失败，写操作保持关闭"));
-	}, [project?.performance, projectId]);
+	}, [controlProject?.performance, controlProjectId]);
 
 	useEffect(() => {
 		if (!status.expiresAt) return;
@@ -87,12 +102,12 @@ export function PerformanceControlContent({ projectId }: { projectId: string }) 
 	}, [status.expiresAt]);
 
 	useEffect(() => {
-		if (!project?.performance) return;
+		if (!controlProject?.performance || !controlProjectId) return;
 		let disposed = false;
 		const refreshStatus = async () => {
 			try {
 				const response = await fetch(
-					`/api/performance/status?project=${encodeURIComponent(projectId)}`,
+					`/api/performance/status?project=${encodeURIComponent(controlProjectId)}`,
 				);
 				if (response.ok && !disposed) {
 					setStatus((await response.json()) as PublicControlStatus);
@@ -124,7 +139,7 @@ export function PerformanceControlContent({ projectId }: { projectId: string }) 
 			window.clearInterval(interval);
 			if (expiryTimer !== null) window.clearTimeout(expiryTimer);
 		};
-	}, [project?.performance, projectId, status.controlState, status.expiresAt]);
+	}, [controlProject?.performance, controlProjectId, status.controlState, status.expiresAt]);
 
 	const remaining = useMemo(() => {
 		if (!status.expiresAt) return null;
@@ -135,7 +150,7 @@ export function PerformanceControlContent({ projectId }: { projectId: string }) 
 		return `${String(Math.floor(seconds / 60)).padStart(2, "0")}:${String(seconds % 60).padStart(2, "0")}`;
 	}, [now, status.expiresAt]);
 
-	if (!project?.performance) {
+	if (!application || !project) {
 		return (
 			<PortfolioPageShell
 				current="project"
@@ -159,7 +174,13 @@ export function PerformanceControlContent({ projectId }: { projectId: string }) 
 		);
 	}
 
-	const performanceView = resolvePerformanceView(project.performance);
+	const performanceView = resolvePerformanceView(
+		controlProject?.performance ?? {
+			controlState: "unknown",
+			liveHealthy: false,
+			latestSnapshot: null,
+		},
+	);
 	const latestSource = performanceView.snapshot
 		? performanceSnapshotSource(performanceView.snapshot)
 		: null;
@@ -176,7 +197,7 @@ export function PerformanceControlContent({ projectId }: { projectId: string }) 
 		!pending;
 
 	const requestControl = async (action: "start" | "stop") => {
-		if (!/^\d{6}$/u.test(totpCode)) return;
+		if (!/^\d{6}$/u.test(totpCode) || !controlProjectId) return;
 		setPending(action);
 		setNotice(
 			action === "start"
@@ -185,7 +206,7 @@ export function PerformanceControlContent({ projectId }: { projectId: string }) 
 		);
 		try {
 			const sessionResponse = await fetch(
-				`/api/performance/control/session?project=${encodeURIComponent(projectId)}`,
+				`/api/performance/control/session?project=${encodeURIComponent(controlProjectId)}`,
 				{
 					method: "POST",
 					headers: {
@@ -199,7 +220,7 @@ export function PerformanceControlContent({ projectId }: { projectId: string }) 
 			};
 			if (!sessionResponse.ok) throw new Error(sessionBody.error ?? "session_unavailable");
 			const response = await fetch(
-				`/api/performance/control/${action}?project=${encodeURIComponent(projectId)}`,
+				`/api/performance/control/${action}?project=${encodeURIComponent(controlProjectId)}`,
 				{
 					method: "POST",
 					headers: {
@@ -236,14 +257,16 @@ export function PerformanceControlContent({ projectId }: { projectId: string }) 
 		<PortfolioPageShell
 			current="project"
 			description="公开状态和可信历史快照保持可读；资源写操作由站内 TOTP、单次 nonce 与固定 GitHub workflow 共同保护。"
-			evidenceUrl={`/evidence/${project.id}`}
+			evidenceUrl={project.evidenceUrl ?? "/dashboard"}
 			eyebrow={`Project Control · ${project.title}`}
-			projectHomeUrl={`/performance-control?project=${project.id}`}
+			projectHomeUrl={project.ownerPage ?? "/dashboard"}
 			title="性能观测成本控制"
 		>
 			<div className="mx-auto max-w-5xl space-y-6">
+				<PerformanceApplicationTabs currentId={application.id} />
 				<PerformanceStatusCard
-					projectId={project.id}
+					controlHref={performanceControlPath(application.id)}
+					projectId={controlProjectId ?? undefined}
 					projectName={project.title}
 					status={{
 						...performanceView,
@@ -253,6 +276,16 @@ export function PerformanceControlContent({ projectId }: { projectId: string }) 
 								: status.controlState,
 					}}
 				/>
+				{!controlProject?.performance ? (
+					<section className="border border-amber-300 bg-amber-50 p-5 text-amber-950">
+						<h2 className="font-serif font-bold text-xl">观测接入尚未完成</h2>
+						<p className="mt-2 text-sm leading-relaxed">
+							该应用已进入统一观测目录，但尚未登记固定 GitHub workflow、AWS 资源前缀和可信快照；因此只展示不可用状态，不开放启停按钮。
+						</p>
+					</section>
+				) : null}
+				{controlProject?.performance ? (
+					<>
 				{latestSource ? (
 					<section className="border border-emerald-300 bg-emerald-50 p-5 text-emerald-950">
 						<h2 className="font-serif font-bold text-xl">
@@ -358,8 +391,33 @@ export function PerformanceControlContent({ projectId }: { projectId: string }) 
 						title="费用边界"
 					/>
 				</section>
+					</>
+				) : null}
 			</div>
 		</PortfolioPageShell>
+	);
+}
+
+function PerformanceApplicationTabs({ currentId }: { currentId: string }) {
+	return (
+		<nav
+			aria-label="性能应用切换"
+			className="grid gap-2 border border-[#d8cfbd] bg-[#f8f3e8] p-3 sm:grid-cols-2 lg:grid-cols-4"
+		>
+			{PERFORMANCE_APPLICATIONS.map((application) => (
+				<a
+					aria-current={application.id === currentId ? "page" : undefined}
+					className="flex min-h-11 items-center justify-between border border-[#c7ced8] bg-white px-3 py-2 font-bold text-sm aria-[current=page]:border-[#bf1737] aria-[current=page]:bg-[#bf1737] aria-[current=page]:text-white"
+					href={performanceControlPath(application.id)}
+					key={application.id}
+				>
+					<span>{application.label}</span>
+					<span className="text-[10px] uppercase tracking-[0.12em]">
+						{application.controlProjectId ? "已接入" : "待接入"}
+					</span>
+				</a>
+			))}
+		</nav>
 	);
 }
 

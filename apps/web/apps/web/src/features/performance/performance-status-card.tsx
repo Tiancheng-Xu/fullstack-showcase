@@ -1,6 +1,10 @@
 import { Activity, ExternalLink, Gauge, History, ShieldCheck } from "lucide-react";
 import { useEffect, useState } from "react";
 import {
+	performanceApplicationIdForControlProject,
+	performanceControlPath,
+} from "@/data/performance-applications";
+import {
 	resolvePerformanceView,
 	validatePerformanceSnapshot,
 } from "./performance-state";
@@ -10,9 +14,11 @@ import type {
 	PerformanceView,
 } from "./performance-types";
 
-export function PerformanceStatusCard({ projectId, projectName, status }: { projectId: string; projectName: string; status: PerformanceView }) {
+export function PerformanceStatusCard({ controlHref, projectId, projectName, status }: { controlHref?: string; projectId?: string; projectName: string; status: PerformanceView }) {
 	const [view, setView] = useState(status);
 	useEffect(() => {
+		setView(status);
+		if (!projectId) return;
 		let active = true;
 		const load = async () => {
 			try {
@@ -40,6 +46,11 @@ export function PerformanceStatusCard({ projectId, projectName, status }: { proj
 			active = false;
 		};
 	}, [projectId, status]);
+	const resolvedControlHref =
+		controlHref ??
+		performanceControlPath(
+			performanceApplicationIdForControlProject(projectId ?? "babysteps"),
+		);
 
 	const metrics = view.snapshot?.metrics ?? [];
 	const isHistorical = view.dataMode === "historical";
@@ -72,7 +83,7 @@ export function PerformanceStatusCard({ projectId, projectName, status }: { proj
 
 			<div className="mt-5 flex flex-col gap-3 border-[#d8cfbd] border-t pt-4 sm:flex-row sm:items-center sm:justify-between">
 				<p className="text-[#5a6470] text-xs">数据模式：{view.dataMode} · 快照：{view.snapshot?.captureId ?? "无"}</p>
-				<a className="inline-flex min-h-11 items-center justify-center gap-2 bg-[#0f2d4d] px-4 py-3 font-bold text-sm text-white" href={`/performance-control?project=${encodeURIComponent(projectId)}`}><Gauge aria-hidden="true" size={17} />进入成本控制<ExternalLink aria-hidden="true" size={14} /></a>
+				<a className="inline-flex min-h-11 items-center justify-center gap-2 bg-[#0f2d4d] px-4 py-3 font-bold text-sm text-white" href={resolvedControlHref}><Gauge aria-hidden="true" size={17} />进入成本控制<ExternalLink aria-hidden="true" size={14} /></a>
 			</div>
 		</article>
 	);

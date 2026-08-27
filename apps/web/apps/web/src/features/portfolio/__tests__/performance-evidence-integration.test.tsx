@@ -25,7 +25,7 @@ describe("performance observability Evidence integration", () => {
 			screen.getByRole("link", { name: /进入成本控制/ }),
 		).toHaveAttribute(
 			"href",
-			"/performance-control?project=performance-observability-control",
+			"/performance-control/babysteps",
 		);
 	});
 

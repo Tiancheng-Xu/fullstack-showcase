@@ -1,4 +1,7 @@
-import { getRegisteredProject, listRegisteredProjects } from "./registry";
+import {
+	getRegisteredProject,
+	type RegisteredPerformanceProject,
+} from "./registry";
 import { createWorkflowDispatchInputs, isCanonicalIso, parseRuntimeCallback, type RuntimeCallback } from "./runtime-contract";
 import {
 	assertSnapshotPublishable,
@@ -363,12 +366,12 @@ const githubInstallationToken = async (env: WorkerEnv) => {
 
 const dispatchFixedWorkflow = async (
 	env: WorkerEnv,
+	project: RegisteredPerformanceProject,
 	action: ControlAction,
 	operationId: string,
 	generation: number,
 	expiresAt: string,
 ) => {
-	const project = listRegisteredProjects()[0];
 	const installationToken = await githubInstallationToken(env);
 	const response = await fetch(
 		`https://api.github.com/repos/${project.repository}/actions/workflows/${project.workflow}/dispatches`,
@@ -476,7 +479,7 @@ const batchedControlMutation = async (
 		return json({ error: "control_batch_conflict" }, { status: 409 });
 	}
 	try {
-		await dispatchFixedWorkflow(env, action, result.operation.operationId, result.operation.generation, expiresAt);
+		await dispatchFixedWorkflow(env, project, action, result.operation.operationId, result.operation.generation, expiresAt);
 	} catch {
 		await env.CONTROL_DB.prepare(
 			"UPDATE project_state SET control_state='cleanup_required', cleanup_verified=0, expires_at=NULL, updated_at=?1 WHERE project_slug=?2 AND operation_id=?3 AND generation=?4 AND control_state IN ('starting','stopping')",
@@ -772,6 +775,8 @@ export const reconcileExpiredControls = async (env: WorkerEnv) => {
 	const { results } = await statement.all<StateRow>();
 	for (const row of results) {
 		if (!isCanonicalIso(row.expires_at)) continue;
+		const project = getRegisteredProject(row.project_slug);
+		if (!project) continue;
 		const operationId = crypto.randomUUID();
 		const generation = row.generation ?? 0;
 		const requestedAt = new Date().toISOString();
@@ -802,7 +807,14 @@ export const reconcileExpiredControls = async (env: WorkerEnv) => {
 		}
 		if (results.length !== 3 || results.some((result) => result.meta?.changes !== 1)) continue;
 		try {
-			await dispatchFixedWorkflow(env, "stop", operationId, generation, row.expires_at);
+			await dispatchFixedWorkflow(
+				env,
+				project,
+				"stop",
+				operationId,
+				generation,
+				row.expires_at,
+			);
 		} catch {
 			await env.CONTROL_DB.prepare(
 				"UPDATE project_state SET control_state='cleanup_required', cleanup_verified=0, expires_at=NULL WHERE project_slug=?1",
