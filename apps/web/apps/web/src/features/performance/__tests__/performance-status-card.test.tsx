@@ -27,7 +27,7 @@ describe("PerformanceStatusCard", () => {
 		expect(screen.getByText(/不会生成模拟性能数据/)).toBeVisible();
 		expect(
 			screen.getByRole("link", { name: /进入成本控制/ }),
-		).toHaveAttribute("href", "/performance-control?project=showcase-dashboard");
+		).toHaveAttribute("href", "/performance-control/showcase-dashboard");
 	});
 
 	it("renders every verified metric as percentile bars", () => {

@@ -4,8 +4,24 @@ export const STATIC_FIRST_ROUTES = [
 		output: "dashboard/index.html",
 	},
 	{
-		url: "/performance-control?project=performance-observability-control",
+		url: "/performance-control",
 		output: "performance-control/index.html",
+	},
+	{
+		url: "/performance-control/babysteps",
+		output: "performance-control/babysteps/index.html",
+	},
+	{
+		url: "/performance-control/agent-market",
+		output: "performance-control/agent-market/index.html",
+	},
+	{
+		url: "/performance-control/personal-ai-agent",
+		output: "performance-control/personal-ai-agent/index.html",
+	},
+	{
+		url: "/performance-control/github-profile-studio",
+		output: "performance-control/github-profile-studio/index.html",
 	},
 	{
 		url: "/evidence/performance-observability-control",

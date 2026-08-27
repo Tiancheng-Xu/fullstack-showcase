@@ -15,6 +15,10 @@ import {
 	type MigratedEvidenceDocument,
 } from "@/data/migrated-evidence";
 import { PROJECTS_INDEX } from "@/data/portfolio-projects";
+import {
+	performanceApplicationIdForControlProject,
+	performanceControlPath,
+} from "@/data/performance-applications";
 import { PortfolioPageShell } from "@/features/portfolio/portfolio-page-shell";
 import { PerformanceEvidenceDiagrams } from "@/features/performance/performance-evidence-diagrams";
 import { resolvePerformanceView } from "@/features/performance/performance-state";
@@ -52,7 +56,9 @@ export function EvidenceContent({ projectId }: { projectId: string }) {
 	const projectHomeUrl =
 		project.ownerPage ??
 		(project.performance
-			? `/performance-control?project=${project.id}`
+			? performanceControlPath(
+					performanceApplicationIdForControlProject(project.id),
+				)
 			: "/dashboard#projects");
 	const evidenceUrl =
 		project.evidenceUrl ?? `https://baby2b.online/evidence/${project.id}`;

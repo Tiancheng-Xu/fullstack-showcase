@@ -1,6 +1,8 @@
-import { describe, expect, it } from "vitest";
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
+import { describe, expect, it } from "vitest";
+
+import { PERFORMANCE_APPLICATIONS } from "../src/data/performance-applications";
 
 import {
 	createCsrFallbackHtml,
@@ -16,8 +18,8 @@ describe("static-first route delivery", () => {
 					output: "dashboard/index.html",
 				}),
 				expect.objectContaining({
-					url: "/performance-control?project=performance-observability-control",
-					output: "performance-control/index.html",
+					url: "/performance-control/babysteps",
+					output: "performance-control/babysteps/index.html",
 				}),
 				expect.objectContaining({
 					url: "/evidence/performance-observability-control",
@@ -39,6 +41,19 @@ describe("static-first route delivery", () => {
 					url: "/evidence/tc-workflow",
 					output: "evidence/tc-workflow/index.html",
 				}),
+			]),
+		);
+	});
+
+	it("pre-renders every registered performance application path", () => {
+		expect(
+			STATIC_FIRST_ROUTES.map(({ url }) => url),
+		).toEqual(
+			expect.arrayContaining([
+				"/performance-control",
+				...PERFORMANCE_APPLICATIONS.map(
+					({ id }) => `/performance-control/${id}`,
+				),
 			]),
 		);
 	});
