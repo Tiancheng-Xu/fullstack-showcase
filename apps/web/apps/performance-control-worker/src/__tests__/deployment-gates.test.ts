@@ -60,9 +60,20 @@ describe("performance control deployment gates", () => {
 
 	it("generates a deterministic production config that remains disabled", () => {
 		const output = execFileSync("node", [resolve(root, "scripts/generate-production-config.mjs"), "--ci"], { encoding: "utf8" });
-		const config = JSON.parse(output) as { vars: Record<string, string>; d1_databases: unknown[]; r2_buckets: unknown[] };
+		const config = JSON.parse(output) as {
+			name: string;
+			vars: Record<string, string>;
+			d1_databases: Array<{ database_name: string }>;
+			r2_buckets: Array<{ bucket_name: string }>;
+		};
+		expect(config.name).toBe("baby2b-performance-control");
 		expect(config.vars.CONTROL_ENABLED).toBe("false");
-		expect(config.d1_databases).toHaveLength(1);
-		expect(config.r2_buckets).toHaveLength(1);
+		expect(config.d1_databases).toEqual([
+			expect.objectContaining({ database_name: "baby2b-performance-control" }),
+		]);
+		expect(config.r2_buckets).toEqual([
+			expect.objectContaining({ bucket_name: "baby2b-performance-snapshots-ci" }),
+		]);
+		expect(output).not.toContain("ACCESS_");
 	});
 });
