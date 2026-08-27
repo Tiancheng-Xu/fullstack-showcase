@@ -15,11 +15,19 @@ describe("static-first Dashboard", () => {
 	});
 
 	it("renders the performance control deep link with its real project content", async () => {
-		const result = await renderDashboardRoute(
-			"/performance-control?project=performance-observability-control",
-		);
+		const result = await renderDashboardRoute("/performance-control/babysteps");
 		expect(result.markup).toContain("性能观测成本控制");
 		expect(result.markup).toContain("安全启动");
+		expect(result.hydrationHtml).toContain("$_TSR");
+	});
+
+	it("renders each application deep link with application-specific semantics", async () => {
+		const result = await renderDashboardRoute(
+			"/performance-control/agent-market",
+		);
+		expect(result.markup).toContain("Agent Market");
+		expect(result.markup).toContain("观测接入尚未完成");
+		expect(result.markup).not.toContain("启动性能观测");
 		expect(result.hydrationHtml).toContain("$_TSR");
 	});
 });
