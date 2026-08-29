@@ -33,13 +33,15 @@ describe("PerformanceControlContent", () => {
 		);
 		expect(screen.getAllByText(/共享 VPC、NAT、RDS/)).not.toHaveLength(0);
 		expect(screen.getByText("历史快照")).toBeVisible();
-		expect(screen.getAllByText("321 ms")).toHaveLength(3);
-		expect(within(screen.getByText("样本数").parentElement as HTMLElement).getByText("1")).toBeVisible();
+		expect(screen.getAllByText("960 ms")).toHaveLength(6);
+		expect(screen.getAllByText("8.5 ms")).toHaveLength(3);
+		expect(screen.getByText("79 样本 · 0 错误")).toBeVisible();
+		expect(within(screen.getByText("样本数").parentElement as HTMLElement).getByText("82")).toBeVisible();
 		expect(
-			screen.getByRole("link", { name: /^查看 GitHub Run #32917816824$/ }),
+			screen.getByRole("link", { name: /^查看 GitHub Run #33160455921$/ }),
 		).toHaveAttribute(
 			"href",
-			"https://github.com/Tiancheng-Xu/babysteps/actions/runs/32917816824",
+			"https://github.com/Tiancheng-Xu/babysteps/actions/runs/33160455921",
 		);
 
 		expect(fetchMock.mock.calls.some(([url]) => String(url).includes("/session"))).toBe(false);

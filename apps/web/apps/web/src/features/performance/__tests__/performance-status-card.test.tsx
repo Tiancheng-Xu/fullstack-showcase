@@ -71,6 +71,43 @@ describe("PerformanceStatusCard", () => {
 		expect(screen.getByText("130 ms")).toBeVisible();
 	});
 
+	it("labels sparse verified metrics as low confidence", () => {
+		render(
+			<PerformanceStatusCard
+				projectName="BabySteps"
+				status={{
+					controlState: "stopped",
+					dataMode: "historical",
+					label: "历史快照",
+					detail: "受控浏览器单样本",
+					snapshot: {
+						captureId: "aws-run-33160455921",
+						capturedAt: "2026-08-28T00:00:00.000Z",
+						window: "1h-controlled",
+						kind: "synthetic-closed-loop",
+						source: {
+							repository: "Tiancheng-Xu/babysteps",
+							commitSha: "e40008e056d24199641fa978142f706051889f3b",
+							workflowRunId: "33160455921",
+							sdkVersion: "commit:e40008e056d2",
+							cleanerVersion: "commit:e40008e056d2",
+						},
+						method: { percentile: "nearest-rank", sampleRate: 1 },
+						filters: { environment: "controlled-browser" },
+						schemaVersion: "performance-snapshot/v1",
+						digest: "sha256:caeb28578ac4990c2eb1a8bb543ca3fb967adce7fa7b93ba848109fa0b504644",
+						metrics: [
+							{ name: "LCP", unit: "ms", page: "all", route: "all", sampleCount: 1, p50: 960, p75: 960, p95: 960, errorCount: 0 },
+						],
+					},
+				}}
+			/>,
+		);
+
+		expect(screen.getByText("低置信度 · n=1")).toBeVisible();
+		expect(screen.getByText(/不能代表稳定生产表现/)).toBeVisible();
+	});
+
 	it("hydrates from the verified public v2 snapshot without inventing fallback data", async () => {
 		vi.stubGlobal("fetch", vi.fn(async (input: RequestInfo | URL) => {
 			const url = String(input);

@@ -14,6 +14,13 @@ describe("portfolio production contracts", () => {
 		);
 		expect(agentMarket?.ownerPage).toBe("https://agent-market.baby2b.online/");
 		expect(agentMarket?.evidenceUrl).toBe("https://agent-market.baby2b.online/evidence/");
+		expect(agentMarket?.status).toBe("已完成");
+		expect(agentMarket?.progress).toBe(100);
+		expect(agentMarket?.skills).toEqual(
+			expect.arrayContaining(["AI Agents", "LangGraph", "Sepolia", "TC Flow"]),
+		);
+		expect(agentMarket?.evidence.join(" ")).toContain("24 笔 Sepolia V3");
+		expect(agentMarket?.renderingModes).not.toContain("Cloud Preview Pending");
 		expect(babySteps?.title).toBe("BabySteps");
 		expect(babySteps?.skills).toContain("Static-First Delivery");
 		expect(babySteps?.evidenceUrl).toBe("https://babysteps.baby2b.online/evidence/");
