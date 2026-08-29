@@ -53,3 +53,12 @@ export function createCsrFallbackHtml(template) {
 			"<title>Tiancheng Xu · Showcase Dashboard</title>",
 		);
 }
+
+export function createNotFoundHtml(template) {
+	return createCsrFallbackHtml(template)
+		.replace(/\s*<script type="module"[^>]*><\/script>/g, "")
+		.replace(
+			'<div id="app"></div>',
+			'<main id="app" data-render-mode="static-404"><h1>页面不存在</h1><p>该地址不属于已发布的作品集页面。</p><a href="/dashboard/">返回作品集首页</a></main>',
+		);
+}

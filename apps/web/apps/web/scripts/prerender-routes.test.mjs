@@ -6,6 +6,7 @@ import { PERFORMANCE_APPLICATIONS } from "../src/data/performance-applications";
 
 import {
 	createCsrFallbackHtml,
+	createNotFoundHtml,
 	STATIC_FIRST_ROUTES,
 } from "./prerender-routes.mjs";
 
@@ -66,6 +67,17 @@ describe("static-first route delivery", () => {
 		expect(html).toContain('src="/assets/app.js"');
 		expect(html).not.toContain('http-equiv="refresh"');
 		expect(html).toContain('<html lang="zh-CN">');
+	});
+
+	it("builds a readable static 404 without client-side route takeover", () => {
+		const html = createNotFoundHtml(
+			'<html lang="en"><head><title>web</title></head><body><div id="app"></div><script type="module" src="/assets/app.js"></script></body></html>',
+		);
+
+		expect(html).toContain('data-render-mode="static-404"');
+		expect(html).toContain("页面不存在");
+		expect(html).toContain('href="/dashboard/"');
+		expect(html).not.toContain('type="module"');
 	});
 
 	it("redirects legacy project and Dashboard evidence paths to their current owners", () => {

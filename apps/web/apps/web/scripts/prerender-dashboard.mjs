@@ -3,6 +3,7 @@ import { dirname, resolve } from "node:path";
 import { pathToFileURL } from "node:url";
 import {
 	createCsrFallbackHtml,
+	createNotFoundHtml,
 	STATIC_FIRST_ROUTES,
 } from "./prerender-routes.mjs";
 
@@ -33,6 +34,7 @@ for (const route of STATIC_FIRST_ROUTES) {
 }
 
 await writeFile(resolve(distDir, "index.html"), csrFallbackHtml, "utf8");
+await writeFile(resolve(distDir, "404.html"), createNotFoundHtml(template), "utf8");
 await writeFile(
 	resolve(distDir, "static-first-manifest.json"),
 	`${JSON.stringify({ schemaVersion: 1, mode: "ssg-hydrate-csr", generatedAt: new Date().toISOString(), routes: STATIC_FIRST_ROUTES.map((route) => route.url) }, null, 2)}\n`,
