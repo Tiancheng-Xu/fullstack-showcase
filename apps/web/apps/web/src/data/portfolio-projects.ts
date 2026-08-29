@@ -93,10 +93,12 @@ export const PORTFOLIO_PROJECTS: PortfolioProject[] = [
 		evidence: [
 			"Cloudflare Production、项目自有 Evidence、深链 SSR 与真实 404 已完成语义回读",
 			"24 笔 Sepolia V3 状态交易全部成功，覆盖 DAG 锚定、接单、异议、仲裁、质押返还与收益领取",
+			"AWS V2 已以 verified-production 完成浏览器到 HMAC API、SNS/SQS、Lambda、ECS Fargate、PostgreSQL 与聚合回读闭环，并记录暂停、零队列与零 ECS Task",
 			"结构化 Agent/Task tags、TC Flow 收口和完整仓库 Gate 已绑定 main 58cec1090a62 与 Verify Run 33232010589",
 		],
 		details: [
 			"Cloudflare Production 与 Sepolia V3 为 verified-production；本地 Transaction Engine 全栈入口仅为 verified-local。",
+			"AWS V2 运行证据来自项目自有 2026-08-27 closure JSON；最新 Cloudflare 发布与 AWS Runtime 使用不同证据链，不能互相替代。",
 			"Sepolia 验证使用单一测试钱包复用多个角色，不等同于多钱包生产隔离证明，也不证明网页生产环境直接提交交易。",
 			"最新生产部署 f0172a7e 证明 GitHub/Cloudflare Web 与 Evidence 已发布；页面中的 demo/test 数据保持演示标识，本次发布不作为实时市场成交或 AWS Runtime 证据。",
 		],

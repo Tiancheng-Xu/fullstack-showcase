@@ -20,9 +20,14 @@ describe("portfolio production contracts", () => {
 			expect.arrayContaining(["AI Agents", "LangGraph", "Sepolia", "TC Flow"]),
 		);
 		expect(agentMarket?.evidence.join(" ")).toContain("24 笔 Sepolia V3");
+		expect(agentMarket?.evidence.join(" ")).toContain("AWS V2");
+		expect(agentMarket?.evidence.join(" ")).toContain("verified-production");
+		expect(agentMarket?.evidence.join(" ")).toContain("零 ECS Task");
 		expect(agentMarket?.evidence.join(" ")).toContain("58cec1090a62");
 		expect(agentMarket?.evidence.join(" ")).toContain("33232010589");
 		expect(agentMarket?.details.join(" ")).toContain("f0172a7e");
+		expect(agentMarket?.details.join(" ")).toContain("2026-08-27 closure JSON");
+		expect(agentMarket?.details.join(" ")).toContain("不能互相替代");
 		expect(agentMarket?.details.join(" ")).toContain("不作为实时市场成交或 AWS Runtime 证据");
 		expect(agentMarket?.sourceUpdatedAt).toBe("2026-08-29");
 		expect(agentMarket?.renderingModes).not.toContain("Cloud Preview Pending");
