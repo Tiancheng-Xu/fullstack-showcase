@@ -463,6 +463,8 @@ export const PORTFOLIO_PROJECTS: PortfolioProject[] = [
 			"Edge SSR",
 			"React Hydration",
 			"Cloudflare Pages",
+			"BackstopJS",
+			"Core Web Vitals",
 			"BrowserRouter",
 			"Release Gate",
 		],
@@ -471,11 +473,13 @@ export const PORTFOLIO_PROJECTS: PortfolioProject[] = [
 			"完整 React Stream 超时、late error 与 one-shot CSR fallback",
 			"216 项 Web 测试、22 项 Node Gate 与 560,008-byte server artifact",
 			"Cloudflare Preview/Production、自定义域名、pages.dev、TLS 与响应头验证",
+			"性能页分层布局与 BackstopJS 视觉回归已通过 375/390/430/1440 生产 Gate，main 798f557、Verify Run 33229705200、Cloudflare Deployment 24c7af9c 均可追溯",
 		],
 		details: [
 			"公开页面由边缘服务器输出安全、可读的摘要壳；身份、钱包、链上交互和性能 SDK 只在浏览器水合后激活。",
 			"项目发现反向更新 shared standard、JS detector、TC Flow N6 和 GitHub reusable workflow。",
 			"原 Dashboard 与 Evidence 的 SSG 路线只保留为兼容性回归，不再承担主工作证明。",
+			"性能布局发布只修改 UI 与视觉 Gate，没有启动 AWS Runtime；真实 AWS 性能链仍由 Run 33160455921 单独证明。",
 		],
 		ownerPage: "https://babysteps.baby2b.online/",
 		renderingModes: [
