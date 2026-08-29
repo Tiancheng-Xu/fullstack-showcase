@@ -28,7 +28,16 @@ describe("BabySteps production release evidence", () => {
 		expect(babySteps?.details.join(" ")).toContain("返回 503");
 		expect(babySteps?.details.join(" ")).toContain("不代表实时管线运行");
 		expect(babySteps?.sourceUpdatedAt).toBe("2026-08-29");
+		expect(babySteps?.evidence.join(" ")).toContain("33279132965");
+		expect(babySteps?.evidence.join(" ")).toContain("9722636468");
+		expect(babySteps?.evidence.join(" ")).toContain("424f82e7");
+		expect(babySteps?.evidence.join(" ")).toContain("33280854201");
+		expect(babySteps?.evidence.join(" ")).toContain("202545f9");
+		expect(babySteps?.details.join(" ")).toContain("85 个唯一事件全部 accepted");
 		expect(performanceControl?.evidence.join(" ")).toContain("17 个启用 Region");
+		expect(performanceControl?.evidence.join(" ")).toContain("14/14 accepted batches");
+		expect(performanceControl?.details.join(" ")).toContain("INP n=1");
+		expect(performanceControl?.details.join(" ")).toContain("继续保留既有可信快照");
 		expect(performanceControl?.details.join(" ")).toContain("未上传完整 Artifact");
 		expect(performanceControl?.details.join(" ")).toContain("不能替换可信快照");
 	});
