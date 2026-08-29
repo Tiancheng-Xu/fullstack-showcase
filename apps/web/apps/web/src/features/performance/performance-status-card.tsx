@@ -91,9 +91,16 @@ export function PerformanceStatusCard({ controlHref, projectId, projectName, sta
 
 function MetricPercentileChart({ metric }: { metric: PerformanceMetric }) {
 	const max = Math.max(metric.p95, 1);
+	const isLowConfidence = metric.sampleCount < 5;
 	return (
 		<section className="border border-[#d8cfbd] bg-[#f8f3e8] p-4">
 			<div className="flex items-start justify-between gap-3"><div><h4 className="font-bold">{metric.name}</h4><p className="text-[#5a6470] text-xs">{metric.sampleCount} 样本 · {metric.errorCount} 错误</p></div><span className="border border-[#d8cfbd] bg-white px-2 py-1 text-xs">{metric.category ?? metric.unit}</span></div>
+			{isLowConfidence ? (
+				<div className="mt-3 border border-[#c29346] bg-[#fff3d6] px-3 py-2 text-[#5d4315] text-xs">
+					<p className="font-bold">低置信度 · n={metric.sampleCount}</p>
+					<p className="mt-1">样本少于 5，只证明本次受控观测，不能代表稳定生产表现。</p>
+				</div>
+			) : null}
 			<div className="mt-3 grid gap-2">
 				<PercentileBar label="p50" value={metric.p50} max={max} unit={metric.unit} tone="bg-[#789b83]" />
 				<PercentileBar label="p75" value={metric.p75} max={max} unit={metric.unit} tone="bg-[#c29346]" />

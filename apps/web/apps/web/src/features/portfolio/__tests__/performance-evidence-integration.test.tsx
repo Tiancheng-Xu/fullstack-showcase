@@ -20,7 +20,7 @@ describe("performance observability Evidence integration", () => {
 			screen.getAllByRole("heading", { name: "性能观测与成本控制" }),
 		).not.toHaveLength(0);
 		expect(screen.getByText("历史快照")).toBeVisible();
-		expect(screen.getAllByText("321 ms")).toHaveLength(3);
+		expect(screen.getAllByText("960 ms")).toHaveLength(6);
 		expect(
 			screen.getByRole("link", { name: /进入成本控制/ }),
 		).toHaveAttribute(
