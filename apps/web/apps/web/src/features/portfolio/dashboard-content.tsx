@@ -70,46 +70,71 @@ export function DashboardContent() {
 	);
 	const skillGroups = [
 		{
-			name: "React / TypeScript",
-			source: "GitHub Profile Studio、Showcase Dashboard",
+			name: "全栈产品工程",
+			source: "BabySteps、Agent Market、GitHub Profile Studio",
 		},
 		{
-			name: "LLM / RAG",
-			source: "Personal AI Agent",
+			name: "AI / Agent 工程",
+			source: "Personal AI Agent、Agent Market",
 		},
 		{
-			name: "Cloudflare Pages",
-			source: "Portfolio Sync、Static-First Delivery",
+			name: "Web3 / 可验证交付",
+			source: "Agent Market、BabySteps",
 		},
 		{
-			name: "TC Flow",
-			source: "TC Workflow",
+			name: "Cloud / Edge / CI/CD",
+			source: "Showcase Dashboard、Portfolio Sync、BabySteps",
 		},
 		{
-			name: "CI/CD Evidence",
-			source: "部署日志、验证记录、回滚材料",
+			name: "性能观测与数据链路",
+			source: "性能观测与成本控制、BabySteps",
 		},
 		{
-			name: "PostgreSQL",
-			source: "Fullstack / 数据链路项目经验",
+			name: "工作流与质量 Gate",
+			source: "TC Flow 2.1、Portfolio Sync、Evidence",
 		},
 	];
 
 	const resumeBlocks = [
 		{
+			title: "BabySteps",
+			meta: "全栈产品、Edge SSR、Web3、AWS 性能观测",
+			body: "完成成长任务、家长中心、纪念馆、Provider 与链上交互等产品模块，并建立 Edge SSR、水合降级和真实性能观测链路；难点是隔离身份、钱包和服务端渲染边界。",
+		},
+		{
+			title: "Agent Market",
+			meta: "AI Agents、LangGraph、Sepolia、Cloudflare",
+			body: "构建可验证 AI Agent 任务市场，覆盖标签匹配、多 Agent DAG、任务协作与链上状态锚定；难点是让本地编排、公开生产页面和 24 笔 Sepolia Evidence 保持同一事实边界。",
+		},
+		{
 			title: "Personal AI Agent",
-			meta: "LLM 编排、RAG、QLoRA",
-			body: "把模型微调、检索增强和外部工具适配拆成可复用链路；难点在于实验代码到可解释推理流程之间的边界整理。",
+			meta: "Qwen3-8B、QLoRA / NF4、GGUF、Ollama",
+			body: "完成双卡 QLoRA 微调、冻结集对照、模型合并和 GGUF 量化，形成 Mac/Ollama 离线交付；难点是训练结果、模型身份和可复现验收之间的证据闭环。",
+		},
+		{
+			title: "Showcase Dashboard",
+			meta: "React、TypeScript、SSG / Hydration、Cloudflare Pages",
+			body: "把项目状态、Evidence、性能控制与自动同步整合为统一作品集入口；难点是保持静态首屏、水合后数据和项目自有页面链接一致，并让未知路由返回真实 404。",
 		},
 		{
 			title: "GitHub Profile Studio",
-			meta: "React、TypeScript、数据驱动页面",
-			body: "用路由、卡片模型和 evidence 数据索引组织作品展示；难点在于保持项目叙事、证据入口和响应式界面一致。",
+			meta: "React、TanStack Router、Hono / Go、SQLite",
+			body: "构建本地优先的 GitHub 公开资料工作台，支持前端与双后端运行方式；难点是 GitHub API、数据缓存、凭据安全和本地交付体验之间的协调。",
 		},
 		{
-			title: "TC Workflow",
-			meta: "任务编排、上下文治理、验收闭环",
-			body: "围绕任务拆分、检查点和交付证据建立工作流；难点在于把执行过程转成可审查、可恢复的工程记录。",
+			title: "Portfolio Sync",
+			meta: "GitHub App、Webhook、Cloudflare Workers、KV",
+			body: "通过签名 Webhook、只读 Installation Token 和定时兜底同步作品集项目清单；难点是跨仓库可信更新、失败降级和 Dashboard 静态基线的一致性。",
+		},
+		{
+			title: "性能观测与成本控制",
+			meta: "RUM、SQS / ECS、PostgreSQL、受保护控制面",
+			body: "集中展示各项目性能指标、可信历史快照和成本控制状态；难点是区分真实用户、受控浏览器与历史快照，并在临时 AWS 链路关闭后保持诚实降级。",
+		},
+		{
+			title: "TC Flow 2.1",
+			meta: "N1-N8、检查点、Review Gate、Evidence",
+			body: "把需求、实现、审查、修复和发布拆成可恢复的 N1-N8 流程，沉淀本地与远端 Gate；难点是让复杂任务在失败、续跑和多人协作时仍保持可审查状态。",
 		},
 	];
 
