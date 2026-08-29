@@ -120,6 +120,7 @@ export const PORTFOLIO_PROJECTS: PortfolioProject[] = [
 		evidence: [
 			"Run 33160455921 生成 415 个受控浏览器事件，Cleaner 写入 103 条并完成项目资源归零",
 			"Recovery Run 33244161458 通过官方 Artifact 证明精确 Stack 不存在、17 个启用 Region 活跃项目资源为 0，共享 Foundation 保持受保护",
+			"Run 33279132965 以 5 条代表性路由、85 个唯一事件和 14/14 accepted batches 验证 CLS、INP、完整导航分项、逐指标回读与零残留清理",
 			"停服时只展示最后一次校验通过的真实快照，不冒充实时趋势",
 			"启停、清理和共享资源保护边界",
 			"运行架构、发布流程、关键时序与明确非目标",
@@ -129,6 +130,7 @@ export const PORTFOLIO_PROJECTS: PortfolioProject[] = [
 			"BabySteps Run 33160455921 记录 LCP/FCP 各 1 个样本、TTFB 1 个样本和 79 个脚本资源样本；单样本指标必须标记低置信度。",
 			"Cleaner 写入 103 条，但清理前仍有 80 条可见消息，因此不宣称队列全量排空；项目 Schema、Stack 与 12 类项目资源已清理，共享基础设施受保护。",
 			"后续源 Run 33232356133 未上传完整 Artifact，不能替换可信快照；Recovery Run 33244161458 只证明精确清理和零活跃残留，不证明实时 AWS 管线运行。",
+			"最新 Run 33279132965 已完成唯一 eventId 最终对账、SQS/DLQ 全状态归零、Schema absence、Stack absence 与 12 类项目资源归零；INP n=1 仍明确标为低置信度。中央数值卡在导入精确机器分位数前继续保留既有可信快照。",
 		],
 		performance: {
 			projectId: "performance-observability-control",
@@ -479,6 +481,7 @@ export const PORTFOLIO_PROJECTS: PortfolioProject[] = [
 			"Cloudflare Preview/Production、自定义域名、pages.dev、TLS 与响应头验证",
 			"性能页分层布局与 BackstopJS 视觉回归已通过 375/390/430/1440 生产 Gate，main 798f557、Verify Run 33229705200、Cloudflare Deployment 24c7af9c 均可追溯",
 			"AWS Recovery Evidence 已由 main 121ebc47、Verify Run 33245253835 与 Cloudflare Deployment 11e51b2f 发布；Recovery Run 33244161458 证明精确 Stack 清理和零活跃项目残留",
+			"多应用性能采样闭环已由 AWS Run 33279132965、Artifact 9722636468、main 424f82e7、Verify Run 33280854201 与 Cloudflare Deployment 202545f9 生产验证",
 		],
 		details: [
 			"公开页面由边缘服务器输出安全、可读的摘要壳；身份、钱包、链上交互和性能 SDK 只在浏览器水合后激活。",
@@ -486,6 +489,7 @@ export const PORTFOLIO_PROJECTS: PortfolioProject[] = [
 			"原 Dashboard 与 Evidence 的 SSG 路线只保留为兼容性回归，不再承担主工作证明。",
 			"性能布局发布只修改 UI 与视觉 Gate，没有启动 AWS Runtime；真实 AWS 性能链仍由 Run 33160455921 单独证明。",
 			"最新 Evidence 发布后浏览器埋点仍会调用性能 API；AWS Runtime 已关闭，因此 events/stats 返回 503 并诚实回退历史快照，不代表实时管线运行。",
+			"新闭环覆盖 /、/tasks、/profile、/performance、/evidence，使用真实无副作用交互产生 INP，CLS 保留真实稳定样本；85 个唯一事件全部 accepted，清理后 AWS 项目资源为 0。",
 		],
 		ownerPage: "https://babysteps.baby2b.online/",
 		sourceUpdatedAt: "2026-08-29",
