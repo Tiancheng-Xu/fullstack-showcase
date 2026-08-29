@@ -119,6 +119,7 @@ export const PORTFOLIO_PROJECTS: PortfolioProject[] = [
 		skills: ["Performance SDK", "Cloudflare", "AWS", "Evidence"],
 		evidence: [
 			"Run 33160455921 生成 415 个受控浏览器事件，Cleaner 写入 103 条并完成项目资源归零",
+			"Recovery Run 33244161458 通过官方 Artifact 证明精确 Stack 不存在、17 个启用 Region 活跃项目资源为 0，共享 Foundation 保持受保护",
 			"停服时只展示最后一次校验通过的真实快照，不冒充实时趋势",
 			"启停、清理和共享资源保护边界",
 			"运行架构、发布流程、关键时序与明确非目标",
@@ -127,6 +128,7 @@ export const PORTFOLIO_PROJECTS: PortfolioProject[] = [
 			"控制面使用站内 TOTP、单次 nonce、幂等控制、固定 BabySteps workflow、HMAC 回调和不可变快照；公开页按应用切换，不暴露通用 AWS 管理权限。",
 			"BabySteps Run 33160455921 记录 LCP/FCP 各 1 个样本、TTFB 1 个样本和 79 个脚本资源样本；单样本指标必须标记低置信度。",
 			"Cleaner 写入 103 条，但清理前仍有 80 条可见消息，因此不宣称队列全量排空；项目 Schema、Stack 与 12 类项目资源已清理，共享基础设施受保护。",
+			"后续源 Run 33232356133 未上传完整 Artifact，不能替换可信快照；Recovery Run 33244161458 只证明精确清理和零活跃残留，不证明实时 AWS 管线运行。",
 		],
 		performance: {
 			projectId: "performance-observability-control",
@@ -476,14 +478,17 @@ export const PORTFOLIO_PROJECTS: PortfolioProject[] = [
 			"216 项 Web 测试、22 项 Node Gate 与 560,008-byte server artifact",
 			"Cloudflare Preview/Production、自定义域名、pages.dev、TLS 与响应头验证",
 			"性能页分层布局与 BackstopJS 视觉回归已通过 375/390/430/1440 生产 Gate，main 798f557、Verify Run 33229705200、Cloudflare Deployment 24c7af9c 均可追溯",
+			"AWS Recovery Evidence 已由 main 121ebc47、Verify Run 33245253835 与 Cloudflare Deployment 11e51b2f 发布；Recovery Run 33244161458 证明精确 Stack 清理和零活跃项目残留",
 		],
 		details: [
 			"公开页面由边缘服务器输出安全、可读的摘要壳；身份、钱包、链上交互和性能 SDK 只在浏览器水合后激活。",
 			"项目发现反向更新 shared standard、JS detector、TC Flow N6 和 GitHub reusable workflow。",
 			"原 Dashboard 与 Evidence 的 SSG 路线只保留为兼容性回归，不再承担主工作证明。",
 			"性能布局发布只修改 UI 与视觉 Gate，没有启动 AWS Runtime；真实 AWS 性能链仍由 Run 33160455921 单独证明。",
+			"最新 Evidence 发布后浏览器埋点仍会调用性能 API；AWS Runtime 已关闭，因此 events/stats 返回 503 并诚实回退历史快照，不代表实时管线运行。",
 		],
 		ownerPage: "https://babysteps.baby2b.online/",
+		sourceUpdatedAt: "2026-08-29",
 		renderingModes: [
 			"Edge SSR",
 			"Hydration",
