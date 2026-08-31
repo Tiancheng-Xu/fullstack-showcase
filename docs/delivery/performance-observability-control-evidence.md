@@ -1,5 +1,7 @@
 # 性能观测与成本控制 Evidence
 
+> 认证方案更新：本文保留早期 Cloudflare Access/JWT 设计讨论，不能作为当前控制认证实现的证明。当前实现以共享 RFC 6238 TOTP、多设备注册、失败锁定、单次 nonce 和同源校验为准，权威边界见 `performance-mfa-control-evidence.md`。在安全 bootstrap、真实 GitHub App dispatch、TOTP start/stop、HMAC 回调、R2 快照和 TTL 停机完成同一轮生产闭环前，中央控制面不得标记为已上线。
+>
 > 状态：本地页面、D1 状态机、R2 快照契约和公开只读 Worker 已实现；BabySteps AWS 临时性能链已通过 Run 32917816824 完成一次真实云端闭环并精确清理。固定启停控制、Cloudflare Access 和 GitHub App 回调尚未上线，控制写入口继续失败关闭。
 
 ## 1. 目标与验收边界

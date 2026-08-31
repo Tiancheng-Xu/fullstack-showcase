@@ -11,7 +11,7 @@ import {
 	Workflow,
 } from "lucide-react";
 
-type ProofState = "本地已实现" | "设计已确认" | "共享已核实" | "云端未部署" | "云端已验证";
+type ProofState = "本地已实现" | "设计已确认" | "共享已核实" | "云端待闭环" | "云端未部署" | "云端已验证";
 
 type FlowStep = {
 	detail: string;
@@ -38,9 +38,9 @@ const RUNTIME_LANES: Array<{
 		name: "受保护控制链路",
 		description: "控制入口不提供任意 AWS 命令，只允许启动观测和安全停止两种固定动作。",
 		steps: [
-			{ label: "Cloudflare Access", detail: "JWT 与操作者白名单", state: "云端未部署" },
-			{ label: "成本控制页", detail: "固定动作 + 风险提示", state: "本地已实现" },
-			{ label: "GitHub App", detail: "仅触发允许的工作流", state: "云端未部署" },
+			{ label: "共享 TOTP", detail: "多设备动态码、失败锁定与单次 nonce", state: "本地已实现" },
+			{ label: "成本控制页", detail: "生产禁用态已验证，固定启停待闭环", state: "云端待闭环" },
+			{ label: "GitHub App", detail: "仅触发允许的仓库、工作流与 main", state: "云端待闭环" },
 			{ label: "GitHub Actions", detail: "项目 OIDC Role", state: "云端已验证" },
 		],
 	},
@@ -80,10 +80,10 @@ const LIFECYCLE_PHASES = [
 	{
 		icon: ShieldCheck,
 		name: "安全启动",
-		state: "云端已验证" as const,
+		state: "云端待闭环" as const,
 		steps: [
-			"先验证上次清理完成，共享资源健康且未发生漂移。",
-			"通过 Access 与固定 GitHub Actions 工作流创建项目临时资源。",
+			"先用 OIDC preflight 验证上次清理、项目零残留与共享资源健康。",
+			"安全 bootstrap 回调建立 stopped 状态后，才允许共享 TOTP 触发固定工作流。",
 			"健康检查通过后才把 controlState 切换为 running。",
 		],
 	},
@@ -221,7 +221,7 @@ function FlowSteps({ steps }: { steps: FlowStep[] }) {
 							<p className="font-bold text-sm">{step.label}</p>
 							{step.label.includes("D1") || step.label.includes("RDS") ? <Database aria-hidden="true" className="shrink-0 text-[#0f2d4d]" size={15} /> : null}
 							{step.label.includes("R2") ? <Archive aria-hidden="true" className="shrink-0 text-[#0f2d4d]" size={15} /> : null}
-							{step.label.includes("Access") || step.label.includes("OIDC") ? <LockKeyhole aria-hidden="true" className="shrink-0 text-[#0f2d4d]" size={15} /> : null}
+				{step.label.includes("TOTP") || step.label.includes("OIDC") ? <LockKeyhole aria-hidden="true" className="shrink-0 text-[#0f2d4d]" size={15} /> : null}
 							{step.label.includes("Actions") || step.label.includes("App") ? <Workflow aria-hidden="true" className="shrink-0 text-[#0f2d4d]" size={15} /> : null}
 						</div>
 						<p className="mt-2 text-[#52606d] text-xs leading-relaxed">{step.detail}</p>
@@ -239,6 +239,8 @@ function StateBadge({ state }: { state: ProofState }) {
 		? "border-emerald-300 bg-emerald-50 text-emerald-950"
 		: state === "云端已验证"
 			? "border-teal-400 bg-teal-50 text-teal-950"
+		: state === "云端待闭环"
+			? "border-orange-300 bg-orange-50 text-orange-950"
 		: state === "共享已核实"
 			? "border-blue-300 bg-blue-50 text-blue-950"
 			: state === "云端未部署"

@@ -7,6 +7,17 @@ import { createWorkflowDispatchInputs, parseRuntimeCallback, runtimeCallbackHead
 
 const fixture = JSON.parse(readFileSync(resolve(import.meta.dirname, "../../fixtures/runtime-callback-v1.json"), "utf8"));
 
+const bootstrapProof = {
+	authority: "github-actions-artifact+aws-zero-residue-readback",
+	workflowRunId: "33279132965",
+	artifactId: "9722636468",
+	evidenceSha256: "a".repeat(64),
+	schemaAbsenceVerified: true,
+	cloudFormationStackAbsent: true,
+	remainingProjectResources: 0,
+	sharedFoundationProtected: true,
+};
+
 describe("performance control protocol v1", () => {
 	it("freezes exact dispatch inputs and callback headers", () => {
 		expect(workflowDispatchInputNames).toEqual(["action", "operation_id", "generation", "expires_at", "estimated_cost_usd"]);
@@ -36,5 +47,40 @@ describe("performance control protocol v1", () => {
 		expect(() => parseRuntimeCallback({ ...fixture, source: "aws-safety-expiry", status: "running" }, fixture.deliveryId)).toThrow("safety_expiry_requires_terminal_status");
 		expect(() => parseRuntimeCallback({ ...fixture, status: "stopped", cleanupVerified: true, zeroResidualVerified: false }, fixture.deliveryId)).toThrow("stopped_requires_dual_verification");
 		expect(parseRuntimeCallback({ ...fixture, source: "aws-safety-expiry", status: "stopped", cleanupVerified: true, zeroResidualVerified: true }, fixture.deliveryId).status).toBe("stopped");
+	});
+
+	it("accepts only the dedicated first-row stopped bootstrap envelope", () => {
+		const bootstrap = {
+			...fixture,
+			deliveryId: "github-33333333333-1-bootstrap-stopped",
+			source: "babysteps-performance-control-bootstrap-v1",
+			operation: "bootstrap-stopped-state",
+			operationId: "bootstrap-babysteps-stopped-33333333333",
+			generation: 1,
+			workflowRunId: "33333333333",
+			status: "stopped",
+			cleanupVerified: true,
+			zeroResidualVerified: true,
+			bootstrapOnly: true,
+			proof: bootstrapProof,
+		};
+
+		expect(parseRuntimeCallback(bootstrap, bootstrap.deliveryId)).toEqual(bootstrap);
+		for (const candidate of [
+			{ ...bootstrap, operation: "stop" },
+			{ ...bootstrap, deliveryId: "short" },
+			{ ...bootstrap, operationId: "ordinary-stop" },
+			{ ...bootstrap, workflowRunId: "run-bootstrap" },
+			{ ...bootstrap, generation: 2 },
+			{ ...bootstrap, status: "running" },
+			{ ...bootstrap, bootstrapOnly: false },
+			{ ...bootstrap, proof: { ...bootstrapProof, remainingProjectResources: 1 } },
+			{ ...bootstrap, proof: { ...bootstrapProof, unexpected: true } },
+			{ ...bootstrap, proof: undefined },
+			{ ...bootstrap, snapshot: {} },
+		]) {
+			expect(() => parseRuntimeCallback(candidate, candidate.deliveryId)).toThrow("invalid_stopped_bootstrap");
+		}
+		expect(() => parseRuntimeCallback({ ...fixture, bootstrapOnly: true }, fixture.deliveryId)).toThrow("bootstrap_fields_forbidden");
 	});
 });

@@ -1,1 +1,694 @@
 @import "@web/ui/globals.css";
+
+.portfolio-surface {
+		--portfolio-ink: #071d34;
+		--portfolio-vermilion: #bf1737;
+		isolation: isolate;
+		background:
+			linear-gradient(rgba(247, 241, 227, 0.08), rgba(247, 241, 227, 0.15)),
+			url("/portfolio/ukiyo-e-dashboard-bg.png") top center / 100% auto no-repeat,
+			radial-gradient(circle at 78% 20%, rgba(74, 105, 125, 0.16), transparent 28rem),
+			radial-gradient(circle at 18% 82%, rgba(55, 88, 108, 0.11), transparent 30rem),
+			linear-gradient(135deg, rgba(255, 255, 255, 0.28), transparent 42%),
+			#f7f1e3;
+}
+
+
+	.portfolio-surface::before {
+		position: absolute;
+		inset: 0;
+		z-index: -1;
+		content: "";
+		pointer-events: none;
+		opacity: 0.09;
+		background-image:
+			repeating-radial-gradient(ellipse at 86% 23%, transparent 0 16px, rgba(31, 70, 96, 0.14) 17px 19px, transparent 20px 34px),
+			repeating-radial-gradient(ellipse at 8% 86%, transparent 0 20px, rgba(31, 70, 96, 0.1) 21px 23px, transparent 24px 42px);
+		mask-image: linear-gradient(to bottom, transparent 4%, #000 18%, #000 92%, transparent);
+	}
+
+	.portfolio-dashboard-main {
+		display: flex;
+		flex-direction: column;
+	}
+
+	.portfolio-dashboard-main #about { order: 1; }
+	.portfolio-dashboard-main #projects { order: 2; }
+	.portfolio-dashboard-main #skills { order: 3; }
+	.portfolio-dashboard-main #performance { order: 4; }
+
+	.portfolio-dashboard-hero {
+		padding-top: clamp(0.5rem, 2vw, 2rem);
+		text-shadow: 0 1px rgba(255, 255, 255, 0.72);
+	}
+
+	.portfolio-dashboard-main #projects {
+		margin-top: clamp(1.5rem, 3vw, 3rem);
+	}
+
+	.portfolio-brand-seal {
+		line-height: 1;
+		box-shadow: inset 0 0 0 2px rgba(251, 248, 239, 0.82);
+	}
+
+	.portfolio-glass-bar {
+		background: rgba(251, 248, 239, 0.72);
+		backdrop-filter: blur(18px) saturate(0.9);
+		-webkit-backdrop-filter: blur(18px) saturate(0.9);
+		box-shadow: 0 8px 24px rgba(7, 29, 52, 0.05), inset 0 1px rgba(255, 255, 255, 0.72);
+	}
+
+	.portfolio-glass-footer,
+	.portfolio-glass-mobile-nav {
+		background: rgba(237, 233, 223, 0.7);
+		backdrop-filter: blur(20px) saturate(0.86);
+		-webkit-backdrop-filter: blur(20px) saturate(0.86);
+		box-shadow: 0 -10px 32px rgba(7, 29, 52, 0.06), inset 0 1px rgba(255, 255, 255, 0.7);
+	}
+
+	.portfolio-glass-control {
+		background: linear-gradient(145deg, rgba(255, 255, 255, 0.48), rgba(226, 233, 233, 0.24));
+		backdrop-filter: blur(12px) saturate(0.84);
+		-webkit-backdrop-filter: blur(12px) saturate(0.84);
+		box-shadow: inset 0 1px rgba(255, 255, 255, 0.86), 0 4px 12px rgba(7, 29, 52, 0.045);
+	}
+
+	.portfolio-primary-nav a {
+		border-color: rgba(83, 104, 121, 0.24);
+		background: rgba(255, 255, 255, 0.25);
+		color: #344252;
+		box-shadow: none;
+		backdrop-filter: blur(10px);
+		-webkit-backdrop-filter: blur(10px);
+	}
+
+	.portfolio-primary-nav a[aria-current="page"] {
+		border-color: rgba(191, 23, 55, 0.34);
+		background: linear-gradient(180deg, rgba(255, 255, 255, 0.34), rgba(191, 23, 55, 0.07));
+		color: #071d34;
+		box-shadow: inset 0 -2px #bf1737;
+	}
+
+	.portfolio-glass-mobile-nav a {
+		border-color: rgba(83, 104, 121, 0.2);
+		background: rgba(255, 255, 255, 0.28);
+		color: #344252;
+		box-shadow: none;
+		backdrop-filter: blur(10px);
+		-webkit-backdrop-filter: blur(10px);
+	}
+
+	.portfolio-glass-mobile-nav a[aria-current] {
+		border-color: rgba(191, 23, 55, 0.36);
+		background: rgba(191, 23, 55, 0.08);
+		color: #8c1428;
+		box-shadow: inset 0 -2px #bf1737;
+	}
+
+	.portfolio-glass-note {
+		background: linear-gradient(110deg, rgba(255, 255, 255, 0.5), rgba(237, 241, 239, 0.28));
+		backdrop-filter: blur(13px) saturate(0.84);
+		-webkit-backdrop-filter: blur(13px) saturate(0.84);
+		box-shadow: inset 0 1px rgba(255, 255, 255, 0.72);
+	}
+
+	.portfolio-section-title {
+		border-image: linear-gradient(90deg, rgba(191, 23, 55, 0.64), rgba(83, 104, 121, 0.22), transparent 82%) 1;
+	}
+
+	.portfolio-glass-panel,
+	.portfolio-surface [data-slot="card"] {
+		background: linear-gradient(145deg, rgba(255, 255, 255, 0.7), rgba(238, 241, 239, 0.46));
+		backdrop-filter: blur(17px) saturate(0.82);
+		-webkit-backdrop-filter: blur(17px) saturate(0.82);
+		box-shadow: 0 18px 42px rgba(7, 29, 52, 0.08), inset 0 1px rgba(255, 255, 255, 0.82);
+	}
+
+	.portfolio-module-stack {
+		position: relative;
+		isolation: isolate;
+	}
+
+	.portfolio-module-stack > [data-slot="card"] {
+		border-color: transparent;
+		clip-path: polygon(0.4% 1.1%, 9% 0.4%, 19% 1%, 31% 0.3%, 43% 0.9%, 56% 0.3%, 68% 1%, 81% 0.4%, 92% 1.1%, 99.5% 0.6%, 99.8% 18%, 99.4% 36%, 99.9% 54%, 99.4% 72%, 99.8% 88%, 99.3% 99%, 87% 99.6%, 74% 99%, 61% 99.7%, 48% 99.1%, 35% 99.8%, 22% 99.1%, 10% 99.6%, 0.5% 98.9%, 0.2% 81%, 0.6% 63%, 0.1% 45%, 0.5% 27%);
+		background:
+			linear-gradient(145deg, rgba(255, 255, 255, 0.61), rgba(230, 237, 236, 0.34)) padding-box,
+			linear-gradient(135deg, rgba(83, 104, 121, 0.45), rgba(117, 111, 123, 0.2) 62%, rgba(168, 74, 97, 0.24)) border-box;
+		backdrop-filter: blur(18px) saturate(0.84);
+		-webkit-backdrop-filter: blur(18px) saturate(0.84);
+		filter: drop-shadow(0 18px 28px rgba(7, 29, 52, 0.09));
+		box-shadow: inset 1px 1px rgba(255, 255, 255, 0.82), inset -1px -1px rgba(83, 104, 121, 0.11);
+	}
+
+	.portfolio-module-stack > [data-slot="card"] > [data-slot="card-content"] > :is(section, article, div)[class*="border"] {
+		background: linear-gradient(145deg, rgba(255, 255, 255, 0.45), rgba(224, 232, 232, 0.24));
+		backdrop-filter: blur(11px) saturate(0.82);
+		-webkit-backdrop-filter: blur(11px) saturate(0.82);
+		box-shadow: inset 0 1px rgba(255, 255, 255, 0.68), 0 8px 18px rgba(7, 29, 52, 0.045);
+	}
+
+	.portfolio-module-stack > [data-slot="card"] > [data-slot="card-content"] > :is(section, article, div)[class*="border"] :is(article, div)[class*="border"] {
+		background: linear-gradient(145deg, rgba(255, 255, 255, 0.34), rgba(220, 229, 230, 0.16));
+		backdrop-filter: blur(7px) saturate(0.8);
+		-webkit-backdrop-filter: blur(7px) saturate(0.8);
+		box-shadow: inset 0 1px rgba(255, 255, 255, 0.58), 0 4px 10px rgba(7, 29, 52, 0.035);
+	}
+
+	.portfolio-module-stack table {
+		background: rgba(255, 255, 255, 0.22);
+		backdrop-filter: blur(8px) saturate(0.8);
+		-webkit-backdrop-filter: blur(8px) saturate(0.8);
+	}
+
+	.portfolio-module-stack thead,
+	.portfolio-module-stack th {
+		background: rgba(221, 229, 230, 0.34);
+	}
+
+	.portfolio-module-stack tbody tr {
+		background: rgba(255, 255, 255, 0.12);
+	}
+
+	.portfolio-module-stack tbody tr:hover {
+		background: rgba(255, 255, 255, 0.34);
+	}
+
+	.portfolio-surface main :is(article, section, div)[class*="border"][class*="bg-"]:not(.portfolio-project-card) {
+		background-color: rgba(251, 248, 239, 0.48);
+		backdrop-filter: blur(12px) saturate(0.84);
+		-webkit-backdrop-filter: blur(12px) saturate(0.84);
+	}
+
+	.portfolio-glass-subpanel {
+		background: linear-gradient(145deg, rgba(251, 248, 239, 0.5), rgba(229, 235, 234, 0.32));
+		backdrop-filter: blur(11px) saturate(0.82);
+		-webkit-backdrop-filter: blur(11px) saturate(0.82);
+	}
+
+	.portfolio-project-card {
+		height: 18rem;
+		clip-path: polygon(0.7% 2.1%, 7% 0.8%, 15% 1.8%, 24% 0.4%, 34% 1.4%, 43% 0.5%, 54% 1.8%, 65% 0.7%, 76% 1.5%, 87% 0.4%, 98.8% 2.3%, 99.4% 12%, 98.9% 23%, 99.6% 35%, 99% 47%, 99.5% 59%, 98.8% 72%, 99.4% 85%, 98.5% 97.6%, 89% 99.2%, 79% 98.4%, 69% 99.6%, 58% 98.5%, 47% 99.3%, 36% 98.2%, 25% 99.5%, 14% 98.4%, 1.2% 97.2%, 0.4% 86%, 1% 74%, 0.3% 62%, 0.9% 50%, 0.2% 38%, 0.8% 25%, 0.3% 13%);
+		background:
+			linear-gradient(145deg, rgba(255, 255, 255, 0.65), rgba(235, 240, 239, 0.37)) padding-box,
+			linear-gradient(135deg, rgba(83, 104, 121, 0.54), rgba(117, 111, 123, 0.24) 58%, rgba(168, 74, 97, 0.3)) border-box;
+		backdrop-filter: blur(18px) saturate(0.82);
+		-webkit-backdrop-filter: blur(18px) saturate(0.82);
+		filter: drop-shadow(0 16px 20px rgba(7, 29, 52, 0.11));
+		box-shadow: inset 1px 1px rgba(255, 255, 255, 0.88), inset -1px -1px rgba(83, 104, 121, 0.12);
+	}
+
+	.portfolio-project-card-body {
+		display: flex;
+		height: 100%;
+		flex-direction: column;
+		gap: 0.85rem;
+		padding: 1.25rem 1.4rem 1.15rem;
+	}
+
+	.portfolio-project-summary {
+		display: -webkit-box;
+		overflow: hidden;
+		-webkit-box-orient: vertical;
+		-webkit-line-clamp: 2;
+	}
+
+	.portfolio-project-row {
+		display: grid;
+		grid-template-columns: 5rem minmax(0, 1fr);
+		align-items: center;
+		gap: 0.75rem;
+		min-height: 1.7rem;
+		border-top: 1px solid rgba(83, 104, 121, 0.12);
+		padding-top: 0.55rem;
+	}
+
+	.portfolio-project-architecture {
+		display: -webkit-box;
+		overflow: hidden;
+		-webkit-box-orient: vertical;
+		-webkit-line-clamp: 1;
+	}
+
+	.portfolio-project-skills {
+		max-height: 1.75rem;
+		overflow: hidden;
+	}
+
+	.portfolio-project-skills span {
+		white-space: nowrap;
+		padding: 0.2rem 0.45rem;
+		font-size: 0.66rem;
+	}
+
+	.portfolio-project-footer {
+		display: flex;
+		min-height: 2.4rem;
+		align-items: center;
+		gap: 0.65rem;
+		margin-top: auto;
+		border-top: 1px solid rgba(83, 104, 121, 0.15);
+		padding-top: 0.75rem;
+	}
+
+	.portfolio-project-action {
+		margin-left: 0.35rem;
+		white-space: nowrap;
+		color: #071d34;
+	}
+
+	.portfolio-project-secondary-links {
+		position: absolute;
+		right: 1.1rem;
+		bottom: 3.3rem;
+		opacity: 0;
+		transform: translateY(0.35rem);
+		pointer-events: none;
+		transition: opacity 160ms ease, transform 160ms ease;
+	}
+
+	.portfolio-project-card:is(:hover, :focus-within) .portfolio-project-secondary-links {
+		opacity: 1;
+		transform: translateY(0);
+		pointer-events: auto;
+	}
+
+	.portfolio-project-number {
+		position: absolute;
+		top: 1.15rem;
+		left: 1.4rem;
+		z-index: 2;
+		font-family: Georgia, "Songti SC", serif;
+		font-size: 1.55rem;
+		line-height: 1;
+		color: #a81e32;
+	}
+
+	.portfolio-project-card .portfolio-glass-subpanel {
+		padding: 0;
+		border: 0;
+		background: transparent;
+		backdrop-filter: none;
+		-webkit-backdrop-filter: none;
+	}
+
+	.portfolio-project-card p {
+		overflow-wrap: anywhere;
+	}
+
+	.portfolio-project-card h3 + p {
+		display: -webkit-box;
+		overflow: hidden;
+		-webkit-box-orient: vertical;
+		-webkit-line-clamp: 3;
+	}
+
+	.portfolio-project-card .portfolio-glass-subpanel p:last-child {
+		display: -webkit-box;
+		overflow: hidden;
+		-webkit-box-orient: vertical;
+		-webkit-line-clamp: 2;
+	}
+
+	.portfolio-project-card::before {
+		position: absolute;
+		inset: 0;
+		content: "";
+		pointer-events: none;
+		background:
+			linear-gradient(118deg, rgba(255, 255, 255, 0.28), transparent 26% 74%, rgba(7, 29, 52, 0.035)),
+			repeating-linear-gradient(92deg, transparent 0 7px, rgba(255, 255, 255, 0.055) 8px, transparent 9px 16px);
+		mix-blend-mode: soft-light;
+	}
+
+	.portfolio-project-icon {
+		display: grid;
+		width: 3.5rem;
+		height: 3.5rem;
+		flex: 0 0 auto;
+		place-items: center;
+		color: #173e68;
+		border: 1px solid rgba(255, 255, 255, 0.72);
+		border-radius: 0.55rem;
+		background: linear-gradient(145deg, rgba(255, 255, 255, 0.46), rgba(225, 233, 234, 0.22));
+		backdrop-filter: blur(12px) saturate(0.84);
+		-webkit-backdrop-filter: blur(12px) saturate(0.84);
+		box-shadow: inset 0 1px rgba(255, 255, 255, 0.88), 0 4px 12px rgba(7, 29, 52, 0.05);
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.portfolio-project-card { transition: none; }
+	}
+
+	@media (max-width: 767px) {
+		.portfolio-surface {
+			background-size: auto 46rem;
+			background-position: 58% top;
+		}
+
+		.portfolio-dashboard-hero {
+			padding-top: 0;
+		}
+
+		.portfolio-project-card {
+			height: auto;
+			min-height: 19rem;
+		}
+	}
+
+	@supports not (backdrop-filter: blur(1px)) {
+		.portfolio-glass-bar,
+		.portfolio-glass-footer,
+		.portfolio-glass-mobile-nav,
+		.portfolio-glass-control,
+		.portfolio-glass-note,
+		.portfolio-glass-panel,
+		.portfolio-glass-subpanel,
+		.portfolio-project-card,
+		.portfolio-project-icon,
+		.portfolio-surface [data-slot="card"] {
+			background-color: rgba(251, 248, 239, 0.94);
+		}
+
+		.portfolio-module-stack :is(section, article, div)[class*="border"] {
+			background-color: rgba(251, 248, 239, 0.9);
+		}
+	}
+
+/* Approved ukiyo-e portfolio reference: exact hierarchy and background-aware glass. */
+.portfolio-surface {
+	background-color: #f3eee4;
+	background-image:
+		linear-gradient(rgba(247, 243, 235, 0.08), rgba(247, 243, 235, 0.08)),
+		url("/portfolio/ukiyo-e-dashboard-bg.png");
+	background-position: center top;
+	background-repeat: no-repeat, no-repeat;
+	background-size: 100% auto, 100% auto;
+	background-attachment: scroll, scroll;
+}
+
+header#top.portfolio-glass-bar {
+	background: rgba(247, 243, 235, 0.28) !important;
+	border-bottom-color: rgba(120, 91, 66, 0.16) !important;
+	-webkit-backdrop-filter: blur(10px) saturate(0.82);
+	backdrop-filter: blur(10px) saturate(0.82);
+	box-shadow: 0 1px 0 rgba(255, 255, 255, 0.7);
+}
+
+header#top > div {
+	height: auto !important;
+	min-height: 5.5rem;
+}
+
+nav[aria-label="作品集主导航"] {
+	position: relative;
+	gap: 2.25rem !important;
+}
+
+nav[aria-label="作品集主导航"]::before {
+	display: grid;
+	width: 2.75rem;
+	height: 2.75rem;
+	place-items: center;
+	content: "亭";
+	color: #b52235;
+	font-family: "Noto Serif SC", "Songti SC", serif;
+	font-size: 1.25rem;
+	font-weight: 800;
+}
+
+nav[aria-label="作品集主导航"] a {
+	position: relative;
+	min-width: 5.75rem;
+	min-height: 3rem !important;
+	justify-content: center;
+	padding: 0.55rem 0.75rem !important;
+	border: 0 !important;
+	background: transparent !important;
+	box-shadow: none !important;
+	color: #071d34 !important;
+	font-family: "Noto Serif SC", "Songti SC", serif;
+	font-size: 1rem;
+	font-weight: 800;
+	letter-spacing: 0.12em;
+}
+
+nav[aria-label="作品集主导航"] a::after {
+	position: absolute;
+	right: 22%;
+	bottom: 0.15rem;
+	left: 22%;
+	height: 2px;
+	content: "";
+	background: transparent;
+}
+
+nav[aria-label="作品集主导航"] a[aria-current="page"]::after,
+nav[aria-label="作品集主导航"] a:hover::after,
+nav[aria-label="作品集主导航"] a:focus-visible::after {
+	background: #b52235;
+}
+
+.portfolio-brand-seal,
+.portfolio-project-icon {
+	background: rgba(248, 245, 237, 0.28) !important;
+	-webkit-backdrop-filter: blur(8px) saturate(0.82);
+	backdrop-filter: blur(8px) saturate(0.82);
+	box-shadow:
+		inset 0 1px rgba(255, 255, 255, 0.84),
+		0 2px 7px rgba(7, 29, 52, 0.08) !important;
+}
+
+.portfolio-name-seal {
+	width: 3.15rem !important;
+	height: 3.55rem !important;
+	padding: 0.22rem;
+	border-width: 2px !important;
+	border-radius: 0.18rem;
+	background: rgba(250, 245, 235, 0.22) !important;
+	box-shadow: inset 0 0 0 1px rgba(181, 34, 53, 0.38) !important;
+}
+
+.portfolio-name-seal > span {
+	display: grid;
+	width: 100%;
+	height: 100%;
+	grid-template-columns: repeat(2, 1fr);
+	grid-template-rows: repeat(2, 1fr);
+	place-items: center;
+	border: 1px solid rgba(181, 34, 53, 0.62);
+	font-family: "STKaiti", "Kaiti SC", "Songti SC", serif;
+	font-size: 0.82rem;
+	font-weight: 900;
+	line-height: 1;
+}
+
+.portfolio-name-seal i {
+	font-style: normal;
+	transform: scaleX(0.9);
+}
+
+.portfolio-github-link {
+	background: rgba(247, 243, 235, 0.22) !important;
+	-webkit-backdrop-filter: blur(8px) saturate(0.78);
+	backdrop-filter: blur(8px) saturate(0.78);
+	box-shadow: inset 0 1px rgba(255, 255, 255, 0.74) !important;
+	transition: border-color 160ms ease, background-color 160ms ease, color 160ms ease;
+}
+
+.portfolio-github-link:hover,
+.portfolio-github-link:focus-visible {
+	border-color: rgba(181, 34, 53, 0.62) !important;
+	background: rgba(250, 247, 240, 0.42) !important;
+	color: #a51d32 !important;
+}
+
+.portfolio-glass-panel,
+.portfolio-glass-note,
+.portfolio-surface [data-slot="card"] {
+	background: linear-gradient(145deg, rgba(250, 247, 240, 0.44), rgba(236, 232, 224, 0.24)) !important;
+	-webkit-backdrop-filter: blur(14px) saturate(0.78);
+	backdrop-filter: blur(14px) saturate(0.78);
+}
+
+.portfolio-glass-subpanel {
+	background: linear-gradient(145deg, rgba(250, 247, 240, 0.31), rgba(236, 232, 224, 0.18)) !important;
+	-webkit-backdrop-filter: blur(8px) saturate(0.76);
+	backdrop-filter: blur(8px) saturate(0.76);
+}
+
+.portfolio-project-card {
+	height: auto !important;
+	min-height: 20.5rem;
+	background: linear-gradient(145deg, rgba(251, 248, 242, 0.5), rgba(231, 233, 231, 0.26)) !important;
+	-webkit-backdrop-filter: blur(11px) saturate(0.74) !important;
+	backdrop-filter: blur(11px) saturate(0.74) !important;
+	box-shadow:
+		inset 0 1px rgba(255, 255, 255, 0.92),
+		0 7px 16px rgba(7, 29, 52, 0.11) !important;
+}
+
+.portfolio-project-card-body {
+	height: auto !important;
+	min-height: 20.5rem;
+	padding: 1.45rem 1.55rem 1.25rem !important;
+	gap: 0.8rem !important;
+}
+
+.portfolio-project-card-body > div:first-child {
+	padding-top: 2.15rem !important;
+	padding-right: 0 !important;
+	gap: 1.15rem !important;
+}
+
+.portfolio-project-card h3 {
+	font-family: "Noto Serif SC", "Songti SC", Georgia, serif;
+	font-size: 1.22rem !important;
+	font-weight: 800;
+	line-height: 1.25;
+}
+
+.portfolio-project-summary {
+	display: -webkit-box;
+	overflow: hidden;
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: 3 !important;
+	color: #304255 !important;
+}
+
+.portfolio-project-row {
+	grid-template-columns: 4.75rem minmax(0, 1fr) !important;
+	column-gap: 0.85rem !important;
+}
+
+.portfolio-project-architecture {
+	-webkit-line-clamp: 2 !important;
+}
+
+.portfolio-project-skills {
+	max-height: 3.2rem !important;
+}
+
+.portfolio-project-status {
+	top: 1.15rem !important;
+	right: 1.35rem !important;
+	border: 0 !important;
+	background: transparent !important;
+	-webkit-backdrop-filter: none !important;
+	backdrop-filter: none !important;
+}
+
+.portfolio-project-number {
+	top: 1.05rem !important;
+	left: 1.45rem !important;
+	font-family: Georgia, "Noto Serif SC", serif;
+}
+
+@media (max-width: 767px) {
+	.portfolio-surface {
+		background-position: 58% top;
+		background-size: auto 46rem, auto 46rem;
+		background-attachment: scroll, scroll;
+	}
+
+	header#top > div {
+		min-height: 4.25rem;
+	}
+
+	.portfolio-project-card,
+	.portfolio-project-card-body {
+		min-height: 0;
+	}
+}
+
+.portfolio-dashboard-main #about { order: 1; }
+.portfolio-dashboard-main #projects { order: 2; }
+.portfolio-dashboard-main #skills { order: 3; }
+.portfolio-dashboard-main #performance { order: 4; }
+
+.portfolio-dashboard-module-card {
+	position: relative;
+	overflow: hidden;
+	border: 1px solid rgba(255, 255, 255, 0.76) !important;
+	background: linear-gradient(145deg, rgba(251, 248, 242, 0.46), rgba(229, 232, 230, 0.24)) !important;
+	-webkit-backdrop-filter: blur(12px) saturate(0.76) !important;
+	backdrop-filter: blur(12px) saturate(0.76) !important;
+	clip-path: polygon(
+		0.4% 1.6%, 4% 0.5%, 8% 1.3%, 12% 0.35%, 17% 1.2%, 22% 0.4%, 27% 1.35%,
+		33% 0.45%, 39% 1.3%, 45% 0.35%, 51% 1.15%, 57% 0.4%, 63% 1.3%, 69% 0.45%,
+		75% 1.2%, 81% 0.35%, 87% 1.25%, 93% 0.45%, 99.6% 1.5%, 99.4% 98.4%,
+		94% 99.5%, 88% 98.7%, 82% 99.55%, 76% 98.65%, 70% 99.55%, 64% 98.7%,
+		58% 99.5%, 52% 98.65%, 46% 99.55%, 40% 98.7%, 34% 99.5%, 28% 98.65%,
+		22% 99.55%, 16% 98.7%, 10% 99.5%, 4% 98.65%, 0.6% 99.2%
+	);
+	box-shadow:
+		inset 0 1px rgba(255, 255, 255, 0.9),
+		0 8px 18px rgba(7, 29, 52, 0.1) !important;
+}
+
+.portfolio-dashboard-module-card::before {
+	position: absolute;
+	inset: 0;
+	z-index: -1;
+	content: "";
+	pointer-events: none;
+	background:
+		linear-gradient(112deg, rgba(255, 255, 255, 0.34), transparent 28%, rgba(105, 126, 138, 0.07) 72%, transparent),
+		repeating-linear-gradient(0deg, rgba(87, 72, 54, 0.018) 0 1px, transparent 1px 5px);
+}
+
+/* Major Dashboard modules share the approved torn-paper glass material. */
+.portfolio-dashboard-main #about > .portfolio-glass-panel,
+.portfolio-dashboard-main #performance > .portfolio-glass-panel,
+.portfolio-dashboard-main #performance > [data-slot="card"],
+.portfolio-dashboard-main #performance .portfolio-performance-shell {
+	position: relative;
+	overflow: hidden;
+	border: 1px solid rgba(255, 255, 255, 0.76) !important;
+	background: linear-gradient(145deg, rgba(251, 248, 242, 0.46), rgba(229, 232, 230, 0.24)) !important;
+	-webkit-backdrop-filter: blur(12px) saturate(0.76) !important;
+	backdrop-filter: blur(12px) saturate(0.76) !important;
+	clip-path: polygon(
+		0.4% 1.6%, 4% 0.5%, 8% 1.3%, 12% 0.35%, 17% 1.2%, 22% 0.4%, 27% 1.35%,
+		33% 0.45%, 39% 1.3%, 45% 0.35%, 51% 1.15%, 57% 0.4%, 63% 1.3%, 69% 0.45%,
+		75% 1.2%, 81% 0.35%, 87% 1.25%, 93% 0.45%, 99.6% 1.5%, 99.4% 98.4%,
+		94% 99.5%, 88% 98.7%, 82% 99.55%, 76% 98.65%, 70% 99.55%, 64% 98.7%,
+		58% 99.5%, 52% 98.65%, 46% 99.55%, 40% 98.7%, 34% 99.5%, 28% 98.65%,
+		22% 99.55%, 16% 98.7%, 10% 99.5%, 4% 98.65%, 0.6% 99.2%
+	);
+	box-shadow:
+		inset 0 1px rgba(255, 255, 255, 0.9),
+		0 8px 18px rgba(7, 29, 52, 0.1) !important;
+}
+
+.portfolio-dashboard-main #about > .portfolio-glass-panel::before,
+.portfolio-dashboard-main #performance > .portfolio-glass-panel::before,
+.portfolio-dashboard-main #performance > [data-slot="card"]::before,
+.portfolio-dashboard-main #performance .portfolio-performance-shell::before {
+	position: absolute;
+	inset: 0;
+	z-index: -1;
+	content: "";
+	pointer-events: none;
+	background:
+		linear-gradient(112deg, rgba(255, 255, 255, 0.34), transparent 28%, rgba(105, 126, 138, 0.07) 72%, transparent),
+		repeating-linear-gradient(0deg, rgba(87, 72, 54, 0.018) 0 1px, transparent 1px 5px);
+}
+
+.portfolio-dashboard-main #about .portfolio-glass-subpanel,
+.portfolio-dashboard-main #performance .portfolio-glass-subpanel,
+.portfolio-dashboard-main #performance [data-slot="card"] [data-slot="card"] {
+	background: linear-gradient(145deg, rgba(251, 248, 242, 0.28), rgba(232, 233, 228, 0.14)) !important;
+	border-color: rgba(114, 101, 82, 0.2) !important;
+	-webkit-backdrop-filter: blur(7px) saturate(0.74) !important;
+	backdrop-filter: blur(7px) saturate(0.74) !important;
+	box-shadow: inset 0 1px rgba(255, 255, 255, 0.68) !important;
+}
+
+@media (max-width: 767px) {
+	.portfolio-dashboard-main #about > .portfolio-glass-panel,
+	.portfolio-dashboard-main #performance > .portfolio-glass-panel,
+	.portfolio-dashboard-main #performance > [data-slot="card"] {
+		clip-path: polygon(1% 1%, 10% 0.3%, 20% 1.1%, 30% 0.4%, 40% 1.2%, 50% 0.35%, 60% 1.1%, 70% 0.4%, 80% 1.2%, 90% 0.35%, 99% 1%, 99% 99%, 90% 99.6%, 80% 98.8%, 70% 99.6%, 60% 98.8%, 50% 99.6%, 40% 98.8%, 30% 99.6%, 20% 98.8%, 10% 99.6%, 1% 99%);
+	}
+}

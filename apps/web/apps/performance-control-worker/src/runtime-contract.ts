@@ -14,8 +14,22 @@ export const runtimeCallbackHeaders = [
 	"x-performance-signature-256",
 ] as const;
 
-export type RuntimeSource = "control" | "aws-safety-expiry";
+export const stoppedBootstrapSource = "babysteps-performance-control-bootstrap-v1";
+export const stoppedBootstrapOperation = "bootstrap-stopped-state";
+
+export type RuntimeSource = "control" | "aws-safety-expiry" | typeof stoppedBootstrapSource;
 export type RuntimeStatus = "starting" | "running" | "stopping" | "stopped" | "degraded" | "cleanup_required" | "failed";
+
+export interface StoppedBootstrapProof {
+	authority: "github-actions-artifact+aws-zero-residue-readback";
+	workflowRunId: string;
+	artifactId: string;
+	evidenceSha256: string;
+	schemaAbsenceVerified: true;
+	cloudFormationStackAbsent: true;
+	remainingProjectResources: 0;
+	sharedFoundationProtected: true;
+}
 
 export interface RuntimeCallback {
 	schemaVersion: "1.0";
@@ -28,17 +42,50 @@ export interface RuntimeCallback {
 	occurredAt: string;
 	cleanupVerified: boolean;
 	zeroResidualVerified: boolean;
+	operation?: typeof stoppedBootstrapOperation;
+	bootstrapOnly?: true;
+	proof?: StoppedBootstrapProof;
 	snapshot?: PerformanceSnapshot;
 }
 
 const requiredKeys = ["schemaVersion", "deliveryId", "source", "operationId", "generation", "workflowRunId", "status", "occurredAt", "cleanupVerified", "zeroResidualVerified"] as const;
-const allowedKeys = new Set<string>([...requiredKeys, "snapshot"]);
-const sources = new Set<RuntimeSource>(["control", "aws-safety-expiry"]);
+const bootstrapFieldNames = ["operation", "bootstrapOnly", "proof"] as const;
+const allowedKeys = new Set<string>([...requiredKeys, ...bootstrapFieldNames, "snapshot"]);
+const sources = new Set<RuntimeSource>(["control", "aws-safety-expiry", stoppedBootstrapSource]);
 const statuses = new Set<RuntimeStatus>(["starting", "running", "stopping", "stopped", "degraded", "cleanup_required", "failed"]);
 const safetyTerminalStatuses = new Set<RuntimeStatus>(["stopped", "cleanup_required", "failed"]);
+const bootstrapProofKeys = new Set([
+	"authority",
+	"workflowRunId",
+	"artifactId",
+	"evidenceSha256",
+	"schemaAbsenceVerified",
+	"cloudFormationStackAbsent",
+	"remainingProjectResources",
+	"sharedFoundationProtected",
+]);
+const bootstrapDeliveryPattern = /^[A-Za-z0-9][A-Za-z0-9._:-]{7,159}$/u;
+const bootstrapOperationIdPattern = /^bootstrap-babysteps-stopped-[A-Za-z0-9._:-]{8,96}$/u;
+const decimalIdPattern = /^[1-9][0-9]*$/u;
+const sha256Pattern = /^[0-9a-f]{64}$/u;
 
 const isRecord = (value: unknown): value is Record<string, unknown> => typeof value === "object" && value !== null && !Array.isArray(value);
 const isNonEmptyString = (value: unknown): value is string => typeof value === "string" && value.trim().length > 0;
+const isStoppedBootstrapProof = (value: unknown): value is StoppedBootstrapProof => {
+	if (!isRecord(value) || Object.keys(value).length !== bootstrapProofKeys.size || Object.keys(value).some((key) => !bootstrapProofKeys.has(key))) {
+		return false;
+	}
+	return (
+		value.authority === "github-actions-artifact+aws-zero-residue-readback" &&
+		decimalIdPattern.test(String(value.workflowRunId ?? "")) &&
+		decimalIdPattern.test(String(value.artifactId ?? "")) &&
+		sha256Pattern.test(String(value.evidenceSha256 ?? "")) &&
+		value.schemaAbsenceVerified === true &&
+		value.cloudFormationStackAbsent === true &&
+		value.remainingProjectResources === 0 &&
+		value.sharedFoundationProtected === true
+	);
+};
 export const isCanonicalIso = (value: unknown): value is string => {
 	if (typeof value !== "string") return false;
 	const timestamp = Date.parse(value);
@@ -76,6 +123,26 @@ export const parseRuntimeCallback = (value: unknown, headerDeliveryId: string): 
 		throw new Error("invalid_runtime_evidence");
 	}
 	if (value.snapshot !== undefined && !isRecord(value.snapshot)) throw new Error("invalid_runtime_snapshot");
+	const hasBootstrapFields = bootstrapFieldNames.some((key) => key in value);
+	if (value.source === stoppedBootstrapSource) {
+		if (
+			value.operation !== stoppedBootstrapOperation ||
+			!bootstrapDeliveryPattern.test(value.deliveryId) ||
+			!bootstrapOperationIdPattern.test(value.operationId) ||
+			!decimalIdPattern.test(value.workflowRunId) ||
+			value.generation !== 1 ||
+			value.status !== "stopped" ||
+			value.cleanupVerified !== true ||
+			value.zeroResidualVerified !== true ||
+			value.bootstrapOnly !== true ||
+			value.snapshot !== undefined ||
+			!isStoppedBootstrapProof(value.proof)
+		) {
+			throw new Error("invalid_stopped_bootstrap");
+		}
+	} else if (hasBootstrapFields) {
+		throw new Error("bootstrap_fields_forbidden");
+	}
 	if (value.source === "aws-safety-expiry" && !safetyTerminalStatuses.has(value.status as RuntimeStatus)) {
 		throw new Error("safety_expiry_requires_terminal_status");
 	}

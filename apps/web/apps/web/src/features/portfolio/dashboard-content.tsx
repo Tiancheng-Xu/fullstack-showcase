@@ -1,14 +1,21 @@
 import {
+	Activity,
 	BadgeCheck,
+	Bot,
+	Boxes,
 	CheckCircle2,
 	Clock3,
 	Code2,
 	Compass,
+	Footprints,
+	LayoutDashboard,
 	LayoutGrid,
 	Menu,
 	PenTool,
-	Search,
+	RefreshCw,
+	ShieldCheck,
 	UserRound,
+	Workflow,
 } from "lucide-react";
 import { type ReactNode, useEffect, useState } from "react";
 
@@ -68,6 +75,22 @@ export function DashboardContent() {
 	const performanceProjects = visibleProjects.filter(
 		(project) => project.performance,
 	);
+	const preferredProjectOrder = [
+		"agent-market",
+		"babysteps",
+		"shared-evidence-verifier",
+		"personal-ai-agent",
+		"fullstack-showcase",
+		"tc-workflow",
+	];
+	const displayProjects = [...visibleProjects].sort((left, right) => {
+		const leftIndex = preferredProjectOrder.indexOf(left.id);
+		const rightIndex = preferredProjectOrder.indexOf(right.id);
+		if (leftIndex === -1 && rightIndex === -1) return 0;
+		if (leftIndex === -1) return 1;
+		if (rightIndex === -1) return -1;
+		return leftIndex - rightIndex;
+	});
 	const skillGroups = [
 		{
 			name: "全栈产品工程",
@@ -138,15 +161,8 @@ export function DashboardContent() {
 		},
 	];
 
-	const visualThemes = [
-		"from-[#dfe7e3] via-[#c7d8dd] to-[#b82139]",
-		"from-[#efe8d6] via-[#d9d3be] to-[#0f2d4d]",
-		"from-[#dde8ec] via-[#c6d1bc] to-[#c29346]",
-		"from-[#ece0cf] via-[#d6c8ad] to-[#15385f]",
-	];
-
 	return (
-		<div className="relative left-1/2 w-screen max-w-none -translate-x-1/2 overflow-x-hidden bg-[#f7f1e3] text-[#071d34]">
+		<div className="portfolio-surface relative left-1/2 w-screen max-w-none -translate-x-1/2 overflow-x-hidden bg-[#f7f1e3] text-[#071d34]">
 			<div
 				aria-hidden="true"
 				className="pointer-events-none absolute inset-0 opacity-[0.42]"
@@ -158,11 +174,11 @@ export function DashboardContent() {
 			/>
 
 			<header
-				className="relative border-[#071d34] border-b bg-[#fbf6ea]/92"
+				className="portfolio-glass-bar relative border-[#071d34] border-b bg-[#fbf6ea]/92"
 				id="top"
 			>
 				<div className={`${PORTFOLIO_FRAME_CLASS} flex h-16 items-center justify-between`}>
-					<div className="flex min-w-0 items-center gap-3">
+						<div className="flex min-w-0 items-center gap-3">
 						<button
 							aria-label="打开菜单"
 							className="grid size-11 place-items-center text-[#071d34] md:hidden"
@@ -170,67 +186,75 @@ export function DashboardContent() {
 						>
 							<Menu aria-hidden="true" size={23} />
 						</button>
-						<div className="hidden size-9 place-items-center border border-[#d9ccb5] bg-[#eef0ec] text-[#071d34] md:grid">
-							<PenTool aria-hidden="true" size={16} />
+					<div aria-label="徐天成篆刻姓名章" className="portfolio-brand-seal portfolio-name-seal portfolio-glass-control hidden size-11 place-items-center border border-[#bf1737] bg-[#eef0ec] font-serif font-bold text-[#bf1737] md:grid">
+						<span aria-hidden="true"><i>徐</i><i>天</i><i>成</i><i>印</i></span>
 						</div>
 						<p className="truncate font-serif text-[#071d34] text-lg md:text-xl">
 							<span className="md:hidden">UKIYO-E PORTFOLIO</span>
-							<span className="hidden md:inline">Tiancheng Xu Portfolio</span>
+							<span className="hidden md:flex md:flex-col">
+								<strong className="tracking-[0.08em]">TIANCHENG XU · PORTFOLIO</strong>
+								<small className="mt-0.5 font-sans text-[#344252] text-[11px] tracking-[0.18em]">徐天成 · 工程作品集</small>
+							</span>
 						</p>
 					</div>
 					<nav
 						aria-label="作品集主导航"
-						className="hidden items-center gap-2 font-bold text-[12px] tracking-[0.15em] md:flex"
+						className="portfolio-primary-nav hidden items-center gap-2 font-bold text-[12px] tracking-[0.15em] md:flex"
 					>
 						<a
 							aria-current="page"
 							className="inline-flex min-h-11 items-center border border-[#bf1737] bg-[#bf1737] px-4 text-white shadow-[3px_3px_0_#071d34]"
 							href="#top"
 						>
-							DASHBOARD
+							作品集首页
 						</a>
 						<a
 							className="inline-flex min-h-11 items-center border border-[#c8bda9] bg-[#fbf6ea] px-4 text-[#344252] transition hover:border-[#bf1737] hover:bg-[#f3e7d7] hover:text-[#9f102a] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#bf1737] focus-visible:outline-offset-3"
 							href="#projects"
 						>
-							PROJECTS
+							项目
 						</a>
 						<a
 							className="inline-flex min-h-11 items-center border border-[#c8bda9] bg-[#fbf6ea] px-4 text-[#344252] transition hover:border-[#bf1737] hover:bg-[#f3e7d7] hover:text-[#9f102a] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#bf1737] focus-visible:outline-offset-3"
 							href="/dashboard#projects"
 						>
-							EVIDENCE
+							工作证明
 						</a>
 					</nav>
 					<div className="flex items-center gap-3">
-						<Search aria-hidden="true" className="hidden md:block" size={24} />
 						<a
 							aria-label="Tiancheng Xu GitHub"
-							className="grid size-11 place-items-center rounded-full border border-[#d9ccb5] bg-[#fbf6ea] md:size-10"
+							className="portfolio-github-link portfolio-glass-control inline-flex min-h-11 items-center gap-2 border border-[#8d99a3]/45 bg-[#fbf6ea]/30 px-3 font-bold text-[#071d34]"
 							href="https://github.com/Tiancheng-Xu"
 							rel="noreferrer"
 							target="_blank"
 						>
-							<UserRound aria-hidden="true" size={22} />
+							<svg aria-hidden="true" className="size-5 shrink-0" viewBox="0 0 24 24">
+								<path d="M12 .8a11.3 11.3 0 0 0-3.57 22c.57.1.78-.24.78-.55v-2.18c-3.18.7-3.85-1.35-3.85-1.35-.52-1.32-1.27-1.67-1.27-1.67-1.04-.71.08-.7.08-.7 1.15.08 1.75 1.18 1.75 1.18 1.02 1.75 2.68 1.24 3.33.95.1-.74.4-1.24.73-1.53-2.54-.29-5.21-1.27-5.21-5.66 0-1.25.45-2.27 1.18-3.07-.12-.29-.51-1.45.11-3.03 0 0 .96-.31 3.11 1.17a10.8 10.8 0 0 1 5.67 0c2.16-1.48 3.11-1.17 3.11-1.17.62 1.58.23 2.74.11 3.03.74.8 1.18 1.82 1.18 3.07 0 4.4-2.68 5.36-5.22 5.65.41.36.77 1.05.77 2.12v3.15c0 .31.21.66.78.55A11.3 11.3 0 0 0 12 .8Z" fill="currentColor" />
+							</svg>
+							<span className="hidden xl:flex xl:flex-col xl:items-start xl:leading-tight">
+								<strong className="text-[11px] tracking-[0.14em]">GITHUB</strong>
+								<small className="font-normal text-[10px] tracking-normal">Tiancheng-Xu ↗</small>
+							</span>
 						</a>
 					</div>
 				</div>
 			</header>
 
-			<main className={`${PORTFOLIO_FRAME_CLASS} relative py-8 md:py-12`}>
+			<main className={`${PORTFOLIO_FRAME_CLASS} portfolio-dashboard-main relative py-8 md:py-12`}>
 				<section
-					className="mx-auto max-w-3xl scroll-mt-24 text-center"
+					className="portfolio-dashboard-hero max-w-4xl scroll-mt-24 text-left"
 					id="about"
 				>
-					<p className="font-serif text-sm">作品看板 Dashboard</p>
-					<h1 className="mt-3 font-bold font-serif text-3xl leading-tight md:text-4xl">
-						Showcase Dashboard
+					<h1 className="font-bold font-serif text-4xl leading-tight md:text-6xl">
+						展示看板
 					</h1>
-					<p className="mt-2 font-bold text-[#3f4650] text-sm">
+					<p className="mt-2 font-serif text-[#344252] text-base tracking-[0.08em]">SHOWCASE DASHBOARD</p>
+					<p className="sr-only">
 						作者：Tiancheng Xu（Tiancheng-Xu）
 					</p>
-					<p className="mx-auto mt-5 border-[#bf1737] border-l-4 bg-[#fbf8ef]/78 px-5 py-4 text-left text-base leading-relaxed shadow-[inset_0_0_0_1px_rgba(7,29,52,0.16)] md:border-l-0 md:bg-transparent md:text-center md:shadow-none">
-						全栈开发工程师，专注于构建可闭环追溯的高质量技术方案与自动化工作流。
+					<p className="mt-5 max-w-3xl border-[#bf1737] border-t pt-4 text-left text-[#344252] text-sm leading-relaxed">
+						精选工程项目速览，包含架构、技术栈与进度概览。
 					</p>
 				</section>
 
@@ -240,11 +264,11 @@ export function DashboardContent() {
 						kicker="Core Competencies"
 						title="个人简历"
 					/>
-					<div className="mt-5 border border-[#cfd5db] bg-white/84 p-5 shadow-sm md:p-8">
+					<div className="portfolio-dashboard-module-card portfolio-glass-panel mt-5 border border-[#cfd5db] bg-white/84 p-5 shadow-sm md:p-8">
 						<div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
 							{skillGroups.map((skill) => (
 								<div
-									className="min-h-16 border border-[#d8cfbd] bg-[#f8f3e8] px-4 py-3"
+									className="portfolio-glass-subpanel min-h-16 border border-[#d8cfbd] bg-[#f8f3e8] px-4 py-3"
 									key={skill.name}
 								>
 									<p className="font-bold text-sm">{skill.name}</p>
@@ -257,7 +281,7 @@ export function DashboardContent() {
 						<div className="mt-6 grid gap-4 md:grid-cols-2">
 							{resumeBlocks.map((block) => (
 								<article
-									className="border border-[#e1d8c7] bg-[#fbf8ef] p-4"
+									className="portfolio-glass-subpanel border border-[#e1d8c7] bg-[#fbf8ef] p-4"
 									key={block.title}
 								>
 									<div className="flex items-start gap-3">
@@ -289,11 +313,12 @@ export function DashboardContent() {
 							kicker="Verified Snapshot"
 							title="性能观测与成本控制"
 						/>
-						<p className="mt-4 max-w-3xl text-[#344252] text-sm leading-relaxed">
-							观测链路停止或故障时，只展示最后一次通过校验的真实快照；没有可信快照时明确显示无数据。启停入口进入受保护控制面，不直接暴露
-							AWS 管理权限。
-						</p>
-						<div className="mt-5 grid gap-5">
+						<div className="portfolio-dashboard-module-card mt-5 p-5 md:p-7">
+							<p className="max-w-3xl text-[#344252] text-sm leading-relaxed">
+								观测链路停止或故障时，只展示最后一次通过校验的真实快照；没有可信快照时明确显示无数据。启停入口进入受保护控制面，不直接暴露
+								AWS 管理权限。
+							</p>
+							<div className="mt-5 grid gap-5">
 							{performanceProjects.map((project) => {
 								const performance = project.performance;
 								if (!performance) return null;
@@ -307,24 +332,27 @@ export function DashboardContent() {
 									/>
 								);
 							})}
+							</div>
 						</div>
 					</section>
 				) : null}
 
 				<section className="mt-10 scroll-mt-24 md:mt-14" id="projects">
-					<SectionTitle
-						icon={<LayoutGrid aria-hidden="true" size={18} />}
-						kicker="Project Portfolio"
-						title="项目列表"
-					/>
-					<p className="mt-3 text-[#59636d] text-xs">
+					<div className="sr-only">
+						<SectionTitle
+							icon={<LayoutGrid aria-hidden="true" size={18} />}
+							kicker="Project Portfolio"
+							title="项目列表"
+						/>
+					</div>
+					<p className="sr-only">
 						{syncedAt
 							? "GitHub App 自动同步 · " +
 								new Date(syncedAt).toLocaleString("zh-CN")
 							: "GitHub App 即时同步 · 静态项目索引兜底"}
 					</p>
-					<div className="mt-6 grid gap-7 md:grid-cols-2 md:gap-x-8 md:gap-y-9">
-						{visibleProjects.map((project, index) => {
+					<div className="mt-6 grid gap-7 md:grid-cols-2 md:gap-x-8 md:gap-y-9 xl:grid-cols-3">
+						{displayProjects.map((project, index) => {
 							const pageLinks = getProjectPageLinks(project);
 							const defaultPage =
 								pageLinks.find((link) => link.id === "evidence") ??
@@ -332,9 +360,12 @@ export function DashboardContent() {
 
 							return (
 								<article
-									className="group relative min-w-0 overflow-hidden border border-[#c7ced8] bg-white shadow-sm transition hover:-translate-y-0.5 hover:border-[#bf1737]/50 hover:shadow-md"
+									className="portfolio-project-card group relative min-w-0 overflow-hidden border border-transparent transition hover:-translate-y-0.5"
 									key={project.id}
 								>
+									<span className="portfolio-project-number" aria-hidden="true">
+										{String(index + 1).padStart(2, "0")}
+									</span>
 									{defaultPage ? (
 										<a
 											aria-label={`查看 ${project.title} 工作证明`}
@@ -346,16 +377,23 @@ export function DashboardContent() {
 											</span>
 										</a>
 									) : null}
-									<div
-										className={`relative h-44 overflow-hidden bg-gradient-to-br ${visualThemes[index % visualThemes.length]} md:h-48`}
-									>
-										<div className="absolute inset-0 opacity-75 mix-blend-multiply [background-image:radial-gradient(circle_at_18%_28%,rgba(255,255,255,.75)_0_8%,transparent_9%),linear-gradient(135deg,transparent_0_38%,rgba(255,255,255,.52)_39%_42%,transparent_43%),repeating-linear-gradient(165deg,rgba(7,29,52,.22)_0_2px,transparent_2px_18px)]" />
-										<div className="absolute inset-x-0 bottom-0 h-20 bg-[linear-gradient(135deg,rgba(255,255,255,.72)_0_12%,transparent_12%_18%,rgba(7,29,52,.18)_18%_19%,transparent_19%_30%,rgba(255,255,255,.42)_30%_44%,transparent_45%)]" />
-										<div className="absolute top-4 right-4 inline-flex min-h-11 items-center gap-2 border border-[#d8cfbd] bg-[#fbf8ef]/94 px-3 py-2 font-bold text-xs shadow-sm">
+									<div className="portfolio-project-card-body">
+						<div className="flex items-start gap-4 pt-8">
+											<ProjectIcon projectId={project.id} />
+											<div className="min-w-0 pt-1">
+												<h3 className="font-bold font-serif text-xl leading-snug md:text-lg">
+													{project.title}
+												</h3>
+												<p className="portfolio-project-summary mt-2 text-[#344252] text-sm leading-relaxed">
+													{project.desc}
+												</p>
+											</div>
+										</div>
+										<div className="portfolio-project-status absolute top-5 right-5 inline-flex items-center gap-2 border border-[#d8cfbd]/70 bg-[#fbf8ef]/45 px-2.5 py-1.5 font-bold text-xs backdrop-blur-md">
 											{project.status === "已完成" ? (
 												<CheckCircle2
 													aria-hidden="true"
-													className="text-[#bf1737]"
+													className="text-[#187044]"
 													size={15}
 												/>
 											) : (
@@ -367,38 +405,15 @@ export function DashboardContent() {
 											)}
 											{project.status}
 										</div>
-									</div>
-									<div className="space-y-5 p-5 md:p-6">
-										<div>
-											<h3 className="font-bold font-serif text-xl leading-snug md:text-lg">
-												{project.title}
-											</h3>
-											<p className="mt-3 text-[#344252] text-sm leading-relaxed">
-												{project.desc}
-											</p>
-										</div>
-										<div className="space-y-2">
-											<div className="flex items-center gap-3">
-												<div className="h-1.5 min-w-0 flex-1 overflow-hidden bg-[#aeb4b7]">
-													<div
-														className="h-full bg-[#0f2d4d]"
-														style={{
-															width: `${Math.min(project.progress, 100)}%`,
-														}}
-													/>
-												</div>
-												<span className="min-w-11 text-right font-bold text-sm">
-													{project.progress}%
-												</span>
-											</div>
-										</div>
-										<div className="border border-[#e1d8c7] bg-[#f8f3e8] p-4">
-											<p className="font-bold text-xs">项目架构：</p>
-											<p className="mt-2 text-[#344252] text-sm leading-relaxed">
+										<div className="portfolio-project-row">
+											<p className="font-bold text-xs">架构概览</p>
+											<p className="portfolio-project-architecture text-[#344252] text-xs leading-relaxed">
 												{project.architecture}
 											</p>
 										</div>
-										<div className="flex flex-wrap gap-2">
+										<div className="portfolio-project-row">
+											<p className="font-bold text-xs">技术栈</p>
+											<div className="portfolio-project-skills flex flex-wrap gap-1.5">
 											{[
 												...new Set([
 													...getProjectRenderingModes(project),
@@ -406,22 +421,28 @@ export function DashboardContent() {
 												]),
 											].map((skill) => (
 												<span
-													className="border border-[#d8cfbd] bg-[#fbf8ef] px-2.5 py-1 text-xs"
+													className="border border-[#bfc6cc]/80 bg-white/38 px-2.5 py-1 text-xs backdrop-blur-sm"
 													key={skill}
 												>
 													{skill}
 												</span>
 											))}
+											</div>
 										</div>
-										{pageLinks.length > 0 ? (
-											<nav
-												aria-label={`${project.title} 项目页面`}
-												className="relative z-20 flex flex-wrap gap-2"
-											>
+										<div className="portfolio-project-footer">
+											<span className="font-bold text-xs">进度</span>
+											<span className="font-serif font-bold text-[#b21f35]">{project.progress}%</span>
+											<div className="h-1.5 min-w-12 flex-1 overflow-hidden bg-[#aeb4b7]">
+												<div className="h-full bg-[#b21f35]" style={{ width: `${Math.min(project.progress, 100)}%` }} />
+											</div>
+											<span className="portfolio-project-action font-bold text-xs">查看工作证明 →</span>
+										</div>
+										{pageLinks.length > 1 ? (
+											<nav aria-label={`${project.title} 项目页面`} className="portfolio-project-secondary-links relative z-20 flex flex-wrap gap-1.5">
 												{pageLinks.map((link) => (
 													<a
 														aria-label={`${project.title}：${link.label}`}
-														className="inline-flex min-h-11 items-center border border-[#bf1737] bg-[#fbf8ef] px-3 py-2 font-bold text-[#9f102a] text-xs transition hover:bg-[#bf1737] hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#071d34] focus-visible:outline-offset-2"
+														className="inline-flex min-h-11 items-center border border-[#9f102a]/45 bg-white/48 px-3 py-2 font-bold text-[#8c1428] text-[11px] backdrop-blur-md"
 														href={link.href}
 														key={link.id}
 													>
@@ -438,7 +459,7 @@ export function DashboardContent() {
 				</section>
 			</main>
 
-			<footer className="relative mt-6 border-[#c8c0b0] border-t bg-[#ebe6da]">
+			<footer className="portfolio-glass-footer relative mt-6 border-[#c8c0b0] border-t bg-[#ebe6da]">
 				<div className={`${PORTFOLIO_FRAME_CLASS} flex min-h-24 flex-col items-center justify-center gap-4 py-7 text-center md:flex-row md:justify-between md:text-left`}>
 					<div className="flex items-center gap-3 font-bold text-sm">
 						<PenTool aria-hidden="true" className="text-[#bf1737]" size={18} />
@@ -463,7 +484,7 @@ export function DashboardContent() {
 
 			<nav
 				aria-label="作品集快捷导航"
-				className="fixed inset-x-0 bottom-0 z-40 border-[#d8cfbd] border-t bg-[#f7f1e3]/96 px-6 py-2 backdrop-blur md:hidden"
+				className="portfolio-glass-mobile-nav fixed inset-x-0 bottom-0 z-40 border-[#d8cfbd] border-t bg-[#f7f1e3]/96 px-6 py-2 backdrop-blur md:hidden"
 			>
 				<div className="mx-auto grid max-w-md grid-cols-4 gap-1">
 					{[
@@ -505,6 +526,26 @@ export function DashboardContent() {
 	);
 }
 
+const PROJECT_ICONS = {
+	"agent-market": Boxes,
+	babysteps: Footprints,
+	"shared-evidence-verifier": ShieldCheck,
+	"personal-ai-agent": Bot,
+	"fullstack-showcase": LayoutDashboard,
+	"portfolio-sync": RefreshCw,
+	"performance-observability-control": Activity,
+	"tc-workflow": Workflow,
+} as const;
+
+function ProjectIcon({ projectId }: { projectId: string }) {
+	const Icon = PROJECT_ICONS[projectId as keyof typeof PROJECT_ICONS] ?? Code2;
+	return (
+		<span className="portfolio-project-icon" aria-hidden="true">
+			<Icon size={26} strokeWidth={1.8} />
+		</span>
+	);
+}
+
 function SectionTitle({
 	icon,
 	kicker,
@@ -515,7 +556,7 @@ function SectionTitle({
 	title: string;
 }) {
 	return (
-		<div className="flex items-center gap-3 border-[#d8cfbd] border-b pb-3">
+		<div className="portfolio-section-title flex items-center gap-3 border-[#d8cfbd] border-b pb-3">
 			<span className="text-[#bf1737]">{icon}</span>
 			<h2 className="font-bold font-serif text-2xl md:text-xl">{title}</h2>
 			<span className="font-bold text-[#4d5863] text-xs uppercase tracking-[0.16em]">

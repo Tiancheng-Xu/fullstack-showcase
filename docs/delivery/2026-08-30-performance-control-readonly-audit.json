@@ -1,0 +1,89 @@
+{
+  "schemaVersion": 1,
+  "collectedAt": "2026-08-30T16:38:14Z",
+  "scope": "Baby2B performance control production read-only audit",
+  "candidateBaseSha": "f8be139bbf49cf48fa6d9a4a06fa36d1f95e403c",
+  "cloudMutationPerformed": false,
+  "production": {
+    "controlPage": {
+      "url": "https://baby2b.online/performance-control/babysteps/",
+      "httpStatus": 200,
+      "totpInputVisible": true,
+      "startDisabled": true,
+      "stopDisabled": true,
+      "viewports": [
+        {
+          "width": 390,
+          "rootOverflowPx": 0,
+          "pageErrors": []
+        },
+        {
+          "width": 1440,
+          "rootOverflowPx": 0,
+          "pageErrors": []
+        }
+      ]
+    },
+    "statusEndpoint": {
+      "url": "https://baby2b.online/api/performance/status?project=performance-observability-control",
+      "httpStatus": 200,
+      "cacheControl": "public, max-age=15",
+      "projectSlug": "performance-observability-control",
+      "controlState": "unknown",
+      "dataMode": "unavailable",
+      "cleanupVerified": false,
+      "snapshotAvailable": false,
+      "estimatedCostUsd": 0.2,
+      "maximumRuntimeMinutes": 45
+    },
+    "snapshotEndpoint": {
+      "url": "https://baby2b.online/api/performance/snapshot?project=performance-observability-control",
+      "httpStatus": 404,
+      "error": "verified_snapshot_not_found"
+    },
+    "unknownProjectEndpoint": {
+      "httpStatus": 404,
+      "error": "unknown_project"
+    },
+    "githubAppPublicPage": {
+      "url": "https://github.com/apps/baby2b-performance-control",
+      "httpStatus": 200,
+      "name": "Baby2B Performance Control",
+      "installationVerified": false
+    }
+  },
+  "localCandidate": {
+    "controlEnabled": false,
+    "workersDev": false,
+    "previewUrls": false,
+    "workerTests": {
+      "passed": 52,
+      "failed": 0,
+      "multiDeviceTotpDirectlyCovered": true
+    },
+    "workerTypecheck": "passed",
+    "performanceEvidenceIntegrationTests": {
+      "passed": 2,
+      "failed": 0
+    },
+    "webTypecheck": "passed"
+  },
+  "boundaries": {
+    "centralControlClosure": "pending",
+    "safeBootstrapCallback": "pending",
+    "githubAppInstallationAndPermissions": "unverified",
+    "awsOidcAndLiveInventory": "unverified-current-session-unavailable",
+    "cloudflareWorkerVariablesAndD1R2Inventory": "unverified-noninteractive-token-unavailable",
+    "r2VerifiedSnapshot": "not-found",
+    "styleBranchFullWebTests": "two unrelated Shared Evidence Verifier assertions remain pending while styling is in progress"
+  },
+  "releaseBlockers": [
+    "BabySteps fixed preflight must publish a dedicated dual-verified stopped bootstrap callback after zero-residue verification",
+    "central Worker must accept and atomically apply the exact bootstrap source contract",
+    "GitHub App installation scope and least permissions must be verified without exposing credentials",
+    "AWS OIDC role, budget and zero-residue inventory must be read back from a current authenticated session",
+    "Cloudflare production variables, D1 migrations/state and R2 bindings must be read back from an authenticated account",
+    "the workers.dev and preview URL hardening candidate must enter main before any redeployment",
+    "one TOTP start-stop lifecycle must prove callback, immutable snapshot, TTL or manual stop, failure degradation and exact cleanup"
+  ]
+}
