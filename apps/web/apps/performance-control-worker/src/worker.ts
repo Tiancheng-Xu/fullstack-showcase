@@ -2,7 +2,14 @@ import {
 	getRegisteredProject,
 	type RegisteredPerformanceProject,
 } from "./registry";
-import { createWorkflowDispatchInputs, isCanonicalIso, parseRuntimeCallback, type RuntimeCallback } from "./runtime-contract";
+import {
+	createWorkflowDispatchInputs,
+	isCanonicalIso,
+	parseRuntimeCallback,
+	stoppedBootstrapOperation,
+	stoppedBootstrapSource,
+	type RuntimeCallback,
+} from "./runtime-contract";
 import {
 	assertSnapshotPublishable,
 	type PerformanceSnapshot,
@@ -629,7 +636,15 @@ const secureWorkflowCallback = async (request: Request, env: WorkerEnv) => {
 		.bind(projectSlug)
 		.first<StateRow>();
 	if (!row) {
-		if (body.source !== "aws-safety-expiry" || body.status !== "stopped" || body.cleanupVerified !== true || body.zeroResidualVerified !== true) {
+		if (
+			body.source !== stoppedBootstrapSource ||
+			body.operation !== stoppedBootstrapOperation ||
+			body.generation !== 1 ||
+			body.status !== "stopped" ||
+			body.cleanupVerified !== true ||
+			body.zeroResidualVerified !== true ||
+			body.bootstrapOnly !== true
+		) {
 			return failDelivery("bootstrap_requires_zero_residual_verification", 409);
 		}
 		if (!env.CONTROL_DB.batch) return failDelivery("callback_atomic_unavailable", 503);
@@ -662,6 +677,9 @@ const secureWorkflowCallback = async (request: Request, env: WorkerEnv) => {
 			return failDelivery("callback_delivery_finalize_conflict", 409);
 		}
 		return json({ applied: true, bootstrapped: true, controlState: "stopped" });
+	}
+	if (body.source === stoppedBootstrapSource) {
+		return failDelivery("bootstrap_existing_row_forbidden", 409);
 	}
 	const nextControlState =
 		body.status === "failed" ? "cleanup_required" : body.status;

@@ -62,11 +62,15 @@ describe("performance control deployment gates", () => {
 		const output = execFileSync("node", [resolve(root, "scripts/generate-production-config.mjs"), "--ci"], { encoding: "utf8" });
 		const config = JSON.parse(output) as {
 			name: string;
+			workers_dev: boolean;
+			preview_urls: boolean;
 			vars: Record<string, string>;
 			d1_databases: Array<{ database_name: string }>;
 			r2_buckets: Array<{ bucket_name: string }>;
 		};
 		expect(config.name).toBe("baby2b-performance-control");
+		expect(config.workers_dev).toBe(false);
+		expect(config.preview_urls).toBe(false);
 		expect(config.vars.CONTROL_ENABLED).toBe("false");
 		expect(config.d1_databases).toEqual([
 			expect.objectContaining({ database_name: "baby2b-performance-control" }),

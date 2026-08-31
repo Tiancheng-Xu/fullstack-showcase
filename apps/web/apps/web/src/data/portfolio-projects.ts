@@ -94,17 +94,18 @@ export const PORTFOLIO_PROJECTS: PortfolioProject[] = [
 			"Cloudflare Production、项目自有 Evidence、深链 SSR 与真实 404 已完成语义回读",
 			"24 笔 Sepolia V3 状态交易全部成功，覆盖 DAG 锚定、接单、异议、仲裁、质押返还与收益领取",
 			"AWS V2 已以 verified-production 完成浏览器到 HMAC API、SNS/SQS、Lambda、ECS Fargate、PostgreSQL 与聚合回读闭环，并记录暂停、零队列与零 ECS Task",
-			"状态账本与公开 Evidence 已通过 PR #16/#17 收口，原 6 项 IMPLEMENTED_UNVERIFIED 已升级 VERIFIED；最终 main 3058bb66cff3、Verify Run 33246537531",
+			"状态账本与公开 Evidence 已收口，原 6 项 IMPLEMENTED_UNVERIFIED 已升级 VERIFIED；最新 main 305a89c4b0d6、Verify Run 33337714155、Cloudflare Production deployment 8d6c44a5-c5f1-4730-ba34-92a0669b955b",
 		],
 		details: [
 			"Cloudflare Web、AWS V2 Runtime 与 Sepolia V3 分别为 verified-production，三套证据互不替代；本地 Transaction Engine、视觉与模型证据仍仅为 verified-local。",
 			"AWS V2 运行证据来自项目自有 2026-08-27 closure JSON；公开 Evidence 已修正陈旧文件名，并由服务端首屏直接输出完整证据链。",
 			"Sepolia 验证使用单一测试钱包复用多个角色，不等同于多钱包生产隔离证明，也不证明网页生产环境直接提交交易。",
-			"最新生产部署 2bd19543 绑定 source 3058bb6；正式域名、项目 Evidence、关键深链、reciprocal links 与真实 404 已完成生产读回。本次 Cloudflare 发布不作为实时市场成交或 AWS Runtime 证据；本轮未触发 AWS mutation、Sepolia 交易或模型 Runtime。",
+			"最新生产部署 8d6c44a5-c5f1-4730-ba34-92a0669b955b 绑定 source 305a89c4b0d6；正式域名、项目 Evidence、关键深链、reciprocal links 与真实 404 已完成生产读回。",
+			"生产录屏入口为 /evidence/agent-market-v3-full-workflow.mp4；它证明生产 UI 流程，不作为实时市场成交或 AWS Runtime 证据。本轮未触发 AWS mutation、钱包签名、Sepolia 交易或模型 Runtime。",
 		],
 		renderingModes: ["Edge SSR", "Hydration", "Client-only Web3"],
 		ownerPage: "https://agent-market.baby2b.online/",
-		sourceUpdatedAt: "2026-08-29",
+		sourceUpdatedAt: "2026-08-30",
 	},
 	{
 		id: "performance-observability-control",
@@ -328,6 +329,117 @@ export const PORTFOLIO_PROJECTS: PortfolioProject[] = [
 						"不为每个项目创建一套 OAuth/OIDC：复用受保护的账户级 OIDC provider，只把最小权限角色按项目隔离。",
 						"不提供通用 AWS 管理控制台：避免把项目控制页变成高权限云控制面，用户只能执行固定启停动作。",
 						"不允许 AI Agent 自动删除或重放资源：删除和 DLQ 重放会改变真实状态，必须由固定工作流、门禁和人工确认执行。",
+					],
+				},
+			],
+		},
+	},
+	{
+		id: "shared-evidence-verifier",
+		title: "Shared Evidence Verifier",
+		desc: "以 GitHub OIDC、AWS 最小权限 Lambda 与公开语义检查，串行验证多个项目的 Production、Evidence 和精确版本边界；Run 33290528028 完成 6/6 串行项目检查。",
+		status: "已完成",
+		progress: 100,
+		architecture:
+			"固定项目清单 → GitHub OIDC（仓库身份与 main 绑定）→ AWS Budget Gate → 非 VPC Lambda 串行验证 → Production/Evidence HTTP 与语义检查 → 7 日脱敏 Artifact；不复制项目 Runtime。",
+		evidenceUrl: `${DASHBOARD_EVIDENCE_BASE_URL}/shared-evidence-verifier`,
+		repo: "Tiancheng-Xu/.github",
+		skills: [
+			"GitHub OIDC",
+			"AWS Lambda",
+			"CloudFormation",
+			"Budget Gate",
+			"Evidence",
+			"Least Privilege",
+		],
+		evidence: [
+			"共享验证 Run 33290528028 在固定 head 96d22e92b594 上完成 6/6 串行项目检查",
+			"4 个公开仓库为 verified；2 个私有仓库为 verified-with-limitations，未把不可读取的仓库 SHA 冒充已核对",
+			"预算门禁前后均为 $27.345 / $40，forecast unavailable；未升级套餐，也未创建 VPC、NAT、RDS、ECS 或 API Gateway",
+			"共享 Stack 仅包含 2 个 IAM Role、1 个非 VPC Lambda 和 1 个 7 日 CloudWatch Log Group",
+			"每个项目产出独立脱敏 Artifact，公开 URL、HTTP 语义、Evidence 入口和版本边界可追溯",
+		],
+		details: [
+			"验证器不是业务运行时，也不证明项目内部功能、链上交易或模型能力；它只验证清单声明的公开交付面与证据入口。",
+			"公开仓库可校验 main SHA；私有仓库在 GitHub App/OIDC 当前权限边界内无法读取 commit，因此保持 verified-with-limitations 和 headShaVerified=false。",
+			"Lambda 按固定清单串行访问公开 HTTPS 端点，限制重试、响应体大小和日志字段；Token、Cookie、私有路径和响应正文不进入 Artifact。",
+			"权威云端 Run 为 33290528028；实现 main 为 7473f746271e，验证器运行 head 为 96d22e92b594，二者分别证明 Evidence 发布与本次真实执行。",
+		],
+		ownerPage: "https://github.com/Tiancheng-Xu/.github",
+		sourceUpdatedAt: "2026-08-30",
+		caseStudy: {
+			stateNotice:
+				"共享 AWS 验证器已云端运行并保存脱敏 Artifact。公开仓库为 verified；私有仓库因当前读取权限限制，仅为 verified-with-limitations。",
+			requirements: [
+				{
+					requirement: "固定身份与不可变来源",
+					implementation:
+						"GitHub Actions 通过 OIDC 获取短期 AWS 身份，工作流绑定 owner、repository ID、main 与精确 head SHA。",
+					code: "Tiancheng-Xu/.github · reusable verifier workflow + CloudFormation",
+					proof: "Run 33290528028 · head 96d22e92b594 · 6/6 jobs success",
+					state: "云端已验证",
+				},
+				{
+					requirement: "免费计划与成本保护",
+					implementation:
+						"部署和调用前执行 Budget Gate；复用一个非 VPC Lambda，不为每个项目创建业务 AWS Runtime。",
+					code: "aws-budget-guard + tc-shared-evidence-verifier",
+					proof: "before/after $27.345 / $40；forecast unavailable；Free plan unchanged",
+					state: "云端已验证",
+				},
+				{
+					requirement: "公开交付语义验证",
+					implementation:
+						"逐项目检查 Production、Evidence、HTTP 状态、最终 URL 和必要语义标记，而不是把 HTTP 200 直接当成功。",
+					code: "fixed project manifest → verifier Lambda → per-project result",
+					proof: "4 verified + 2 verified-with-limitations；每项目独立 Artifact",
+					state: "云端已验证",
+				},
+				{
+					requirement: "最小权限与隐私",
+					implementation:
+						"IAM 仅允许固定工作流调用验证器；日志和 Artifact 只保留脱敏摘要，不保存凭据、Cookie、正文或私有路径。",
+					code: "2 IAM roles + 1 Lambda + 1 seven-day LogGroup",
+					proof: "Stack UPDATE_COMPLETE；无 VPC/API/S3 bucket 新增",
+					state: "云端已验证",
+				},
+			],
+			sections: [
+				{
+					title: "运行架构",
+					state: "云端已验证",
+					summary:
+						"共享层只负责验证公开交付事实，不侵入项目业务 Runtime；身份、预算、网络和 Evidence 形成四道边界。",
+					steps: [
+						"固定清单声明项目 ID、仓库、Production、Evidence 和允许验证的语义合同。",
+						"GitHub OIDC 换取短期、最小权限 AWS 身份，不保存长期 AWS Key。",
+						"Budget Gate 先判定成本边界，再调用单个非 VPC Lambda。",
+						"Lambda 串行验证公开端点，输出每项目独立的脱敏 JSON Artifact。",
+					],
+				},
+				{
+					title: "串行验证时序",
+					state: "云端已验证",
+					summary:
+						"一次 Run 内按固定顺序执行身份、预算、项目语义与结果分级；任何硬 Gate 失败都 fail-closed。",
+					steps: [
+						"Workflow 固定 ref 与 head SHA，校验调用来源。",
+						"Budget Gate 读取实际用量和预算上限；不满足则停止。",
+						"OIDC AssumeRole 后调用共享 Lambda，项目间不共享可变输入。",
+						"公开仓库核对 SHA 与页面语义；私有仓库权限不足时降级为 verified-with-limitations。",
+						"上传 7 日脱敏 Artifact，并由汇总 Job 核对 6/6 结果。",
+					],
+				},
+				{
+					title: "真实结果与限制",
+					state: "云端已验证",
+					summary:
+						"本次运行证明共享验证链和公开交付入口可用，不把私有仓库、业务 Runtime 或外部云能力扩大为已验证。",
+					steps: [
+						"公开项目：fullstack-showcase、github-profile-studio、portfolio-sync、performance-observability-control 为 verified。",
+						"私有项目：personal-ai-agent、tc-workflow 为 verified-with-limitations，headShaVerified=false。",
+						"本次没有启动各项目 AWS Runtime、重放链上交易、上传模型权重或改变 Cloudflare 套餐。",
+						"GitHub Actions 官方 action 的 Node 20 deprecation annotation 为已知非阻断警告。",
 					],
 				},
 			],

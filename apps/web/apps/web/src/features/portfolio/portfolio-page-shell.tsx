@@ -29,7 +29,7 @@ export function PortfolioPageShell({
 	];
 
 	return (
-		<div className="relative left-1/2 min-h-screen w-screen max-w-none -translate-x-1/2 overflow-x-hidden bg-[#f7f1e3] pb-24 text-[#071d34] md:pb-0">
+		<div className="portfolio-surface relative left-1/2 min-h-screen w-screen max-w-none -translate-x-1/2 overflow-x-hidden bg-[#f7f1e3] pb-24 text-[#071d34] md:pb-0">
 			<div
 				aria-hidden="true"
 				className="pointer-events-none absolute inset-0 opacity-40"
@@ -40,16 +40,16 @@ export function PortfolioPageShell({
 				}}
 			/>
 
-			<header className="relative border-[#071d34] border-b bg-[#fbf6ea]/95">
+			<header className="portfolio-glass-bar relative border-[#071d34] border-b bg-[#fbf6ea]/95">
 				<div className={`${PORTFOLIO_FRAME_CLASS} flex min-h-16 items-center justify-between gap-4 py-2`}>
 					<a className="flex min-h-11 items-center gap-3 font-serif font-bold" href="/dashboard">
-						<span className="grid size-9 place-items-center border border-[#d9ccb5] bg-[#eef0ec] text-[#bf1737]">
+						<span className="portfolio-glass-control grid size-9 place-items-center border border-[#d9ccb5] bg-[#eef0ec] text-[#bf1737]">
 							<PenTool aria-hidden="true" size={17} />
 						</span>
 						<span className="hidden sm:inline">Tiancheng Xu Portfolio</span>
 						<span className="sm:hidden">PORTFOLIO</span>
 					</a>
-					<nav aria-label="项目导航" className="hidden items-center gap-2 md:flex">
+					<nav aria-label="项目导航" className="portfolio-primary-nav hidden items-center gap-2 md:flex">
 						{links.map((link) => (
 							<a
 								aria-current={current === link.id ? "page" : undefined}
@@ -72,14 +72,14 @@ export function PortfolioPageShell({
 				<header className="border-[#d8cfbd] border-b pb-6">
 					<p className="font-bold text-[#bf1737] text-xs uppercase tracking-[0.18em]">{eyebrow}</p>
 					<h1 className="mt-3 font-serif font-bold text-3xl leading-tight md:text-5xl">{title}</h1>
-					<p className="mt-4 max-w-3xl border-l-4 border-[#bf1737] bg-[#fbf8ef]/85 px-4 py-3 text-[#344252] text-sm leading-relaxed md:text-base">
+					<p className="portfolio-glass-note mt-4 max-w-3xl border-l-4 border-[#bf1737] bg-[#fbf8ef]/85 px-4 py-3 text-[#344252] text-sm leading-relaxed md:text-base">
 						{description}
 					</p>
 				</header>
-				<div className="mt-7">{children}</div>
+				<div className="portfolio-module-stack mt-7">{children}</div>
 			</main>
 
-			<footer className="relative border-[#c8c0b0] border-t bg-[#ebe6da]">
+			<footer className="portfolio-glass-footer relative border-[#c8c0b0] border-t bg-[#ebe6da]">
 				<div className={`${PORTFOLIO_FRAME_CLASS} flex min-h-24 flex-col items-center justify-between gap-4 py-7 text-center md:flex-row md:text-left`}>
 					<div className="flex items-center gap-3 font-bold text-sm">
 						<PenTool aria-hidden="true" className="text-[#bf1737]" size={18} />
@@ -94,7 +94,7 @@ export function PortfolioPageShell({
 				</div>
 			</footer>
 
-			<nav aria-label="项目快捷导航" className="fixed inset-x-0 bottom-0 z-50 border-[#d8cfbd] border-t bg-[#f7f1e3]/96 px-3 py-2 backdrop-blur md:hidden">
+			<nav aria-label="项目快捷导航" className="portfolio-glass-mobile-nav fixed inset-x-0 bottom-0 z-50 border-[#d8cfbd] border-t bg-[#f7f1e3]/96 px-3 py-2 backdrop-blur md:hidden">
 				<div className="mx-auto grid max-w-md grid-cols-3 gap-1.5">
 					{links.map(({ href, icon: Icon, id, label }) => (
 						<a

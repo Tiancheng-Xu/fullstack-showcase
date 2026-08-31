@@ -261,6 +261,27 @@ describe("performance control worker writes", () => {
 		});
 	});
 
+	it("allows independent trusted devices to share TOTP while issuing distinct nonces", async () => {
+		const [firstResponse, secondResponse] = await Promise.all([
+			handleRequest(
+				controlRequest("/api/performance/control/session?project=performance-observability-control"),
+				env(),
+			),
+			handleRequest(
+				controlRequest("/api/performance/control/session?project=performance-observability-control"),
+				env(),
+			),
+		]);
+
+		expect(firstResponse.status).toBe(200);
+		expect(secondResponse.status).toBe(200);
+		const first = await firstResponse.json() as { mfaVerified: boolean; nonce: string };
+		const second = await secondResponse.json() as { mfaVerified: boolean; nonce: string };
+		expect(first.mfaVerified).toBe(true);
+		expect(second.mfaVerified).toBe(true);
+		expect(first.nonce).not.toBe(second.nonce);
+	});
+
 	it("rejects cross-origin mutation and dispatches only the fixed BabySteps workflow once", async () => {
 		const queries: string[] = [];
 		const prepare = (query: string) => {
@@ -589,7 +610,30 @@ describe("performance control worker writes", () => {
 
 	it("rolls back bootstrap when delivery finalize fails and retries atomically", async () => {
 		const occurredAt = new Date().toISOString();
-		const body = JSON.stringify({ schemaVersion: "1.0", deliveryId: "delivery-bootstrap-retry", source: "aws-safety-expiry", operationId: "op-bootstrap-retry", generation: 1, workflowRunId: "run-bootstrap-retry", status: "stopped", cleanupVerified: true, zeroResidualVerified: true, occurredAt });
+		const body = JSON.stringify({
+			schemaVersion: "1.0",
+			deliveryId: "delivery-bootstrap-retry",
+			source: "babysteps-performance-control-bootstrap-v1",
+			operation: "bootstrap-stopped-state",
+			operationId: "bootstrap-babysteps-stopped-retry-33333333333",
+			generation: 1,
+			workflowRunId: "33333333333",
+			status: "stopped",
+			cleanupVerified: true,
+			zeroResidualVerified: true,
+			bootstrapOnly: true,
+			occurredAt,
+			proof: {
+				authority: "github-actions-artifact+aws-zero-residue-readback",
+				workflowRunId: "33279132965",
+				artifactId: "9722636468",
+				evidenceSha256: "a".repeat(64),
+				schemaAbsenceVerified: true,
+				cloudFormationStackAbsent: true,
+				remainingProjectResources: 0,
+				sharedFoundationProtected: true,
+			},
+		});
 		const bodyDigest = createHash("sha256").update(body).digest("hex");
 		const timestamp = String(Math.floor(Date.now() / 1000));
 		const request = () => new Request("https://baby2b.online/api/performance/control/callback", { method: "POST", headers: { "content-length": String(body.length), "x-performance-timestamp": timestamp, "x-performance-delivery-id": "delivery-bootstrap-retry", "x-performance-signature-256": `sha256=${createHmac("sha256", "callback-secret").update(`${timestamp}.${body}`).digest("hex")}` }, body });
@@ -601,7 +645,7 @@ describe("performance control worker writes", () => {
 			if (query.includes("FROM callback_deliveries")) return new Statement(delivery);
 			if (query.includes("SET status='processing'")) return { bind() { return this; }, async first<T>() { return null as T | null; }, async run<T>() { if (delivery) { delivery.status = "processing"; delivery.attempts += 1; } return { success: true, meta: { changes: 1 } } as T; } };
 			if (query.includes("SET status='failed'")) return { bind() { return this; }, async first<T>() { return null as T | null; }, async run<T>() { if (delivery) delivery.status = "failed"; return { success: true, meta: { changes: 1 } } as T; } };
-			if (query.includes("FROM project_state")) return new Statement(bootstrapped ? { project_slug: "performance-observability-control", control_state: "stopped", data_mode: "unavailable", generation: 1, operation_id: "op-bootstrap-retry", workflow_run_id: "run-bootstrap-retry", cleanup_verified: 1, updated_at: occurredAt, last_event_at: occurredAt } : null);
+			if (query.includes("FROM project_state")) return new Statement(bootstrapped ? { project_slug: "performance-observability-control", control_state: "stopped", data_mode: "unavailable", generation: 1, operation_id: "bootstrap-babysteps-stopped-retry-33333333333", workflow_run_id: "33333333333", cleanup_verified: 1, updated_at: occurredAt, last_event_at: occurredAt } : null);
 			if (query.includes("INSERT INTO project_state")) return { bind() { return this; }, async first<T>() { return null as T | null; }, async run<T>() { bootstrapped = true; return { success: true, meta: { changes: 1 } } as T; } };
 			if (query.includes("SET status='applied'")) return { bind() { return this; }, async first<T>() { return null as T | null; }, async run<T>() { finalizeAttempts += 1; const changes = finalizeAttempts === 1 ? 0 : 1; if (changes && delivery) delivery.status = "applied"; return { success: true, meta: { changes } } as T; } };
 			return new Statement(null, { success: true, meta: { changes: 1 } });
@@ -618,6 +662,68 @@ describe("performance control worker writes", () => {
 		expect((await handleRequest(request(), bootstrapEnv)).status).toBe(200);
 		expect(bootstrapped).toBe(true);
 		expect(delivery).toMatchObject({ status: "applied", attempts: 2 });
+	});
+
+	it("rejects a dedicated bootstrap when the D1 project row already exists", async () => {
+		const occurredAt = new Date().toISOString();
+		const body = JSON.stringify({
+			schemaVersion: "1.0",
+			deliveryId: "delivery-bootstrap-existing",
+			source: "babysteps-performance-control-bootstrap-v1",
+			operation: "bootstrap-stopped-state",
+			operationId: "bootstrap-babysteps-stopped-existing-33333333333",
+			generation: 1,
+			workflowRunId: "33333333333",
+			status: "stopped",
+			cleanupVerified: true,
+			zeroResidualVerified: true,
+			bootstrapOnly: true,
+			occurredAt,
+			proof: {
+				authority: "github-actions-artifact+aws-zero-residue-readback",
+				workflowRunId: "33279132965",
+				artifactId: "9722636468",
+				evidenceSha256: "a".repeat(64),
+				schemaAbsenceVerified: true,
+				cloudFormationStackAbsent: true,
+				remainingProjectResources: 0,
+				sharedFoundationProtected: true,
+			},
+		});
+		const timestamp = String(Math.floor(Date.now() / 1000));
+		const response = await handleRequest(
+			new Request("https://baby2b.online/api/performance/control/callback", {
+				method: "POST",
+				headers: {
+					"content-length": String(Buffer.byteLength(body)),
+					"x-performance-timestamp": timestamp,
+					"x-performance-delivery-id": "delivery-bootstrap-existing",
+					"x-performance-signature-256": `sha256=${createHmac("sha256", "callback-secret").update(`${timestamp}.${body}`).digest("hex")}`,
+				},
+				body,
+			}),
+			env({
+				prepare: (query) => {
+					if (query.includes("FROM project_state")) {
+						return new Statement({
+							project_slug: "performance-observability-control",
+							control_state: "stopped",
+							data_mode: "unavailable",
+							generation: 1,
+							operation_id: "existing-operation",
+							workflow_run_id: "33333333332",
+							cleanup_verified: 1,
+							updated_at: new Date(Date.now() - 1_000).toISOString(),
+							last_event_at: new Date(Date.now() - 1_000).toISOString(),
+						});
+					}
+					return new Statement(null, { success: true, meta: { changes: 1 } });
+				},
+			}),
+		);
+
+		expect(response.status).toBe(409);
+		expect(await response.json()).toEqual({ error: "bootstrap_existing_row_forbidden" });
 	});
 
 	it("reclaims the same delivery after an R2 write failure", async () => {

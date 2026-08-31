@@ -1,0 +1,67 @@
+{
+  "schemaVersion": 1,
+  "collectedAt": "2026-08-30T16:56:34Z",
+  "cloudMutationPerformed": false,
+  "dashboardStyleReleaseFrozen": true,
+  "production": {
+    "controlPage": "https://baby2b.online/performance-control/babysteps/",
+    "statusEndpoint": {
+      "url": "https://baby2b.online/api/performance/status?project=performance-observability-control",
+      "httpStatus": 200,
+      "projectSlug": "performance-observability-control",
+      "controlState": "unknown",
+      "dataMode": "unavailable",
+      "cleanupVerified": false,
+      "snapshotAvailable": false,
+      "expiresAt": null,
+      "estimatedCostUsd": 0.2,
+      "maximumRuntimeMinutes": 45,
+      "updatedAt": null,
+      "metricCount": 0
+    },
+    "snapshotEndpoint": {
+      "url": "https://baby2b.online/api/performance/snapshot?project=performance-observability-control",
+      "httpStatus": 404,
+      "error": "verified_snapshot_not_found"
+    }
+  },
+  "githubAppInstallationAudit": {
+    "endpoint": "/user/installations",
+    "httpStatus": 403,
+    "result": "blocked_by_user_token_scope",
+    "interpretation": "The current gh user token cannot list GitHub App installations. This is not evidence that the app is absent.",
+    "secretReadAttempted": false
+  },
+  "babyStepsCoordination": {
+    "commit": "aff5328",
+    "localFullGate": "passed",
+    "visualGate": "36/36 passed",
+    "awsRuntimeStarted": false,
+    "safetyBootstrapContract": "verified_local",
+    "source": "babysteps-performance-control-bootstrap-v1",
+    "operation": "bootstrap-stopped-state",
+    "requiredSemantics": [
+      "fresh traceable Sepolia read-only snapshot",
+      "AWS stopped and zero-residual proof",
+      "HMAC signature and timestamp freshness",
+      "delivery replay binding",
+      "fixed source and operation",
+      "generation equals 1",
+      "authoritative cleanup artifact",
+      "fail-closed first D1 row creation"
+    ]
+  },
+  "centralWorker": {
+    "safetyBootstrapContract": "verified_local",
+    "workerTests": "54/54 passed",
+    "typecheck": "passed",
+    "authoritativePackageGate": "test_and_check_types_passed",
+    "adHocBiomeAudit": "existing_package_wide_format_and_unused_code_debt_not_declared_as_package_gate",
+    "cloudMutationPerformed": false
+  },
+  "releaseDecision": {
+    "controlEnabled": false,
+    "safeToPublish": false,
+    "reason": "The production control row has not been dispatched or safely bootstrapped, the GitHub App installation scope is not yet verified, and the user has frozen Dashboard publication pending further style changes."
+  }
+}

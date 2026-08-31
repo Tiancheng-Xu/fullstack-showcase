@@ -23,6 +23,7 @@ import { PortfolioPageShell } from "@/features/portfolio/portfolio-page-shell";
 import { PerformanceEvidenceDiagrams } from "@/features/performance/performance-evidence-diagrams";
 import { resolvePerformanceView } from "@/features/performance/performance-state";
 import { PerformanceStatusCard } from "@/features/performance/performance-status-card";
+import { SharedEvidenceVerifierDiagrams } from "./shared-evidence-verifier-diagrams";
 import {
 	Card,
 	CardContent,
@@ -73,7 +74,7 @@ export function EvidenceContent({ projectId }: { projectId: string }) {
 			projectHomeUrl={projectHomeUrl}
 			title={project.title}
 		>
-			<Card className="rounded-none border-[#c7ced8] bg-white/90 shadow-sm">
+			<Card className="portfolio-glass-panel rounded-none border-[#c7ced8] bg-white/90 shadow-sm">
 				<CardHeader>
 					<CardTitle className="text-xl">{project.title}</CardTitle>
 					<CardDescription>{project.desc}</CardDescription>
@@ -138,6 +139,9 @@ export function EvidenceContent({ projectId }: { projectId: string }) {
 						<>
 							{project.id === "performance-observability-control" ? (
 								<PerformanceEvidenceDiagrams />
+							) : null}
+							{project.id === "shared-evidence-verifier" ? (
+								<SharedEvidenceVerifierDiagrams />
 							) : null}
 							<section className="space-y-3">
 								<h2 className="font-semibold text-lg">交付要求到证据映射</h2>
