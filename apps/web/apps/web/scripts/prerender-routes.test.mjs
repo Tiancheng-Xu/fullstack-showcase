@@ -42,6 +42,10 @@ describe("static-first route delivery", () => {
 					url: "/evidence/tc-workflow",
 					output: "evidence/tc-workflow/index.html",
 				}),
+				expect.objectContaining({
+					url: "/evidence/shared-evidence-verifier",
+					output: "evidence/shared-evidence-verifier/index.html",
+				}),
 			]),
 		);
 	});
@@ -93,6 +97,23 @@ describe("static-first route delivery", () => {
 			"/github-profile-studio https://baby2b.online/evidence/github-profile-studio 301",
 			"/portfolio-sync https://baby2b.online/evidence/portfolio-sync 301",
 			"/tc-workflow https://baby2b.online/evidence/tc-workflow 301",
+		]) {
+			expect(redirects).toContain(rule);
+		}
+	});
+
+	it("rewrites static-first directory routes to their generated index files", () => {
+		const redirects = readFileSync(
+			resolve(process.cwd(), "public/_redirects"),
+			"utf8",
+		);
+
+		for (const rule of [
+			"/evidence/:slug /evidence/:slug/index.html 200",
+			"/evidence/:slug/ /evidence/:slug/index.html 200",
+			"/performance-control /performance-control/index.html 200",
+			"/performance-control/:id /performance-control/:id/index.html 200",
+			"/performance-control/:id/ /performance-control/:id/index.html 200",
 		]) {
 			expect(redirects).toContain(rule);
 		}

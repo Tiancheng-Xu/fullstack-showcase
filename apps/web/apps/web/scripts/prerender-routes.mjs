@@ -43,6 +43,10 @@ export const STATIC_FIRST_ROUTES = [
 		url: "/evidence/tc-workflow",
 		output: "evidence/tc-workflow/index.html",
 	},
+	{
+		url: "/evidence/shared-evidence-verifier",
+		output: "evidence/shared-evidence-verifier/index.html",
+	},
 ];
 
 export function createCsrFallbackHtml(template) {
