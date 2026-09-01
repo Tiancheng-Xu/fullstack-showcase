@@ -1,7 +1,7 @@
 import { act, fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
-import { PerformanceControlContent } from "../performance-control-content";
+import { controlErrorNotice, PerformanceControlContent } from "../performance-control-content";
 
 describe("PerformanceControlContent", () => {
 	afterEach(() => vi.unstubAllGlobals());
@@ -117,5 +117,11 @@ describe("PerformanceControlContent", () => {
 		render(<PerformanceControlContent projectId="babysteps" />);
 		fireEvent.change(screen.getByLabelText("6 位动态验证码"), { target: { value: "123456" } });
 		await waitFor(() => expect(screen.getByRole("button", { name: "安全停止性能观测" })).toBeEnabled());
+	});
+
+	it("distinguishes GitHub control failures from invalid TOTP", () => {
+		expect(controlErrorNotice("github_app_unavailable")).toContain("未启动 AWS 资源");
+		expect(controlErrorNotice("github_dispatch_failed")).toContain("禁止再次启动");
+		expect(controlErrorNotice("totp_invalid")).toContain("验证码无效");
 	});
 });

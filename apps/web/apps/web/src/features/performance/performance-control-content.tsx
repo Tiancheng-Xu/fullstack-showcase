@@ -66,6 +66,22 @@ const defaultStatus: PublicControlStatus = {
 	maximumRuntimeMinutes: 45,
 };
 
+export const controlErrorNotice = (errorCode: string) => {
+	switch (errorCode) {
+		case "totp_rate_limited":
+			return "验证码错误次数过多，请稍后重试";
+		case "totp_invalid":
+		case "totp_required":
+			return "验证码无效，请等待验证器生成下一组动态码后重试";
+		case "github_app_unavailable":
+			return "GitHub App 授权暂不可用；控制状态未改变，也未启动 AWS 资源";
+		case "github_dispatch_failed":
+			return "GitHub 工作流派发结果不确定；已锁定为仅可停止或恢复，禁止再次启动";
+		default:
+			return "操作未完成；控制状态保持失败关闭，未伪造成功状态";
+	}
+};
+
 export function PerformanceControlContent({ projectId }: { projectId: string }) {
 	const application = getPerformanceApplication(projectId);
 	const project = application
@@ -244,9 +260,9 @@ export function PerformanceControlContent({ projectId }: { projectId: string }) 
 		} catch (error) {
 			setTotpCode("");
 			setNotice(
-				error instanceof Error && error.message === "totp_rate_limited"
-					? "验证码错误次数过多，请稍后重试"
-					: "验证码无效或操作未完成；状态未被伪造",
+				controlErrorNotice(
+					error instanceof Error ? error.message : "control_failed",
+				),
 			);
 		} finally {
 			setPending(null);
