@@ -363,7 +363,7 @@ describe("performance control worker writes", () => {
 		expect(await response.json()).toEqual({ error: "state_unavailable" });
 	});
 
-	it("rolls back to cleanup_required when GitHub installation token exchange fails", async () => {
+	it("keeps the verified stopped state unchanged when GitHub token preflight fails", async () => {
 		const queries: string[] = [];
 		vi.stubGlobal("fetch", vi.fn(async (input: string | URL | Request) => {
 			const url = String(input);
@@ -381,6 +381,30 @@ describe("performance control worker writes", () => {
 			} }),
 		);
 		expect(response.status).toBe(502);
+		expect(await response.json()).toEqual({ error: "github_app_unavailable", stateUnchanged: true });
+		expect(queries.some((query) => /UPDATE|INSERT/u.test(query))).toBe(false);
+	});
+
+	it("fails closed as cleanup_required when workflow dispatch is ambiguous", async () => {
+		const queries: string[] = [];
+		vi.stubGlobal("fetch", vi.fn(async (input: string | URL | Request) => {
+			const url = String(input);
+			if (url.endsWith("/cdn-cgi/access/certs")) return new Response(JSON.stringify({ keys: [{ ...publicJwk, kid: "access-key-1", alg: "RS256", use: "sig" }] }));
+			if (url.includes("/app/installations/67890/access_tokens")) return new Response(JSON.stringify({ token: "short-lived-token" }));
+			if (url.includes("/dispatches")) return new Response(JSON.stringify({ message: "upstream unavailable" }), { status: 502 });
+			throw new Error(`unexpected fetch ${url}`);
+		}));
+		const response = await handleRequest(
+			controlRequest("/api/performance/control/start?project=performance-observability-control", { headers: { origin: "https://control.example", "cf-access-jwt-assertion": accessToken(), "x-control-nonce": "nonce-1", "idempotency-key": "dispatch-failure-1" } }),
+			env({ prepare: (query) => {
+				queries.push(query);
+				if (query.includes("FROM control_nonces")) return new Statement({ nonce: "nonce-1", consumed_at: null, expires_at: "2099-01-01T00:00:00.000Z" });
+				if (query.includes("FROM project_state")) return new Statement({ project_slug: "performance-observability-control", control_state: "stopped", data_mode: "historical", generation: 1, cleanup_verified: 1, updated_at: "2026-08-26T00:00:00.000Z" });
+				return new Statement(null, { success: true, meta: { changes: 1 } });
+			} }),
+		);
+		expect(response.status).toBe(502);
+		expect(await response.json()).toEqual({ cleanupRequired: true, error: "github_dispatch_failed" });
 		expect(queries.some((query) => query.includes("cleanup_required"))).toBe(true);
 	});
 
@@ -428,6 +452,7 @@ describe("performance control worker writes", () => {
 		vi.stubGlobal("fetch", vi.fn(async (input: string | URL | Request) => {
 			const url = String(input);
 			if (url.endsWith("/cdn-cgi/access/certs")) return new Response(JSON.stringify({ keys: [{ ...publicJwk, kid: "access-key-1", alg: "RS256", use: "sig" }] }));
+			if (url.includes("/app/installations/67890/access_tokens")) return new Response(JSON.stringify({ token: "preflight-token" }));
 			if (url.includes("/dispatches")) dispatches += 1;
 			throw new Error(`unexpected fetch ${url}`);
 		}));

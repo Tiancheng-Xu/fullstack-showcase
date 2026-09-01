@@ -378,15 +378,16 @@ const dispatchFixedWorkflow = async (
 	operationId: string,
 	generation: number,
 	expiresAt: string,
+	installationToken?: string,
 ) => {
-	const installationToken = await githubInstallationToken(env);
+	const token = installationToken ?? (await githubInstallationToken(env));
 	const response = await fetch(
 		`https://api.github.com/repos/${project.repository}/actions/workflows/${project.workflow}/dispatches`,
 		{
 			method: "POST",
 			headers: {
 				accept: "application/vnd.github+json",
-				authorization: `Bearer ${installationToken}`,
+				authorization: `Bearer ${token}`,
 				"content-type": "application/json",
 				"x-github-api-version": "2022-11-28",
 			},
@@ -448,6 +449,27 @@ const batchedControlMutation = async (
 	});
 	if (result.kind === "rejected") return json({ error: result.reason }, { status: 409 });
 	if (result.kind === "duplicate") return json({ ...result.state, duplicate: true });
+	let installationToken: string;
+	try {
+		installationToken = await githubInstallationToken(env);
+	} catch (error) {
+		const reason =
+			error instanceof Error &&
+			["github_app_not_configured", "github_token_exchange_failed"].includes(
+				error.message,
+			)
+				? error.message
+				: "github_app_crypto_failure";
+		console.error("control_github_preflight_failed", {
+			action,
+			projectSlug,
+			reason,
+		});
+		return json(
+			{ error: "github_app_unavailable", stateUnchanged: true },
+			{ status: 502 },
+		);
+	}
 	const nonceClaim = env.CONTROL_DB.prepare(
 		`UPDATE control_nonces SET consumed_at=?1, consumed_by_operation_id=?2
 		 WHERE nonce=?3 AND project_slug=?4 AND actor_subject_hash=?5
@@ -486,12 +508,29 @@ const batchedControlMutation = async (
 		return json({ error: "control_batch_conflict" }, { status: 409 });
 	}
 	try {
-		await dispatchFixedWorkflow(env, project, action, result.operation.operationId, result.operation.generation, expiresAt);
+		await dispatchFixedWorkflow(
+			env,
+			project,
+			action,
+			result.operation.operationId,
+			result.operation.generation,
+			expiresAt,
+			installationToken,
+		);
 	} catch {
+		console.error("control_workflow_dispatch_failed", {
+			action,
+			generation: result.operation.generation,
+			operationId: result.operation.operationId,
+			projectSlug,
+		});
 		await env.CONTROL_DB.prepare(
 			"UPDATE project_state SET control_state='cleanup_required', cleanup_verified=0, expires_at=NULL, updated_at=?1 WHERE project_slug=?2 AND operation_id=?3 AND generation=?4 AND control_state IN ('starting','stopping')",
 		).bind(requestedAt, projectSlug, result.operation.operationId, result.operation.generation).run();
-		return json({ error: "dispatch_failed", cleanupRequired: true }, { status: 502 });
+		return json(
+			{ error: "github_dispatch_failed", cleanupRequired: true },
+			{ status: 502 },
+		);
 	}
 	return json({ projectSlug, controlState: result.state.controlState, operationId: result.operation.operationId, generation: result.operation.generation, expiresAt: result.state.expiresAt ?? null, estimatedCostUsd: project.estimatedCostUsd }, { status: 202, headers: { "cache-control": "no-store" } });
 };
