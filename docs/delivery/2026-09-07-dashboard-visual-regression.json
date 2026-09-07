@@ -1,0 +1,232 @@
+{
+  "schemaVersion": "1.0",
+  "generatedAt": "2026-09-07T06:43:58.803Z",
+  "status": "verified-local",
+  "provenance": "local-visual-regression",
+  "environment": {
+    "browser": "Chrome 152.0.7977.77",
+    "operatingSystem": "darwin-arm64",
+    "locale": "zh-CN",
+    "timezone": "UTC",
+    "deviceScaleFactor": 1
+  },
+  "contract": {
+    "routes": [
+      "/dashboard",
+      "/projects",
+      "/evidence",
+      "/performance-control/babysteps"
+    ],
+    "viewports": [
+      375,
+      390,
+      430,
+      1440
+    ],
+    "reviewedBaseline": true,
+    "thresholdPercent": 0.1,
+    "primaryRunCaptured": 15,
+    "recoveryRunCaptured": 4,
+    "uniqueScenarios": 16,
+    "note": "The primary Backstop process timed out while launching its final browser. A filtered rerun revalidated all four performance-control viewports; only its missing 1440 candidate completes this composite."
+  },
+  "summary": {
+    "passed": 16,
+    "failed": 0,
+    "maximumMismatchPercent": 0.04811
+  },
+  "scenarios": [
+    {
+      "scenario": "dashboard/0_375px",
+      "candidateSource": "primary-run-20260907-060253",
+      "width": 375,
+      "height": 10084,
+      "mismatchedPixels": 0,
+      "mismatchPercent": 0,
+      "thresholdPercent": 0.1,
+      "passed": true,
+      "referenceSha256": "5052a41403345d371cdca4a52eba8f90e8c39a561947d3dd84b9e7b5b2662b37",
+      "candidateSha256": "5052a41403345d371cdca4a52eba8f90e8c39a561947d3dd84b9e7b5b2662b37"
+    },
+    {
+      "scenario": "dashboard/1_390px",
+      "candidateSource": "primary-run-20260907-060253",
+      "width": 390,
+      "height": 9867,
+      "mismatchedPixels": 0,
+      "mismatchPercent": 0,
+      "thresholdPercent": 0.1,
+      "passed": true,
+      "referenceSha256": "a693797d51d40deb2a07372b289be2a27b24c61834e4ad709ecc565baba9c548",
+      "candidateSha256": "a693797d51d40deb2a07372b289be2a27b24c61834e4ad709ecc565baba9c548"
+    },
+    {
+      "scenario": "dashboard/2_430px",
+      "candidateSource": "primary-run-20260907-060253",
+      "width": 430,
+      "height": 9174,
+      "mismatchedPixels": 0,
+      "mismatchPercent": 0,
+      "thresholdPercent": 0.1,
+      "passed": true,
+      "referenceSha256": "32041ad5c5af9a1dcce6efd9990cc321360001ef6fd8868e76e6bdac4da02b77",
+      "candidateSha256": "32041ad5c5af9a1dcce6efd9990cc321360001ef6fd8868e76e6bdac4da02b77"
+    },
+    {
+      "scenario": "dashboard/3_1440px",
+      "candidateSource": "primary-run-20260907-060253",
+      "width": 1440,
+      "height": 4176,
+      "mismatchedPixels": 0,
+      "mismatchPercent": 0,
+      "thresholdPercent": 0.1,
+      "passed": true,
+      "referenceSha256": "b6abac2a50fee0f9bf0343a124cd84225cb2acb5616e98e3a155c5e2cabd7798",
+      "candidateSha256": "e6aba43e58c271b1832006fa5487e202a3e3ee0c0aa1183865a10e5776017e4d"
+    },
+    {
+      "scenario": "evidence/0_375px",
+      "candidateSource": "primary-run-20260907-060253",
+      "width": 375,
+      "height": 9323,
+      "mismatchedPixels": 1682,
+      "mismatchPercent": 0.04811,
+      "thresholdPercent": 0.1,
+      "passed": true,
+      "referenceSha256": "41240c727af23f650285279ad88d0c05c0eb8fe2b561d37ea07d9172b682a709",
+      "candidateSha256": "c1a609cdb0e4a7cc9a4a9a27da7ebd7265a498047074870b5e111078a5eb6001"
+    },
+    {
+      "scenario": "evidence/1_390px",
+      "candidateSource": "primary-run-20260907-060253",
+      "width": 390,
+      "height": 9301,
+      "mismatchedPixels": 1115,
+      "mismatchPercent": 0.030738,
+      "thresholdPercent": 0.1,
+      "passed": true,
+      "referenceSha256": "e88a037186a6d98c60ee6f81d0d4b1966c025c718f1d36f9669d98257f00dde1",
+      "candidateSha256": "cc189b4a4fb369b984d857637bb171b265f994fcfb35adadf6634d92754c3468"
+    },
+    {
+      "scenario": "evidence/2_430px",
+      "candidateSource": "primary-run-20260907-060253",
+      "width": 430,
+      "height": 9179,
+      "mismatchedPixels": 0,
+      "mismatchPercent": 0,
+      "thresholdPercent": 0.1,
+      "passed": true,
+      "referenceSha256": "a22d9bd0022fca979d62770e53471f315942cf6db62ed03d5308ac3b4e5666bd",
+      "candidateSha256": "2107f03ec1b86f872b697aa2a54999e21a32e4136dbc2e1f7b71347ed1daa301"
+    },
+    {
+      "scenario": "evidence/3_1440px",
+      "candidateSource": "primary-run-20260907-060253",
+      "width": 1440,
+      "height": 8647,
+      "mismatchedPixels": 0,
+      "mismatchPercent": 0,
+      "thresholdPercent": 0.1,
+      "passed": true,
+      "referenceSha256": "0c3789fc6f699791d673d62eb3b56619cbbf4a4f5f83b29c317876fd8805a8f6",
+      "candidateSha256": "3aa6ec5829b1136f2562a047079cb22101afacd8e90c49e5636741577fedaf21"
+    },
+    {
+      "scenario": "performance-control/0_375px",
+      "candidateSource": "primary-run-20260907-060253",
+      "width": 375,
+      "height": 4768,
+      "mismatchedPixels": 42,
+      "mismatchPercent": 0.002349,
+      "thresholdPercent": 0.1,
+      "passed": true,
+      "referenceSha256": "f8dd2d24f92e40020894e8371f87d02b1354366fef7787ce623dbc4e1a140825",
+      "candidateSha256": "eeb974c0064c8b3b6c4f42717a246581b083c7452bb70e3a507d2562df533fdd"
+    },
+    {
+      "scenario": "performance-control/1_390px",
+      "candidateSource": "primary-run-20260907-060253",
+      "width": 390,
+      "height": 4684,
+      "mismatchedPixels": 0,
+      "mismatchPercent": 0,
+      "thresholdPercent": 0.1,
+      "passed": true,
+      "referenceSha256": "8828242dc9b8e2fc87a2d61d5e20b391b76f9665a72e32c28820927a6245a35d",
+      "candidateSha256": "8828242dc9b8e2fc87a2d61d5e20b391b76f9665a72e32c28820927a6245a35d"
+    },
+    {
+      "scenario": "performance-control/2_430px",
+      "candidateSource": "primary-run-20260907-060253",
+      "width": 430,
+      "height": 4639,
+      "mismatchedPixels": 33,
+      "mismatchPercent": 0.001654,
+      "thresholdPercent": 0.1,
+      "passed": true,
+      "referenceSha256": "66e9d7f966012efd125e4ddf1822a4a0517383ac6c7f586adcf98d1fb9767a05",
+      "candidateSha256": "7ccbed14daceeecdfcca08535b669e2f3e30aa7705bf2c005d9a6505f5c96038"
+    },
+    {
+      "scenario": "performance-control/3_1440px",
+      "candidateSource": "filtered-recovery-20260907-061438",
+      "width": 1440,
+      "height": 2674,
+      "mismatchedPixels": 0,
+      "mismatchPercent": 0,
+      "thresholdPercent": 0.1,
+      "passed": true,
+      "referenceSha256": "51324c4fd94db91cf96ddfa9450fe15eb51cf15114112c521ee6d5d21b04ee2f",
+      "candidateSha256": "51324c4fd94db91cf96ddfa9450fe15eb51cf15114112c521ee6d5d21b04ee2f"
+    },
+    {
+      "scenario": "projects/0_375px",
+      "candidateSource": "primary-run-20260907-060253",
+      "width": 375,
+      "height": 6212,
+      "mismatchedPixels": 0,
+      "mismatchPercent": 0,
+      "thresholdPercent": 0.1,
+      "passed": true,
+      "referenceSha256": "bf4f35d8c525a5326671ae31a1b8f9b1c09bfe5c41bbad135fa5fd8db2b551f0",
+      "candidateSha256": "bf4f35d8c525a5326671ae31a1b8f9b1c09bfe5c41bbad135fa5fd8db2b551f0"
+    },
+    {
+      "scenario": "projects/1_390px",
+      "candidateSource": "primary-run-20260907-060253",
+      "width": 390,
+      "height": 6040,
+      "mismatchedPixels": 0,
+      "mismatchPercent": 0,
+      "thresholdPercent": 0.1,
+      "passed": true,
+      "referenceSha256": "d453a30c9852cb463e30dcb46295c060a4c92d3f86fa0da0479f071f87bf3ce2",
+      "candidateSha256": "9c0e80a71584d6f48aa8970a58dbc99d82b9ab650d6851e7ca48fa15b909d4dd"
+    },
+    {
+      "scenario": "projects/2_430px",
+      "candidateSource": "primary-run-20260907-060253",
+      "width": 430,
+      "height": 5827,
+      "mismatchedPixels": 52,
+      "mismatchPercent": 0.002075,
+      "thresholdPercent": 0.1,
+      "passed": true,
+      "referenceSha256": "d7aefe3d4f03e6172e05b15be0e67fb2a74e6a0da6b99ad7accfcc9d9c8017e5",
+      "candidateSha256": "d0c872887c3858d9a9e19fc0d1d2a7ec9717b07a1e49b8851654761b304c997b"
+    },
+    {
+      "scenario": "projects/3_1440px",
+      "candidateSource": "primary-run-20260907-060253",
+      "width": 1440,
+      "height": 3246,
+      "mismatchedPixels": 0,
+      "mismatchPercent": 0,
+      "thresholdPercent": 0.1,
+      "passed": true,
+      "referenceSha256": "5ba4b8c2bc156af9851e72a44036279308c1ada8ea9f64a4576c17a6c89edbe4",
+      "candidateSha256": "5ba4b8c2bc156af9851e72a44036279308c1ada8ea9f64a4576c17a6c89edbe4"
+    }
+  ]
+}

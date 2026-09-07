@@ -1,0 +1,113 @@
+.performance-dispatch-readiness {
+	--dispatch-accent: #8f2734;
+	--dispatch-ink: #102844;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 1.25rem;
+	min-height: 7rem;
+	padding: 1.15rem 1.35rem;
+	color: var(--dispatch-ink);
+	background: color-mix(in srgb, #f7f1e7 72%, transparent);
+	border: 1px solid color-mix(in srgb, var(--dispatch-ink) 23%, transparent);
+	box-shadow:
+		0 14px 34px rgb(27 37 52 / 10%),
+		inset 0 1px 0 rgb(255 255 255 / 72%);
+	backdrop-filter: blur(18px) saturate(112%);
+	-webkit-backdrop-filter: blur(18px) saturate(112%);
+	clip-path: polygon(
+		0.6% 2%,
+		5% 0.3%,
+		10% 1.5%,
+		17% 0%,
+		25% 1.1%,
+		34% 0.2%,
+		44% 1.4%,
+		54% 0%,
+		64% 1.2%,
+		75% 0.3%,
+		86% 1.5%,
+		99.4% 0.4%,
+		100% 98.2%,
+		94% 100%,
+		86% 98.6%,
+		76% 100%,
+		65% 98.7%,
+		55% 100%,
+		45% 98.8%,
+		34% 100%,
+		23% 98.5%,
+		12% 100%,
+		0.4% 98.1%
+	);
+}
+
+.performance-dispatch-readiness[data-readiness-tone="ready"] {
+	--dispatch-accent: #17663d;
+}
+
+.performance-dispatch-readiness[data-readiness-tone="unavailable"] {
+	--dispatch-accent: #8a5a1f;
+}
+
+.performance-dispatch-readiness__eyebrow {
+	margin: 0 0 0.35rem;
+	color: var(--dispatch-accent);
+	font-family: ui-monospace, "SFMono-Regular", Consolas, monospace;
+	font-size: 0.7rem;
+	font-weight: 800;
+	letter-spacing: 0.14em;
+	text-transform: uppercase;
+}
+
+.performance-dispatch-readiness h3 {
+	margin: 0;
+	font-family: "Noto Serif SC", "Songti SC", serif;
+	font-size: clamp(1rem, 1.5vw, 1.24rem);
+	line-height: 1.35;
+}
+
+.performance-dispatch-readiness p:last-child {
+	max-width: 52rem;
+	margin: 0.45rem 0 0;
+	color: color-mix(in srgb, var(--dispatch-ink) 72%, transparent);
+	font-size: 0.9rem;
+	line-height: 1.65;
+}
+
+.performance-dispatch-readiness > span {
+	flex: 0 0 auto;
+	min-width: 6.3rem;
+	padding: 0.55rem 0.7rem;
+	color: var(--dispatch-accent);
+	background: color-mix(in srgb, var(--dispatch-accent) 8%, transparent);
+	border: 1px solid color-mix(in srgb, var(--dispatch-accent) 42%, transparent);
+	font-family: ui-monospace, "SFMono-Regular", Consolas, monospace;
+	font-size: 0.68rem;
+	font-weight: 900;
+	letter-spacing: 0.12em;
+	text-align: center;
+}
+
+@media (max-width: 640px) {
+	.performance-dispatch-readiness {
+		align-items: flex-start;
+		flex-direction: column;
+		padding: 1rem;
+	}
+
+	.performance-dispatch-readiness > span {
+		min-height: 2.75rem;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+	}
+}
+
+@media (prefers-reduced-transparency: reduce) {
+	.performance-dispatch-readiness {
+		background: #f7f1e7;
+		backdrop-filter: none;
+		-webkit-backdrop-filter: none;
+	}
+}

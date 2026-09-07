@@ -22,6 +22,10 @@
 /tc-workflow/* https://baby2b.online/evidence/tc-workflow 301
 /performance-observability-control https://baby2b.online/evidence/performance-observability-control 301
 /performance-observability-control/* https://baby2b.online/evidence/performance-observability-control 301
+/projects /projects/index.html 200
+/projects/ /projects/index.html 200
+/evidence /evidence/index.html 200
+/evidence/ /evidence/index.html 200
 /evidence/:slug /evidence/:slug/index.html 200
 /evidence/:slug/ /evidence/:slug/index.html 200
 /performance-control /performance-control/index.html 200

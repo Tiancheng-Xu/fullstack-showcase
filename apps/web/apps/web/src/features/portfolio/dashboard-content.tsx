@@ -10,67 +10,26 @@ import {
 	Footprints,
 	LayoutDashboard,
 	LayoutGrid,
-	Menu,
 	PenTool,
 	RefreshCw,
 	ShieldCheck,
-	UserRound,
 	Workflow,
 } from "lucide-react";
-import { type ReactNode, useEffect, useState } from "react";
+import type { ReactNode } from "react";
 
 import {
 	getProjectPageLinks,
 	getProjectRenderingModes,
-	PORTFOLIO_PROJECTS,
 } from "@/data/portfolio-projects";
-import {
-	loadSyncedPortfolio,
-	mergePortfolioProjects,
-} from "@/data/portfolio-sync";
 import { resolvePerformanceView } from "@/features/performance/performance-state";
 import { PerformanceStatusCard } from "@/features/performance/performance-status-card";
+import { DashboardScrollProgress } from "@/features/portfolio/dashboard-scroll-progress";
 import { PORTFOLIO_FRAME_CLASS } from "@/features/portfolio/portfolio-layout";
+import { PortfolioPrimaryNavigation } from "@/features/portfolio/portfolio-primary-navigation";
+import { usePortfolioProjects } from "@/features/portfolio/use-portfolio-projects";
 
 export function DashboardContent() {
-	const [visibleProjects, setVisibleProjects] = useState(PORTFOLIO_PROJECTS);
-	const [syncedAt, setSyncedAt] = useState<string | null>(null);
-	const [activeSection, setActiveSection] = useState("projects");
-
-	useEffect(() => {
-		const controller = new AbortController();
-		loadSyncedPortfolio(controller.signal)
-			.then((envelope) => {
-				setVisibleProjects(
-					mergePortfolioProjects(PORTFOLIO_PROJECTS, envelope.projects),
-				);
-				setSyncedAt(envelope.generatedAt);
-			})
-			.catch(() => {
-				// Keep the reviewed static index when sync is unavailable.
-			});
-		return () => controller.abort();
-	}, []);
-
-	useEffect(() => {
-		if (typeof IntersectionObserver === "undefined") return;
-		const sections = ["about", "skills", "projects"]
-			.map((id) => document.getElementById(id))
-			.filter((section): section is HTMLElement => Boolean(section));
-		const observer = new IntersectionObserver(
-			(entries) => {
-				const visible = entries
-					.filter((entry) => entry.isIntersecting)
-					.sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
-				if (visible?.target.id) setActiveSection(visible.target.id);
-			},
-			{ rootMargin: "-22% 0px -58%", threshold: [0.05, 0.25, 0.5] },
-		);
-		sections.forEach((section) => {
-			observer.observe(section);
-		});
-		return () => observer.disconnect();
-	}, []);
+	const { projects: visibleProjects, syncedAt } = usePortfolioProjects();
 
 	const performanceProjects = visibleProjects.filter(
 		(project) => project.performance,
@@ -163,6 +122,7 @@ export function DashboardContent() {
 
 	return (
 		<div className="portfolio-surface relative left-1/2 w-screen max-w-none -translate-x-1/2 overflow-x-hidden bg-[#f7f1e3] text-[#071d34]">
+			<DashboardScrollProgress />
 			<div
 				aria-hidden="true"
 				className="pointer-events-none absolute inset-0 opacity-[0.42]"
@@ -177,50 +137,37 @@ export function DashboardContent() {
 				className="portfolio-glass-bar relative border-[#071d34] border-b bg-[#fbf6ea]/92"
 				id="top"
 			>
-				<div className={`${PORTFOLIO_FRAME_CLASS} flex h-16 items-center justify-between`}>
-						<div className="flex min-w-0 items-center gap-3">
-						<button
-							aria-label="打开菜单"
-							className="grid size-11 place-items-center text-[#071d34] md:hidden"
-							type="button"
+				<div
+					className={`${PORTFOLIO_FRAME_CLASS} flex h-16 items-center justify-between`}
+				>
+					<div className="flex min-w-0 items-center gap-3">
+						<div
+							aria-label="徐天成篆刻姓名章"
+							className="portfolio-brand-seal portfolio-name-seal portfolio-glass-control hidden size-11 place-items-center border border-[#bf1737] bg-[#eef0ec] font-bold font-serif text-[#bf1737] md:grid"
+							role="img"
 						>
-							<Menu aria-hidden="true" size={23} />
-						</button>
-					<div aria-label="徐天成篆刻姓名章" className="portfolio-brand-seal portfolio-name-seal portfolio-glass-control hidden size-11 place-items-center border border-[#bf1737] bg-[#eef0ec] font-serif font-bold text-[#bf1737] md:grid">
-						<span aria-hidden="true"><i>徐</i><i>天</i><i>成</i><i>印</i></span>
+							<span aria-hidden="true">
+								<i>徐</i>
+								<i>天</i>
+								<i>成</i>
+								<i>印</i>
+							</span>
 						</div>
 						<p className="truncate font-serif text-[#071d34] text-lg md:text-xl">
-							<span className="md:hidden">UKIYO-E PORTFOLIO</span>
+							<span className="md:hidden">TIANCHENG XU · PORTFOLIO</span>
 							<span className="hidden md:flex md:flex-col">
-								<strong className="tracking-[0.08em]">TIANCHENG XU · PORTFOLIO</strong>
-								<small className="mt-0.5 font-sans text-[#344252] text-[11px] tracking-[0.18em]">徐天成 · 工程作品集</small>
+								<strong className="tracking-[0.08em]">
+									TIANCHENG XU · PORTFOLIO
+								</strong>
+								<small className="mt-0.5 font-sans text-[#344252] text-[11px] tracking-[0.18em]">
+									徐天成 · 工程作品集
+								</small>
 							</span>
 						</p>
 					</div>
-					<nav
-						aria-label="作品集主导航"
-						className="portfolio-primary-nav hidden items-center gap-2 font-bold text-[12px] tracking-[0.15em] md:flex"
-					>
-						<a
-							aria-current="page"
-							className="inline-flex min-h-11 items-center border border-[#bf1737] bg-[#bf1737] px-4 text-white shadow-[3px_3px_0_#071d34]"
-							href="#top"
-						>
-							作品集首页
-						</a>
-						<a
-							className="inline-flex min-h-11 items-center border border-[#c8bda9] bg-[#fbf6ea] px-4 text-[#344252] transition hover:border-[#bf1737] hover:bg-[#f3e7d7] hover:text-[#9f102a] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#bf1737] focus-visible:outline-offset-3"
-							href="#projects"
-						>
-							项目
-						</a>
-						<a
-							className="inline-flex min-h-11 items-center border border-[#c8bda9] bg-[#fbf6ea] px-4 text-[#344252] transition hover:border-[#bf1737] hover:bg-[#f3e7d7] hover:text-[#9f102a] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#bf1737] focus-visible:outline-offset-3"
-							href="/dashboard#projects"
-						>
-							工作证明
-						</a>
-					</nav>
+					<div className="hidden md:block">
+						<PortfolioPrimaryNavigation current="dashboard" />
+					</div>
 					<div className="flex items-center gap-3">
 						<a
 							aria-label="Tiancheng Xu GitHub"
@@ -229,19 +176,32 @@ export function DashboardContent() {
 							rel="noreferrer"
 							target="_blank"
 						>
-							<svg aria-hidden="true" className="size-5 shrink-0" viewBox="0 0 24 24">
-								<path d="M12 .8a11.3 11.3 0 0 0-3.57 22c.57.1.78-.24.78-.55v-2.18c-3.18.7-3.85-1.35-3.85-1.35-.52-1.32-1.27-1.67-1.27-1.67-1.04-.71.08-.7.08-.7 1.15.08 1.75 1.18 1.75 1.18 1.02 1.75 2.68 1.24 3.33.95.1-.74.4-1.24.73-1.53-2.54-.29-5.21-1.27-5.21-5.66 0-1.25.45-2.27 1.18-3.07-.12-.29-.51-1.45.11-3.03 0 0 .96-.31 3.11 1.17a10.8 10.8 0 0 1 5.67 0c2.16-1.48 3.11-1.17 3.11-1.17.62 1.58.23 2.74.11 3.03.74.8 1.18 1.82 1.18 3.07 0 4.4-2.68 5.36-5.22 5.65.41.36.77 1.05.77 2.12v3.15c0 .31.21.66.78.55A11.3 11.3 0 0 0 12 .8Z" fill="currentColor" />
+							<svg
+								aria-hidden="true"
+								className="size-5 shrink-0"
+								viewBox="0 0 24 24"
+							>
+								<path
+									d="M12 .8a11.3 11.3 0 0 0-3.57 22c.57.1.78-.24.78-.55v-2.18c-3.18.7-3.85-1.35-3.85-1.35-.52-1.32-1.27-1.67-1.27-1.67-1.04-.71.08-.7.08-.7 1.15.08 1.75 1.18 1.75 1.18 1.02 1.75 2.68 1.24 3.33.95.1-.74.4-1.24.73-1.53-2.54-.29-5.21-1.27-5.21-5.66 0-1.25.45-2.27 1.18-3.07-.12-.29-.51-1.45.11-3.03 0 0 .96-.31 3.11 1.17a10.8 10.8 0 0 1 5.67 0c2.16-1.48 3.11-1.17 3.11-1.17.62 1.58.23 2.74.11 3.03.74.8 1.18 1.82 1.18 3.07 0 4.4-2.68 5.36-5.22 5.65.41.36.77 1.05.77 2.12v3.15c0 .31.21.66.78.55A11.3 11.3 0 0 0 12 .8Z"
+									fill="currentColor"
+								/>
 							</svg>
 							<span className="hidden xl:flex xl:flex-col xl:items-start xl:leading-tight">
-								<strong className="text-[11px] tracking-[0.14em]">GITHUB</strong>
-								<small className="font-normal text-[10px] tracking-normal">Tiancheng-Xu ↗</small>
+								<strong className="text-[11px] tracking-[0.14em]">
+									GITHUB
+								</strong>
+								<small className="font-normal text-[10px] tracking-normal">
+									Tiancheng-Xu ↗
+								</small>
 							</span>
 						</a>
 					</div>
 				</div>
 			</header>
 
-			<main className={`${PORTFOLIO_FRAME_CLASS} portfolio-dashboard-main relative py-8 md:py-12`}>
+			<main
+				className={`${PORTFOLIO_FRAME_CLASS} portfolio-dashboard-main relative py-8 md:py-12`}
+			>
 				<section
 					className="portfolio-dashboard-hero max-w-4xl scroll-mt-24 text-left"
 					id="about"
@@ -249,10 +209,10 @@ export function DashboardContent() {
 					<h1 className="font-bold font-serif text-4xl leading-tight md:text-6xl">
 						展示看板
 					</h1>
-					<p className="mt-2 font-serif text-[#344252] text-base tracking-[0.08em]">SHOWCASE DASHBOARD</p>
-					<p className="sr-only">
-						作者：Tiancheng Xu（Tiancheng-Xu）
+					<p className="mt-2 font-serif text-[#344252] text-base tracking-[0.08em]">
+						SHOWCASE DASHBOARD
 					</p>
+					<p className="sr-only">作者：Tiancheng Xu（Tiancheng-Xu）</p>
 					<p className="mt-5 max-w-3xl border-[#bf1737] border-t pt-4 text-left text-[#344252] text-sm leading-relaxed">
 						精选工程项目速览，包含架构、技术栈与进度概览。
 					</p>
@@ -319,19 +279,19 @@ export function DashboardContent() {
 								AWS 管理权限。
 							</p>
 							<div className="mt-5 grid gap-5">
-							{performanceProjects.map((project) => {
-								const performance = project.performance;
-								if (!performance) return null;
+								{performanceProjects.map((project) => {
+									const performance = project.performance;
+									if (!performance) return null;
 
-								return (
-									<PerformanceStatusCard
-										key={project.id}
-										projectId={project.id}
-										projectName={project.title}
-										status={resolvePerformanceView(performance)}
-									/>
-								);
-							})}
+									return (
+										<PerformanceStatusCard
+											key={project.id}
+											projectId={project.id}
+											projectName={project.title}
+											status={resolvePerformanceView(performance)}
+										/>
+									);
+								})}
 							</div>
 						</div>
 					</section>
@@ -366,19 +326,8 @@ export function DashboardContent() {
 									<span className="portfolio-project-number" aria-hidden="true">
 										{String(index + 1).padStart(2, "0")}
 									</span>
-									{defaultPage ? (
-										<a
-											aria-label={`查看 ${project.title} 工作证明`}
-											className="absolute inset-0 z-10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#bf1737] focus-visible:outline-offset-[-4px]"
-											href={defaultPage.href}
-										>
-											<span className="sr-only">
-												查看 {project.title} 工作证明
-											</span>
-										</a>
-									) : null}
 									<div className="portfolio-project-card-body">
-						<div className="flex items-start gap-4 pt-8">
+										<div className="flex items-start gap-4 pt-8">
 											<ProjectIcon projectId={project.id} />
 											<div className="min-w-0 pt-1">
 												<h3 className="font-bold font-serif text-xl leading-snug md:text-lg">
@@ -414,31 +363,48 @@ export function DashboardContent() {
 										<div className="portfolio-project-row">
 											<p className="font-bold text-xs">技术栈</p>
 											<div className="portfolio-project-skills flex flex-wrap gap-1.5">
-											{[
-												...new Set([
-													...getProjectRenderingModes(project),
-													...project.skills,
-												]),
-											].map((skill) => (
-												<span
-													className="border border-[#bfc6cc]/80 bg-white/38 px-2.5 py-1 text-xs backdrop-blur-sm"
-													key={skill}
-												>
-													{skill}
-												</span>
-											))}
+												{[
+													...new Set([
+														...getProjectRenderingModes(project),
+														...project.skills,
+													]),
+												].map((skill) => (
+													<span
+														className="border border-[#bfc6cc]/80 bg-white/38 px-2.5 py-1 text-xs backdrop-blur-sm"
+														key={skill}
+													>
+														{skill}
+													</span>
+												))}
 											</div>
 										</div>
 										<div className="portfolio-project-footer">
 											<span className="font-bold text-xs">进度</span>
-											<span className="font-serif font-bold text-[#b21f35]">{project.progress}%</span>
+											<span className="font-bold font-serif text-[#b21f35]">
+												{project.progress}%
+											</span>
 											<div className="h-1.5 min-w-12 flex-1 overflow-hidden bg-[#aeb4b7]">
-												<div className="h-full bg-[#b21f35]" style={{ width: `${Math.min(project.progress, 100)}%` }} />
+												<div
+													className="h-full bg-[#b21f35]"
+													style={{
+														width: `${Math.min(project.progress, 100)}%`,
+													}}
+												/>
 											</div>
-											<span className="portfolio-project-action font-bold text-xs">查看工作证明 →</span>
+											{defaultPage ? (
+												<a
+													className="portfolio-project-action relative z-20 font-bold text-xs"
+													href={defaultPage.href}
+												>
+													查看工作证明 →
+												</a>
+											) : null}
 										</div>
 										{pageLinks.length > 1 ? (
-											<nav aria-label={`${project.title} 项目页面`} className="portfolio-project-secondary-links relative z-20 flex flex-wrap gap-1.5">
+											<nav
+												aria-label={`${project.title} 项目页面`}
+												className="portfolio-project-secondary-links relative z-20 flex flex-wrap gap-1.5"
+											>
 												{pageLinks.map((link) => (
 													<a
 														aria-label={`${project.title}：${link.label}`}
@@ -460,10 +426,12 @@ export function DashboardContent() {
 			</main>
 
 			<footer className="portfolio-glass-footer relative mt-6 border-[#c8c0b0] border-t bg-[#ebe6da]">
-				<div className={`${PORTFOLIO_FRAME_CLASS} flex min-h-24 flex-col items-center justify-center gap-4 py-7 text-center md:flex-row md:justify-between md:text-left`}>
+				<div
+					className={`${PORTFOLIO_FRAME_CLASS} flex min-h-24 flex-col items-center justify-center gap-4 py-7 text-center md:flex-row md:justify-between md:text-left`}
+				>
 					<div className="flex items-center gap-3 font-bold text-sm">
 						<PenTool aria-hidden="true" className="text-[#bf1737]" size={18} />
-						<span>UKIYO-E PORTFOLIO · TIANCHENG XU</span>
+						<span>TIANCHENG XU · PORTFOLIO</span>
 					</div>
 					<div className="flex flex-wrap items-center justify-center gap-5 font-bold text-[#3f4650] text-xs tracking-[0.16em]">
 						<a
@@ -473,7 +441,7 @@ export function DashboardContent() {
 						>
 							GITHUB
 						</a>
-						<a href="/dashboard#projects">EVIDENCE</a>
+						<a href="/evidence">EVIDENCE</a>
 						<a href="#top">BACK TO TOP</a>
 					</div>
 					<p className="text-[#5a6470] text-xs">
@@ -482,46 +450,9 @@ export function DashboardContent() {
 				</div>
 			</footer>
 
-			<nav
-				aria-label="作品集快捷导航"
-				className="portfolio-glass-mobile-nav fixed inset-x-0 bottom-0 z-40 border-[#d8cfbd] border-t bg-[#f7f1e3]/96 px-6 py-2 backdrop-blur md:hidden"
-			>
-				<div className="mx-auto grid max-w-md grid-cols-4 gap-1">
-					{[
-						{
-							id: "projects",
-							label: "Works",
-							icon: PenTool,
-							href: "#projects",
-						},
-						{ id: "about", label: "About", icon: UserRound, href: "#about" },
-						{ id: "skills", label: "Skills", icon: Compass, href: "#skills" },
-						{
-							id: "proof",
-							label: "Proof",
-							icon: BadgeCheck,
-							href: "/dashboard#projects",
-						},
-					].map(({ id, href, icon: Icon, label }) => (
-						<a
-							aria-current={activeSection === id ? "location" : undefined}
-							className={`flex min-h-14 flex-col items-center justify-center gap-1 border px-1 font-bold text-[11px] transition ${
-								activeSection === id
-									? "border-[#bf1737] bg-[#bf1737] text-white shadow-[2px_2px_0_#071d34]"
-									: "border-[#d8cfbd] bg-[#fbf6ea] text-[#4d5863] hover:border-[#bf1737] hover:bg-[#f3e7d7]"
-							}`}
-							href={href}
-							key={label}
-							onClick={() => {
-								if (id !== "proof") setActiveSection(id);
-							}}
-						>
-							<Icon aria-hidden="true" size={19} />
-							<span>{label}</span>
-						</a>
-					))}
-				</div>
-			</nav>
+			<div className="portfolio-glass-mobile-nav fixed inset-x-0 bottom-0 z-40 border-[#d8cfbd] border-t bg-[#f7f1e3]/96 px-4 py-2 backdrop-blur md:hidden">
+				<PortfolioPrimaryNavigation current="dashboard" />
+			</div>
 		</div>
 	);
 }

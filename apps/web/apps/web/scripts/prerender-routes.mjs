@@ -4,6 +4,14 @@ export const STATIC_FIRST_ROUTES = [
 		output: "dashboard/index.html",
 	},
 	{
+		url: "/projects",
+		output: "projects/index.html",
+	},
+	{
+		url: "/evidence",
+		output: "evidence/index.html",
+	},
+	{
 		url: "/performance-control",
 		output: "performance-control/index.html",
 	},

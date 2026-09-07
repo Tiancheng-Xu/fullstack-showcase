@@ -1,0 +1,204 @@
+{
+	"schema_version": 1,
+	"diagram_type": "architecture",
+	"meta": {
+		"title": "GitHub Profile Studio · 资料分析与 README 生成",
+		"quality_profile": "showcase",
+		"visual_preset": "blueprint",
+		"animation": "trace",
+		"views": [
+			{
+				"id": "authorize",
+				"label": "授权与读取",
+				"focus": ["user", "ui", "oauth", "github"],
+				"note": "用户授权后只读取允许范围内的 GitHub 资料。"
+			},
+			{
+				"id": "compose",
+				"label": "分析与生成",
+				"focus": ["github", "normalize", "analysis", "composer", "preview"],
+				"note": "仓库元数据经归一、能力分析和模板组合形成可预览 README。"
+			},
+			{
+				"id": "deliver",
+				"label": "交付与证明",
+				"focus": ["preview", "export", "evidence"],
+				"note": "导出行为与公开 Evidence 分离，未独立发布时保持进行中。"
+			}
+		]
+	},
+	"components": [
+		{
+			"id": "user",
+			"type": "external",
+			"label": "GitHub 用户",
+			"sublabel": "选择资料与输出范围",
+			"pos": [38, 170],
+			"size": [152, 66]
+		},
+		{
+			"id": "ui",
+			"type": "frontend",
+			"label": "Studio UI",
+			"sublabel": "Profile / Repo selection",
+			"pos": [228, 170],
+			"size": [152, 66]
+		},
+		{
+			"id": "oauth",
+			"type": "security",
+			"label": "GitHub Authorization",
+			"sublabel": "Minimal scopes / private token",
+			"pos": [418, 170],
+			"size": [152, 66]
+		},
+		{
+			"id": "github",
+			"type": "external",
+			"label": "GitHub API",
+			"sublabel": "profile / repos / languages",
+			"pos": [608, 170],
+			"size": [152, 66]
+		},
+		{
+			"id": "normalize",
+			"type": "backend",
+			"label": "Metadata Normalizer",
+			"sublabel": "分页 / 限流 / 缺失处理",
+			"pos": [798, 170],
+			"size": [152, 66]
+		},
+		{
+			"id": "analysis",
+			"type": "backend",
+			"label": "Capability Analyzer",
+			"sublabel": "技术栈与项目信号",
+			"pos": [228, 330],
+			"size": [152, 66]
+		},
+		{
+			"id": "composer",
+			"type": "backend",
+			"label": "README Composer",
+			"sublabel": "typed sections / templates",
+			"pos": [418, 330],
+			"size": [152, 66]
+		},
+		{
+			"id": "preview",
+			"type": "frontend",
+			"label": "Deterministic Preview",
+			"sublabel": "Markdown / assets",
+			"pos": [608, 330],
+			"size": [152, 66]
+		},
+		{
+			"id": "export",
+			"type": "external",
+			"label": "Repository Delivery",
+			"sublabel": "复制或用户批准后写入",
+			"pos": [798, 330],
+			"size": [152, 66]
+		},
+		{
+			"id": "evidence",
+			"type": "external",
+			"label": "Project Evidence",
+			"sublabel": "状态、测试与边界",
+			"pos": [988, 330],
+			"size": [152, 66]
+		}
+	],
+	"boundaries": [
+		{
+			"kind": "security-group",
+			"label": "Browser session",
+			"wraps": ["ui", "oauth", "preview"],
+			"pad": 16
+		},
+		{
+			"kind": "region",
+			"label": "GitHub external trust boundary",
+			"wraps": ["github", "export"],
+			"pad": 16
+		},
+		{
+			"kind": "region",
+			"label": "Studio processing boundary",
+			"wraps": ["normalize", "analysis", "composer"],
+			"pad": 16
+		}
+	],
+	"connections": [
+		{
+			"from": "user",
+			"to": "ui",
+			"variant": "emphasis",
+			"labelAt": [209, 152]
+		},
+		{
+			"from": "ui",
+			"to": "oauth",
+			"variant": "security",
+			"labelAt": [399, 152]
+		},
+		{
+			"from": "github",
+			"to": "normalize",
+			"variant": "default",
+			"labelAt": [779, 152]
+		},
+		{
+			"from": "analysis",
+			"to": "composer",
+			"variant": "default",
+			"labelAt": [399, 352]
+		},
+		{
+			"from": "composer",
+			"to": "preview",
+			"variant": "emphasis",
+			"labelAt": [589, 352]
+		},
+		{
+			"from": "preview",
+			"to": "export",
+			"variant": "default",
+			"labelAt": [779, 352]
+		},
+		{
+			"from": "export",
+			"to": "evidence",
+			"variant": "dashed",
+			"labelAt": [969, 352]
+		}
+	],
+	"cards": [
+		{
+			"dot": "amber",
+			"title": "当前状态",
+			"items": [
+				"Dashboard 按真实状态展示，不把进行中项目写成独立生产完成",
+				"架构图描述目标边界，不替代尚缺的正式 deployment Evidence"
+			]
+		},
+		{
+			"dot": "cyan",
+			"title": "数据质量",
+			"items": [
+				"分页、限流、私有仓库缺失和 API 失败需要显式降级",
+				"语言占比和技术能力是推断，不等于作者自述",
+				"冻结输入后才能比较生成结果"
+			]
+		},
+		{
+			"dot": "rose",
+			"title": "隐私边界",
+			"items": [
+				"OAuth Token 只存在于受控会话/服务端密钥域",
+				"不公开邮箱、Token、私有仓库内容或未批准 README",
+				"仓库写入必须由用户批准"
+			]
+		}
+	]
+}

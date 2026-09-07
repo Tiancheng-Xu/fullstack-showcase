@@ -1,0 +1,220 @@
+{
+	"schema_version": 1,
+	"diagram_type": "architecture",
+	"meta": {
+		"title": "Shared Evidence Verifier · 共享低成本验证平面",
+		"quality_profile": "showcase",
+		"visual_preset": "blueprint",
+		"animation": "trace",
+		"views": [
+			{
+				"id": "request",
+				"label": "项目验证请求",
+				"focus": ["repo", "workflow", "oidc", "verifier"],
+				"note": "项目仓库固定工作流通过 OIDC 调用共享验证器，不使用长期 AWS 密钥。"
+			},
+			{
+				"id": "verify",
+				"label": "公开事实核验",
+				"focus": ["verifier", "allowlist", "targets", "result"],
+				"note": "验证器只访问 allowlist 中的公开 URL、manifest 与 commit，并输出结构化结果。"
+			},
+			{
+				"id": "retain",
+				"label": "证据与成本",
+				"focus": ["result", "artifact", "logs", "budget", "evidence"],
+				"note": "脱敏 JSON、短期日志和预算读回共同构成可审计但低成本的证明。"
+			}
+		]
+	},
+	"components": [
+		{
+			"id": "repo",
+			"type": "external",
+			"label": "Project Repository",
+			"sublabel": "commit + public manifest",
+			"pos": [38, 170],
+			"size": [152, 66]
+		},
+		{
+			"id": "workflow",
+			"type": "external",
+			"label": "Fixed GitHub Action",
+			"sublabel": "project-scoped inputs",
+			"pos": [228, 170],
+			"size": [152, 66]
+		},
+		{
+			"id": "oidc",
+			"type": "security",
+			"label": "GitHub OIDC",
+			"sublabel": "short-lived role",
+			"pos": [418, 170],
+			"size": [152, 66]
+		},
+		{
+			"id": "verifier",
+			"type": "cloud",
+			"label": "Verifier Lambda",
+			"sublabel": "Non-VPC / short timeout",
+			"pos": [608, 170],
+			"size": [152, 66]
+		},
+		{
+			"id": "allowlist",
+			"type": "security",
+			"label": "Verification Policy",
+			"sublabel": "URL / schema / size guard",
+			"pos": [798, 170],
+			"size": [152, 66]
+		},
+		{
+			"id": "targets",
+			"type": "external",
+			"label": "Public Targets",
+			"sublabel": "production / evidence / 404",
+			"pos": [988, 170],
+			"size": [152, 66]
+		},
+		{
+			"id": "result",
+			"type": "backend",
+			"label": "Structured Result",
+			"sublabel": "HTTP + semantic assertions",
+			"pos": [228, 330],
+			"size": [152, 66]
+		},
+		{
+			"id": "artifact",
+			"type": "database",
+			"label": "Artifact Bucket",
+			"sublabel": "redacted JSON / 7-day TTL",
+			"pos": [418, 330],
+			"size": [152, 66]
+		},
+		{
+			"id": "logs",
+			"type": "cloud",
+			"label": "CloudWatch Logs",
+			"sublabel": "short retention / counters",
+			"pos": [608, 330],
+			"size": [152, 66]
+		},
+		{
+			"id": "budget",
+			"type": "security",
+			"label": "Budget Guard",
+			"sublabel": "usage / Free-plan eligibility",
+			"pos": [798, 330],
+			"size": [152, 66]
+		},
+		{
+			"id": "evidence",
+			"type": "external",
+			"label": "Project Evidence",
+			"sublabel": "SHA / Run / result link",
+			"pos": [988, 330],
+			"size": [152, 66]
+		}
+	],
+	"boundaries": [
+		{
+			"kind": "security-group",
+			"label": "GitHub project identity",
+			"wraps": ["repo", "workflow", "oidc"],
+			"pad": 16
+		},
+		{
+			"kind": "region",
+			"label": "Shared AWS verification plane",
+			"wraps": [
+				"verifier",
+				"allowlist",
+				"result",
+				"artifact",
+				"logs",
+				"budget"
+			],
+			"pad": 16
+		},
+		{
+			"kind": "region",
+			"label": "Public internet targets",
+			"wraps": ["targets"],
+			"pad": 16
+		},
+		{
+			"kind": "region",
+			"label": "Project-owned publication",
+			"wraps": ["evidence"],
+			"pad": 16
+		}
+	],
+	"connections": [
+		{
+			"from": "repo",
+			"to": "workflow",
+			"variant": "default",
+			"labelAt": [209, 152]
+		},
+		{
+			"from": "workflow",
+			"to": "oidc",
+			"variant": "security",
+			"labelAt": [399, 152]
+		},
+		{
+			"from": "oidc",
+			"to": "verifier",
+			"variant": "security",
+			"labelAt": [589, 152]
+		},
+		{
+			"from": "allowlist",
+			"to": "targets",
+			"variant": "emphasis",
+			"labelAt": [969, 152]
+		},
+		{
+			"from": "result",
+			"to": "artifact",
+			"variant": "default",
+			"labelAt": [399, 352]
+		},
+		{
+			"from": "verifier",
+			"to": "logs",
+			"variant": "dashed",
+			"labelAt": [780, 303]
+		}
+	],
+	"cards": [
+		{
+			"dot": "amber",
+			"title": "当前边界",
+			"items": [
+				"这是共享能力设计，不自动把所有项目升级为 verified-production",
+				"每个项目必须拥有独立 Run、commit、URL 与语义结果",
+				"若共享验证器尚未实际部署，状态必须保持 pending"
+			]
+		},
+		{
+			"dot": "cyan",
+			"title": "低成本策略",
+			"items": [
+				"优先非 VPC Lambda、短超时、短日志保留和复用安全 Artifact Bucket",
+				"禁止为静态验证复制 VPC、NAT、RDS、ECS 或 API Gateway",
+				"每项目一次短调用，调用前仍需实时预算与资格检查"
+			]
+		},
+		{
+			"dot": "rose",
+			"title": "安全限制",
+			"items": [
+				"只允许固定公开 URL/manifest，不抓取私有仓库、模型权重或用户输入",
+				"OIDC 角色按仓库和工作流最小授权",
+				"任一权限或库存读回失败时 fail-closed，不把 AccessDenied 当作零残留"
+			]
+		}
+	]
+}

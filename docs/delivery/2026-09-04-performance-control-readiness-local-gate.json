@@ -1,0 +1,108 @@
+{
+  "schemaVersion": "performance-control-readiness-local-gate/v1",
+  "capturedAt": "2026-09-05T02:46:38Z",
+  "scope": "local-readiness-foundation-and-read-only-production-audit",
+  "implementation": {
+    "status": "implemented-not-integrated",
+    "components": [
+      "fixed GitHub workflow readiness probe",
+      "D1 dispatch_readiness migration",
+      "freshness and invalid-cache fail-closed projection",
+      "command readiness gate",
+      "D1 read and upsert service",
+      "registry default branch"
+    ],
+    "notIntegrated": [
+      "public status response",
+      "TOTP session precheck",
+      "start live recheck",
+      "scheduled readiness refresh",
+      "Dashboard readiness rendering"
+    ]
+  },
+  "localGates": {
+    "workerTests": {
+      "result": "pass",
+      "testFiles": 10,
+      "tests": 77
+    },
+    "workerTypecheck": {
+      "result": "pass"
+    },
+    "sqliteMigrationChain": {
+      "result": "pass",
+      "migrations": [
+        "0001_performance_control.sql",
+        "0002_mfa_control_security.sql",
+        "0003_totp_auth.sql",
+        "0004_dispatch_readiness.sql"
+      ],
+      "foreignKeyViolations": 0
+    },
+    "formatCommand": {
+      "result": "not-applicable",
+      "reason": "repository does not expose a biome command"
+    },
+    "rootCheckCommand": {
+      "result": "not-applicable",
+      "reason": "repository does not define pnpm check"
+    }
+  },
+  "productionReadOnlyFacts": {
+    "publicStatus": {
+      "httpStatus": 200,
+      "controlState": "stopped",
+      "dataMode": "historical",
+      "cleanupVerified": true,
+      "snapshotAvailable": false,
+      "generation": 7
+    },
+    "publicSnapshot": {
+      "httpStatus": 404,
+      "error": "verified_snapshot_not_found"
+    },
+    "totpRateLimit": {
+      "scopes": 0,
+      "failureCount": 0,
+      "lockedUntil": null
+    },
+    "operations": {
+      "dispatchFailedNoWorkflowRun": 2,
+      "cleanupVerifiedManualRecovery": 1,
+      "historicalPendingStarts": 3
+    },
+    "callbackDeliveries": {
+      "applied": 27,
+      "failed": 2
+    },
+    "githubWorkflow": {
+      "repository": "Tiancheng-Xu/babysteps",
+      "path": ".github/workflows/aws-performance-control.yml",
+      "state": "disabled_manually"
+    },
+    "cloudflareWorker": {
+      "controlEnabled": true,
+      "handlers": ["fetch", "scheduled"],
+      "bindings": ["CONTROL_DB", "SNAPSHOTS"],
+      "secretNamesPresent": [
+        "CALLBACK_HMAC_SECRET",
+        "GITHUB_APP_PRIVATE_KEY",
+        "TOTP_SECRET"
+      ]
+    },
+    "awsCli": {
+      "result": "authentication-required",
+      "reason": "session expired before live inventory"
+    }
+  },
+  "writesNotPerformed": [
+    "GitHub workflow enable or dispatch",
+    "AWS API mutation",
+    "Cloudflare deploy or resource mutation",
+    "production D1 migration",
+    "production D1 readiness write",
+    "R2 snapshot write",
+    "Git commit, push, PR, merge or release"
+  ],
+  "completionBoundary": "This record proves the local readiness foundation and the cited read-only facts only. It does not prove production readiness integration, TOTP success, GitHub App installation health, AWS OIDC preflight, runtime start-stop, callback completion, immutable snapshot creation or zero-residue cleanup for a new run."
+}

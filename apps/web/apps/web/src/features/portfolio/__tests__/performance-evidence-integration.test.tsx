@@ -2,11 +2,16 @@ import { render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 
 vi.mock("@tanstack/react-router", () => ({
-	Link: ({ children, to, ...props }: React.ComponentProps<"a"> & { to: string }) => (
+	Link: ({
+		children,
+		to,
+		...props
+	}: React.ComponentProps<"a"> & { to: string }) => (
 		<a href={to} {...props}>
 			{children}
 		</a>
 	),
+	useRouter: () => undefined,
 }));
 
 import { DashboardContent } from "../dashboard-content";
@@ -21,9 +26,7 @@ describe("performance observability Evidence integration", () => {
 		).not.toHaveLength(0);
 		expect(screen.getByText("历史快照")).toBeVisible();
 		expect(screen.getAllByText("960 ms")).toHaveLength(6);
-		expect(
-			screen.getByRole("link", { name: /进入成本控制/ }),
-		).toHaveAttribute(
+		expect(screen.getByRole("link", { name: /进入成本控制/ })).toHaveAttribute(
 			"href",
 			"/performance-control/babysteps",
 		);
@@ -55,7 +58,9 @@ describe("performance observability Evidence integration", () => {
 			"GitHub Actions、预览与灰度",
 			"启动、采集与停止时序",
 		]) {
-			expect(screen.getByRole("heading", { name: diagramHeading })).toBeVisible();
+			expect(
+				screen.getByRole("heading", { name: diagramHeading }),
+			).toBeVisible();
 		}
 		expect(screen.getAllByText(/Cloudflare Pages/)).not.toHaveLength(0);
 		expect(screen.getAllByText(/GitHub Actions/)).not.toHaveLength(0);

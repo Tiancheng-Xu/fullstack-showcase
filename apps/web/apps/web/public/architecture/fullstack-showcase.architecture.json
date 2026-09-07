@@ -1,0 +1,254 @@
+{
+	"schema_version": 1,
+	"diagram_type": "architecture",
+	"meta": {
+		"title": "Showcase Dashboard · 作品集聚合与发布架构",
+		"quality_profile": "showcase",
+		"visual_preset": "blueprint",
+		"animation": "trace",
+		"views": [
+			{
+				"id": "render",
+				"label": "静态首屏",
+				"focus": ["visitor", "pages", "ssr", "routes"],
+				"note": "访问者获得静态首屏、真实路径路由与水合后的同一信息架构。"
+			},
+			{
+				"id": "sync",
+				"label": "项目同步",
+				"focus": ["github", "app", "worker", "kv", "manifest", "routes"],
+				"note": "GitHub App 事件经 Worker/KV 汇总项目清单，但不能覆盖人工核验状态。"
+			},
+			{
+				"id": "control",
+				"label": "性能控制",
+				"focus": ["control", "workflow", "project-runtime", "evidence"],
+				"note": "中央控制面只调度固定工作流，项目运行与 Evidence 保持独立边界。"
+			}
+		]
+	},
+	"components": [
+		{
+			"id": "visitor",
+			"type": "external",
+			"label": "访客 / 项目作者",
+			"sublabel": "Dashboard / Project / Evidence",
+			"pos": [38, 170],
+			"size": [152, 66]
+		},
+		{
+			"id": "pages",
+			"type": "frontend",
+			"label": "Cloudflare Pages",
+			"sublabel": "CDN + custom domain",
+			"pos": [228, 170],
+			"size": [152, 66],
+			"tag": "verified-production"
+		},
+		{
+			"id": "ssr",
+			"type": "frontend",
+			"label": "Static-first SSR",
+			"sublabel": "首屏语义 + 404",
+			"pos": [418, 170],
+			"size": [152, 66]
+		},
+		{
+			"id": "routes",
+			"type": "frontend",
+			"label": "TanStack Router",
+			"sublabel": "dashboard / project / evidence",
+			"pos": [608, 170],
+			"size": [152, 66]
+		},
+		{
+			"id": "manifest",
+			"type": "database",
+			"label": "Curated Project Model",
+			"sublabel": "状态 / 架构 / skills",
+			"pos": [798, 170],
+			"size": [152, 66]
+		},
+		{
+			"id": "evidence",
+			"type": "external",
+			"label": "Project-owned Evidence",
+			"sublabel": "每项目独立证明",
+			"pos": [988, 170],
+			"size": [152, 66]
+		},
+		{
+			"id": "github",
+			"type": "external",
+			"label": "GitHub Repositories",
+			"sublabel": "main / PR / Actions",
+			"pos": [228, 330],
+			"size": [152, 66]
+		},
+		{
+			"id": "app",
+			"type": "security",
+			"label": "GitHub App",
+			"sublabel": "Signed installation",
+			"pos": [418, 330],
+			"size": [152, 66]
+		},
+		{
+			"id": "worker",
+			"type": "cloud",
+			"label": "Portfolio Sync Worker",
+			"sublabel": "事件归一与安全合并",
+			"pos": [608, 330],
+			"size": [152, 66]
+		},
+		{
+			"id": "kv",
+			"type": "database",
+			"label": "Cloudflare KV",
+			"sublabel": "projects.json / health",
+			"pos": [798, 330],
+			"size": [152, 66]
+		},
+		{
+			"id": "control",
+			"type": "frontend",
+			"label": "Performance Control",
+			"sublabel": "路径化项目控制页",
+			"pos": [418, 485],
+			"size": [152, 66]
+		},
+		{
+			"id": "workflow",
+			"type": "external",
+			"label": "Fixed GitHub Workflow",
+			"sublabel": "MFA/TOTP 授权后 dispatch",
+			"pos": [608, 485],
+			"size": [152, 66]
+		},
+		{
+			"id": "project-runtime",
+			"type": "cloud",
+			"label": "Project AWS Runtime",
+			"sublabel": "项目自有启动 / 清理",
+			"pos": [798, 485],
+			"size": [152, 66]
+		}
+	],
+	"boundaries": [
+		{
+			"kind": "region",
+			"label": "Cloudflare delivery plane",
+			"wraps": ["pages", "ssr", "routes", "worker", "kv", "control"],
+			"pad": 16
+		},
+		{
+			"kind": "security-group",
+			"label": "GitHub trust boundary",
+			"wraps": ["github", "app", "workflow"],
+			"pad": 16
+		},
+		{
+			"kind": "region",
+			"label": "Project-owned evidence and runtime",
+			"wraps": ["evidence", "project-runtime"],
+			"pad": 16
+		}
+	],
+	"connections": [
+		{
+			"from": "visitor",
+			"to": "pages",
+			"variant": "emphasis",
+			"labelAt": [209, 152]
+		},
+		{
+			"from": "pages",
+			"to": "ssr",
+			"variant": "default",
+			"labelAt": [399, 152]
+		},
+		{
+			"from": "ssr",
+			"to": "routes",
+			"variant": "default",
+			"labelAt": [589, 152]
+		},
+		{
+			"from": "manifest",
+			"to": "routes",
+			"variant": "default",
+			"labelAt": [779, 152]
+		},
+		{
+			"from": "github",
+			"to": "app",
+			"variant": "security",
+			"labelAt": [399, 352]
+		},
+		{
+			"from": "app",
+			"to": "worker",
+			"variant": "default",
+			"labelAt": [589, 352]
+		},
+		{
+			"from": "worker",
+			"to": "kv",
+			"variant": "default",
+			"labelAt": [779, 352]
+		},
+		{
+			"from": "kv",
+			"to": "manifest",
+			"variant": "dashed",
+			"labelAt": [970, 303]
+		},
+		{
+			"from": "control",
+			"to": "workflow",
+			"variant": "default",
+			"labelAt": [589, 552]
+		},
+		{
+			"from": "workflow",
+			"to": "project-runtime",
+			"variant": "emphasis",
+			"labelAt": [779, 552]
+		},
+		{
+			"from": "project-runtime",
+			"to": "evidence",
+			"variant": "dashed",
+			"route": "orthogonal-h"
+		}
+	],
+	"cards": [
+		{
+			"dot": "emerald",
+			"title": "发布合同",
+			"items": [
+				"GitHub main、Actions、Cloudflare deployment 与正式域名绑定",
+				"SSR 与 Hydration 链接必须一致",
+				"未知页面返回真实 404，不以 HTTP 200 冒充语义正确"
+			]
+		},
+		{
+			"dot": "cyan",
+			"title": "数据所有权",
+			"items": [
+				"人工核验状态是可信基线",
+				"远端同步可补充字段和新项目，不得把已完成项目降级",
+				"Evidence 链接归项目所有，不再依赖中央 Evidence 仓库"
+			]
+		},
+		{
+			"dot": "rose",
+			"title": "控制面边界",
+			"items": [
+				"Dashboard 不直接持有 AWS 长期密钥",
+				"固定 workflow、TOTP 授权、预算与清理 Gate 分层",
+				"项目 Runtime 的完成状态由项目 Evidence 证明"
+			]
+		}
+	]
+}
