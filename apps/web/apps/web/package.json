@@ -12,8 +12,8 @@
 		"start": "vite",
 		"check-types": "tsc --noEmit",
 		"test": "vitest run --maxWorkers=1 --testTimeout=15000",
-		"visual:reference": "backstop reference --config=backstop.config.cjs",
-		"visual:test": "backstop test --config=backstop.config.cjs"
+		"visual:reference": "BACKSTOP_VALIDATE_REVIEWED_ENVIRONMENT=1 backstop reference --config=backstop.config.cjs",
+		"visual:test": "BACKSTOP_VALIDATE_REVIEWED_ENVIRONMENT=1 backstop test --config=backstop.config.cjs"
 	},
 	"dependencies": {
 		"@hookform/resolvers": "^5.5.7",

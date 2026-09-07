@@ -14,22 +14,28 @@ const visualEnvironment = {
 };
 const chromeExecutable = process.env.BACKSTOP_CHROME_EXECUTABLE || macChrome;
 
-if (!existsSync(chromeExecutable)) {
-	throw new Error(
-		`Reviewed Chrome executable is unavailable: ${chromeExecutable}`,
-	);
-}
-const actualBrowser = execFileSync(chromeExecutable, ["--version"], {
-	encoding: "utf8",
-}).trim();
-if (
-	actualBrowser !== visualEnvironment.browser ||
-	platform() !== visualEnvironment.platform ||
-	arch() !== visualEnvironment.architecture
-) {
-	throw new Error(
-		`Visual environment mismatch: ${JSON.stringify({ actualBrowser, platform: platform(), architecture: arch() })}`,
-	);
+const validateReviewedEnvironment = () => {
+	if (!existsSync(chromeExecutable)) {
+		throw new Error(
+			`Reviewed Chrome executable is unavailable: ${chromeExecutable}`,
+		);
+	}
+	const actualBrowser = execFileSync(chromeExecutable, ["--version"], {
+		encoding: "utf8",
+	}).trim();
+	if (
+		actualBrowser !== visualEnvironment.browser ||
+		platform() !== visualEnvironment.platform ||
+		arch() !== visualEnvironment.architecture
+	) {
+		throw new Error(
+			`Visual environment mismatch: ${JSON.stringify({ actualBrowser, platform: platform(), architecture: arch() })}`,
+		);
+	}
+};
+
+if (process.env.BACKSTOP_VALIDATE_REVIEWED_ENVIRONMENT === "1") {
+	validateReviewedEnvironment();
 }
 process.env.TZ = visualEnvironment.timezone;
 
