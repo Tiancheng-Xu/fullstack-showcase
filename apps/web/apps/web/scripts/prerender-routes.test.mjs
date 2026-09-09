@@ -19,6 +19,14 @@ describe("static-first route delivery", () => {
 					output: "dashboard/index.html",
 				}),
 				expect.objectContaining({
+					url: "/projects",
+					output: "projects/index.html",
+				}),
+				expect.objectContaining({
+					url: "/evidence",
+					output: "evidence/index.html",
+				}),
+				expect.objectContaining({
 					url: "/performance-control/babysteps",
 					output: "performance-control/babysteps/index.html",
 				}),
@@ -51,9 +59,7 @@ describe("static-first route delivery", () => {
 	});
 
 	it("pre-renders every registered performance application path", () => {
-		expect(
-			STATIC_FIRST_ROUTES.map(({ url }) => url),
-		).toEqual(
+		expect(STATIC_FIRST_ROUTES.map(({ url }) => url)).toEqual(
 			expect.arrayContaining([
 				"/performance-control",
 				...PERFORMANCE_APPLICATIONS.map(
@@ -109,6 +115,10 @@ describe("static-first route delivery", () => {
 		);
 
 		for (const rule of [
+			"/projects /projects/index.html 200",
+			"/projects/ /projects/index.html 200",
+			"/evidence /evidence/index.html 200",
+			"/evidence/ /evidence/index.html 200",
 			"/evidence/:slug /evidence/:slug/index.html 200",
 			"/evidence/:slug/ /evidence/:slug/index.html 200",
 			"/performance-control /performance-control/index.html 200",

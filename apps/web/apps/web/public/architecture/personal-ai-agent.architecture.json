@@ -1,0 +1,216 @@
+{
+	"schema_version": 1,
+	"diagram_type": "architecture",
+	"meta": {
+		"title": "Personal AI Agent · 公开界面与本地模型边界",
+		"quality_profile": "showcase",
+		"visual_preset": "blueprint",
+		"animation": "trace",
+		"views": [
+			{
+				"id": "public",
+				"label": "公开产品面",
+				"focus": ["user", "web", "edge", "gateway"],
+				"note": "公开站点提供产品说明与受控请求入口，不直接暴露本地模型端口。"
+			},
+			{
+				"id": "local",
+				"label": "本地推理",
+				"focus": [
+					"gateway",
+					"scope",
+					"orchestrator",
+					"ollama",
+					"model",
+					"memory"
+				],
+				"note": "通过 Owner Scope 后，编排器在用户设备内调用 Ollama、模型与本地记忆。"
+			},
+			{
+				"id": "proof",
+				"label": "模型与交付证明",
+				"focus": ["model", "tools", "evidence"],
+				"note": "模型身份、工具调用与 Smoke 状态分别留证，不公开权重和私有数据。"
+			}
+		]
+	},
+	"components": [
+		{
+			"id": "user",
+			"type": "external",
+			"label": "用户 / Owner",
+			"sublabel": "Web 与本地设备",
+			"pos": [38, 170],
+			"size": [152, 66]
+		},
+		{
+			"id": "web",
+			"type": "frontend",
+			"label": "Public Web UI",
+			"sublabel": "能力说明 / 状态边界",
+			"pos": [228, 170],
+			"size": [152, 66],
+			"tag": "verified-production"
+		},
+		{
+			"id": "edge",
+			"type": "cloud",
+			"label": "Cloudflare Edge",
+			"sublabel": "TLS / static delivery",
+			"pos": [418, 170],
+			"size": [152, 66]
+		},
+		{
+			"id": "gateway",
+			"type": "backend",
+			"label": "Owner Runtime Gateway",
+			"sublabel": "仅安全网络入口",
+			"pos": [608, 170],
+			"size": [152, 66]
+		},
+		{
+			"id": "scope",
+			"type": "security",
+			"label": "Runtime Scope",
+			"sublabel": "HMAC / owner authorization",
+			"pos": [798, 170],
+			"size": [152, 66]
+		},
+		{
+			"id": "orchestrator",
+			"type": "backend",
+			"label": "Agent Orchestrator",
+			"sublabel": "任务分解 / 工具路由",
+			"pos": [228, 330],
+			"size": [152, 66]
+		},
+		{
+			"id": "ollama",
+			"type": "backend",
+			"label": "Ollama Runtime",
+			"sublabel": "localhost only",
+			"pos": [418, 330],
+			"size": [152, 66],
+			"tag": "verified-local"
+		},
+		{
+			"id": "model",
+			"type": "database",
+			"label": "Local Model",
+			"sublabel": "GGUF identity / manifest hash",
+			"pos": [608, 330],
+			"size": [152, 66]
+		},
+		{
+			"id": "memory",
+			"type": "database",
+			"label": "Local Memory",
+			"sublabel": "Scoped / removable context",
+			"pos": [798, 330],
+			"size": [152, 66]
+		},
+		{
+			"id": "tools",
+			"type": "backend",
+			"label": "Tool Adapters",
+			"sublabel": "文件 / 浏览器 / APIs",
+			"pos": [988, 330],
+			"size": [152, 66]
+		},
+		{
+			"id": "evidence",
+			"type": "external",
+			"label": "Model Evidence",
+			"sublabel": "tag / hash / smoke boundary",
+			"pos": [798, 485],
+			"size": [152, 66]
+		}
+	],
+	"boundaries": [
+		{
+			"kind": "region",
+			"label": "Public delivery plane",
+			"wraps": ["web", "edge"],
+			"pad": 16
+		},
+		{
+			"kind": "security-group",
+			"label": "Owner-controlled access boundary",
+			"wraps": ["gateway", "scope"],
+			"pad": 16
+		},
+		{
+			"kind": "region",
+			"label": "User device · private local runtime",
+			"wraps": ["orchestrator", "ollama", "model", "memory", "tools"],
+			"pad": 16
+		}
+	],
+	"connections": [
+		{
+			"from": "user",
+			"to": "web",
+			"variant": "emphasis",
+			"labelAt": [209, 152]
+		},
+		{
+			"from": "web",
+			"to": "edge",
+			"variant": "default",
+			"labelAt": [399, 152]
+		},
+		{
+			"from": "gateway",
+			"to": "scope",
+			"variant": "security",
+			"labelAt": [779, 152]
+		},
+		{
+			"from": "orchestrator",
+			"to": "ollama",
+			"variant": "emphasis",
+			"labelAt": [399, 352]
+		},
+		{
+			"from": "model",
+			"to": "evidence",
+			"variant": "dashed",
+			"route": "orthogonal-h"
+		},
+		{
+			"from": "tools",
+			"to": "evidence",
+			"variant": "dashed",
+			"route": "orthogonal-h"
+		}
+	],
+	"cards": [
+		{
+			"dot": "emerald",
+			"title": "真实部署边界",
+			"items": [
+				"公开 Web 可以 verified-production",
+				"Ollama 与模型运行只保持 verified-local，不能因网页在线而宣称模型云端在线",
+				"本机不是默认公开云主机"
+			]
+		},
+		{
+			"dot": "cyan",
+			"title": "模型与 Agent",
+			"items": [
+				"本地 Ollama 可接入非自训练模型",
+				"微调稳定行为与风格，不替代知识更新和可信检索",
+				"Agent 编排与模型权重是两个不同层次"
+			]
+		},
+		{
+			"dot": "rose",
+			"title": "隐私与安全",
+			"items": [
+				"不公开 localhost 端口、Provider Key、Prompt、权重或私有路径",
+				"Owner Runtime Scope 失败时保持 OFFLINE",
+				"Evidence 只保存脱敏 manifest、哈希和可复现 Smoke 状态"
+			]
+		}
+	]
+}

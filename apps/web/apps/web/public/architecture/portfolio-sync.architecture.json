@@ -1,0 +1,235 @@
+{
+	"schema_version": 1,
+	"diagram_type": "architecture",
+	"meta": {
+		"title": "Portfolio Sync · GitHub 事件到 Dashboard 清单",
+		"quality_profile": "showcase",
+		"visual_preset": "blueprint",
+		"animation": "trace",
+		"views": [
+			{
+				"id": "webhook",
+				"label": "Webhook 入口",
+				"focus": ["github", "app", "webhook", "verify"],
+				"note": "GitHub 事件通过 App Webhook 进入签名校验和重放保护。"
+			},
+			{
+				"id": "merge",
+				"label": "可信合并",
+				"focus": ["verify", "normalize", "merge", "kv", "manifest"],
+				"note": "远端元数据被归一后只增量补充，人工核验字段保持所有权。"
+			},
+			{
+				"id": "consume",
+				"label": "公开消费",
+				"focus": ["manifest", "health", "dashboard", "fallback"],
+				"note": "Dashboard 优先使用可信清单，Worker 不可用时回退静态基线。"
+			}
+		]
+	},
+	"components": [
+		{
+			"id": "github",
+			"type": "external",
+			"label": "GitHub Repositories",
+			"sublabel": "push / PR / workflow events",
+			"pos": [38, 170],
+			"size": [152, 66]
+		},
+		{
+			"id": "app",
+			"type": "security",
+			"label": "GitHub App",
+			"sublabel": "installation + webhook secret",
+			"pos": [228, 170],
+			"size": [152, 66]
+		},
+		{
+			"id": "webhook",
+			"type": "cloud",
+			"label": "Cloudflare Worker",
+			"sublabel": "POST /webhook",
+			"pos": [418, 170],
+			"size": [152, 66]
+		},
+		{
+			"id": "verify",
+			"type": "security",
+			"label": "Signature Guard",
+			"sublabel": "HMAC / timestamp / delivery ID",
+			"pos": [608, 170],
+			"size": [152, 66]
+		},
+		{
+			"id": "normalize",
+			"type": "backend",
+			"label": "Event Normalizer",
+			"sublabel": "repo / branch / deployment",
+			"pos": [798, 170],
+			"size": [152, 66]
+		},
+		{
+			"id": "merge",
+			"type": "backend",
+			"label": "Portfolio Merge Policy",
+			"sublabel": "curated fields win",
+			"pos": [988, 170],
+			"size": [152, 66]
+		},
+		{
+			"id": "kv",
+			"type": "database",
+			"label": "Cloudflare KV",
+			"sublabel": "versioned project snapshot",
+			"pos": [228, 295],
+			"size": [152, 66]
+		},
+		{
+			"id": "manifest",
+			"type": "backend",
+			"label": "Public projects.json",
+			"sublabel": "generatedAt / source freshness",
+			"pos": [418, 295],
+			"size": [152, 66]
+		},
+		{
+			"id": "health",
+			"type": "external",
+			"label": "Health Endpoint",
+			"sublabel": "JSON availability / version",
+			"pos": [608, 295],
+			"size": [152, 66]
+		},
+		{
+			"id": "dashboard",
+			"type": "frontend",
+			"label": "Dashboard Hydration",
+			"sublabel": "augment curated baseline",
+			"pos": [798, 295],
+			"size": [152, 66]
+		},
+		{
+			"id": "fallback",
+			"type": "database",
+			"label": "Static Portfolio Data",
+			"sublabel": "SSR / JS failure fallback",
+			"pos": [988, 295],
+			"size": [152, 66]
+		},
+		{
+			"id": "evidence",
+			"type": "external",
+			"label": "Sync Evidence",
+			"sublabel": "delivery / merge / freshness",
+			"pos": [798, 425],
+			"size": [152, 66]
+		}
+	],
+	"boundaries": [
+		{
+			"kind": "security-group",
+			"label": "GitHub trust boundary",
+			"wraps": ["github", "app"],
+			"pad": 16
+		},
+		{
+			"kind": "region",
+			"label": "Cloudflare Worker runtime",
+			"wraps": [
+				"webhook",
+				"verify",
+				"normalize",
+				"merge",
+				"kv",
+				"manifest",
+				"health"
+			],
+			"pad": 16
+		},
+		{
+			"kind": "region",
+			"label": "Portfolio application",
+			"wraps": ["dashboard", "fallback", "evidence"],
+			"pad": 16
+		}
+	],
+	"connections": [
+		{
+			"from": "github",
+			"to": "app",
+			"variant": "security",
+			"labelAt": [209, 152]
+		},
+		{
+			"from": "app",
+			"to": "webhook",
+			"variant": "security",
+			"labelAt": [399, 152]
+		},
+		{
+			"from": "webhook",
+			"to": "verify",
+			"variant": "default",
+			"labelAt": [589, 152]
+		},
+		{
+			"from": "normalize",
+			"to": "merge",
+			"variant": "default",
+			"labelAt": [969, 152]
+		},
+		{
+			"from": "kv",
+			"to": "manifest",
+			"variant": "default",
+			"labelAt": [399, 352]
+		},
+		{
+			"from": "health",
+			"to": "dashboard",
+			"variant": "dashed",
+			"labelAt": [779, 352]
+		},
+		{
+			"from": "fallback",
+			"to": "dashboard",
+			"variant": "emphasis",
+			"labelAt": [969, 352]
+		},
+		{
+			"from": "dashboard",
+			"to": "evidence",
+			"variant": "default",
+			"labelAt": [970, 503]
+		}
+	],
+	"cards": [
+		{
+			"dot": "emerald",
+			"title": "同步合同",
+			"items": [
+				"Webhook 必须校验签名、时间和 delivery ID",
+				"projects.json 携带生成时间和来源新鲜度",
+				"健康检查是 API JSON，不是需要视觉适配的 UI 页面"
+			]
+		},
+		{
+			"dot": "cyan",
+			"title": "合并优先级",
+			"items": [
+				"人工核验的状态、进度、正式链接与 sourceUpdatedAt 优先",
+				"远端数据可补充描述、仓库元数据和未知项目",
+				"旧远端快照不得把已完成项目降级"
+			]
+		},
+		{
+			"dot": "rose",
+			"title": "降级与证据",
+			"items": [
+				"SSR 和 JavaScript 失败时仍有静态基线",
+				"HTTP 200 不等于语义正确，必须检查 payload 与页面内容",
+				"同步 Evidence 不替代各项目自己的生产 Evidence"
+			]
+		}
+	]
+}

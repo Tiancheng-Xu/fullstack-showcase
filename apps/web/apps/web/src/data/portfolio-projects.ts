@@ -48,6 +48,7 @@ export type PortfolioProject = {
 	status: "已完成" | "进行中";
 	progress: number;
 	architecture: string;
+	architectureAsset?: string;
 	evidenceUrl?: string;
 	repo?: string;
 	skills: string[];
@@ -71,6 +72,8 @@ const DASHBOARD_EVIDENCE_BASE_URL = "https://baby2b.online/evidence";
 export const PORTFOLIO_PROJECTS: PortfolioProject[] = [
 	{
 		id: "agent-market",
+		architectureAsset:
+			"architecture/agent-market.visual-check.1440x900.light.png",
 		title: "Agent Market",
 		desc: "面向 Sepolia 的可验证 AI Agent 任务市场，完成结构化 Agent/Task 标签、多 Agent 编排、链上状态闭环与项目自有 Evidence。",
 		status: "已完成",
@@ -94,21 +97,23 @@ export const PORTFOLIO_PROJECTS: PortfolioProject[] = [
 			"Cloudflare Production、项目自有 Evidence、深链 SSR 与真实 404 已完成语义回读",
 			"24 笔 Sepolia V3 状态交易全部成功，覆盖 DAG 锚定、接单、异议、仲裁、质押返还与收益领取",
 			"AWS V2 已以 verified-production 完成浏览器到 HMAC API、SNS/SQS、Lambda、ECS Fargate、PostgreSQL 与聚合回读闭环，并记录暂停、零队列与零 ECS Task",
-			"状态账本与公开 Evidence 已收口，原 6 项 IMPLEMENTED_UNVERIFIED 已升级 VERIFIED；最新 main 305a89c4b0d6、Verify Run 33337714155、Cloudflare Production deployment 8d6c44a5-c5f1-4730-ba34-92a0669b955b",
+			"状态账本与公开 Evidence 已收口；最新 main 4589c72b110f、完整 Verify Run 34088481986、Project Verify Run 34088482435、Cloudflare Production deployment 15f7837e-1c9b-48a5-9c67-c79913304b05",
 		],
 		details: [
 			"Cloudflare Web、AWS V2 Runtime 与 Sepolia V3 分别为 verified-production，三套证据互不替代；本地 Transaction Engine、视觉与模型证据仍仅为 verified-local。",
 			"AWS V2 运行证据来自项目自有 2026-08-27 closure JSON；公开 Evidence 已修正陈旧文件名，并由服务端首屏直接输出完整证据链。",
 			"Sepolia 验证使用单一测试钱包复用多个角色，不等同于多钱包生产隔离证明，也不证明网页生产环境直接提交交易。",
-			"最新生产部署 8d6c44a5-c5f1-4730-ba34-92a0669b955b 绑定 source 305a89c4b0d6；正式域名、项目 Evidence、关键深链、reciprocal links 与真实 404 已完成生产读回。",
+			"最新生产部署 15f7837e-1c9b-48a5-9c67-c79913304b05 绑定 source 4589c72b110f；root、/agents/local、/office、/committee、/evidence、未知路由 404 与站内切换 scrollY=0 已完成生产回读。",
 			"生产录屏入口为 /evidence/agent-market-v3-full-workflow.mp4；它证明生产 UI 流程，不作为实时市场成交或 AWS Runtime 证据。本轮未触发 AWS mutation、钱包签名、Sepolia 交易或模型 Runtime。",
 		],
 		renderingModes: ["Edge SSR", "Hydration", "Client-only Web3"],
 		ownerPage: "https://agent-market.baby2b.online/",
-		sourceUpdatedAt: "2026-08-30",
+		sourceUpdatedAt: "2026-09-07",
 	},
 	{
 		id: "performance-observability-control",
+		architectureAsset:
+			"architecture/performance-observability-control.visual-check.1440x900.light.png",
 		title: "性能观测与成本控制",
 		desc: "以 BabySteps 完成 AWS 临时性能观测、真实聚合与精确清理，并保留可信历史快照和可追溯 Evidence。",
 		status: "进行中",
@@ -225,7 +230,8 @@ export const PORTFOLIO_PROJECTS: PortfolioProject[] = [
 					implementation:
 						"controlState 与 dataMode 分离；仅接受摘要、来源和百分位字段全部通过校验的快照。",
 					code: "src/features/performance/performance-status-card.tsx",
-					proof: "AWS Stack 清理后页面展示 Run 33160455921 的 historical 快照，并明确标注单样本与未全量排空边界。",
+					proof:
+						"AWS Stack 清理后页面展示 Run 33160455921 的 historical 快照，并明确标注单样本与未全量排空边界。",
 					state: "云端已验证",
 				},
 				{
@@ -336,6 +342,8 @@ export const PORTFOLIO_PROJECTS: PortfolioProject[] = [
 	},
 	{
 		id: "shared-evidence-verifier",
+		architectureAsset:
+			"architecture/shared-evidence-verifier.visual-check.1440x900.light.png",
 		title: "Shared Evidence Verifier",
 		desc: "以 GitHub OIDC、AWS 最小权限 Lambda 与公开语义检查，串行验证多个项目的 Production、Evidence 和精确版本边界；Run 33290528028 完成 6/6 串行项目检查。",
 		status: "已完成",
@@ -384,7 +392,8 @@ export const PORTFOLIO_PROJECTS: PortfolioProject[] = [
 					implementation:
 						"部署和调用前执行 Budget Gate；复用一个非 VPC Lambda，不为每个项目创建业务 AWS Runtime。",
 					code: "aws-budget-guard + tc-shared-evidence-verifier",
-					proof: "before/after $27.345 / $40；forecast unavailable；Free plan unchanged",
+					proof:
+						"before/after $27.345 / $40；forecast unavailable；Free plan unchanged",
 					state: "云端已验证",
 				},
 				{
@@ -392,7 +401,8 @@ export const PORTFOLIO_PROJECTS: PortfolioProject[] = [
 					implementation:
 						"逐项目检查 Production、Evidence、HTTP 状态、最终 URL 和必要语义标记，而不是把 HTTP 200 直接当成功。",
 					code: "fixed project manifest → verifier Lambda → per-project result",
-					proof: "4 verified + 2 verified-with-limitations；每项目独立 Artifact",
+					proof:
+						"4 verified + 2 verified-with-limitations；每项目独立 Artifact",
 					state: "云端已验证",
 				},
 				{
@@ -447,6 +457,8 @@ export const PORTFOLIO_PROJECTS: PortfolioProject[] = [
 	},
 	{
 		id: "personal-ai-agent",
+		architectureAsset:
+			"architecture/personal-ai-agent.visual-check.1440x900.light.png",
 		title: "Personal AI Agent 模型训练与本地推理",
 		desc: "独立完成 Qwen3-8B 双卡 QLoRA、冻结集对照、GGUF 量化与 Mac/Ollama 离线交付；公开模型门禁与能力边界。",
 		status: "已完成",
@@ -479,6 +491,8 @@ export const PORTFOLIO_PROJECTS: PortfolioProject[] = [
 	},
 	{
 		id: "fullstack-showcase",
+		architectureAsset:
+			"architecture/fullstack-showcase.visual-check.1440x900.light.png",
 		title: "Showcase Dashboard",
 		desc: "汇总真实项目、项目自有 Evidence、自动同步状态与静态首屏交付的个人作品看板。",
 		status: "已完成",
@@ -502,6 +516,8 @@ export const PORTFOLIO_PROJECTS: PortfolioProject[] = [
 	},
 	{
 		id: "github-profile-studio",
+		architectureAsset:
+			"architecture/github-profile-studio.visual-check.1440x900.light.png",
 		title: "GitHub Profile Studio",
 		desc: "本地优先的 GitHub 公开资料工作台，前后端与双运行时已完成，公网部署仍在规划。",
 		status: "进行中",
@@ -521,6 +537,8 @@ export const PORTFOLIO_PROJECTS: PortfolioProject[] = [
 	},
 	{
 		id: "portfolio-sync",
+		architectureAsset:
+			"architecture/portfolio-sync.visual-check.1440x900.light.png",
 		title: "Portfolio Sync",
 		desc: "GitHub App 与 Cloudflare Worker 驱动的作品集同步系统，把真实项目仓库的发布清单自动汇总到 Dashboard。",
 		status: "已完成",
@@ -564,10 +582,12 @@ export const PORTFOLIO_PROJECTS: PortfolioProject[] = [
 			"该条目用于展示流程编排实践与 Feature 交付闭环。",
 			"主要难点是把执行记录、检查点和验收证据连接成可回看的工作流。",
 		],
-		ownerPage: "https://github.com/Tiancheng-Xu/personal-skills/tree/main/skills/tc-flow",
+		ownerPage:
+			"https://github.com/Tiancheng-Xu/personal-skills/tree/main/skills/tc-flow",
 	},
 	{
 		id: "babysteps",
+		architectureAsset: "architecture/babysteps.visual-check.1440x900.light.png",
 		title: "BabySteps",
 		desc: "家庭成长 DApp，并以真实生产链验证 Edge SSR、安全摘要壳、精确水合、浏览器能力激活与一次性纯 CSR 降级。",
 		status: "已完成",

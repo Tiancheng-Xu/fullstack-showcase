@@ -1,0 +1,100 @@
+{
+  "schemaVersion": "dashboard-non-aws-local-gate/v1",
+  "capturedAt": "2026-09-07",
+  "scope": "dashboard-navigation-evidence-architecture-and-performance-control-readiness",
+  "baseCommit": "cfd1de4fe7fa0e3cbbfb9a43614a2fae38fae4b5",
+  "status": "verified-local-ready-for-pr",
+  "localGates": {
+    "performanceControlWorkerTests": {
+      "result": "pass",
+      "testFiles": 10,
+      "tests": 90
+    },
+    "webTests": {
+      "result": "pass",
+      "testFiles": 22,
+      "tests": 71
+    },
+    "portfolioSyncTests": {
+      "result": "pass",
+      "tests": 3
+    },
+    "typecheck": {
+      "result": "pass"
+    },
+    "productionBuild": {
+      "result": "pass",
+      "staticFirstRoutes": 14,
+      "knownRouteStatus": 200,
+      "unknownRouteStatus": 404
+    },
+    "visualRegression": {
+      "result": "pass-composite",
+      "scenarios": 16,
+      "routes": ["/dashboard", "/projects", "/evidence", "/performance-control/babysteps"],
+      "viewports": [375, 390, 430, 1440],
+      "maximumMismatchPercent": 0.04811,
+      "reviewedBeforeBaselineApproval": true,
+      "machineReadableReport": "docs/delivery/2026-09-07-dashboard-visual-regression.json",
+      "runEvidence": {
+        "primaryCapture": "15 of 16 scenarios captured; the final local Chrome process failed to expose its debugging endpoint within 30 seconds",
+        "primaryPixelComparison": "15 captured images passed a 0.1 percent pixel threshold",
+        "missingScenarioRecovery": "performance-control filtered Backstop run passed 4 of 4 viewports, including the missing 1440 viewport",
+        "uniqueScenariosVerified": 16
+      },
+      "environment": {
+        "browser": "Google Chrome 152.0.7977.77",
+        "platform": "darwin",
+        "architecture": "arm64",
+        "locale": "zh-CN",
+        "timezone": "UTC",
+        "deviceScaleFactor": 1
+      },
+      "assertions": ["route semantics", "no root horizontal overflow", "no pageerror"],
+      "boundary": "Reviewed local macOS baseline; not a cross-platform CI pixel baseline."
+    },
+    "performanceControlWorkerLocalPackaging": {
+      "result": "pass",
+      "controlEnabled": false,
+      "d1Migrations": [
+        "0001_performance_control.sql",
+        "0002_mfa_control_security.sql",
+        "0003_totp_auth.sql",
+        "0004_dispatch_readiness.sql"
+      ],
+      "wranglerDeployDryRun": "pass"
+    },
+    "portfolioSyncWorkerDryRun": {
+      "result": "pass"
+    },
+    "architectureEvidence": {
+      "result": "pass",
+      "artifactCount": 24,
+      "reviewedReports": 8,
+      "remoteGoogleFonts": 0
+    },
+    "changedSourceBiome": {
+      "result": "pass",
+      "files": 40
+    },
+    "publicSecretAndPiiScan": {
+      "result": "pass"
+    },
+    "gitDiffCheck": {
+      "result": "pass"
+    }
+  },
+  "safetyContracts": [
+    "A workflow dispatch is accepted only with a validated GitHub workflow_run_id receipt.",
+    "Ambiguous dispatches fail closed and are not retried automatically.",
+    "A stopped callback requires both cleanupVerified and zeroResidualVerified.",
+    "Unknown or stale readiness disables TOTP entry and start control.",
+    "Curated portfolio facts cannot be overwritten by remote repository narratives."
+  ],
+  "writesNotPerformed": [
+    "AWS login, API call, workflow dispatch or resource mutation",
+    "Cloudflare remote deployment or production D1 migration",
+    "Git merge or production release"
+  ],
+  "completionBoundary": "This record proves the listed local non-AWS implementation and deterministic gates only. GitHub PR checks, Cloudflare Preview, production deployment, AWS runtime state and production semantic readback require separate evidence."
+}

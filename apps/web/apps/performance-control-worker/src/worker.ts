@@ -1,25 +1,32 @@
+import type { PublicDispatchReadiness } from "./dispatch-readiness-cache";
+import { evaluateDispatchReadiness } from "./dispatch-readiness-gate";
+import {
+	readDispatchReadiness,
+	refreshDispatchReadiness,
+} from "./dispatch-readiness-service";
+import { withGitHubTimeout } from "./github-http";
 import {
 	getRegisteredProject,
+	listRegisteredProjects,
 	type RegisteredPerformanceProject,
 } from "./registry";
 import {
 	createWorkflowDispatchInputs,
 	isCanonicalIso,
 	parseRuntimeCallback,
+	type RuntimeCallback,
 	stoppedBootstrapOperation,
 	stoppedBootstrapSource,
-	type RuntimeCallback,
 } from "./runtime-contract";
 import {
 	assertSnapshotPublishable,
 	type PerformanceSnapshot,
 } from "./snapshot";
 import {
-	applyWorkflowCallback,
-	createInitialProjectState,
-	requestControlOperation,
 	type ControlAction,
+	createInitialProjectState,
 	type ProjectState,
+	requestControlOperation,
 } from "./state-machine";
 import { verifyTotpCode } from "./totp";
 
@@ -76,11 +83,6 @@ interface StateRow {
 	last_event_at?: string | null;
 	updated_at: string;
 }
-interface NonceRow {
-	nonce: string;
-	consumed_at: string | null;
-	expires_at: string;
-}
 interface TotpAttemptRow {
 	failure_count: number;
 	window_started_at: string;
@@ -112,11 +114,6 @@ const sha256 = async (value: string) => {
 		.join("");
 };
 
-const decodeBase64Url = (value: string) => {
-	const normalized = value.replace(/-/g, "+").replace(/_/g, "/");
-	return Uint8Array.from(atob(normalized), (character) => character.charCodeAt(0));
-};
-
 const configured = (env: WorkerEnv) =>
 	env.CONTROL_ENABLED === "true" &&
 	Boolean(
@@ -128,35 +125,78 @@ const configured = (env: WorkerEnv) =>
 			env.CALLBACK_HMAC_SECRET,
 	);
 
-const recordTotpFailure = async (env: WorkerEnv) => {
+const claimTotpVerification = async (env: WorkerEnv) => {
 	const now = new Date();
-	let previous: TotpAttemptRow | null = null;
+	const leaseUntil = new Date(now.getTime() + 10_000).toISOString();
 	try {
-		previous = await env.CONTROL_DB.prepare(
-			"SELECT failure_count, window_started_at, locked_until FROM totp_attempts WHERE scope='operator'",
-		).first<TotpAttemptRow>();
-	} catch {
-		return json({ error: "totp_verification_unavailable" }, { status: 503 });
-	}
-	const windowStartedAt = previous ? Date.parse(previous.window_started_at) : 0;
-	const inWindow = Number.isFinite(windowStartedAt) && now.getTime() - windowStartedAt < 5 * 60_000;
-	const failureCount = inWindow ? (previous?.failure_count ?? 0) + 1 : 1;
-	const startedAt = inWindow && previous ? previous.window_started_at : now.toISOString();
-	const lockedUntil = failureCount >= 5 ? new Date(now.getTime() + 10 * 60_000).toISOString() : null;
-	try {
-		await env.CONTROL_DB.prepare(
+		const claimed = await env.CONTROL_DB.prepare(
 			`INSERT INTO totp_attempts (scope, failure_count, window_started_at, locked_until)
-			 VALUES ('operator', ?1, ?2, ?3)
-			 ON CONFLICT(scope) DO UPDATE SET failure_count=?1, window_started_at=?2, locked_until=?3`,
+			 VALUES ('operator', 0, ?1, ?2)
+			 ON CONFLICT(scope) DO UPDATE SET locked_until=?2
+			 WHERE totp_attempts.locked_until IS NULL OR totp_attempts.locked_until <= ?1
+			 RETURNING failure_count, window_started_at, locked_until`,
 		)
-			.bind(failureCount, startedAt, lockedUntil)
-			.run();
+			.bind(now.toISOString(), leaseUntil)
+			.first<TotpAttemptRow>();
+		return claimed ? { now, leaseUntil } : null;
+	} catch {
+		return undefined;
+	}
+};
+
+const recordTotpFailure = async (
+	env: WorkerEnv,
+	claim: { now: Date; leaseUntil: string },
+) => {
+	const now = claim.now.toISOString();
+	const lockUntil = new Date(claim.now.getTime() + 10 * 60_000).toISOString();
+	try {
+		const result = await env.CONTROL_DB.prepare(
+			`UPDATE totp_attempts SET
+			 failure_count = CASE
+			   WHEN unixepoch(?1) - unixepoch(window_started_at) < 300 THEN failure_count + 1
+			   ELSE 1
+			 END,
+			 window_started_at = CASE
+			   WHEN unixepoch(?1) - unixepoch(window_started_at) < 300 THEN window_started_at
+			   ELSE ?1
+			 END,
+			 locked_until = CASE
+			   WHEN (CASE WHEN unixepoch(?1) - unixepoch(window_started_at) < 300 THEN failure_count + 1 ELSE 1 END) >= 5 THEN ?3
+			   ELSE NULL
+			 END
+			 WHERE scope='operator' AND locked_until=?2
+			 RETURNING failure_count, window_started_at, locked_until`,
+		)
+			.bind(now, claim.leaseUntil, lockUntil)
+			.first<TotpAttemptRow>();
+		if (!result) {
+			return json({ error: "totp_verification_unavailable" }, { status: 503 });
+		}
+		return result.locked_until
+			? json({ error: "totp_rate_limited" }, { status: 429 })
+			: json({ error: "totp_invalid" }, { status: 401 });
 	} catch {
 		return json({ error: "totp_verification_unavailable" }, { status: 503 });
 	}
-	return lockedUntil
-		? json({ error: "totp_rate_limited" }, { status: 429 })
-		: json({ error: "totp_invalid" }, { status: 401 });
+};
+
+const releaseTotpVerification = async (
+	env: WorkerEnv,
+	claim: { now: Date; leaseUntil: string },
+) => {
+	try {
+		const result = await env.CONTROL_DB.prepare(
+			`UPDATE totp_attempts
+			 SET failure_count=0, window_started_at=?1, locked_until=NULL
+			 WHERE scope='operator' AND locked_until=?2`,
+		)
+			.bind(claim.now.toISOString(), claim.leaseUntil)
+			.run<D1RunResultLike>();
+		return result.meta?.changes === 1;
+	} catch {
+		return false;
+	}
 };
 
 const verifyAccess = async (
@@ -168,7 +208,19 @@ const verifyAccess = async (
 	if (!env.TOTP_SECRET) {
 		return json({ error: "control_not_configured" }, { status: 503 });
 	}
-	if (!(await verifyTotpCode(env.TOTP_SECRET, code))) return recordTotpFailure(env);
+	const claim = await claimTotpVerification(env);
+	if (claim === undefined) {
+		return json({ error: "totp_verification_unavailable" }, { status: 503 });
+	}
+	if (claim === null) {
+		return json({ error: "totp_rate_limited" }, { status: 429 });
+	}
+	if (!(await verifyTotpCode(env.TOTP_SECRET, code))) {
+		return recordTotpFailure(env, claim);
+	}
+	if (!(await releaseTotpVerification(env, claim))) {
+		return json({ error: "totp_verification_unavailable" }, { status: 503 });
+	}
 	return { actorHash: await sha256(`totp:${env.TOTP_SECRET}`) };
 };
 
@@ -245,7 +297,8 @@ const publicSnapshot = async (request: Request, url: URL, env: WorkerEnv) => {
 		});
 	}
 	const object = await env.SNAPSHOTS.get(pointer.snapshot_key);
-	if (!object) return json({ error: "snapshot_object_missing" }, { status: 502 });
+	if (!object)
+		return json({ error: "snapshot_object_missing" }, { status: 502 });
 	const raw = await object.text();
 	if ((await sha256(raw)) !== pointer.snapshot_sha256) {
 		return json({ error: "snapshot_digest_mismatch" }, { status: 502 });
@@ -253,7 +306,8 @@ const publicSnapshot = async (request: Request, url: URL, env: WorkerEnv) => {
 	try {
 		const snapshot = JSON.parse(raw) as PerformanceSnapshot;
 		assertSnapshotPublishable(snapshot, { immutableObjectExists: false });
-		if (snapshot.projectSlug !== projectSlug) throw new Error("project_mismatch");
+		if (snapshot.projectSlug !== projectSlug)
+			throw new Error("project_mismatch");
 		return json(snapshot, {
 			headers: {
 				"cache-control": "public, max-age=60, stale-if-error=86400",
@@ -295,8 +349,12 @@ const createSession = async (request: Request, url: URL, env: WorkerEnv) => {
 	);
 };
 
-const rowToState = (row: StateRow | null, projectSlug: string): ProjectState => {
-	if (!row) return createInitialProjectState(projectSlug, new Date().toISOString());
+const rowToState = (
+	row: StateRow | null,
+	projectSlug: string,
+): ProjectState => {
+	if (!row)
+		return createInitialProjectState(projectSlug, new Date().toISOString());
 	return {
 		projectSlug: row.project_slug,
 		controlState: row.control_state as ProjectState["controlState"],
@@ -349,27 +407,45 @@ const githubAppJwt = async (env: WorkerEnv) => {
 };
 
 const githubInstallationToken = async (env: WorkerEnv) => {
-	if (!env.GITHUB_APP_INSTALLATION_ID) throw new Error("github_app_not_configured");
-	const response = await fetch(
-		`https://api.github.com/app/installations/${env.GITHUB_APP_INSTALLATION_ID}/access_tokens`,
-		{
-			method: "POST",
-			headers: {
-				accept: "application/vnd.github+json",
-				authorization: `Bearer ${await githubAppJwt(env)}`,
-				"x-github-api-version": "2022-11-28",
+	if (!env.GITHUB_APP_INSTALLATION_ID)
+		throw new Error("github_app_not_configured");
+	return withGitHubTimeout(async (signal) => {
+		const response = await fetch(
+			`https://api.github.com/app/installations/${env.GITHUB_APP_INSTALLATION_ID}/access_tokens`,
+			{
+				method: "POST",
+				headers: {
+					accept: "application/vnd.github+json",
+					authorization: `Bearer ${await githubAppJwt(env)}`,
+					"x-github-api-version": "2022-11-28",
+				},
+				body: JSON.stringify({
+					repositories: ["babysteps"],
+					permissions: { actions: "write", metadata: "read" },
+				}),
+				signal,
 			},
-			body: JSON.stringify({
-				repositories: ["babysteps"],
-				permissions: { actions: "write", metadata: "read" },
-			}),
-		},
-	);
-	if (!response.ok) throw new Error("github_token_exchange_failed");
-	const body = (await response.json()) as { token?: string };
-	if (!body.token) throw new Error("github_token_exchange_failed");
-	return body.token;
+		);
+		if (!response.ok) throw new Error("github_token_exchange_failed");
+		const body = (await response.json()) as { token?: string };
+		if (!body.token) throw new Error("github_token_exchange_failed");
+		return body.token;
+	});
 };
+
+const refreshProjectDispatchReadiness = async (
+	env: WorkerEnv,
+	project: RegisteredPerformanceProject,
+	installationToken?: string,
+) =>
+	refreshDispatchReadiness({
+		database: env.CONTROL_DB,
+		projectSlug: project.projectSlug,
+		target: project,
+		installationToken: installationToken
+			? async () => installationToken
+			: () => githubInstallationToken(env),
+	});
 
 const dispatchFixedWorkflow = async (
 	env: WorkerEnv,
@@ -381,23 +457,107 @@ const dispatchFixedWorkflow = async (
 	installationToken?: string,
 ) => {
 	const token = installationToken ?? (await githubInstallationToken(env));
-	const response = await fetch(
-		`https://api.github.com/repos/${project.repository}/actions/workflows/${project.workflow}/dispatches`,
-		{
-			method: "POST",
-			headers: {
-				accept: "application/vnd.github+json",
-				authorization: `Bearer ${token}`,
-				"content-type": "application/json",
-				"x-github-api-version": "2022-11-28",
+	return withGitHubTimeout(async (signal) => {
+		const response = await fetch(
+			`https://api.github.com/repos/${project.repository}/actions/workflows/${project.workflow}/dispatches`,
+			{
+				method: "POST",
+				headers: {
+					accept: "application/vnd.github+json",
+					authorization: `Bearer ${token}`,
+					"content-type": "application/json",
+					"x-github-api-version": "2026-03-10",
+				},
+				body: JSON.stringify({
+					ref: project.defaultBranch,
+					inputs: createWorkflowDispatchInputs(
+						action,
+						operationId,
+						generation,
+						expiresAt,
+					),
+				}),
+				signal,
 			},
-			body: JSON.stringify({
-				ref: "main",
-				inputs: createWorkflowDispatchInputs(action, operationId, generation, expiresAt),
-			}),
-		},
+		);
+		if (response.status !== 200) throw new Error("github_dispatch_unconfirmed");
+		const body = (await response.json()) as { workflow_run_id?: unknown };
+		const workflowRunId = String(body.workflow_run_id ?? "");
+		if (!/^[1-9][0-9]*$/u.test(workflowRunId)) {
+			throw new Error("github_dispatch_unconfirmed");
+		}
+		return { workflowRunId };
+	});
+};
+
+export const persistDispatchReceipt = async (
+	env: WorkerEnv,
+	receipt: {
+		workflowRunId: string;
+		projectSlug: string;
+		operationId: string;
+		generation: number;
+	},
+) => {
+	if (!env.CONTROL_DB.batch) return false;
+	let results: D1RunResultLike[];
+	try {
+		results = await env.CONTROL_DB.batch([
+			env.CONTROL_DB.prepare(
+				`UPDATE operations SET workflow_run_id=?1
+				 WHERE operation_id=?2 AND generation=?3
+				   AND (workflow_run_id IS NULL OR workflow_run_id=?1)`,
+			).bind(receipt.workflowRunId, receipt.operationId, receipt.generation),
+			env.CONTROL_DB.prepare(
+				`UPDATE project_state SET workflow_run_id=?1
+				 WHERE project_slug=?2 AND operation_id=?3 AND generation=?4
+				   AND (workflow_run_id IS NULL OR workflow_run_id=?1)`,
+			).bind(
+				receipt.workflowRunId,
+				receipt.projectSlug,
+				receipt.operationId,
+				receipt.generation,
+			),
+			env.CONTROL_DB.prepare(
+				"DELETE FROM control_batch_guards WHERE operation_id=?1",
+			).bind(receipt.operationId),
+			env.CONTROL_DB.prepare(
+				`INSERT INTO control_batch_guards (operation_id, valid)
+				 SELECT ?1, CASE WHEN
+				 EXISTS (SELECT 1 FROM operations WHERE operation_id=?1 AND generation=?2 AND workflow_run_id=?3)
+				 AND EXISTS (SELECT 1 FROM project_state WHERE project_slug=?4 AND operation_id=?1
+				   AND generation=?2 AND workflow_run_id=?3)
+				 THEN 1 ELSE 0 END`,
+			).bind(
+				receipt.operationId,
+				receipt.generation,
+				receipt.workflowRunId,
+				receipt.projectSlug,
+			),
+		]);
+	} catch {
+		return false;
+	}
+	return (
+		results.length === 4 && results.every((entry) => entry.meta?.changes === 1)
 	);
-	if (response.status !== 204) throw new Error("github_dispatch_failed");
+};
+
+const markDispatchUncertain = async (
+	env: WorkerEnv,
+	action: ControlAction,
+	requestedAt: string,
+	projectSlug: string,
+	operationId: string,
+	generation: number,
+) => {
+	const statement =
+		action === "stop"
+			? "UPDATE project_state SET control_state='cleanup_required', cleanup_verified=0, expires_at=NULL, updated_at=?1 WHERE project_slug=?2 AND operation_id=?3 AND generation=?4 AND control_state IN ('starting','stopping')"
+			: "UPDATE project_state SET control_state='degraded', cleanup_verified=0, updated_at=?1 WHERE project_slug=?2 AND operation_id=?3 AND generation=?4 AND control_state IN ('starting','stopping')";
+	await env.CONTROL_DB.prepare(statement)
+		.bind(requestedAt, projectSlug, operationId, generation)
+		.run();
 };
 
 const batchedControlMutation = async (
@@ -408,16 +568,22 @@ const batchedControlMutation = async (
 ) => {
 	const { projectSlug, project } = projectFrom(url);
 	if (!project) return json({ error: "unknown_project" }, { status: 404 });
-	if (!configured(env) || !env.CONTROL_DB.batch) return json({ error: "control_not_configured" }, { status: 503 });
-	if (request.headers.get("origin") !== env.CONTROL_ORIGIN) return json({ error: "origin_not_allowed" }, { status: 403 });
-	const access = await verifyAccess(request, env);
-	if (access instanceof Response) return access;
+	if (!configured(env) || !env.CONTROL_DB.batch)
+		return json({ error: "control_not_configured" }, { status: 503 });
+	if (request.headers.get("origin") !== env.CONTROL_ORIGIN)
+		return json({ error: "origin_not_allowed" }, { status: 403 });
 	const nonce = request.headers.get("x-control-nonce") ?? "";
 	const idempotencyKey = request.headers.get("idempotency-key") ?? "";
-	if (!nonce || !idempotencyPattern.test(idempotencyKey)) return json({ error: "invalid_control_proof" }, { status: 403 });
+	if (!nonce || !idempotencyPattern.test(idempotencyKey))
+		return json({ error: "invalid_control_proof" }, { status: 403 });
+	if (!env.TOTP_SECRET)
+		return json({ error: "control_not_configured" }, { status: 503 });
+	const actorHash = await sha256(`totp:${env.TOTP_SECRET}`);
 	let row: StateRow | null;
 	try {
-		row = await env.CONTROL_DB.prepare("SELECT * FROM project_state WHERE project_slug=?1")
+		row = await env.CONTROL_DB.prepare(
+			"SELECT * FROM project_state WHERE project_slug=?1",
+		)
 			.bind(projectSlug)
 			.first<StateRow>();
 	} catch {
@@ -431,15 +597,24 @@ const batchedControlMutation = async (
 		try {
 			existingOperation = await env.CONTROL_DB.prepare(
 				"SELECT action FROM operations WHERE operation_id=?1 AND project_slug=?2 AND idempotency_key=?3",
-			).bind(row.operation_id, projectSlug, idempotencyKey).first<{ action: ControlAction }>();
+			)
+				.bind(row.operation_id, projectSlug, idempotencyKey)
+				.first<{ action: ControlAction }>();
 		} catch {
 			return json({ error: "idempotency_state_unavailable" }, { status: 503 });
 		}
-		if (!existingOperation) return json({ error: "idempotency_state_conflict" }, { status: 409 });
+		if (!existingOperation)
+			return json({ error: "idempotency_state_conflict" }, { status: 409 });
 		currentState.operationAction = existingOperation.action;
 	}
-	const expiresAt = action === "start" ? new Date(Date.now() + project.maximumRuntimeMinutes * 60_000).toISOString() : row.expires_at;
-	if (!isCanonicalIso(expiresAt)) return json({ error: "active_expiry_required" }, { status: 409 });
+	const expiresAt =
+		action === "start"
+			? new Date(
+					Date.now() + project.maximumRuntimeMinutes * 60_000,
+				).toISOString()
+			: (row.expires_at ?? requestedAt);
+	if (!isCanonicalIso(expiresAt))
+		return json({ error: "active_expiry_required" }, { status: 409 });
 	const result = requestControlOperation(currentState, {
 		action,
 		idempotencyKey,
@@ -447,8 +622,10 @@ const batchedControlMutation = async (
 		requestedAt,
 		expiresAt,
 	});
-	if (result.kind === "rejected") return json({ error: result.reason }, { status: 409 });
-	if (result.kind === "duplicate") return json({ ...result.state, duplicate: true });
+	if (result.kind === "rejected")
+		return json({ error: result.reason }, { status: 409 });
+	if (result.kind === "duplicate")
+		return json({ ...result.state, duplicate: true });
 	let installationToken: string;
 	try {
 		installationToken = await githubInstallationToken(env);
@@ -470,11 +647,35 @@ const batchedControlMutation = async (
 			{ status: 502 },
 		);
 	}
+	if (action === "start") {
+		const readiness = await refreshProjectDispatchReadiness(
+			env,
+			project,
+			installationToken,
+		);
+		const readinessGate = evaluateDispatchReadiness(readiness);
+		if (!readinessGate.ok) {
+			return json(
+				{
+					error: readinessGate.error,
+					dispatchReadiness: readiness,
+					stateUnchanged: true,
+				},
+				{ status: readinessGate.status },
+			);
+		}
+	}
 	const nonceClaim = env.CONTROL_DB.prepare(
 		`UPDATE control_nonces SET consumed_at=?1, consumed_by_operation_id=?2
 		 WHERE nonce=?3 AND project_slug=?4 AND actor_subject_hash=?5
 		 AND consumed_at IS NULL AND expires_at > ?1`,
-	).bind(requestedAt, result.operation.operationId, nonce, projectSlug, access.actorHash);
+	).bind(
+		requestedAt,
+		result.operation.operationId,
+		nonce,
+		projectSlug,
+		actorHash,
+	);
 	const stateClaim = env.CONTROL_DB.prepare(
 		`UPDATE project_state SET control_state=?1, data_mode=?2, generation=?3,
 		 operation_id=?4, idempotency_key=?5, workflow_run_id=NULL, cleanup_verified=?6,
@@ -482,14 +683,38 @@ const batchedControlMutation = async (
 		 WHERE project_slug=?10 AND generation=?11 AND control_state=?12
 		 AND EXISTS (SELECT 1 FROM control_nonces WHERE nonce=?13
 		 AND consumed_by_operation_id=?4 AND consumed_at=?9)`,
-	).bind(result.state.controlState, result.state.dataMode, result.state.generation, result.state.operationId, result.state.idempotencyKey, result.state.cleanupVerified ? 1 : 0, result.state.expiresAt ?? null, project.estimatedCostUsd, requestedAt, projectSlug, row.generation ?? 0, row.control_state, nonce);
+	).bind(
+		result.state.controlState,
+		result.state.dataMode,
+		result.state.generation,
+		result.state.operationId,
+		result.state.idempotencyKey,
+		result.state.cleanupVerified ? 1 : 0,
+		result.state.expiresAt ?? null,
+		project.estimatedCostUsd,
+		requestedAt,
+		projectSlug,
+		row.generation ?? 0,
+		row.control_state,
+		nonce,
+	);
 	const operationInsert = env.CONTROL_DB.prepare(
 		`INSERT INTO operations (operation_id, project_slug, action, idempotency_key,
 		 generation, actor_subject_hash, estimated_cost_usd, requested_at)
 		 SELECT ?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8
 		 WHERE EXISTS (SELECT 1 FROM project_state WHERE project_slug=?2
 		 AND operation_id=?1 AND generation=?5 AND control_state=?9)`,
-	).bind(result.operation.operationId, projectSlug, action, idempotencyKey, result.operation.generation, access.actorHash, project.estimatedCostUsd, requestedAt, result.state.controlState);
+	).bind(
+		result.operation.operationId,
+		projectSlug,
+		action,
+		idempotencyKey,
+		result.operation.generation,
+		actorHash,
+		project.estimatedCostUsd,
+		requestedAt,
+		result.state.controlState,
+	);
 	const atomicGuard = env.CONTROL_DB.prepare(
 		`INSERT INTO control_batch_guards (operation_id, valid)
 		 SELECT ?1, CASE WHEN
@@ -497,18 +722,32 @@ const batchedControlMutation = async (
 		 AND EXISTS (SELECT 1 FROM project_state WHERE project_slug=?3 AND operation_id=?1 AND generation=?4)
 		 AND EXISTS (SELECT 1 FROM operations WHERE operation_id=?1 AND generation=?4)
 		 THEN 1 ELSE 0 END`,
-	).bind(result.operation.operationId, nonce, projectSlug, result.operation.generation);
+	).bind(
+		result.operation.operationId,
+		nonce,
+		projectSlug,
+		result.operation.generation,
+	);
 	let batchResults: D1RunResultLike[];
 	try {
-		batchResults = await env.CONTROL_DB.batch([nonceClaim, stateClaim, operationInsert, atomicGuard]);
+		batchResults = await env.CONTROL_DB.batch([
+			nonceClaim,
+			stateClaim,
+			operationInsert,
+			atomicGuard,
+		]);
 	} catch {
 		return json({ error: "control_batch_conflict" }, { status: 409 });
 	}
-	if (batchResults.length !== 4 || batchResults.some((entry) => entry.meta?.changes !== 1)) {
+	if (
+		batchResults.length !== 4 ||
+		batchResults.some((entry) => entry.meta?.changes !== 1)
+	) {
 		return json({ error: "control_batch_conflict" }, { status: 409 });
 	}
+	let dispatch: { workflowRunId: string };
 	try {
-		await dispatchFixedWorkflow(
+		dispatch = await dispatchFixedWorkflow(
 			env,
 			project,
 			action,
@@ -524,15 +763,55 @@ const batchedControlMutation = async (
 			operationId: result.operation.operationId,
 			projectSlug,
 		});
-		await env.CONTROL_DB.prepare(
-			"UPDATE project_state SET control_state='cleanup_required', cleanup_verified=0, expires_at=NULL, updated_at=?1 WHERE project_slug=?2 AND operation_id=?3 AND generation=?4 AND control_state IN ('starting','stopping')",
-		).bind(requestedAt, projectSlug, result.operation.operationId, result.operation.generation).run();
+		await markDispatchUncertain(
+			env,
+			action,
+			requestedAt,
+			projectSlug,
+			result.operation.operationId,
+			result.operation.generation,
+		);
 		return json(
-			{ error: "github_dispatch_failed", cleanupRequired: true },
+			{ error: "github_dispatch_unconfirmed", dispatchUncertain: true },
 			{ status: 502 },
 		);
 	}
-	return json({ projectSlug, controlState: result.state.controlState, operationId: result.operation.operationId, generation: result.operation.generation, expiresAt: result.state.expiresAt ?? null, estimatedCostUsd: project.estimatedCostUsd }, { status: 202, headers: { "cache-control": "no-store" } });
+	const receiptPersisted = await persistDispatchReceipt(env, {
+		workflowRunId: dispatch.workflowRunId,
+		projectSlug,
+		operationId: result.operation.operationId,
+		generation: result.operation.generation,
+	});
+	if (!receiptPersisted) {
+		await markDispatchUncertain(
+			env,
+			action,
+			requestedAt,
+			projectSlug,
+			result.operation.operationId,
+			result.operation.generation,
+		);
+		return json(
+			{
+				error: "github_dispatch_receipt_persist_failed",
+				dispatchUncertain: true,
+				workflowRunId: dispatch.workflowRunId,
+			},
+			{ status: 502 },
+		);
+	}
+	return json(
+		{
+			projectSlug,
+			controlState: result.state.controlState,
+			operationId: result.operation.operationId,
+			generation: result.operation.generation,
+			workflowRunId: dispatch.workflowRunId,
+			expiresAt: result.state.expiresAt ?? null,
+			estimatedCostUsd: project.estimatedCostUsd,
+		},
+		{ status: 202, headers: { "cache-control": "no-store" } },
+	);
 };
 
 const verifyCallback = async (
@@ -560,7 +839,8 @@ const readBoundedCallbackBody = async (request: Request) => {
 	const declaredLength = request.headers.get("content-length");
 	if (declaredLength !== null) {
 		const length = Number(declaredLength);
-		if (!Number.isInteger(length) || length < 0) throw new Error("invalid_content_length");
+		if (!Number.isInteger(length) || length < 0)
+			throw new Error("invalid_content_length");
 		if (length > callbackLimitBytes) throw new Error("callback_too_large");
 	}
 	if (!request.body) return "";
@@ -587,9 +867,21 @@ const readBoundedCallbackBody = async (request: Request) => {
 };
 
 const callbackTransitions: Record<string, ReadonlySet<string>> = {
-	starting: new Set(["starting", "running", "degraded", "stopping", "cleanup_required"]),
+	starting: new Set([
+		"starting",
+		"running",
+		"degraded",
+		"stopping",
+		"cleanup_required",
+	]),
 	running: new Set(["running", "degraded", "stopping", "cleanup_required"]),
-	degraded: new Set(["running", "degraded", "stopping", "cleanup_required"]),
+	degraded: new Set([
+		"running",
+		"degraded",
+		"stopping",
+		"stopped",
+		"cleanup_required",
+	]),
 	stopping: new Set(["stopping", "stopped", "cleanup_required"]),
 	failed: new Set(["stopping", "cleanup_required"]),
 	stopped: new Set(["stopped"]),
@@ -603,7 +895,12 @@ const secureWorkflowCallback = async (request: Request, env: WorkerEnv) => {
 	} catch (error) {
 		return json(
 			{ error: error instanceof Error ? error.message : "invalid_callback" },
-			{ status: error instanceof Error && error.message === "callback_too_large" ? 413 : 400 },
+			{
+				status:
+					error instanceof Error && error.message === "callback_too_large"
+						? 413
+						: 400,
+			},
 		);
 	}
 	const timestamp = request.headers.get("x-performance-timestamp") ?? "";
@@ -643,14 +940,23 @@ const secureWorkflowCallback = async (request: Request, env: WorkerEnv) => {
 			"SELECT body_sha256, status, claimed_at, applied_at, attempts FROM callback_deliveries WHERE delivery_id=?1",
 		)
 			.bind(deliveryId)
-			.first<{ body_sha256: string; status: string; claimed_at: string; applied_at: string | null; attempts: number }>();
+			.first<{
+				body_sha256: string;
+				status: string;
+				claimed_at: string;
+				applied_at: string | null;
+				attempts: number;
+			}>();
 		if (!existingDelivery || existingDelivery.body_sha256 !== bodyDigest) {
 			return json({ error: "callback_delivery_conflict" }, { status: 409 });
 		}
 		if (existingDelivery.status === "applied") {
 			return json({ applied: false, duplicate: true });
 		}
-		if (existingDelivery.status === "processing" && Date.parse(existingDelivery.claimed_at) > Date.parse(leaseCutoff)) {
+		if (
+			existingDelivery.status === "processing" &&
+			Date.parse(existingDelivery.claimed_at) > Date.parse(leaseCutoff)
+		) {
 			return json({ error: "callback_delivery_processing" }, { status: 409 });
 		}
 		const reclaimed = await env.CONTROL_DB.prepare(
@@ -661,17 +967,24 @@ const secureWorkflowCallback = async (request: Request, env: WorkerEnv) => {
 		)
 			.bind(claimedAt, deliveryId, bodyDigest, leaseCutoff)
 			.run<D1RunResultLike>();
-		if (reclaimed.meta?.changes !== 1) return json({ error: "callback_delivery_conflict" }, { status: 409 });
+		if (reclaimed.meta?.changes !== 1)
+			return json({ error: "callback_delivery_conflict" }, { status: 409 });
 	}
 	const failDelivery = async (error: string, status: number) => {
 		await env.CONTROL_DB.prepare(
 			"UPDATE callback_deliveries SET status='failed', applied_at=NULL WHERE delivery_id=?1 AND body_sha256=?2 AND status='processing'",
-		).bind(deliveryId, bodyDigest).run();
+		)
+			.bind(deliveryId, bodyDigest)
+			.run();
 		return json({ error }, { status });
 	};
-	const projectSlug = body.snapshot?.projectSlug ?? "performance-observability-control";
-	if (!getRegisteredProject(projectSlug)) return failDelivery("unknown_project", 404);
-	const row = await env.CONTROL_DB.prepare("SELECT * FROM project_state WHERE project_slug=?1")
+	const projectSlug =
+		body.snapshot?.projectSlug ?? "performance-observability-control";
+	if (!getRegisteredProject(projectSlug))
+		return failDelivery("unknown_project", 404);
+	const row = await env.CONTROL_DB.prepare(
+		"SELECT * FROM project_state WHERE project_slug=?1",
+	)
 		.bind(projectSlug)
 		.first<StateRow>();
 	if (!row) {
@@ -686,13 +999,20 @@ const secureWorkflowCallback = async (request: Request, env: WorkerEnv) => {
 		) {
 			return failDelivery("bootstrap_requires_zero_residual_verification", 409);
 		}
-		if (!env.CONTROL_DB.batch) return failDelivery("callback_atomic_unavailable", 503);
+		if (!env.CONTROL_DB.batch)
+			return failDelivery("callback_atomic_unavailable", 503);
 		const bootstrapInsert = env.CONTROL_DB.prepare(
 			`INSERT INTO project_state (project_slug, control_state, data_mode, generation,
 			 operation_id, workflow_run_id, cleanup_verified, estimated_cost_usd, updated_at, last_event_at)
 			 VALUES (?1, 'stopped', 'unavailable', ?2, ?3, ?4, 1, 0.20, ?5, ?5)
 			 ON CONFLICT(project_slug) DO NOTHING`,
-		).bind(projectSlug, body.generation, body.operationId, body.workflowRunId, body.occurredAt);
+		).bind(
+			projectSlug,
+			body.generation,
+			body.operationId,
+			body.workflowRunId,
+			body.occurredAt,
+		);
 		const deliveryFinalize = env.CONTROL_DB.prepare(
 			"UPDATE callback_deliveries SET status='applied', applied_at=?1 WHERE delivery_id=?2 AND body_sha256=?3 AND status='processing'",
 		).bind(body.occurredAt, deliveryId, bodyDigest);
@@ -705,14 +1025,30 @@ const secureWorkflowCallback = async (request: Request, env: WorkerEnv) => {
 			 AND EXISTS (SELECT 1 FROM callback_deliveries WHERE delivery_id=?7
 			   AND body_sha256=?8 AND status='applied' AND applied_at=?6)
 			 THEN 1 ELSE 0 END`,
-		).bind(`callback:${deliveryId}`, projectSlug, body.generation, body.operationId, body.workflowRunId, body.occurredAt, deliveryId, bodyDigest);
+		).bind(
+			`callback:${deliveryId}`,
+			projectSlug,
+			body.generation,
+			body.operationId,
+			body.workflowRunId,
+			body.occurredAt,
+			deliveryId,
+			bodyDigest,
+		);
 		let bootstrapResults: D1RunResultLike[];
 		try {
-			bootstrapResults = await env.CONTROL_DB.batch([bootstrapInsert, deliveryFinalize, bootstrapGuard]);
+			bootstrapResults = await env.CONTROL_DB.batch([
+				bootstrapInsert,
+				deliveryFinalize,
+				bootstrapGuard,
+			]);
 		} catch {
 			return failDelivery("callback_delivery_finalize_conflict", 409);
 		}
-		if (bootstrapResults.length !== 3 || bootstrapResults.some((result) => result.meta?.changes !== 1)) {
+		if (
+			bootstrapResults.length !== 3 ||
+			bootstrapResults.some((result) => result.meta?.changes !== 1)
+		) {
 			return failDelivery("callback_delivery_finalize_conflict", 409);
 		}
 		return json({ applied: true, bootstrapped: true, controlState: "stopped" });
@@ -722,34 +1058,53 @@ const secureWorkflowCallback = async (request: Request, env: WorkerEnv) => {
 	}
 	const nextControlState =
 		body.status === "failed" ? "cleanup_required" : body.status;
+	if (
+		nextControlState === "stopped" &&
+		(body.cleanupVerified !== true || body.zeroResidualVerified !== true)
+	) {
+		return failDelivery("stopped_requires_zero_residual_verification", 409);
+	}
 	const occurredAtMs = Date.parse(body.occurredAt);
-	if (!Number.isFinite(occurredAtMs)) return failDelivery("invalid_occurred_at", 400);
+	if (!Number.isFinite(occurredAtMs))
+		return failDelivery("invalid_occurred_at", 400);
 	const previousEventAt = row.last_event_at ?? row.updated_at;
 	if (occurredAtMs <= Date.parse(previousEventAt)) {
 		return failDelivery("invalid_callback_transition", 409);
 	}
-	if (Math.abs(occurredAtMs - timestampSeconds * 1000) > 10 * 60_000 || occurredAtMs > Date.now() + clockSkewSeconds * 1000) {
+	if (
+		Math.abs(occurredAtMs - timestampSeconds * 1000) > 10 * 60_000 ||
+		occurredAtMs > Date.now() + clockSkewSeconds * 1000
+	) {
 		return failDelivery("occurred_at_out_of_window", 400);
 	}
 	if (body.source === "control") {
-		if (!callbackTransitions[row.control_state]?.has(nextControlState)) return failDelivery("invalid_callback_transition", 409);
+		if (!callbackTransitions[row.control_state]?.has(nextControlState))
+			return failDelivery("invalid_callback_transition", 409);
 		const operationRun = await env.CONTROL_DB.prepare(
 			`UPDATE operations SET workflow_run_id=COALESCE(workflow_run_id, ?1)
 			 WHERE operation_id=?2 AND generation=?3
 			   AND (workflow_run_id IS NULL OR workflow_run_id=?1)`,
-		).bind(body.workflowRunId, body.operationId, body.generation).run<D1RunResultLike>();
-		if (operationRun.meta?.changes !== 1) return failDelivery("workflow_run_conflict", 409);
+		)
+			.bind(body.workflowRunId, body.operationId, body.generation)
+			.run<D1RunResultLike>();
+		if (operationRun.meta?.changes !== 1)
+			return failDelivery("workflow_run_conflict", 409);
 	} else if (body.generation < (row.generation ?? 0)) {
 		return failDelivery("stale_safety_expiry", 409);
 	}
 	let snapshotDigest: string | null = null;
 	let snapshotKey: string | null = null;
 	if (body.snapshot) {
-		if (body.snapshot.repository !== "Tiancheng-Xu/babysteps" || body.snapshot.workflowRunId !== body.workflowRunId) {
+		if (
+			body.snapshot.repository !== "Tiancheng-Xu/babysteps" ||
+			body.snapshot.workflowRunId !== body.workflowRunId
+		) {
 			return failDelivery("snapshot_source_mismatch", 400);
 		}
 		try {
-			assertSnapshotPublishable(body.snapshot, { immutableObjectExists: false });
+			assertSnapshotPublishable(body.snapshot, {
+				immutableObjectExists: false,
+			});
 		} catch {
 			return failDelivery("invalid_snapshot", 400);
 		}
@@ -763,7 +1118,8 @@ const secureWorkflowCallback = async (request: Request, env: WorkerEnv) => {
 		)
 			.bind(snapshotDigest, body.operationId, body.generation)
 			.run<D1RunResultLike>();
-		if (reserved.meta?.changes !== 1) return failDelivery("operation_snapshot_conflict", 409);
+		if (reserved.meta?.changes !== 1)
+			return failDelivery("operation_snapshot_conflict", 409);
 		const existing = await env.SNAPSHOTS.get(snapshotKey);
 		if (existing) {
 			if ((await sha256(await existing.text())) !== snapshotDigest) {
@@ -771,18 +1127,32 @@ const secureWorkflowCallback = async (request: Request, env: WorkerEnv) => {
 			}
 		} else {
 			try {
-				const created = await env.SNAPSHOTS.put(snapshotKey, snapshotRaw, { onlyIf: { etagDoesNotMatch: "*" } });
-				if (created === null) return failDelivery("immutable_snapshot_conflict", 409);
+				const created = await env.SNAPSHOTS.put(snapshotKey, snapshotRaw, {
+					onlyIf: { etagDoesNotMatch: "*" },
+				});
+				if (created === null)
+					return failDelivery("immutable_snapshot_conflict", 409);
 			} catch {
 				return failDelivery("snapshot_write_failed", 502);
 			}
 		}
 	}
-	const cleanupVerified = nextControlState === "stopped" && body.cleanupVerified === true && body.zeroResidualVerified === true;
-	const nextDataMode = nextControlState === "running" ? "live" : nextControlState === "stopped" && row.data_mode === "live" ? "historical" : row.data_mode;
-	if (!env.CONTROL_DB.batch) return failDelivery("callback_atomic_unavailable", 503);
-	const stateApply = body.source === "control" ? env.CONTROL_DB.prepare(
-		`UPDATE project_state SET control_state=?1, data_mode=?2, workflow_run_id=?3,
+	const cleanupVerified =
+		nextControlState === "stopped" &&
+		body.cleanupVerified === true &&
+		body.zeroResidualVerified === true;
+	const nextDataMode =
+		nextControlState === "running"
+			? "live"
+			: nextControlState === "stopped" && row.data_mode === "live"
+				? "historical"
+				: row.data_mode;
+	if (!env.CONTROL_DB.batch)
+		return failDelivery("callback_atomic_unavailable", 503);
+	const stateApply =
+		body.source === "control"
+			? env.CONTROL_DB.prepare(
+					`UPDATE project_state SET control_state=?1, data_mode=?2, workflow_run_id=?3,
 		 cleanup_verified=?4, expires_at=CASE WHEN ?1 IN ('starting','running','degraded') THEN expires_at ELSE NULL END,
 		 snapshot_key=COALESCE(?5, snapshot_key),
 		 snapshot_sha256=COALESCE(?6, snapshot_sha256), updated_at=?7, last_event_at=?7
@@ -790,14 +1160,42 @@ const secureWorkflowCallback = async (request: Request, env: WorkerEnv) => {
 		   AND updated_at=?12 AND COALESCE(last_event_at, updated_at)=?13
 		   AND (workflow_run_id IS NULL OR workflow_run_id=?3)
 		   AND (snapshot_sha256 IS NULL OR ?6 IS NULL OR snapshot_sha256=?6)`,
-	).bind(nextControlState, nextDataMode, body.workflowRunId, cleanupVerified ? 1 : 0, snapshotKey, snapshotDigest, body.occurredAt, projectSlug, row.control_state, body.operationId, body.generation, row.updated_at, previousEventAt) : env.CONTROL_DB.prepare(
-		`UPDATE project_state SET control_state=?1, data_mode=?2, generation=?3,
+				).bind(
+					nextControlState,
+					nextDataMode,
+					body.workflowRunId,
+					cleanupVerified ? 1 : 0,
+					snapshotKey,
+					snapshotDigest,
+					body.occurredAt,
+					projectSlug,
+					row.control_state,
+					body.operationId,
+					body.generation,
+					row.updated_at,
+					previousEventAt,
+				)
+			: env.CONTROL_DB.prepare(
+					`UPDATE project_state SET control_state=?1, data_mode=?2, generation=?3,
 		 operation_id=?4, workflow_run_id=?5, cleanup_verified=?6, expires_at=NULL,
 		 snapshot_key=COALESCE(?7, snapshot_key), snapshot_sha256=COALESCE(?8, snapshot_sha256),
 		 updated_at=?9, last_event_at=?9
 		 WHERE project_slug=?10 AND generation<=?3 AND updated_at=?11
 		 AND COALESCE(last_event_at, updated_at)=?12`,
-	).bind(nextControlState, nextDataMode, body.generation, body.operationId, body.workflowRunId, cleanupVerified ? 1 : 0, snapshotKey, snapshotDigest, body.occurredAt, projectSlug, row.updated_at, previousEventAt);
+				).bind(
+					nextControlState,
+					nextDataMode,
+					body.generation,
+					body.operationId,
+					body.workflowRunId,
+					cleanupVerified ? 1 : 0,
+					snapshotKey,
+					snapshotDigest,
+					body.occurredAt,
+					projectSlug,
+					row.updated_at,
+					previousEventAt,
+				);
 	const deliveryFinalize = env.CONTROL_DB.prepare(
 		"UPDATE callback_deliveries SET status='applied', applied_at=?1 WHERE delivery_id=?2 AND body_sha256=?3 AND status='processing'",
 	).bind(body.occurredAt, deliveryId, bodyDigest);
@@ -810,14 +1208,31 @@ const secureWorkflowCallback = async (request: Request, env: WorkerEnv) => {
 		 AND EXISTS (SELECT 1 FROM callback_deliveries WHERE delivery_id=?8
 		   AND body_sha256=?9 AND status='applied' AND applied_at=?7)
 		 THEN 1 ELSE 0 END`,
-	).bind(`callback:${deliveryId}`, projectSlug, nextControlState, body.operationId, body.generation, body.workflowRunId, body.occurredAt, deliveryId, bodyDigest);
+	).bind(
+		`callback:${deliveryId}`,
+		projectSlug,
+		nextControlState,
+		body.operationId,
+		body.generation,
+		body.workflowRunId,
+		body.occurredAt,
+		deliveryId,
+		bodyDigest,
+	);
 	let applyResults: D1RunResultLike[];
 	try {
-		applyResults = await env.CONTROL_DB.batch([stateApply, deliveryFinalize, applyGuard]);
+		applyResults = await env.CONTROL_DB.batch([
+			stateApply,
+			deliveryFinalize,
+			applyGuard,
+		]);
 	} catch {
 		return failDelivery("callback_delivery_finalize_conflict", 409);
 	}
-	if (applyResults.length !== 3 || applyResults.some((result) => result.meta?.changes !== 1)) {
+	if (
+		applyResults.length !== 3 ||
+		applyResults.some((result) => result.meta?.changes !== 1)
+	) {
 		return failDelivery("callback_delivery_finalize_conflict", 409);
 	}
 	return json({ applied: true, controlState: nextControlState });
@@ -839,16 +1254,31 @@ export const reconcileExpiredControls = async (env: WorkerEnv) => {
 		const requestedAt = new Date().toISOString();
 		const update = env.CONTROL_DB.prepare(
 			`UPDATE project_state SET control_state='stopping', operation_id=?1,
-			 generation=?2, idempotency_key=?3, updated_at=?4
+			 generation=?2, idempotency_key=?3, workflow_run_id=NULL, updated_at=?4
 			 WHERE project_slug=?5 AND generation=?6 AND control_state=?7 AND expires_at<=?4`,
-		).bind(operationId, generation, `ttl:${row.generation}`, requestedAt, row.project_slug, row.generation, row.control_state);
+		).bind(
+			operationId,
+			generation,
+			`ttl:${row.generation}`,
+			requestedAt,
+			row.project_slug,
+			row.generation,
+			row.control_state,
+		);
 		const insert = env.CONTROL_DB.prepare(
 			`INSERT INTO operations (operation_id, project_slug, action, idempotency_key,
 			 generation, actor_subject_hash, estimated_cost_usd, requested_at)
 			 SELECT ?1, ?2, 'stop', ?3, ?4, ?5, 0.20, ?6
 			 WHERE EXISTS (SELECT 1 FROM project_state WHERE project_slug=?2
 			 AND operation_id=?1 AND generation=?4 AND control_state='stopping')`,
-		).bind(operationId, row.project_slug, `ttl:${row.generation}`, generation, await sha256("system:ttl"), requestedAt);
+		).bind(
+			operationId,
+			row.project_slug,
+			`ttl:${row.generation}`,
+			generation,
+			await sha256("system:ttl"),
+			requestedAt,
+		);
 		const guard = env.CONTROL_DB.prepare(
 			`INSERT INTO control_batch_guards (operation_id, valid)
 			 SELECT ?1, CASE WHEN
@@ -862,9 +1292,13 @@ export const reconcileExpiredControls = async (env: WorkerEnv) => {
 		} catch {
 			continue;
 		}
-		if (results.length !== 3 || results.some((result) => result.meta?.changes !== 1)) continue;
+		if (
+			results.length !== 3 ||
+			results.some((result) => result.meta?.changes !== 1)
+		)
+			continue;
 		try {
-			await dispatchFixedWorkflow(
+			const dispatch = await dispatchFixedWorkflow(
 				env,
 				project,
 				"stop",
@@ -872,6 +1306,19 @@ export const reconcileExpiredControls = async (env: WorkerEnv) => {
 				generation,
 				row.expires_at,
 			);
+			const receiptPersisted = await persistDispatchReceipt(env, {
+				workflowRunId: dispatch.workflowRunId,
+				projectSlug: row.project_slug,
+				operationId,
+				generation,
+			});
+			if (!receiptPersisted) {
+				await env.CONTROL_DB.prepare(
+					"UPDATE project_state SET control_state='cleanup_required', cleanup_verified=0, expires_at=NULL WHERE project_slug=?1 AND operation_id=?2 AND generation=?3 AND control_state='stopping'",
+				)
+					.bind(row.project_slug, operationId, generation)
+					.run();
+			}
 		} catch {
 			await env.CONTROL_DB.prepare(
 				"UPDATE project_state SET control_state='cleanup_required', cleanup_verified=0, expires_at=NULL WHERE project_slug=?1",
@@ -882,24 +1329,128 @@ export const reconcileExpiredControls = async (env: WorkerEnv) => {
 	}
 };
 
+export const refreshRegisteredDispatchReadiness = async (env: WorkerEnv) => {
+	if (!configured(env)) return;
+	await Promise.all(
+		listRegisteredProjects().map(async (project) => {
+			try {
+				await refreshProjectDispatchReadiness(env, project);
+			} catch {
+				console.error("dispatch_readiness_refresh_failed", {
+					projectSlug: project.projectSlug,
+				});
+			}
+		}),
+	);
+};
+
+const publicStatusWithDispatchReadiness = async (url: URL, env: WorkerEnv) => {
+	const response = await publicStatus(url, env);
+	if (!response.ok) return response;
+	const payload = (await response.json()) as Record<string, unknown>;
+	const projectSlug =
+		typeof payload.projectSlug === "string" ? payload.projectSlug : "";
+	let dispatchReadiness: PublicDispatchReadiness;
+	try {
+		dispatchReadiness = await readDispatchReadiness(
+			env.CONTROL_DB,
+			projectSlug,
+		);
+	} catch {
+		dispatchReadiness = {
+			state: "unknown" as const,
+			reason: "readiness_not_checked" as const,
+			checkedAt: null,
+			freshUntil: null,
+		};
+	}
+	return json(
+		{ ...payload, dispatchReadiness },
+		{ status: response.status, headers: response.headers },
+	);
+};
+
+const createReadinessProtectedSession = async (
+	request: Request,
+	url: URL,
+	env: WorkerEnv,
+) => {
+	const { project, projectSlug } = projectFrom(url);
+	if (!project) return json({ error: "unknown_project" }, { status: 404 });
+	if (!configured(env)) {
+		return json({ error: "control_not_configured" }, { status: 503 });
+	}
+	if (request.headers.get("origin") !== env.CONTROL_ORIGIN) {
+		return json({ error: "origin_not_allowed" }, { status: 403 });
+	}
+	const requestedAction = url.searchParams.get("action");
+	if (requestedAction !== "start" && requestedAction !== "stop") {
+		return json({ error: "invalid_control_action" }, { status: 400 });
+	}
+	if (requestedAction === "stop") {
+		return createSession(request, url, env);
+	}
+
+	let readiness: PublicDispatchReadiness;
+	try {
+		readiness = await readDispatchReadiness(env.CONTROL_DB, projectSlug);
+	} catch {
+		readiness = {
+			state: "unknown" as const,
+			reason: "readiness_not_checked" as const,
+			checkedAt: null,
+			freshUntil: null,
+		};
+	}
+	const readinessGate = evaluateDispatchReadiness(readiness);
+	if (!readinessGate.ok) {
+		return json(
+			{
+				error: readinessGate.error,
+				dispatchReadiness: readiness,
+				projectSlug,
+				stateUnchanged: true,
+			},
+			{ status: readinessGate.status },
+		);
+	}
+
+	return createSession(request, url, env);
+};
+
 export const handleRequest = async (request: Request, env: WorkerEnv) => {
 	const url = new URL(request.url);
 	if (request.method === "GET" && url.pathname === "/api/performance/status") {
-		return publicStatus(url, env);
+		return publicStatusWithDispatchReadiness(url, env);
 	}
-	if (request.method === "GET" && url.pathname === "/api/performance/snapshot") {
+	if (
+		request.method === "GET" &&
+		url.pathname === "/api/performance/snapshot"
+	) {
 		return publicSnapshot(request, url, env);
 	}
-	if (request.method === "POST" && url.pathname === "/api/performance/control/callback") {
+	if (
+		request.method === "POST" &&
+		url.pathname === "/api/performance/control/callback"
+	) {
 		return secureWorkflowCallback(request, env);
 	}
-	if (request.method === "POST" && url.pathname === "/api/performance/control/session") {
-		return createSession(request, url, env);
+	if (
+		request.method === "POST" &&
+		url.pathname === "/api/performance/control/session"
+	) {
+		return createReadinessProtectedSession(request, url, env);
 	}
-	if (request.method === "POST" && url.pathname === "/api/performance/control/start") {
+	if (
+		request.method === "POST" &&
+		url.pathname === "/api/performance/control/start"
+	) {
 		return batchedControlMutation(request, url, env, "start");
 	}
-	if (request.method === "POST" && url.pathname === "/api/performance/control/stop") {
+	if (
+		request.method === "POST" &&
+		url.pathname === "/api/performance/control/stop"
+	) {
 		return batchedControlMutation(request, url, env, "stop");
 	}
 	return json({ error: "not_found" }, { status: 404 });

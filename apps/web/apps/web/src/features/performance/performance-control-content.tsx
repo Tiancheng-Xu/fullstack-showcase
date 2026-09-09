@@ -1,4 +1,10 @@
-import { useEffect, useMemo, useState } from "react";
+import { Button } from "@web/ui/components/button";
+import {
+	Card,
+	CardContent,
+	CardDescription,
+	CardHeader,
+} from "@web/ui/components/card";
 import {
 	CircleDollarSign,
 	CloudCog,
@@ -7,27 +13,26 @@ import {
 	ShieldCheck,
 	Square,
 } from "lucide-react";
-
-import { PROJECTS_INDEX } from "@/data/portfolio-projects";
+import { useEffect, useMemo, useState } from "react";
 import {
 	getPerformanceApplication,
 	PERFORMANCE_APPLICATIONS,
 	performanceControlPath,
 } from "@/data/performance-applications";
+import { PROJECTS_INDEX } from "@/data/portfolio-projects";
+import {
+	DispatchReadinessNotice,
+	type DispatchReadinessView,
+	isDispatchReady,
+	normalizeDispatchReadiness,
+} from "@/features/performance/dispatch-readiness-notice";
 import { resolvePerformanceView } from "@/features/performance/performance-state";
 import { PerformanceStatusCard } from "@/features/performance/performance-status-card";
 import {
-	performanceSnapshotSource,
 	type PerformanceControlState,
+	performanceSnapshotSource,
 } from "@/features/performance/performance-types";
 import { PortfolioPageShell } from "@/features/portfolio/portfolio-page-shell";
-import { Button } from "@web/ui/components/button";
-import {
-	Card,
-	CardContent,
-	CardDescription,
-	CardHeader,
-} from "@web/ui/components/card";
 
 const START_STEPS = [
 	"确认上一次临时 Stack、项目 Schema、项目角色和临时队列已经清理干净。",
@@ -46,6 +51,7 @@ const STOP_STEPS = [
 type PublicControlStatus = {
 	controlState: PerformanceControlState;
 	cleanupVerified: boolean;
+	dispatchReadiness?: DispatchReadinessView;
 	expiresAt: string | null;
 	estimatedCostUsd: number;
 	maximumRuntimeMinutes: number;
@@ -75,6 +81,16 @@ export const controlErrorNotice = (errorCode: string) => {
 			return "验证码无效，请等待验证器生成下一组动态码后重试";
 		case "github_app_unavailable":
 			return "GitHub App 授权暂不可用；控制状态未改变，也未启动 AWS 资源";
+		case "fixed_workflow_disabled":
+			return "GitHub 控制工作流已暂停；未验证 TOTP，也未启动 AWS 资源";
+		case "fixed_workflow_missing":
+			return "默认分支缺少固定控制工作流；启动保持关闭";
+		case "github_app_permission_denied":
+			return "GitHub App 权限不足；启动保持关闭";
+		case "github_dispatch_unconfirmed":
+			return "GitHub 调度结果待确认；已保留清理入口与原始截止时间，禁止再次启动";
+		case "dispatch_readiness_unavailable":
+			return "调度就绪状态不可用；启动保持关闭";
 		case "github_dispatch_failed":
 			return "GitHub 工作流派发结果不确定；已锁定为仅可停止或恢复，禁止再次启动";
 		default:
@@ -82,7 +98,11 @@ export const controlErrorNotice = (errorCode: string) => {
 	}
 };
 
-export function PerformanceControlContent({ projectId }: { projectId: string }) {
+export function PerformanceControlContent({
+	projectId,
+}: {
+	projectId: string;
+}) {
 	const application = getPerformanceApplication(projectId);
 	const project = application
 		? PROJECTS_INDEX[application.portfolioProjectId]
@@ -112,10 +132,10 @@ export function PerformanceControlContent({ projectId }: { projectId: string }) 
 	}, [controlProject?.performance, controlProjectId]);
 
 	useEffect(() => {
-		if (!status.expiresAt) return;
+		if (!status.expiresAt && !status.dispatchReadiness?.freshUntil) return;
 		const timer = window.setInterval(() => setNow(Date.now()), 1_000);
 		return () => window.clearInterval(timer);
-	}, [status.expiresAt]);
+	}, [status.expiresAt, status.dispatchReadiness?.freshUntil]);
 
 	useEffect(() => {
 		if (!controlProject?.performance || !controlProjectId) return;
@@ -155,7 +175,12 @@ export function PerformanceControlContent({ projectId }: { projectId: string }) 
 			window.clearInterval(interval);
 			if (expiryTimer !== null) window.clearTimeout(expiryTimer);
 		};
-	}, [controlProject?.performance, controlProjectId, status.controlState, status.expiresAt]);
+	}, [
+		controlProject?.performance,
+		controlProjectId,
+		status.controlState,
+		status.expiresAt,
+	]);
 
 	const remaining = useMemo(() => {
 		if (!status.expiresAt) return null;
@@ -179,7 +204,7 @@ export function PerformanceControlContent({ projectId }: { projectId: string }) 
 				<div className="mx-auto max-w-3xl">
 					<Card>
 						<CardHeader>
-							<h2 className="font-serif font-bold text-2xl">访问范围</h2>
+							<h2 className="font-bold font-serif text-2xl">访问范围</h2>
 							<CardDescription>
 								只有已登记性能观测契约的项目才能进入固定动作控制面。
 							</CardDescription>
@@ -200,8 +225,13 @@ export function PerformanceControlContent({ projectId }: { projectId: string }) 
 	const latestSource = performanceView.snapshot
 		? performanceSnapshotSource(performanceView.snapshot)
 		: null;
+	const dispatchReadiness = normalizeDispatchReadiness(
+		status.dispatchReadiness,
+		now,
+	);
 	const canStart =
 		/^\d{6}$/u.test(totpCode) &&
+		isDispatchReady(dispatchReadiness, now) &&
 		status.controlState === "stopped" &&
 		status.cleanupVerified &&
 		!pending;
@@ -211,18 +241,28 @@ export function PerformanceControlContent({ projectId }: { projectId: string }) 
 			status.controlState,
 		) &&
 		!pending;
+	const canEnterTotp =
+		pending === null &&
+		((status.controlState === "stopped" &&
+			status.cleanupVerified &&
+			isDispatchReady(dispatchReadiness, now)) ||
+			[
+				"starting",
+				"running",
+				"degraded",
+				"failed",
+				"cleanup_required",
+			].includes(status.controlState));
 
 	const requestControl = async (action: "start" | "stop") => {
 		if (!/^\d{6}$/u.test(totpCode) || !controlProjectId) return;
 		setPending(action);
 		setNotice(
-			action === "start"
-				? "正在提交启动请求…"
-				: "正在提交停止与清理请求…",
+			action === "start" ? "正在提交启动请求…" : "正在提交停止与清理请求…",
 		);
 		try {
 			const sessionResponse = await fetch(
-				`/api/performance/control/session?project=${encodeURIComponent(controlProjectId)}`,
+				`/api/performance/control/session?project=${encodeURIComponent(controlProjectId)}&action=${action}`,
 				{
 					method: "POST",
 					headers: {
@@ -234,14 +274,14 @@ export function PerformanceControlContent({ projectId }: { projectId: string }) 
 			const sessionBody = (await sessionResponse.json()) as ControlSession & {
 				error?: string;
 			};
-			if (!sessionResponse.ok) throw new Error(sessionBody.error ?? "session_unavailable");
+			if (!sessionResponse.ok)
+				throw new Error(sessionBody.error ?? "session_unavailable");
 			const response = await fetch(
 				`/api/performance/control/${action}?project=${encodeURIComponent(controlProjectId)}`,
 				{
 					method: "POST",
 					headers: {
 						"x-control-nonce": sessionBody.nonce,
-						"x-control-totp": totpCode,
 						"idempotency-key": crypto.randomUUID(),
 					},
 				},
@@ -294,119 +334,131 @@ export function PerformanceControlContent({ projectId }: { projectId: string }) 
 				/>
 				{!controlProject?.performance ? (
 					<section className="border border-amber-300 bg-amber-50 p-5 text-amber-950">
-						<h2 className="font-serif font-bold text-xl">观测接入尚未完成</h2>
+						<h2 className="font-bold font-serif text-xl">观测接入尚未完成</h2>
 						<p className="mt-2 text-sm leading-relaxed">
-							该应用已进入统一观测目录，但尚未登记固定 GitHub workflow、AWS 资源前缀和可信快照；因此只展示不可用状态，不开放启停按钮。
+							该应用已进入统一观测目录，但尚未登记固定 GitHub workflow、AWS
+							资源前缀和可信快照；因此只展示不可用状态，不开放启停按钮。
 						</p>
 					</section>
 				) : null}
 				{controlProject?.performance ? (
 					<>
-				{latestSource ? (
-					<section className="border border-emerald-300 bg-emerald-50 p-5 text-emerald-950">
-						<h2 className="font-serif font-bold text-xl">
-							最近一次云端验收已完成并清理
-						</h2>
-						<p className="mt-2 text-sm leading-relaxed">
-							当前展示 Run #{latestSource.workflowRunId} 的真实合成闭环历史快照，不把它冒充生产趋势或当前运行数据。
-						</p>
-						<a
-							className="mt-4 inline-flex min-h-11 items-center gap-2 border border-emerald-800 px-4 py-3 font-bold text-sm"
-							href={`https://github.com/${latestSource.repository}/actions/runs/${latestSource.workflowRunId}`}
-							rel="noreferrer"
-							target="_blank"
-						>
-							查看 GitHub Run #{latestSource.workflowRunId}
-						</a>
-					</section>
-				) : null}
-				<header className="border border-[#c7ced8] bg-[#f8f3e8] p-6 sm:p-8">
-					<div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-						<div>
-							<p className="font-bold text-xs uppercase tracking-[0.16em] text-[#5a6470]">
-								固定动作控制面 · {project.title}
+						<DispatchReadinessNotice now={now} readiness={dispatchReadiness} />
+						{latestSource ? (
+							<section className="border border-emerald-300 bg-emerald-50 p-5 text-emerald-950">
+								<h2 className="font-bold font-serif text-xl">
+									最近一次云端验收已完成并清理
+								</h2>
+								<p className="mt-2 text-sm leading-relaxed">
+									当前展示 Run #{latestSource.workflowRunId}{" "}
+									的真实合成闭环历史快照，不把它冒充生产趋势或当前运行数据。
+								</p>
+								<a
+									className="mt-4 inline-flex min-h-11 items-center gap-2 border border-emerald-800 px-4 py-3 font-bold text-sm"
+									href={`https://github.com/${latestSource.repository}/actions/runs/${latestSource.workflowRunId}`}
+									rel="noreferrer"
+									target="_blank"
+								>
+									查看 GitHub Run #{latestSource.workflowRunId}
+								</a>
+							</section>
+						) : null}
+						<header className="border border-[#c7ced8] bg-[#f8f3e8] p-6 sm:p-8">
+							<div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+								<div>
+									<p className="font-bold text-[#5a6470] text-xs uppercase tracking-[0.16em]">
+										固定动作控制面 · {project.title}
+									</p>
+									<h2 className="mt-2 font-bold font-serif text-2xl">
+										固定动作与安全边界
+									</h2>
+									<p className="mt-3 max-w-3xl text-[#344252] text-sm leading-relaxed">
+										这里只允许启动观测与安全停止两条固定动作，不接收仓库、workflow、区域、时长、费用或
+										AWS 资源参数。
+									</p>
+								</div>
+								<span className="inline-flex min-h-11 items-center gap-2 border border-amber-300 bg-amber-50 px-3 py-2 font-bold text-amber-950 text-xs">
+									<LockKeyhole aria-hidden="true" size={16} />
+									{notice}
+								</span>
+							</div>
+							<div className="mt-4 grid gap-2 text-sm sm:grid-cols-3">
+								<p>
+									预计增量费用上限：USD {status.estimatedCostUsd.toFixed(2)}
+								</p>
+								<p>最长运行：{status.maximumRuntimeMinutes} 分钟</p>
+								<p>{remaining ? `剩余时间：${remaining}` : "倒计时：未运行"}</p>
+							</div>
+							<label className="mt-5 block max-w-sm" htmlFor="performance-totp">
+								<span className="block font-bold text-sm">6 位动态验证码</span>
+								<input
+									aria-label="6 位动态验证码"
+									autoComplete="one-time-code"
+									className="mt-2 min-h-11 w-full border border-[#7c8794] bg-white px-4 font-mono text-lg tracking-[0.3em] outline-none focus:border-[#bf1737] focus:ring-2 focus:ring-[#bf1737]/20"
+									disabled={!canEnterTotp}
+									id="performance-totp"
+									inputMode="numeric"
+									maxLength={6}
+									onChange={(event) =>
+										setTotpCode(
+											event.target.value.replace(/\D/gu, "").slice(0, 6),
+										)
+									}
+									placeholder="000000"
+									type="text"
+									value={totpCode}
+								/>
+								<span className="mt-2 block text-[#5a6470] text-xs">
+									验证码仅发送到同源 Worker，不写入日志或浏览器存储。
+								</span>
+							</label>
+						</header>
+
+						{status.controlState === "cleanup_required" ||
+						!status.cleanupVerified ? (
+							<p className="border border-red-400 bg-red-50 p-4 font-bold text-red-900">
+								清理未验证：禁止再次启动，只允许安全停止/恢复工作流。
 							</p>
-							<h2 className="mt-2 font-serif font-bold text-2xl">
-								固定动作与安全边界
-							</h2>
-							<p className="mt-3 max-w-3xl text-[#344252] text-sm leading-relaxed">
-								这里只允许启动观测与安全停止两条固定动作，不接收仓库、workflow、区域、时长、费用或 AWS 资源参数。
-							</p>
-						</div>
-						<span className="inline-flex min-h-11 items-center gap-2 border border-amber-300 bg-amber-50 px-3 py-2 font-bold text-amber-950 text-xs">
-							<LockKeyhole aria-hidden="true" size={16} />
-							{notice}
-						</span>
-					</div>
-					<div className="mt-4 grid gap-2 text-sm sm:grid-cols-3">
-						<p>预计增量费用上限：USD {status.estimatedCostUsd.toFixed(2)}</p>
-						<p>最长运行：{status.maximumRuntimeMinutes} 分钟</p>
-						<p>{remaining ? `剩余时间：${remaining}` : "倒计时：未运行"}</p>
-					</div>
-					<label className="mt-5 block max-w-sm" htmlFor="performance-totp">
-						<span className="block font-bold text-sm">6 位动态验证码</span>
-						<input
-							aria-label="6 位动态验证码"
-							autoComplete="one-time-code"
-							className="mt-2 min-h-11 w-full border border-[#7c8794] bg-white px-4 font-mono text-lg tracking-[0.3em] outline-none focus:border-[#bf1737] focus:ring-2 focus:ring-[#bf1737]/20"
-							disabled={pending !== null}
-							id="performance-totp"
-							inputMode="numeric"
-							maxLength={6}
-							onChange={(event) => setTotpCode(event.target.value.replace(/\D/gu, "").slice(0, 6))}
-							placeholder="000000"
-							type="text"
-							value={totpCode}
-						/>
-						<span className="mt-2 block text-[#5a6470] text-xs">验证码仅发送到同源 Worker，不写入日志或浏览器存储。</span>
-					</label>
-				</header>
+						) : null}
 
-				{status.controlState === "cleanup_required" ||
-				!status.cleanupVerified ? (
-					<p className="border border-red-400 bg-red-50 p-4 font-bold text-red-900">
-						清理未验证：禁止再次启动，只允许安全停止/恢复工作流。
-					</p>
-				) : null}
+						<section className="grid gap-5 lg:grid-cols-2">
+							<LifecycleCard
+								buttonLabel="启动性能观测"
+								description="只在清理门禁通过后创建单实例临时资源。"
+								disabled={!canStart}
+								icon={<Play aria-hidden="true" size={18} />}
+								onClick={() => void requestControl("start")}
+								steps={START_STEPS}
+								title="安全启动"
+							/>
+							<LifecycleCard
+								buttonLabel="安全停止性能观测"
+								description="保留最后可信结果后精确清理项目资源。"
+								disabled={!canStop}
+								icon={<Square aria-hidden="true" size={17} />}
+								onClick={() => void requestControl("stop")}
+								steps={STOP_STEPS}
+								title="安全停止"
+							/>
+						</section>
 
-				<section className="grid gap-5 lg:grid-cols-2">
-					<LifecycleCard
-						buttonLabel="启动性能观测"
-						description="只在清理门禁通过后创建单实例临时资源。"
-						disabled={!canStart}
-						icon={<Play aria-hidden="true" size={18} />}
-						onClick={() => void requestControl("start")}
-						steps={START_STEPS}
-						title="安全启动"
-					/>
-					<LifecycleCard
-						buttonLabel="安全停止性能观测"
-						description="保留最后可信结果后精确清理项目资源。"
-						disabled={!canStop}
-						icon={<Square aria-hidden="true" size={17} />}
-						onClick={() => void requestControl("stop")}
-						steps={STOP_STEPS}
-						title="安全停止"
-					/>
-				</section>
-
-				<section className="grid gap-4 md:grid-cols-3">
-					<BoundaryCard
-						body="Worker 校验 RFC 6238 TOTP 动态码，错误尝试进入 D1 计数与限流；密钥只保存在 Worker Secret。"
-						icon={<ShieldCheck aria-hidden="true" size={19} />}
-						title="MFA 与身份"
-					/>
-					<BoundaryCard
-						body="每次控制操作交换短期 installation token，只派发 Tiancheng-Xu/babysteps 的固定 GitHub Actions 工作流 aws-performance-control.yml；运行资源复用共享 VPC、NAT、RDS。"
-						icon={<CloudCog aria-hidden="true" size={19} />}
-						title="派发边界"
-					/>
-					<BoundaryCard
-						body="45 分钟、USD 0.20、单实例；TTL 或故障进入清理优先的失败关闭状态。"
-						icon={<CircleDollarSign aria-hidden="true" size={19} />}
-						title="费用边界"
-					/>
-				</section>
+						<section className="grid gap-4 md:grid-cols-3">
+							<BoundaryCard
+								body="Worker 校验 RFC 6238 TOTP 动态码，错误尝试进入 D1 计数与限流；密钥只保存在 Worker Secret。"
+								icon={<ShieldCheck aria-hidden="true" size={19} />}
+								title="MFA 与身份"
+							/>
+							<BoundaryCard
+								body="每次控制操作交换短期 installation token，只派发 Tiancheng-Xu/babysteps 的固定 GitHub Actions 工作流 aws-performance-control.yml；运行资源复用共享 VPC、NAT、RDS。"
+								icon={<CloudCog aria-hidden="true" size={19} />}
+								title="派发边界"
+							/>
+							<BoundaryCard
+								body="45 分钟、USD 0.20、单实例；TTL 或故障进入清理优先的失败关闭状态。"
+								icon={<CircleDollarSign aria-hidden="true" size={19} />}
+								title="费用边界"
+							/>
+						</section>
 					</>
 				) : null}
 			</div>
@@ -461,7 +513,7 @@ function LifecycleCard({
 				<CardDescription>{description}</CardDescription>
 			</CardHeader>
 			<CardContent className="space-y-4">
-				<ol className="space-y-3 text-sm text-muted-foreground">
+				<ol className="space-y-3 text-muted-foreground text-sm">
 					{steps.map((step, index) => (
 						<li className="flex items-start gap-3" key={step}>
 							<span className="grid size-6 shrink-0 place-items-center bg-[#0f2d4d] font-bold text-white text-xs">

@@ -1,6 +1,8 @@
 packages:
   - apps/*
   - packages/*
+allowBuilds:
+  puppeteer: false
 catalog:
   dotenv: ^17.4.2
   zod: ^4.4.3

@@ -1,0 +1,247 @@
+{
+	"schema_version": 1,
+	"diagram_type": "architecture",
+	"meta": {
+		"title": "Performance Control · 多项目观测与成本控制",
+		"quality_profile": "showcase",
+		"visual_preset": "blueprint",
+		"animation": "trace",
+		"views": [
+			{
+				"id": "authorize",
+				"label": "授权控制",
+				"focus": ["operator", "control-ui", "access", "totp", "worker"],
+				"note": "操作者通过访问控制与 TOTP 完成一次短期控制授权。"
+			},
+			{
+				"id": "dispatch",
+				"label": "固定调度",
+				"focus": ["worker", "github-app", "workflow", "oidc", "runtime"],
+				"note": "Worker 使用 GitHub App 调度固定工作流，工作流通过 OIDC 获得短期 AWS 权限。"
+			},
+			{
+				"id": "readback",
+				"label": "回读与恢复",
+				"focus": ["runtime", "callback", "snapshot", "dashboard", "recovery"],
+				"note": "控制状态来自签名回调、快照和精确恢复结果，不由前端猜测。"
+			}
+		]
+	},
+	"components": [
+		{
+			"id": "operator",
+			"type": "external",
+			"label": "授权操作者",
+			"sublabel": "当前设备 / MFA",
+			"pos": [38, 170],
+			"size": [152, 66]
+		},
+		{
+			"id": "control-ui",
+			"type": "frontend",
+			"label": "Project Control UI",
+			"sublabel": "/performance-control/:project",
+			"pos": [228, 170],
+			"size": [152, 66]
+		},
+		{
+			"id": "access",
+			"type": "security",
+			"label": "Cloudflare Access",
+			"sublabel": "身份会话与应用策略",
+			"pos": [418, 170],
+			"size": [152, 66]
+		},
+		{
+			"id": "totp",
+			"type": "security",
+			"label": "TOTP Challenge",
+			"sublabel": "短时一次性验证码",
+			"pos": [608, 170],
+			"size": [152, 66]
+		},
+		{
+			"id": "worker",
+			"type": "cloud",
+			"label": "Control Worker",
+			"sublabel": "nonce / project allowlist",
+			"pos": [798, 170],
+			"size": [152, 66]
+		},
+		{
+			"id": "github-app",
+			"type": "security",
+			"label": "GitHub App",
+			"sublabel": "Install token / dispatch",
+			"pos": [988, 170],
+			"size": [152, 66]
+		},
+		{
+			"id": "workflow",
+			"type": "external",
+			"label": "Fixed Workflow",
+			"sublabel": "start / stop / recovery",
+			"pos": [228, 315],
+			"size": [152, 66]
+		},
+		{
+			"id": "oidc",
+			"type": "security",
+			"label": "GitHub OIDC",
+			"sublabel": "短期最小权限",
+			"pos": [418, 315],
+			"size": [152, 66]
+		},
+		{
+			"id": "runtime",
+			"type": "cloud",
+			"label": "Project AWS Runtime",
+			"sublabel": "TTL / budget / tags",
+			"pos": [608, 315],
+			"size": [152, 66]
+		},
+		{
+			"id": "callback",
+			"type": "backend",
+			"label": "Signed Callback",
+			"sublabel": "run / state / cleanup status",
+			"pos": [798, 315],
+			"size": [152, 66]
+		},
+		{
+			"id": "snapshot",
+			"type": "database",
+			"label": "Control Snapshot",
+			"sublabel": "project + run + freshness",
+			"pos": [988, 315],
+			"size": [152, 66]
+		},
+		{
+			"id": "dashboard",
+			"type": "frontend",
+			"label": "Central Readback",
+			"sublabel": "图表 / 成本 / 状态",
+			"pos": [418, 455],
+			"size": [152, 66]
+		},
+		{
+			"id": "recovery",
+			"type": "security",
+			"label": "Fail-closed Recovery",
+			"sublabel": "exact stack / zero residue",
+			"pos": [798, 455],
+			"size": [152, 66]
+		}
+	],
+	"boundaries": [
+		{
+			"kind": "security-group",
+			"label": "Human authorization boundary",
+			"wraps": ["operator", "control-ui", "access", "totp"],
+			"pad": 16
+		},
+		{
+			"kind": "region",
+			"label": "Cloudflare control plane",
+			"wraps": ["worker", "callback", "snapshot", "dashboard"],
+			"pad": 16
+		},
+		{
+			"kind": "security-group",
+			"label": "GitHub identity plane",
+			"wraps": ["github-app", "workflow", "oidc"],
+			"pad": 16
+		},
+		{
+			"kind": "region",
+			"label": "Project-scoped AWS boundary",
+			"wraps": ["runtime", "recovery"],
+			"pad": 16
+		}
+	],
+	"connections": [
+		{
+			"from": "operator",
+			"to": "control-ui",
+			"variant": "emphasis",
+			"labelAt": [209, 152]
+		},
+		{
+			"from": "control-ui",
+			"to": "access",
+			"variant": "security",
+			"labelAt": [399, 152]
+		},
+		{
+			"from": "access",
+			"to": "totp",
+			"variant": "security",
+			"labelAt": [589, 152]
+		},
+		{
+			"from": "worker",
+			"to": "github-app",
+			"variant": "default",
+			"labelAt": [969, 152]
+		},
+		{
+			"from": "workflow",
+			"to": "oidc",
+			"variant": "security",
+			"labelAt": [399, 352]
+		},
+		{
+			"from": "oidc",
+			"to": "runtime",
+			"variant": "security",
+			"labelAt": [589, 352]
+		},
+		{
+			"from": "callback",
+			"to": "snapshot",
+			"variant": "default",
+			"labelAt": [969, 352]
+		},
+		{
+			"from": "runtime",
+			"to": "recovery",
+			"variant": "security",
+			"route": "orthogonal-h"
+		},
+		{
+			"from": "recovery",
+			"to": "callback",
+			"variant": "dashed",
+			"labelAt": [970, 503]
+		}
+	],
+	"cards": [
+		{
+			"dot": "emerald",
+			"title": "控制原则",
+			"items": [
+				"路径路由绑定明确 projectId",
+				"前端按钮不是权限边界，服务端必须验证身份、nonce 与项目 allowlist",
+				"状态未确认时保持 pending/blocked，禁止伪造 success"
+			]
+		},
+		{
+			"dot": "cyan",
+			"title": "最小权限",
+			"items": [
+				"GitHub App 仅调度固定 workflow",
+				"OIDC 只签发短期项目权限，不保存 AWS 长期密钥",
+				"日志读取限制在项目日志组，不扩为 logs:*"
+			]
+		},
+		{
+			"dot": "rose",
+			"title": "成本与恢复",
+			"items": [
+				"启动前执行 aws-budget-guard 与 Free-plan 资格检查",
+				"TTL、精确 Stack 与资源标签共同限制生命周期",
+				"清理未验证时禁止再次启动，只开放 stop/recovery"
+			]
+		}
+	]
+}

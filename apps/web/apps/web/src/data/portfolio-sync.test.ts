@@ -32,8 +32,8 @@ describe("mergePortfolioProjects", () => {
 			expect.objectContaining({
 				evidenceUrl: project.evidenceUrl,
 				ownerPage: project.ownerPage,
-				progress: 90,
-				status: "进行中",
+				progress: project.progress,
+				status: project.status,
 			}),
 		]);
 	});
@@ -88,5 +88,48 @@ describe("mergePortfolioProjects", () => {
 		};
 
 		expect(mergePortfolioProjects([project], [retired])).toEqual([project]);
+	});
+
+	it("does not let sync rewrite curated facts or verification fields", () => {
+		const local = {
+			...project,
+			title: "Curated title",
+			desc: "Old description",
+			architectureAsset: "architecture/example.html",
+		};
+		const remote = {
+			...project,
+			title: "Curated title",
+			desc: "Fresh description",
+			architecture: "Unreviewed architecture",
+			evidence: ["Unreviewed production claim"],
+			details: ["Unreviewed delivery claim"],
+			status: "已完成" as const,
+			progress: 100,
+			architectureAsset: "https://untrusted.example/diagram.html",
+		};
+
+		expect(mergePortfolioProjects([local], [remote])).toEqual([
+			expect.objectContaining({
+				title: "Curated title",
+				desc: local.desc,
+				architecture: local.architecture,
+				evidence: local.evidence,
+				details: local.details,
+				status: local.status,
+				progress: local.progress,
+				architectureAsset: local.architectureAsset,
+			}),
+		]);
+	});
+
+	it("does not append an unreviewed project from the remote index", () => {
+		const remote = {
+			...project,
+			id: "remote-only",
+			architectureAsset: "https://untrusted.example/diagram.html",
+		};
+
+		expect(mergePortfolioProjects([], [remote])).toEqual([]);
 	});
 });

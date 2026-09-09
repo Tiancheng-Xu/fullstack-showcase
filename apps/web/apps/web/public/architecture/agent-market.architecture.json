@@ -1,0 +1,256 @@
+{
+	"schema_version": 1,
+	"diagram_type": "architecture",
+	"meta": {
+		"title": "Agent Market · 可验证 Agent 任务市场",
+		"quality_profile": "showcase",
+		"visual_preset": "blueprint",
+		"animation": "trace",
+		"views": [
+			{
+				"id": "market-request",
+				"label": "市场请求",
+				"focus": ["browser", "pages", "market", "dag"],
+				"note": "用户从 SSR 市场进入标签匹配与可修改的多 Agent 编排。"
+			},
+			{
+				"id": "aws-execution",
+				"label": "AWS 异步执行",
+				"focus": ["market", "hmac", "sns", "sqs", "lambda", "ecs", "postgres"],
+				"note": "生产任务经鉴权、FIFO 消息链路、计算层与数据库形成可回读结果。"
+			},
+			{
+				"id": "proof-chain",
+				"label": "状态与证明",
+				"focus": ["postgres", "sepolia", "evidence", "ops"],
+				"note": "数据库状态、Sepolia 锚定与脱敏 Evidence 分层证明，不互相替代。"
+			}
+		]
+	},
+	"components": [
+		{
+			"id": "browser",
+			"type": "external",
+			"label": "用户 / Agent Owner",
+			"sublabel": "市场、工作区、Office",
+			"pos": [38, 170],
+			"size": [152, 66]
+		},
+		{
+			"id": "pages",
+			"type": "frontend",
+			"label": "Cloudflare Pages",
+			"sublabel": "SSR + Hydration + 真实 404",
+			"pos": [228, 170],
+			"size": [152, 66],
+			"tag": "verified-production"
+		},
+		{
+			"id": "market",
+			"type": "backend",
+			"label": "Market API",
+			"sublabel": "Agent / Task / Match",
+			"pos": [418, 170],
+			"size": [152, 66]
+		},
+		{
+			"id": "hmac",
+			"type": "security",
+			"label": "Runtime Scope",
+			"sublabel": "HMAC + Owner boundary",
+			"pos": [608, 170],
+			"size": [152, 66]
+		},
+		{
+			"id": "sns",
+			"type": "messagebus",
+			"label": "SNS FIFO",
+			"sublabel": "任务事件发布",
+			"pos": [798, 170],
+			"size": [152, 66]
+		},
+		{
+			"id": "sqs",
+			"type": "messagebus",
+			"label": "SQS FIFO + DLQ",
+			"sublabel": "顺序消费 / 失败隔离",
+			"pos": [988, 170],
+			"size": [152, 66]
+		},
+		{
+			"id": "dag",
+			"type": "backend",
+			"label": "LangGraph DAG",
+			"sublabel": "可修改编排 / 自动接单",
+			"pos": [228, 330],
+			"size": [152, 66],
+			"tag": "verified-local"
+		},
+		{
+			"id": "lambda",
+			"type": "cloud",
+			"label": "Lambda Orchestrator",
+			"sublabel": "校验与任务路由",
+			"pos": [418, 330],
+			"size": [152, 66]
+		},
+		{
+			"id": "ecs",
+			"type": "cloud",
+			"label": "ECS Fargate ARM64",
+			"sublabel": "Agent 执行与聚合",
+			"pos": [608, 330],
+			"size": [152, 66]
+		},
+		{
+			"id": "postgres",
+			"type": "database",
+			"label": "PostgreSQL",
+			"sublabel": "任务 / 结果 / 审计状态",
+			"pos": [798, 330],
+			"size": [152, 66]
+		},
+		{
+			"id": "sepolia",
+			"type": "external",
+			"label": "Sepolia V3",
+			"sublabel": "押金与 24 笔状态回执",
+			"pos": [988, 330],
+			"size": [152, 66],
+			"tag": "verified-production"
+		},
+		{
+			"id": "ops",
+			"type": "external",
+			"label": "CloudWatch / Cleanup",
+			"sublabel": "队列、任务、零残留",
+			"pos": [608, 485],
+			"size": [152, 66]
+		},
+		{
+			"id": "evidence",
+			"type": "external",
+			"label": "Project Evidence",
+			"sublabel": "Run / receipt / deployment",
+			"pos": [798, 485],
+			"size": [152, 66],
+			"tag": "verified-production"
+		}
+	],
+	"boundaries": [
+		{
+			"kind": "region",
+			"label": "Cloudflare public edge",
+			"wraps": ["pages", "market"],
+			"pad": 16
+		},
+		{
+			"kind": "security-group",
+			"label": "AWS us-east-1 · temporary runtime",
+			"wraps": ["hmac", "sns", "sqs", "lambda", "ecs", "postgres", "ops"],
+			"pad": 16
+		},
+		{
+			"kind": "region",
+			"label": "Ethereum Sepolia",
+			"wraps": ["sepolia"],
+			"pad": 16
+		}
+	],
+	"connections": [
+		{
+			"from": "browser",
+			"to": "pages",
+			"variant": "emphasis",
+			"labelAt": [209, 152]
+		},
+		{
+			"from": "pages",
+			"to": "market",
+			"variant": "emphasis",
+			"labelAt": [399, 152]
+		},
+		{
+			"from": "market",
+			"to": "dag",
+			"variant": "dashed",
+			"route": "orthogonal-h"
+		},
+		{
+			"from": "market",
+			"to": "hmac",
+			"variant": "security",
+			"labelAt": [589, 152]
+		},
+		{
+			"from": "sns",
+			"to": "sqs",
+			"variant": "default",
+			"labelAt": [969, 152]
+		},
+		{
+			"from": "lambda",
+			"to": "ecs",
+			"variant": "emphasis",
+			"labelAt": [589, 352]
+		},
+		{
+			"from": "ecs",
+			"to": "postgres",
+			"variant": "default",
+			"labelAt": [779, 352]
+		},
+		{
+			"from": "postgres",
+			"to": "sepolia",
+			"variant": "security",
+			"labelAt": [969, 352]
+		},
+		{
+			"from": "ecs",
+			"to": "ops",
+			"variant": "dashed",
+			"labelAt": [780, 503]
+		},
+		{
+			"from": "postgres",
+			"to": "evidence",
+			"variant": "emphasis",
+			"labelAt": [970, 503]
+		},
+		{
+			"from": "sepolia",
+			"to": "evidence",
+			"variant": "emphasis",
+			"route": "orthogonal-h"
+		}
+	],
+	"cards": [
+		{
+			"dot": "emerald",
+			"title": "已验证生产边界",
+			"items": [
+				"Cloudflare Web、AWS V2 Runtime、Sepolia V3 分别 verified-production",
+				"生产完成绑定项目 Evidence，不用静态架构测试代替运行证据"
+			]
+		},
+		{
+			"dot": "cyan",
+			"title": "核心设计",
+			"items": [
+				"结构化 tags 与指数衰减滑动评分",
+				"LangGraph DAG 支持用户修改编排与 Agent 自动接单",
+				"6% 押金与链上锚定独立于办公室社交展示"
+			]
+		},
+		{
+			"dot": "rose",
+			"title": "安全与恢复",
+			"items": [
+				"HMAC 与 Owner Runtime Scope 保护运行入口",
+				"SNS/SQS FIFO 保序，DLQ 隔离失败",
+				"临时 AWS 运行必须预算 Gate、清理与零残留回读"
+			]
+		}
+	]
+}

@@ -1,0 +1,87 @@
+{
+  "schemaVersion": 1,
+  "aiEngineering": true,
+  "successCriteria": [
+    {
+      "id": "ai-project-facts",
+      "metric": "AI and Agent project facts remain linked to their verified project and Evidence sources",
+      "threshold": "All portfolio production-link and Evidence contract tests pass",
+      "gateType": "deterministic",
+      "evidence": "apps/web/apps/web/src/features/portfolio/__tests__/dashboard-production-links.test.ts"
+    },
+    {
+      "id": "no-model-runtime-expansion",
+      "metric": "New model inference or RAG runtime calls introduced by this change",
+      "threshold": 0,
+      "gateType": "deterministic",
+      "evidence": "docs/delivery/2026-09-07-dashboard-non-aws-local-gate.json"
+    },
+    {
+      "id": "control-failure-honesty",
+      "metric": "Ambiguous performance-control dispatches that are reported as successful",
+      "threshold": 0,
+      "gateType": "deterministic",
+      "evidence": "apps/web/apps/performance-control-worker/src/__tests__/worker.test.ts"
+    }
+  ],
+  "deterministicGates": [
+    {
+      "id": "portfolio-contracts",
+      "check": "Portfolio links, routes, architecture images, and Evidence semantics pass their Vitest contracts",
+      "evidence": "docs/delivery/2026-09-07-dashboard-non-aws-local-gate.json"
+    },
+    {
+      "id": "control-state-machine",
+      "check": "GitHub dispatch readiness, receipt persistence, callback races, TTL cleanup, and no-redispatch behavior pass Worker tests",
+      "evidence": "apps/web/apps/performance-control-worker/src/__tests__/worker.test.ts"
+    },
+    {
+      "id": "build-and-routing",
+      "check": "TypeScript, client and SSR builds, known-route 200, and unknown-route 404 checks pass",
+      "evidence": "apps/web/apps/web/scripts/verify-built-route-semantics.mjs"
+    },
+    {
+      "id": "visual-regression",
+      "check": "Reviewed macOS Chrome baselines pass for four routes at 375, 390, 430, and 1440 pixels",
+      "evidence": "docs/delivery/2026-09-07-dashboard-visual-regression.json"
+    }
+  ],
+  "llmJudge": {
+    "enabled": false,
+    "canOverrideDeterministic": false
+  },
+  "rag": {
+    "enabled": false
+  },
+  "dag": {
+    "enabled": false
+  },
+  "serviceLevels": {
+    "qualityThreshold": "100 percent of deterministic release Gates pass",
+    "ttftMs": "Not applicable because this change adds no model inference runtime",
+    "p95LatencyMs": "Not applicable because this change adds no model inference runtime",
+    "costBudget": "0 USD incremental model-inference cost",
+    "reliabilityThreshold": "No ambiguous control mutation may be reported as successful"
+  },
+  "feedback": {
+    "clean": true,
+    "deduplicate": true,
+    "redact": true,
+    "frozenEvaluationSet": true,
+    "releaseRegressionGate": true
+  },
+  "proof": [
+    {
+      "kind": "deterministic-test-ledger",
+      "location": "docs/delivery/2026-09-07-dashboard-non-aws-local-gate.json",
+      "proves": "Local Worker, Web, type, build, route, packaging, and public-content Gates",
+      "status": "verified-local"
+    },
+    {
+      "kind": "visual-regression-ledger",
+      "location": "docs/delivery/2026-09-07-dashboard-visual-regression.json",
+      "proves": "Reviewed local visual comparisons with per-scenario hashes and mismatch percentages",
+      "status": "verified-local"
+    }
+  ]
+}

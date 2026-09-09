@@ -1,0 +1,101 @@
+{
+  "schemaVersion": "performance-control-production-readback/v1",
+  "checkedAt": "2026-09-04T00:00:00-04:00",
+  "mode": "read-only",
+  "production": {
+    "origin": "https://baby2b.online",
+    "statusEndpoint": {
+      "url": "https://baby2b.online/api/performance/status?project=performance-observability-control",
+      "httpStatus": 200,
+      "projectSlug": "performance-observability-control",
+      "controlState": "stopped",
+      "dataMode": "historical",
+      "cleanupVerified": true,
+      "snapshotAvailable": false,
+      "expiresAt": null,
+      "estimatedCostUsd": 0.2,
+      "maximumRuntimeMinutes": 45,
+      "updatedAt": "2026-09-01T09:17:24.000Z",
+      "metricCount": 0
+    },
+    "snapshotEndpoint": {
+      "url": "https://baby2b.online/api/performance/snapshot?project=performance-observability-control",
+      "httpStatus": 404,
+      "error": "verified_snapshot_not_found"
+    },
+    "routeSemantics": [
+      {
+        "url": "https://baby2b.online/performance-control/babysteps/",
+        "httpStatus": 200,
+        "application": "babysteps",
+        "controlProjectId": "performance-observability-control",
+        "integration": "connected"
+      },
+      {
+        "url": "https://baby2b.online/performance-control/github-profile-studio/",
+        "httpStatus": 200,
+        "application": "github-profile-studio",
+        "controlProjectId": null,
+        "integration": "pending"
+      },
+      {
+        "url": "https://baby2b.online/performance-control/not-a-project/",
+        "httpStatus": 404,
+        "semanticMarker": "page-not-found"
+      }
+    ]
+  },
+  "controlContract": {
+    "repository": "Tiancheng-Xu/babysteps",
+    "workflow": "aws-performance-control.yml",
+    "githubEnvironment": "aws-performance",
+    "awsRegion": "us-east-1",
+    "resourcePrefix": "babysteps-performance-",
+    "maximumRuntimeMinutes": 45,
+    "maximumIncrementalCostUsd": 0.2,
+    "latestObservedScheduledRun": {
+      "runId": 33697265838,
+      "headSha": "9337ea71e4b790b23d574bc63d3314ab997435a4",
+      "conclusion": "success",
+      "url": "https://github.com/Tiancheng-Xu/babysteps/actions/runs/33697265838"
+    },
+    "latestObservedDashboardControlCi": {
+      "runId": 33492139101,
+      "headSha": "d675576ddc591e3780f8733518ad6f794dd6a207",
+      "conclusion": "success",
+      "url": "https://github.com/Tiancheng-Xu/fullstack-showcase/actions/runs/33492139101"
+    }
+  },
+  "applicationCoverage": [
+    {
+      "application": "babysteps",
+      "status": "connected"
+    },
+    {
+      "application": "agent-market",
+      "status": "pending"
+    },
+    {
+      "application": "personal-ai-agent",
+      "status": "pending"
+    },
+    {
+      "application": "github-profile-studio",
+      "status": "pending"
+    }
+  ],
+  "verifiedClaims": [
+    "The public status endpoint returns stopped with cleanupVerified=true.",
+    "The public snapshot endpoint honestly reports that no verified immutable snapshot is available.",
+    "BabySteps is the only application currently mapped to the production control project.",
+    "Known application routes return HTTP 200 and an unknown application route returns HTTP 404.",
+    "The fixed BabySteps control workflow and the dashboard control CI have successful observed runs."
+  ],
+  "notVerified": [
+    "No TOTP code or control nonce was exercised during this read-only audit.",
+    "No AWS inventory, OIDC session, runtime start, runtime stop, callback delivery, D1 mutation, R2 write, or zero-residue cleanup was performed during this audit.",
+    "A successful scheduled workflow run does not prove that an AWS runtime was started.",
+    "Agent Market, Personal AI Agent, and GitHub Profile Studio do not yet have production control registry entries.",
+    "No verified immutable R2 snapshot is currently available from the public snapshot endpoint."
+  ]
+}

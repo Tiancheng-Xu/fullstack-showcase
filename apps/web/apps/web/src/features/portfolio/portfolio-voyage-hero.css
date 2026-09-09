@@ -1,0 +1,455 @@
+.portfolio-voyage { position: relative; isolation: isolate; overflow: hidden; min-height: clamp(500px, 63vw, 760px); margin-top: -1px; color: #f7f1e4; background: linear-gradient(#13354b 0 41%, #d19a70 42% 55%, #0c4055 56%); }
+.portfolio-voyage__canvas,
+.portfolio-voyage__fallback,
+.portfolio-voyage__wash { position: absolute; inset: 0; width: 100%; height: 100%; }
+.portfolio-voyage__canvas { z-index: 1; display: block; opacity: 0; transition: opacity .8s ease; }
+.portfolio-voyage__canvas[data-active="true"] { opacity: 1; }
+.portfolio-voyage__fallback { z-index: 0; overflow: hidden; background: linear-gradient(180deg, #123149 0%, #315267 43%, #d2a27d 50%, #315c68 52%, #0c374c 100%); }
+.portfolio-voyage__sun { position: absolute; top: 21%; left: 67%; width: 94px; aspect-ratio: 1; border-radius: 50%; background: #db6752; box-shadow: 0 0 65px rgba(235, 131, 92, .5); }
+.portfolio-voyage__mountain { position: absolute; inset: auto -5% 43%; height: 31%; background: #182d3b; opacity: .72; clip-path: polygon(0 100%, 0 72%, 12% 48%, 20% 73%, 31% 37%, 43% 78%, 54% 50%, 67% 74%, 78% 22%, 87% 64%, 100% 45%, 100% 100%); }
+.portfolio-voyage__mountain--back { opacity: .35; transform: translateY(-42px) scale(1.08); }
+.portfolio-voyage__sea { position: absolute; inset: 54% 0 0; background: repeating-radial-gradient(ellipse at 60% 0, rgba(255,220,174,.35) 0 1px, transparent 2px 17px), linear-gradient(#315f6c, #092f45); }
+.portfolio-voyage__boat { position: absolute; z-index: 2; left: 62%; top: 59%; color: #111d27; font: 700 54px/1 "Noto Serif SC", serif; transform: rotate(-4deg); text-shadow: 0 12px 12px rgba(0,0,0,.3); }
+.portfolio-voyage__wash { z-index: 2; pointer-events: none; background: linear-gradient(90deg, rgba(4,16,27,.86), rgba(4,18,29,.52) 42%, transparent 72%), linear-gradient(0deg, rgba(3,15,26,.5), transparent 44%); }
+.portfolio-voyage__loader { position: absolute; z-index: 5; top: 50%; left: 50%; display: grid; grid-template-columns: auto 1fr; align-items: center; gap: 13px; width: min(310px, calc(100% - 40px)); padding: 16px 18px 23px; transform: translate(-50%, -50%); color: #f6eee0; border: 1px solid rgba(238, 219, 191, .28); background: rgba(4, 20, 31, .72); box-shadow: 0 20px 70px rgba(2, 10, 18, .42); backdrop-filter: blur(18px); }
+.portfolio-voyage__loader-mark { display: grid; place-items: center; width: 43px; height: 43px; color: #e46b58; border: 1px solid currentColor; font: 700 21px/1 "Noto Serif SC", serif; }
+.portfolio-voyage__loader strong,
+.portfolio-voyage__loader span { display: block; }
+.portfolio-voyage__loader strong { font-family: "Noto Serif SC", serif; letter-spacing: .08em; }
+.portfolio-voyage__loader div span { margin-top: 4px; color: #b8c6ce; font-size: 10px; letter-spacing: .1em; }
+.portfolio-voyage__loader i { position: absolute; right: 18px; bottom: 12px; left: 18px; height: 1px; overflow: hidden; background: rgba(222, 231, 232, .15); }
+.portfolio-voyage__loader i::after { content: ""; position: absolute; inset: 0; width: 42%; background: linear-gradient(90deg, transparent, #e45a4d, transparent); animation: voyage-loading 1.2s ease-in-out infinite; }
+.portfolio-voyage__content { position: relative; z-index: 3; width: min(1180px, calc(100% - 48px)); margin: 0 auto; padding-top: clamp(118px, 14vw, 190px); }
+.portfolio-voyage__content > p:first-child { margin: 0 0 16px; color: #d5b8a2; font: 700 11px/1.4 ui-monospace, monospace; letter-spacing: .24em; }
+.portfolio-voyage__content h1 { max-width: 720px; margin: 0; font: 700 clamp(42px, 6vw, 82px)/1.08 "Noto Serif SC", serif; letter-spacing: .03em; text-wrap: balance; }
+.portfolio-voyage__rule { width: min(520px, 70vw); height: 1px; margin: 26px 0; background: linear-gradient(90deg, #d54b3f, rgba(213,75,63,0)); }
+.portfolio-voyage__lead { max-width: 650px; color: #dae2e4; font-size: clamp(15px, 1.4vw, 18px); line-height: 1.9; }
+.portfolio-voyage__content a { display: inline-flex; margin-top: 16px; padding: 11px 0 8px; color: #fff7ea; border-bottom: 1px solid #d95347; font-weight: 700; text-decoration: none; }
+.portfolio-voyage__status { position: absolute; z-index: 4; right: 24px; bottom: 20px; margin: 0; padding: 7px 10px; color: rgba(239,244,246,.72); background: rgba(5,20,31,.34); border: 1px solid rgba(231,237,239,.18); backdrop-filter: blur(10px); font-size: 10px; }
+.portfolio-voyage__credit { position: absolute; z-index: 4; left: 24px; bottom: 20px; margin: 0; color: rgba(239,244,246,.48); font-size: 9px; }
+@media (max-width: 767px) { .portfolio-voyage { min-height: 610px; } .portfolio-voyage__canvas { display: none; } .portfolio-voyage__wash { background: linear-gradient(180deg, rgba(5,18,29,.28), rgba(5,18,29,.78)); } .portfolio-voyage__content { width: calc(100% - 36px); padding-top: 110px; } .portfolio-voyage__boat { left: 57%; top: 61%; } .portfolio-voyage__status { right: 18px; } .portfolio-voyage__credit { left: 18px; max-width: 45%; } }
+@media (prefers-reduced-motion: reduce) { .portfolio-voyage__canvas { display: none; } }
+
+[data-portfolio-reveal] {
+	opacity: 0;
+	transform: translateY(26px) scale(.988);
+	transition:
+		opacity .72s cubic-bezier(.22, 1, .36, 1) var(--portfolio-reveal-delay, 0ms),
+		transform .82s cubic-bezier(.22, 1, .36, 1) var(--portfolio-reveal-delay, 0ms);
+	will-change: opacity, transform;
+}
+
+[data-portfolio-reveal].portfolio-reveal--visible {
+	opacity: 1;
+	transform: translateY(0) scale(1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+	[data-portfolio-reveal] { opacity: 1; transform: none; transition: none; }
+}
+@keyframes voyage-loading { from { transform: translateX(-120%); } to { transform: translateX(340%); } }
+
+/* Daylight treatment keeps the approved voyage composition and only shifts its tone. */
+.portfolio-voyage {
+	background:
+		radial-gradient(circle at 72% 22%, rgba(218, 171, 119, 0.26), transparent 24rem),
+		linear-gradient(180deg, #9eb6bd 0%, #c1c7bd 48%, #789da5 100%);
+	color: #102b3b;
+}
+
+.portfolio-voyage__canvas {
+	filter: saturate(0.68) brightness(1.42) contrast(0.82);
+	opacity: 0;
+	cursor: grab;
+}
+
+.portfolio-voyage__canvas[data-active="true"] {
+	opacity: 0.82;
+}
+
+.portfolio-voyage__canvas:active {
+	cursor: grabbing;
+}
+
+.portfolio-voyage__wash {
+	background:
+		linear-gradient(90deg, rgba(222, 226, 214, 0.58), rgba(188, 202, 198, 0.12) 54%, transparent 78%),
+		linear-gradient(0deg, rgba(111, 145, 151, 0.14), transparent 48%);
+}
+
+.portfolio-voyage__content,
+.portfolio-voyage__content h1,
+.portfolio-voyage__content p,
+.portfolio-voyage__status,
+.portfolio-voyage__credit {
+	color: #102b3b;
+	text-shadow: 0 1px 0 rgba(239, 235, 220, 0.42);
+}
+
+.portfolio-voyage__fallback {
+	background: linear-gradient(180deg, #9eb5bc 0%, #bbc2b8 43%, #d0ad87 50%, #7ca0a6 52%, #537d87 100%);
+}
+
+.portfolio-voyage__sun {
+	background: #c96550;
+	box-shadow: 0 0 72px rgba(215, 145, 100, 0.42);
+}
+
+.portfolio-voyage__mountain {
+	background: #566d72;
+	opacity: 0.48;
+}
+
+.portfolio-voyage__sea {
+	background:
+		repeating-radial-gradient(ellipse at 60% 0, rgba(239, 220, 184, 0.3) 0 1px, transparent 2px 17px),
+		linear-gradient(#789da3, #527c87);
+}
+
+.portfolio-voyage__loader {
+	top: auto;
+	right: 24px;
+	bottom: 58px;
+	left: auto;
+	transform: none;
+	color: #102b3b;
+	border-color: rgba(39, 65, 74, 0.2);
+	background: rgba(221, 222, 211, 0.76);
+	box-shadow: 0 12px 36px rgba(39, 57, 64, 0.12);
+}
+
+.portfolio-voyage__loader div span {
+	color: #52666d;
+}
+
+/* Daylight ocean with a full-scene startup state. */
+.portfolio-voyage {
+	background: #758f94;
+	color: #102b3b;
+}
+.portfolio-voyage__canvas {
+	filter: saturate(.96) contrast(1.04) brightness(1.14);
+}
+.portfolio-voyage__canvas[data-active="true"] { opacity: 1; }
+.portfolio-voyage__fallback {
+	background: linear-gradient(180deg, #c4cbc3 0 48%, #8da8aa 49%, #587e84 100%);
+	transition: opacity .7s ease;
+}
+.portfolio-voyage[data-scene-state="active"] .portfolio-voyage__fallback { opacity: 0; }
+.portfolio-voyage__mountain { display: none; }
+.portfolio-voyage__sun {
+	top: 31%;
+	left: 69%;
+	width: 76px;
+	background: #d69569;
+	box-shadow: 0 0 54px rgba(218, 163, 116, .46);
+}
+.portfolio-voyage__sea {
+	inset: 49% 0 0;
+	background:
+		repeating-radial-gradient(ellipse at 69% 0, rgba(247, 225, 176, .38) 0 1px, transparent 2px 18px),
+		linear-gradient(180deg, #aec6c7, #668f95);
+}
+.portfolio-voyage__wash {
+	background:
+		linear-gradient(180deg, rgba(201, 230, 238, .72) 0, rgba(242, 242, 222, .48) 38%, transparent 52%),
+		linear-gradient(90deg, rgba(220, 229, 222, .08), transparent 55%),
+		linear-gradient(0deg, rgba(42, 78, 84, .05), transparent 42%);
+}
+
+.portfolio-voyage__wash::before {
+	position: absolute;
+	inset: 0 -8% 48%;
+	pointer-events: none;
+	content: "";
+	background:
+		linear-gradient(180deg, rgba(249, 247, 237, .24), rgba(221, 233, 232, .08)),
+		url("/assets/portfolio/distant-sunrise-clouds.png") center 70% / cover no-repeat;
+	filter: grayscale(.3) saturate(.48) brightness(1.38) contrast(.86) hue-rotate(158deg);
+	mix-blend-mode: screen;
+	opacity: .66;
+	transform: translate3d(-2%, 0, 0) scaleX(1.08);
+	animation: voyage-sunrise-clouds 38s ease-in-out infinite alternate;
+}
+
+.portfolio-voyage__content {
+	width: min(1180px, calc(100% - 56px));
+	padding-top: clamp(285px, 31vw, 390px);
+}
+
+.portfolio-voyage__content > p:first-child {
+	display: flex;
+	align-items: center;
+	gap: 14px;
+	margin-bottom: 14px;
+	color: #a94a3d;
+	font: 700 10px/1.4 ui-monospace, monospace;
+	letter-spacing: .28em;
+}
+
+.portfolio-voyage__content > p:first-child::before {
+	width: 58px;
+	height: 2px;
+	content: "";
+	background: linear-gradient(90deg, #bd3441, #d7a878);
+}
+
+.portfolio-voyage__content h1 {
+	max-width: 900px;
+	color: #11364a;
+	font-family: "Noto Sans SC", "Source Han Sans SC", sans-serif;
+	font-size: clamp(48px, 6.4vw, 88px);
+	font-weight: 800;
+	line-height: .98;
+	letter-spacing: -.055em;
+	text-shadow: 0 2px 0 rgba(255, 252, 240, .5), 0 14px 36px rgba(53, 85, 91, .12);
+}
+
+.portfolio-voyage__rule {
+	width: min(590px, 72vw);
+	margin: 24px 0 20px;
+}
+
+.portfolio-voyage__lead {
+	max-width: 720px;
+	margin: 0;
+	padding: 10px 14px;
+	color: #173e50;
+	border-left: 2px solid rgba(185, 42, 55, .7);
+	background: linear-gradient(90deg, rgba(250, 247, 235, .5), rgba(250, 247, 235, .08));
+	backdrop-filter: blur(6px);
+	font-size: clamp(14px, 1.25vw, 17px);
+	line-height: 1.8;
+}
+
+.portfolio-voyage__status,
+.portfolio-voyage button,
+.portfolio-voyage__camera-controls {
+	display: none !important;
+}
+
+main section article {
+	position: relative;
+	isolation: isolate;
+	overflow: hidden;
+	transition:
+		transform .3s cubic-bezier(.2, .75, .25, 1),
+		box-shadow .3s ease,
+		border-color .3s ease;
+}
+
+main section article::before {
+	position: absolute;
+	inset: -45% -65%;
+	z-index: 0;
+	pointer-events: none;
+	content: "";
+	background: linear-gradient(
+		105deg,
+		transparent 28%,
+		rgba(213, 151, 104, .05) 38%,
+		rgba(235, 211, 153, .2) 46%,
+		rgba(138, 185, 181, .18) 54%,
+		rgba(104, 151, 174, .1) 61%,
+		transparent 71%
+	);
+	transform: translateX(-62%) rotate(-2deg);
+	transition: transform 1s cubic-bezier(.18, .68, .24, 1);
+}
+
+@keyframes voyage-sunrise-clouds {
+	to { transform: translate3d(5%, 1.5%, 0) scaleX(1.08); }
+}
+
+main section article > * {
+	position: relative;
+	z-index: 1;
+}
+
+@media (hover: hover) and (pointer: fine) {
+	main section article:hover {
+		z-index: 2;
+		transform: translateY(-6px);
+		border-color: rgba(164, 126, 93, .42);
+		box-shadow: 0 18px 38px rgba(43, 62, 67, .17);
+	}
+
+	main section article:hover::before {
+		transform: translateX(62%) rotate(-2deg);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	main section article,
+	main section article::before {
+		transition: none;
+	}
+
+	main section article:hover {
+		transform: none;
+	}
+}
+.portfolio-voyage__content,
+.portfolio-voyage__content h1,
+.portfolio-voyage__content p,
+.portfolio-voyage__content a,
+.portfolio-voyage__status,
+.portfolio-voyage__credit {
+	color: #102b3b;
+}
+.portfolio-voyage__content > p:first-child {
+	margin-bottom: 14px;
+	color: #874942;
+	font: 700 10px/1.5 ui-monospace, "SFMono-Regular", monospace;
+	letter-spacing: .22em;
+}
+.portfolio-voyage__content h1 {
+	max-width: 650px;
+	font-family: "Noto Serif SC", "Songti SC", STSong, serif;
+	font-size: clamp(40px, 5.2vw, 68px);
+	font-weight: 700;
+	line-height: 1.12;
+	letter-spacing: .025em;
+}
+.portfolio-voyage__lead {
+	max-width: 610px;
+	font-family: "Noto Sans SC", "PingFang SC", sans-serif;
+	font-size: clamp(15px, 1.25vw, 17px);
+	font-weight: 500;
+	line-height: 1.82;
+	letter-spacing: .015em;
+}
+.portfolio-voyage__content a {
+	font-family: "Noto Sans SC", "PingFang SC", sans-serif;
+	font-size: 14px;
+	letter-spacing: .06em;
+}
+.portfolio-voyage__loader {
+	inset: 0;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 14px;
+	width: auto;
+	padding: 0;
+	transform: none;
+	color: #102b3b;
+	border: 0;
+	background: rgba(207, 214, 207, .76);
+	box-shadow: none;
+	backdrop-filter: blur(8px) saturate(.82);
+}
+.portfolio-voyage__loader-vortex {
+	position: relative;
+	width: 154px;
+	aspect-ratio: 1;
+	border-radius: 50%;
+	background:
+		radial-gradient(circle, #f1e5d0 0 3%, transparent 4%),
+		repeating-radial-gradient(circle, transparent 0 12px, rgba(43, 84, 92, .2) 13px 14px, transparent 15px 21px);
+	filter: drop-shadow(0 12px 30px rgba(34, 65, 71, .18));
+	animation: voyage-vortex-turn 9s linear infinite;
+}
+.portfolio-voyage__loader-vortex::before,
+.portfolio-voyage__loader-vortex::after,
+.portfolio-voyage__loader-vortex span {
+	position: absolute;
+	content: "";
+	width: 7px;
+	height: 7px;
+	border-radius: 50%;
+	background: #315f68;
+	box-shadow: 18px 12px #b86a5e, 38px -3px #607d80, 55px 18px #d0a27b, 72px -8px #315f68;
+}
+.portfolio-voyage__loader-vortex::before { left: 35px; top: 55px; transform: rotate(25deg); }
+.portfolio-voyage__loader-vortex::after { right: 44px; bottom: 43px; transform: rotate(155deg); }
+.portfolio-voyage__loader-vortex span:nth-child(1) { left: 68px; top: 70px; }
+.portfolio-voyage__loader-vortex span:nth-child(2) { left: 22px; bottom: 24px; transform: rotate(70deg); }
+.portfolio-voyage__loader-vortex span:nth-child(3) { right: 24px; top: 24px; transform: rotate(210deg); }
+.portfolio-voyage__loader-copy {
+	display: grid;
+	grid-template-columns: 1fr auto;
+	width: min(330px, calc(100% - 48px));
+	align-items: end;
+}
+.portfolio-voyage__loader-copy strong {
+	color: #8c4e48;
+	font: 700 11px/1.4 ui-monospace, monospace;
+	letter-spacing: .13em;
+}
+.portfolio-voyage__loader-copy b {
+	color: #a84d46;
+	font: 500 32px/1 "Noto Serif SC", serif;
+}
+.portfolio-voyage__loader-copy small {
+	grid-column: 1 / -1;
+	margin-top: 7px;
+	color: #405c62;
+	font-size: 11px;
+}
+.portfolio-voyage__loader-track {
+	width: min(330px, calc(100% - 48px));
+	height: 3px;
+	overflow: hidden;
+	background: rgba(49, 95, 104, .16);
+}
+.portfolio-voyage__loader-track span {
+	display: block;
+	width: var(--voyage-progress);
+	height: 100%;
+	background: linear-gradient(90deg, #315f68, #b65c54, #d2a174);
+	transition: width .18s ease;
+}
+@keyframes voyage-vortex-turn { to { transform: rotate(360deg); } }
+
+.portfolio-voyage__status {
+	bottom: 64px;
+	color: #183743;
+	border-color: rgba(24, 55, 67, .18);
+	background: rgba(226, 226, 213, .62);
+	box-shadow: 0 8px 24px rgba(34, 59, 65, .1);
+}
+
+.portfolio-voyage__content { pointer-events: none; }
+.portfolio-voyage__content a { pointer-events: auto; }
+
+.portfolio-voyage__camera-controls {
+	position: absolute;
+	z-index: 5;
+	right: 24px;
+	bottom: 20px;
+	display: flex;
+	gap: 4px;
+	padding: 4px;
+	border: 1px solid rgba(24, 55, 67, .16);
+	background: rgba(224, 225, 214, .58);
+	box-shadow: 0 8px 24px rgba(34, 59, 65, .1);
+	backdrop-filter: blur(14px) saturate(.82);
+}
+
+.portfolio-voyage__camera-controls button {
+	min-width: 48px;
+	padding: 7px 10px;
+	color: #284750;
+	border: 0;
+	background: transparent;
+	font: 700 10px/1 ui-monospace, monospace;
+	letter-spacing: .08em;
+	cursor: pointer;
+}
+
+.portfolio-voyage__camera-controls button[aria-pressed="true"] {
+	color: #f5efe2;
+	background: #536f73;
+}
+
+.portfolio-voyage__camera-controls button:disabled {
+	opacity: .38;
+	cursor: default;
+}
+
+@media (max-width: 767px) {
+	.portfolio-voyage__camera-controls { display: none; }
+	.portfolio-voyage__status { bottom: 20px; }
+}

@@ -1,0 +1,237 @@
+{
+	"schema_version": 1,
+	"diagram_type": "architecture",
+	"meta": {
+		"title": "BabySteps · 产品与性能观测闭环",
+		"quality_profile": "showcase",
+		"visual_preset": "blueprint",
+		"animation": "trace",
+		"views": [
+			{
+				"id": "product",
+				"label": "产品请求",
+				"focus": ["family", "pages", "router", "product-api"],
+				"note": "家庭用户经边缘 SSR 进入成长任务、纪念馆与 Provider 产品模块。"
+			},
+			{
+				"id": "telemetry",
+				"label": "性能遥测",
+				"focus": ["sdk", "ingest", "queue", "cleaner", "schema", "query"],
+				"note": "真实浏览器事件经受控预算进入临时 AWS 管线并按项目 Schema 聚合。"
+			},
+			{
+				"id": "evidence",
+				"label": "快照与清理",
+				"focus": ["query", "dashboard", "evidence", "cleanup"],
+				"note": "Dashboard 快照、样本置信度与零残留证明形成闭环。"
+			}
+		]
+	},
+	"components": [
+		{
+			"id": "family",
+			"type": "external",
+			"label": "家庭用户 / Provider",
+			"sublabel": "成长任务与管理入口",
+			"pos": [38, 170],
+			"size": [152, 66]
+		},
+		{
+			"id": "pages",
+			"type": "frontend",
+			"label": "Cloudflare Pages",
+			"sublabel": "Edge SSR + Hydration",
+			"pos": [228, 170],
+			"size": [152, 66],
+			"tag": "verified-production"
+		},
+		{
+			"id": "router",
+			"type": "frontend",
+			"label": "Product Routes",
+			"sublabel": "tasks / profile / evidence",
+			"pos": [418, 170],
+			"size": [152, 66]
+		},
+		{
+			"id": "product-api",
+			"type": "backend",
+			"label": "Product APIs",
+			"sublabel": "身份与业务模块",
+			"pos": [608, 170],
+			"size": [152, 66]
+		},
+		{
+			"id": "sdk",
+			"type": "frontend",
+			"label": "Performance SDK",
+			"sublabel": "Vitals / navigation / route",
+			"pos": [228, 330],
+			"size": [152, 66]
+		},
+		{
+			"id": "ingest",
+			"type": "cloud",
+			"label": "API + Ingest Lambda",
+			"sublabel": "校验 / 脱敏 / 批次预算",
+			"pos": [418, 330],
+			"size": [152, 66]
+		},
+		{
+			"id": "queue",
+			"type": "messagebus",
+			"label": "SQS + DLQ",
+			"sublabel": "可靠送达与最终对账",
+			"pos": [608, 330],
+			"size": [152, 66]
+		},
+		{
+			"id": "cleaner",
+			"type": "cloud",
+			"label": "ECS Cleaner",
+			"sublabel": "去重 / 分类 / PostgreSQL 写入",
+			"pos": [798, 330],
+			"size": [152, 66]
+		},
+		{
+			"id": "schema",
+			"type": "database",
+			"label": "Project Schema",
+			"sublabel": "逐指标分布与 eventId",
+			"pos": [988, 330],
+			"size": [152, 66]
+		},
+		{
+			"id": "query",
+			"type": "cloud",
+			"label": "Query Lambda",
+			"sublabel": "p50 / p75 / p95",
+			"pos": [418, 485],
+			"size": [152, 66]
+		},
+		{
+			"id": "dashboard",
+			"type": "frontend",
+			"label": "Performance Dashboard",
+			"sublabel": "Live / verified snapshot",
+			"pos": [608, 485],
+			"size": [152, 66]
+		},
+		{
+			"id": "cleanup",
+			"type": "security",
+			"label": "Recovery Contract",
+			"sublabel": "Stack / Schema / 12 类资源",
+			"pos": [798, 485],
+			"size": [152, 66]
+		},
+		{
+			"id": "evidence",
+			"type": "external",
+			"label": "BabySteps Evidence",
+			"sublabel": "Run / Artifact / WebM",
+			"pos": [988, 170],
+			"size": [152, 66],
+			"tag": "verified-production"
+		}
+	],
+	"boundaries": [
+		{
+			"kind": "region",
+			"label": "Cloudflare production edge",
+			"wraps": ["pages", "router", "product-api", "sdk"],
+			"pad": 16
+		},
+		{
+			"kind": "security-group",
+			"label": "AWS temporary performance runtime",
+			"wraps": ["ingest", "queue", "cleaner", "schema", "query", "cleanup"],
+			"pad": 16
+		},
+		{
+			"kind": "region",
+			"label": "Public verification surface",
+			"wraps": ["dashboard", "evidence"],
+			"pad": 16
+		}
+	],
+	"connections": [
+		{
+			"from": "family",
+			"to": "pages",
+			"variant": "emphasis",
+			"labelAt": [209, 152]
+		},
+		{
+			"from": "pages",
+			"to": "router",
+			"variant": "default",
+			"labelAt": [399, 152]
+		},
+		{
+			"from": "router",
+			"to": "product-api",
+			"variant": "default",
+			"labelAt": [589, 152]
+		},
+		{
+			"from": "router",
+			"to": "sdk",
+			"variant": "dashed",
+			"route": "orthogonal-h"
+		},
+		{
+			"from": "sdk",
+			"to": "ingest",
+			"variant": "emphasis",
+			"labelAt": [399, 352]
+		},
+		{
+			"from": "ingest",
+			"to": "queue",
+			"variant": "default",
+			"labelAt": [589, 352]
+		},
+		{
+			"from": "query",
+			"to": "dashboard",
+			"variant": "emphasis",
+			"labelAt": [589, 552]
+		},
+		{
+			"from": "cleanup",
+			"to": "evidence",
+			"variant": "security",
+			"route": "orthogonal-h"
+		}
+	],
+	"cards": [
+		{
+			"dot": "emerald",
+			"title": "已验证闭环",
+			"items": [
+				"Run 33279132965 覆盖 5 条代表性路由",
+				"14/14 batches accepted，85 unique events，最终队列排空",
+				"AWS Runtime 已关闭，12 类项目资源零残留"
+			]
+		},
+		{
+			"dot": "cyan",
+			"title": "指标合同",
+			"items": [
+				"LCP、INP、CLS 与 FCP/TTFB 分层",
+				"navigation、resource、route 与业务交互分开统计",
+				"每项保存 sampleCount、p50/p75/p95、来源、版本与新鲜度"
+			]
+		},
+		{
+			"dot": "rose",
+			"title": "诚实边界",
+			"items": [
+				"INP n=1 明确低置信度",
+				"Dashboard-only capture 不污染验收数据",
+				"Mock、历史快照与实时管线不可互相冒充"
+			]
+		}
+	]
+}

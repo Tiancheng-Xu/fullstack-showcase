@@ -54,15 +54,6 @@ function projectKey(project: PortfolioProject) {
 	return project.repo || project.id;
 }
 
-function isRetiredEvidenceHubProject(project: PortfolioProject) {
-	return Boolean(
-		project.repo === "Tiancheng-Xu/baby2b-online-deployment-evidence" ||
-			project.id === "baby2b-online-deployment-evidence" ||
-			project.id === "baby2b-deployment-evidence" ||
-			project.evidenceUrl?.startsWith("https://evidence.baby2b.online"),
-	);
-}
-
 export function mergePortfolioProjects(
 	curated: PortfolioProject[],
 	synced: PortfolioProject[],
@@ -70,31 +61,15 @@ export function mergePortfolioProjects(
 	const remoteByKey = new Map(
 		synced.map((project) => [projectKey(project), project]),
 	);
-	const consumed = new Set<string>();
 	const merged = curated.map((local) => {
 		const remote =
 			remoteByKey.get(projectKey(local)) ??
 			synced.find((project) => project.id === local.id);
 		if (!remote) return local;
-		consumed.add(projectKey(remote));
 		return {
-			...remote,
 			...local,
-			status: remote.status,
-			progress: remote.progress,
-			evidenceUrl: local.evidenceUrl || remote.evidenceUrl,
-			ownerPage: local.ownerPage || remote.ownerPage,
-			sourceUpdatedAt: remote.sourceUpdatedAt,
+			sourceUpdatedAt: local.sourceUpdatedAt || remote.sourceUpdatedAt,
 		};
 	});
-
-	for (const project of synced) {
-		if (
-			!consumed.has(projectKey(project)) &&
-			!isRetiredEvidenceHubProject(project)
-		) {
-			merged.push(project);
-		}
-	}
 	return merged;
 }
