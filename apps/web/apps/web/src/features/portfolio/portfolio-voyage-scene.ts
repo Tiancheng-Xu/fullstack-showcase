@@ -280,8 +280,8 @@ export async function mountPortfolioVoyageScene(
   });
   oceanMaterial.setFloat("time", 0);
   const waterBump = new Texture("/assets/portfolio/waterbump.png", scene);
-  waterBump.wrapU = Texture.WRAP_ADDRESS;
-  waterBump.wrapV = Texture.WRAP_ADDRESS;
+  waterBump.wrapU = Texture.WRAP_ADDRESSMODE;
+  waterBump.wrapV = Texture.WRAP_ADDRESSMODE;
   oceanMaterial.setTexture("bumpTexture", waterBump);
   oceanMaterial.setVector3("sunDirection", skySunDirection);
   ocean.material = oceanMaterial;
