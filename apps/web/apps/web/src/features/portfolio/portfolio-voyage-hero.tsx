@@ -107,9 +107,11 @@ export function PortfolioVoyageHero({ forceStatic = false }: PortfolioVoyageHero
     if (!enabled) return;
 
 		let disposed = false;
-			let dispose: (() => void) | undefined;
-			let idleHandle: number | undefined;
-			let progressTimer: number | undefined;
+		let dispose: (() => void) | undefined;
+		let idleHandle: number | undefined;
+		let firstPaintFrame: number | undefined;
+		let settledPaintFrame: number | undefined;
+		let progressTimer: number | undefined;
 		const idleWindow = window as Window & {
 			requestIdleCallback?: (
 				callback: IdleRequestCallback,
@@ -117,7 +119,7 @@ export function PortfolioVoyageHero({ forceStatic = false }: PortfolioVoyageHero
 			) => number;
 			cancelIdleCallback?: (handle: number) => void;
 		};
-			const loadScene = () => {
+		const loadScene = () => {
 				if (disposed) return;
 				setLoadingProgress(12);
 				setSceneState("loading");
@@ -146,15 +148,26 @@ export function PortfolioVoyageHero({ forceStatic = false }: PortfolioVoyageHero
 				});
 		};
 
-		if (typeof idleWindow.requestIdleCallback === "function") {
-			idleHandle = idleWindow.requestIdleCallback(loadScene, { timeout: 900 });
-		} else {
-			idleHandle = window.setTimeout(loadScene, 160);
-		}
+		const scheduleAfterFirstPaint = () => {
+			firstPaintFrame = window.requestAnimationFrame(() => {
+				settledPaintFrame = window.requestAnimationFrame(() => {
+					if (typeof idleWindow.requestIdleCallback === "function") {
+						idleHandle = idleWindow.requestIdleCallback(loadScene, { timeout: 2400 });
+					} else {
+						idleHandle = window.setTimeout(loadScene, 600);
+					}
+				});
+			});
+		};
+		if (document.readyState === "complete") scheduleAfterFirstPaint();
+		else window.addEventListener("load", scheduleAfterFirstPaint, { once: true });
 
 		return () => {
-				disposed = true;
-				if (progressTimer !== undefined) window.clearInterval(progressTimer);
+			disposed = true;
+			window.removeEventListener("load", scheduleAfterFirstPaint);
+			if (firstPaintFrame !== undefined) window.cancelAnimationFrame(firstPaintFrame);
+			if (settledPaintFrame !== undefined) window.cancelAnimationFrame(settledPaintFrame);
+			if (progressTimer !== undefined) window.clearInterval(progressTimer);
 			if (idleHandle !== undefined) {
 				if (typeof idleWindow.cancelIdleCallback === "function")
 					idleWindow.cancelIdleCallback(idleHandle);

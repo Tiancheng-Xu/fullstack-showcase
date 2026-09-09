@@ -12,7 +12,10 @@ import { Scene } from "@babylonjs/core/scene.js";
 
 import type { CapabilityDomain } from "./capability-map-data";
 import { createTechnologyParticleLayout } from "./technology-particle-layout";
-import { getVoyageDevicePixelRatio } from "./voyage-scene-policy";
+import {
+	advanceVoyageReadiness,
+	getVoyageDevicePixelRatio,
+} from "./voyage-scene-policy";
 
 export type CapabilityParticleController = {
 	dispose: () => void;
@@ -45,6 +48,7 @@ function createParticleTexture(scene: Scene) {
 export function mountTechnologyCapabilityParticleScene(
 	canvas: HTMLCanvasElement,
 	domains: CapabilityDomain[],
+	onReady?: () => void,
 ): CapabilityParticleController {
 	const dpr = getVoyageDevicePixelRatio(window.innerWidth, window.devicePixelRatio || 1);
 	const engine = new Engine(canvas, true, {
@@ -166,6 +170,24 @@ export function mountTechnologyCapabilityParticleScene(
 	});
 
 	const render = () => scene.render();
+	let readyFrames = 0;
+	let readyNotified = false;
+	const readyObserver = scene.onAfterRenderObservable.add(() => {
+		if (readyNotified) return;
+		const frameReady =
+			canvas.isConnected &&
+			canvas.clientWidth > 0 &&
+			canvas.clientHeight > 0 &&
+			engine.getRenderWidth() > 1 &&
+			engine.getRenderHeight() > 1 &&
+			scene.isReady();
+		const readiness = advanceVoyageReadiness(readyFrames, frameReady);
+		readyFrames = readiness.frames;
+		if (!readiness.ready) return;
+		readyNotified = true;
+		scene.onAfterRenderObservable.remove(readyObserver);
+		onReady?.();
+	});
 	const syncRenderLoop = () => {
 		engine.stopRenderLoop(render);
 		if (visible && !paused) engine.runRenderLoop(render);
@@ -197,6 +219,7 @@ export function mountTechnologyCapabilityParticleScene(
 			if (paused) scene.render();
 		},
 		dispose() {
+			scene.onAfterRenderObservable.remove(readyObserver);
 			observer.disconnect();
 			resizeObserver.disconnect();
 			window.removeEventListener("resize", resize);

@@ -14,6 +14,10 @@ import "./technology-capability-map.css";
 
 export function TechnologyCapabilityMap() {
 	const [selected, setSelected] = useState<CapabilityNode | null>(null);
+	const [sceneState, setSceneState] = useState<
+		"static" | "loading" | "active" | "failed"
+	>("static");
+	const sectionRef = useRef<HTMLElement>(null);
 	const canvasRef = useRef<HTMLCanvasElement>(null);
 	const particleController = useRef<CapabilityParticleController | null>(null);
   const allNodes = useMemo(
@@ -30,7 +34,7 @@ export function TechnologyCapabilityMap() {
 	}, []);
 
 	useEffect(() => {
-		if (!canvasRef.current) return;
+		if (!canvasRef.current || !sectionRef.current) return;
 		const reducedMotion =
 			typeof window.matchMedia === "function" &&
 			window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -44,23 +48,63 @@ export function TechnologyCapabilityMap() {
 			return;
 
 		let disposed = false;
-		const timer = window.setTimeout(() => {
-			void import("./technology-capability-particle-scene").then(
-				({ mountTechnologyCapabilityParticleScene }) => {
+		let idleHandle: number | undefined;
+		let paintFrame: number | undefined;
+		const idleWindow = window as Window & {
+			requestIdleCallback?: (
+				callback: IdleRequestCallback,
+				options?: IdleRequestOptions,
+			) => number;
+			cancelIdleCallback?: (handle: number) => void;
+		};
+		const loadScene = () => {
+			if (disposed) return;
+			setSceneState("loading");
+			void import("./technology-capability-particle-scene")
+				.then(({ mountTechnologyCapabilityParticleScene }) => {
 					if (disposed || !canvasRef.current) return;
 					particleController.current = mountTechnologyCapabilityParticleScene(
 						canvasRef.current,
 						CAPABILITY_DOMAINS,
+						() => {
+							if (!disposed) setSceneState("active");
+						},
 					);
 					particleController.current.setPaused(false);
 					particleController.current.setRange(1);
-				},
-			);
-		}, 220);
+				})
+				.catch(() => {
+					if (!disposed) setSceneState("failed");
+				});
+		};
+		const scheduleLoad = () => {
+			paintFrame = window.requestAnimationFrame(() => {
+				if (typeof idleWindow.requestIdleCallback === "function") {
+					idleHandle = idleWindow.requestIdleCallback(loadScene, { timeout: 1800 });
+				} else {
+					idleHandle = window.setTimeout(loadScene, 400);
+				}
+			});
+		};
+		const observer = new IntersectionObserver(
+			([entry]) => {
+				if (!entry?.isIntersecting) return;
+				observer.disconnect();
+				scheduleLoad();
+			},
+			{ rootMargin: "240px 0px" },
+		);
+		observer.observe(sectionRef.current);
 
 		return () => {
 			disposed = true;
-			window.clearTimeout(timer);
+			observer.disconnect();
+			if (paintFrame !== undefined) window.cancelAnimationFrame(paintFrame);
+			if (idleHandle !== undefined) {
+				if (typeof idleWindow.cancelIdleCallback === "function")
+					idleWindow.cancelIdleCallback(idleHandle);
+				else window.clearTimeout(idleHandle);
+			}
 			particleController.current?.dispose();
 			particleController.current = null;
 		};
@@ -68,8 +112,10 @@ export function TechnologyCapabilityMap() {
 
   return (
     <section
+		ref={sectionRef}
       id="technology-map"
       className="technology-map"
+		data-scene-state={sceneState}
       aria-labelledby="technology-map-title"
     >
       <header className="technology-map__header">
@@ -88,6 +134,7 @@ export function TechnologyCapabilityMap() {
 			<canvas
 				ref={canvasRef}
 				className="technology-map__particle-canvas"
+				data-active={sceneState === "active"}
 				aria-hidden="true"
 			/>
         <svg className="technology-map__orbits" aria-hidden="true" viewBox="0 0 1200 720">
