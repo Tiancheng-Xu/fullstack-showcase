@@ -20,6 +20,14 @@ export function PortfolioPrimaryNavigation({
 	const router = useRouter({ warn: false });
 	return (
 		<nav aria-label="作品集主导航" className="portfolio-primary-navigation">
+			<span
+				aria-hidden="true"
+				className="portfolio-primary-navigation-mark"
+			>
+				<svg fill="none" viewBox="0 0 24 24">
+					<path d="M3 10h18M5 10 12 4l7 6M6 10v8m4-8v8m4-8v8m4-8v8M4 18h16M2.5 21h19" />
+				</svg>
+			</span>
 			{ITEMS.map((item) => {
 				const props = {
 					"aria-current": current === item.id ? ("page" as const) : undefined,

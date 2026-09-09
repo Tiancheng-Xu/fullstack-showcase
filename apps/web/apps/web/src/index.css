@@ -55,21 +55,29 @@
 	flex-direction: column;
 }
 
-.portfolio-dashboard-main #about {
+.portfolio-dashboard-main #skills {
 	order: 1;
 }
-.portfolio-dashboard-main #projects {
+.portfolio-dashboard-main #technology-map {
 	order: 2;
 }
-.portfolio-dashboard-main #skills {
+.portfolio-dashboard-main #about {
 	order: 3;
 }
-.portfolio-dashboard-main #performance {
+.portfolio-dashboard-main #projects {
 	order: 4;
+}
+.portfolio-dashboard-main #open-source {
+	order: 5;
+}
+.portfolio-dashboard-main #performance {
+	order: 6;
 }
 
 .portfolio-dashboard-hero {
-	padding-top: clamp(0.5rem, 2vw, 2rem);
+	min-height: 0 !important;
+	padding-top: clamp(0.5rem, 1.4vw, 1.25rem);
+	padding-bottom: clamp(1rem, 2.2vw, 2rem);
 	text-shadow: 0 1px rgba(255, 255, 255, 0.72);
 }
 
@@ -788,17 +796,23 @@ nav[aria-label="作品集主导航"] a:focus-visible::after {
 	}
 }
 
-.portfolio-dashboard-main #about {
+.portfolio-dashboard-main #skills {
 	order: 1;
 }
-.portfolio-dashboard-main #projects {
+.portfolio-dashboard-main #technology-map {
 	order: 2;
 }
-.portfolio-dashboard-main #skills {
+.portfolio-dashboard-main #about {
 	order: 3;
 }
-.portfolio-dashboard-main #performance {
+.portfolio-dashboard-main #projects {
 	order: 4;
+}
+.portfolio-dashboard-main #open-source {
+	order: 5;
+}
+.portfolio-dashboard-main #performance {
+	order: 6;
 }
 
 .portfolio-dashboard-module-card {
@@ -1139,6 +1153,28 @@ header#top.portfolio-glass-bar {
 }
 
 /* Portfolio route-level navigation and indexes */
+.portfolio-primary-navigation::before {
+	display: none !important;
+	content: none !important;
+}
+
+.portfolio-primary-navigation-mark {
+	display: inline-grid;
+	width: 2.1rem;
+	height: 2.1rem;
+	place-items: center;
+	color: #b21f35;
+}
+
+.portfolio-primary-navigation-mark svg {
+	width: 1.65rem;
+	height: 1.65rem;
+	stroke: currentColor;
+	stroke-width: 1.65;
+	stroke-linecap: round;
+	stroke-linejoin: round;
+}
+
 .portfolio-primary-navigation {
 	display: flex;
 	align-items: center;
@@ -1626,4 +1662,84 @@ header#top.portfolio-glass-bar {
 		justify-content: center;
 		padding: 1.2rem 0;
 	}
+}
+
+/* Portfolio-wide Morandi resume palette: muted surfaces, preserved paper texture and hierarchy. */
+.portfolio-surface {
+	--portfolio-morandi-ink: #102b3b;
+	--portfolio-morandi-muted: #53656b;
+	--portfolio-morandi-line: rgba(39, 65, 74, 0.2);
+	--portfolio-morandi-paper: rgba(226, 224, 211, 0.72);
+	--portfolio-morandi-glass: rgba(211, 218, 211, 0.58);
+	background:
+		linear-gradient(rgba(238, 233, 219, 0.34), rgba(184, 198, 195, 0.18)),
+		#c5cbc3;
+	color: var(--portfolio-morandi-ink);
+}
+
+.portfolio-dashboard-main {
+	background:
+		radial-gradient(circle at 82% 12%, rgba(155, 174, 178, 0.2), transparent 30rem),
+		linear-gradient(180deg, rgba(220, 218, 204, 0.72), rgba(191, 203, 199, 0.62));
+}
+
+.portfolio-glass-bar,
+.portfolio-glass-footer,
+.portfolio-glass-mobile-nav {
+	border-color: var(--portfolio-morandi-line);
+	background: rgba(213, 216, 207, 0.76);
+	box-shadow: 0 10px 30px rgba(39, 57, 64, 0.1);
+	backdrop-filter: blur(18px) saturate(0.78);
+}
+
+.portfolio-dashboard-module-card,
+.portfolio-glass-panel {
+	border-color: var(--portfolio-morandi-line);
+	background:
+		linear-gradient(135deg, rgba(234, 230, 216, 0.72), rgba(200, 211, 207, 0.58));
+	box-shadow:
+		inset 0 1px 0 rgba(255, 252, 242, 0.52),
+		0 14px 34px rgba(39, 57, 64, 0.1);
+	backdrop-filter: blur(16px) saturate(0.76);
+}
+
+.portfolio-glass-subpanel,
+.portfolio-project-card {
+	border-color: rgba(39, 65, 74, 0.18);
+	background:
+		linear-gradient(145deg, rgba(237, 232, 218, 0.62), rgba(190, 204, 202, 0.48));
+	box-shadow:
+		inset 0 1px 0 rgba(255, 252, 242, 0.48),
+		0 10px 24px rgba(39, 57, 64, 0.08);
+}
+
+.portfolio-section-title,
+.portfolio-project-card,
+.portfolio-project-summary,
+.portfolio-project-row,
+.portfolio-project-architecture,
+.portfolio-project-skills,
+.portfolio-project-action {
+	color: var(--portfolio-morandi-ink);
+}
+
+.portfolio-project-icon,
+.portfolio-glass-control {
+	border-color: rgba(39, 65, 74, 0.2);
+	background: rgba(224, 224, 212, 0.62);
+	color: var(--portfolio-morandi-ink);
+}
+
+.portfolio-project-number,
+.portfolio-primary-navigation-mark,
+.portfolio-project-action:hover {
+	color: #9f3937;
+}
+
+.portfolio-dashboard-main :is(h1, h2, h3, h4, p, li, dt, dd) {
+	color: var(--portfolio-morandi-ink);
+}
+
+.portfolio-dashboard-main :is(a, button) {
+	text-decoration-color: rgba(159, 57, 55, 0.48);
 }

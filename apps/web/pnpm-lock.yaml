@@ -84,6 +84,15 @@ importers:
 
   apps/web:
     dependencies:
+      '@babylonjs/core':
+        specifier: ^9.25.0
+        version: 9.25.0
+      '@babylonjs/loaders':
+        specifier: ^9.25.0
+        version: 9.25.0(@babylonjs/core@9.25.0)(babylonjs-gltf2interface@9.25.0)
+      '@babylonjs/materials':
+        specifier: 9.25.0
+        version: 9.25.0(@babylonjs/core@9.25.0)
       '@hookform/resolvers':
         specifier: ^5.5.7
         version: 5.5.7(@standard-schema/spec@1.1.0)(ajv-formats@2.1.1(ajv@8.20.0))(ajv@8.20.0)(react-hook-form@7.83.0(react@19.2.8))(zod@4.4.3)
@@ -407,6 +416,20 @@ packages:
   '@babel/types@7.29.7':
     resolution: {integrity: sha512-4zBIxpPzowiZpusoFkyGVwakdRJUyuH5PxQ/PrqghfdFWWasvnCdPfQXHrenDai+gyLARulZjZowCOj6fjT4pA==}
     engines: {node: '>=6.9.0'}
+
+  '@babylonjs/core@9.25.0':
+    resolution: {integrity: sha512-PflCKhM0ZRQ1o/7fRsYic4r1ogBpE/ZxA/8wJ2K2C9wg7rc0rIkXMVTUAcAypAFeVtE0ix6sp3Bd4zbz/rfHBQ==}
+
+  '@babylonjs/loaders@9.25.0':
+    resolution: {integrity: sha512-K0R+ehftbe+kzf9cDtUERc57B5G/bdTbi6Kb3dF0dnUi1OVTJtRWs1Kxon/nVeUtQjuoe/nmEt7qjcUWnqyxDg==}
+    peerDependencies:
+      '@babylonjs/core': ^9.0.0
+      babylonjs-gltf2interface: ^9.0.0
+
+  '@babylonjs/materials@9.25.0':
+    resolution: {integrity: sha512-twvOW1fFtGJ7sWLIsYsuBkpwbbDtVq+P/J4Yo0of7Qaf1/sIoAxkaBBsuuuIVe5jBo4CkL1/JOL80+OoTwD8uw==}
+    peerDependencies:
+      '@babylonjs/core': ^9.0.0
 
   '@base-ui/react@1.6.0':
     resolution: {integrity: sha512-/jzjTWJYXhRFO45Bev9lc3cHbmjzCMpUqbMZ2AgKy/z25mY9B6shGSNcXcjQar9n5doM0KYW1W8fcFv2jZBuMw==}
@@ -1239,6 +1262,9 @@ packages:
 
   babel-dead-code-elimination@1.0.12:
     resolution: {integrity: sha512-GERT7L2TiYcYDtYk1IpD+ASAYXjKbLTDPhBtYj7X1NuRMDTMtAx9kyBenub1Ev41lo91OHCKdmP+egTDmfQ7Ig==}
+
+  babylonjs-gltf2interface@9.25.0:
+    resolution: {integrity: sha512-yi+Gh+rqEghH5T9jdpp0W+be4HRh13+0N4xCPazMyElNbwqtEYoWoFLE3Q3CrA1aY4H5dMOVRXYcspWwo15crg==}
 
   backstopjs@6.3.25:
     resolution: {integrity: sha512-jy0dxlk45tItXLcj9zjRTCyCa6D27M9OMK5kM8To0ELLclKhI/dWn/igUTMBBMJXe4Kql+CGyDRErMtTv2+40Q==}
@@ -3590,6 +3616,17 @@ snapshots:
       '@babel/helper-string-parser': 7.29.7
       '@babel/helper-validator-identifier': 7.29.7
 
+  '@babylonjs/core@9.25.0': {}
+
+  '@babylonjs/loaders@9.25.0(@babylonjs/core@9.25.0)(babylonjs-gltf2interface@9.25.0)':
+    dependencies:
+      '@babylonjs/core': 9.25.0
+      babylonjs-gltf2interface: 9.25.0
+
+  '@babylonjs/materials@9.25.0(@babylonjs/core@9.25.0)':
+    dependencies:
+      '@babylonjs/core': 9.25.0
+
   '@base-ui/react@1.6.0(@types/react@19.2.17)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)':
     dependencies:
       '@babel/runtime': 7.29.7
@@ -4276,6 +4313,8 @@ snapshots:
       '@babel/types': 7.29.7
     transitivePeerDependencies:
       - supports-color
+
+  babylonjs-gltf2interface@9.25.0: {}
 
   backstopjs@6.3.25(supports-color@7.2.0)(typescript@6.0.3):
     dependencies:

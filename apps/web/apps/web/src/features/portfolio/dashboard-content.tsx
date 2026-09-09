@@ -8,8 +8,8 @@ import {
 	Code2,
 	Compass,
 	Footprints,
+	GitPullRequest,
 	LayoutDashboard,
-	LayoutGrid,
 	PenTool,
 	RefreshCw,
 	ShieldCheck,
@@ -24,8 +24,11 @@ import {
 import { resolvePerformanceView } from "@/features/performance/performance-state";
 import { PerformanceStatusCard } from "@/features/performance/performance-status-card";
 import { DashboardScrollProgress } from "@/features/portfolio/dashboard-scroll-progress";
+import { orderOpenSourceContributions } from "@/features/portfolio/open-source-contributions";
 import { PORTFOLIO_FRAME_CLASS } from "@/features/portfolio/portfolio-layout";
 import { PortfolioPrimaryNavigation } from "@/features/portfolio/portfolio-primary-navigation";
+import { PortfolioVoyageHero } from "@/features/portfolio/portfolio-voyage-hero";
+import { TechnologyCapabilityMap } from "@/features/portfolio/technology-capability-map";
 import { usePortfolioProjects } from "@/features/portfolio/use-portfolio-projects";
 
 export function DashboardContent() {
@@ -35,10 +38,13 @@ export function DashboardContent() {
 		(project) => project.performance,
 	);
 	const preferredProjectOrder = [
-		"agent-market",
 		"babysteps",
+		"agent-market",
+		"performance-observability-control",
 		"shared-evidence-verifier",
+		"portfolio-sync",
 		"personal-ai-agent",
+		"github-profile-studio",
 		"fullstack-showcase",
 		"tc-workflow",
 	];
@@ -50,68 +56,83 @@ export function DashboardContent() {
 		if (rightIndex === -1) return -1;
 		return leftIndex - rightIndex;
 	});
-	const skillGroups = [
+	const projectGroups = [
 		{
-			name: "全栈产品工程",
-			source: "BabySteps、Agent Market、GitHub Profile Studio",
+			id: "part-time",
+			title: "2026 北京京城一灯兼职项目",
+			description:
+				"按业务完整度、岗位覆盖面与生产证据排序；仅收录个人仓库中已有实际实现的项目。",
+			projectIds: ["babysteps", "agent-market"],
 		},
 		{
-			name: "AI / Agent 工程",
-			source: "Personal AI Agent、Agent Market",
+			id: "trusted-delivery",
+			title: "云平台与可信交付能力",
+			description:
+				"展示性能观测、最小权限验证、自动同步与可追溯交付能力，不把基础设施模块包装成独立商业项目。",
+			projectIds: [
+				"performance-observability-control",
+				"shared-evidence-verifier",
+				"portfolio-sync",
+			],
 		},
 		{
-			name: "Web3 / 可验证交付",
-			source: "Agent Market、BabySteps",
-		},
-		{
-			name: "Cloud / Edge / CI/CD",
-			source: "Showcase Dashboard、Portfolio Sync、BabySteps",
-		},
-		{
-			name: "性能观测与数据链路",
-			source: "性能观测与成本控制、BabySteps",
-		},
-		{
-			name: "工作流与质量 Gate",
-			source: "TC Flow 2.1、Portfolio Sync、Evidence",
+			id: "portfolio-system",
+			title: "个人工程能力与作品系统",
+			description:
+				"用于集中证明全栈、多运行时、安全边界和作品组织能力，不计入兼职或客户项目经历。",
+			projectIds: [
+				"personal-ai-agent",
+				"github-profile-studio",
+				"fullstack-showcase",
+				"tc-workflow",
+			],
 		},
 	];
+	const professionalExperience = {
+		period: "2023–2026",
+		title: "政企低代码 / FDE 工程师",
+		location: "宁波 · 驻场交付",
+		body: "驻场服务宁波市公安局科信、特警等相关业务部门，参与低代码与 FDE 项目建设，负责前台业务应用与中台能力的架构实现，以及相关模块的工程交付和持续迭代。",
+	};
 
-	const resumeBlocks = [
-		{
-			title: "BabySteps",
-			meta: "全栈产品、Edge SSR、Web3、AWS 性能观测",
-			body: "完成成长任务、家长中心、纪念馆、Provider 与链上交互等产品模块，并建立 Edge SSR、水合降级和真实性能观测链路；难点是隔离身份、钱包和服务端渲染边界。",
-		},
+	const partTimeProjects = [
 		{
 			title: "Agent Market",
 			meta: "AI Agents、LangGraph、Sepolia、Cloudflare",
 			body: "构建可验证 AI Agent 任务市场，覆盖标签匹配、多 Agent DAG、任务协作与链上状态锚定；难点是让本地编排、公开生产页面和 24 笔 Sepolia Evidence 保持同一事实边界。",
 		},
 		{
+			title: "BabySteps",
+			meta: "全栈产品、Edge SSR、Web3、AWS 性能观测",
+			body: "完成成长任务、家长中心、纪念馆、Provider 与链上交互等产品模块，并建立 Edge SSR、水合降级和真实性能观测链路；难点是隔离身份、钱包和服务端渲染边界。",
+		},
+	];
+
+	const personalEngineeringShowcases = [
+		{
 			title: "Personal AI Agent",
 			meta: "Qwen3-8B、QLoRA / NF4、GGUF、Ollama",
 			body: "完成双卡 QLoRA 微调、冻结集对照、模型合并和 GGUF 量化，形成 Mac/Ollama 离线交付；难点是训练结果、模型身份和可复现验收之间的证据闭环。",
 		},
 		{
-			title: "Showcase Dashboard",
-			meta: "React、TypeScript、SSG / Hydration、Cloudflare Pages",
-			body: "把项目状态、Evidence、性能控制与自动同步整合为统一作品集入口；难点是保持静态首屏、水合后数据和项目自有页面链接一致，并让未知路由返回真实 404。",
-		},
-		{
 			title: "GitHub Profile Studio",
 			meta: "React、TanStack Router、Hono / Go、SQLite",
-			body: "构建本地优先的 GitHub 公开资料工作台，支持前端与双后端运行方式；难点是 GitHub API、数据缓存、凭据安全和本地交付体验之间的协调。",
+			body: "构建本地优先的 GitHub 公开资料工作台，以统一 API 契约验证 Hono / Node 与 Go 双后端，并通过服务端白名单和 macOS 钥匙串隔离浏览器凭据。",
+		},
+		{
+			title: "Showcase Dashboard",
+			meta: "React、TypeScript、SSG / Hydration、Cloudflare Pages",
+			body: "把项目状态、Evidence、Portfolio Sync、性能观测与受保护控制入口整合为个人工程作品系统；保持静态首屏、水合后数据和项目自有链接一致，并让未知路由返回真实 404。",
 		},
 		{
 			title: "Portfolio Sync",
-			meta: "GitHub App、Webhook、Cloudflare Workers、KV",
-			body: "通过签名 Webhook、只读 Installation Token 和定时兜底同步作品集项目清单；难点是跨仓库可信更新、失败降级和 Dashboard 静态基线的一致性。",
+			meta: "GitHub App、Cloudflare Workers、KV、HMAC",
+			body: "以 GitHub App Webhook、HMAC 验签与 Cloudflare Worker/KV 汇总真实项目发布清单，并用定时任务补齐事件遗漏；难点是同步状态、静态首屏与项目自有 Evidence 的一致性。",
 		},
 		{
 			title: "性能观测与成本控制",
-			meta: "RUM、SQS / ECS、PostgreSQL、受保护控制面",
-			body: "集中展示各项目性能指标、可信历史快照和成本控制状态；难点是区分真实用户、受控浏览器与历史快照，并在临时 AWS 链路关闭后保持诚实降级。",
+			meta: "Core Web Vitals、AWS、Cloudflare、Evidence",
+			body: "将浏览器真实性能样本、临时 AWS 聚合链路、成本控制与零残留清理纳入同一受保护控制面；难点是同时守住样本可信度、最小权限和预算边界。",
 		},
 		{
 			title: "TC Flow 2.1",
@@ -119,6 +140,290 @@ export function DashboardContent() {
 			body: "把需求、实现、审查、修复和发布拆成可恢复的 N1-N8 流程，沉淀本地与远端 Gate；难点是让复杂任务在失败、续跑和多人协作时仍保持可审查状态。",
 		},
 	];
+	const openSourceContributions = orderOpenSourceContributions([
+		{
+			project: "PR-Agent",
+			stars: 12907,
+			pullRequests: [
+				{
+					label: "#3140",
+					href: "https://github.com/The-PR-Agent/pr-agent/pull/3140",
+					contribution: "移除失效的共享限流处理逻辑",
+				},
+				{
+					label: "#3141",
+					href: "https://github.com/The-PR-Agent/pr-agent/pull/3141",
+					contribution: "修正 GitLab /ask_line 对旧侧行位置的处理",
+				},
+				{
+					label: "#3142",
+					href: "https://github.com/The-PR-Agent/pr-agent/pull/3142",
+					contribution: "从用户帮助信息中隐藏已禁用命令",
+				},
+			],
+		},
+		{
+			project: "ClawBox",
+			stars: 27,
+			pullRequests: [
+				{
+					label: "#774",
+					href: "https://github.com/ID-Robots/clawbox/pull/774",
+					contribution: "按 Provider 限定模型目录 fallback",
+				},
+			],
+		},
+		{
+			project: "PySNMP MIBs",
+			stars: 8,
+			pullRequests: [
+				{
+					label: "#361",
+					href: "https://github.com/pysnmp/mibs/pull/361",
+					contribution: "修正 TCPIPX unspecified table row 类型",
+				},
+			],
+		},
+	]);
+	const openSourceContributionsInReview = orderOpenSourceContributions([
+		{
+			project: "Deno",
+			stars: 108406,
+			pullRequests: [
+				{
+					label: "#36794",
+					href: "https://github.com/denoland/deno/pull/36794",
+					contribution: "保留 CLI 入口前的 -- 分隔符",
+				},
+			],
+		},
+		{
+			project: "RTK",
+			stars: 79560,
+			pullRequests: [
+				{
+					label: "#3933",
+					href: "https://github.com/rtk-ai/rtk/pull/3933",
+					contribution: "让 Ruff format 路由匹配首个参数",
+				},
+				{
+					label: "#3922",
+					href: "https://github.com/rtk-ai/rtk/pull/3922",
+					contribution: "增加 gitleaks TOML 输出过滤",
+				},
+			],
+		},
+		{
+			project: "pnpm",
+			stars: 36465,
+			pullRequests: [
+				{
+					label: "#14675",
+					href: "https://github.com/pnpm/pnpm/pull/14675",
+					contribution: "澄清 workspace package patterns",
+				},
+				{
+					label: "#14674",
+					href: "https://github.com/pnpm/pnpm/pull/14674",
+					contribution: "在安全支持策略中列出 pnpm v12",
+				},
+			],
+		},
+		{
+			project: "LiteLLM",
+			stars: 58324,
+			pullRequests: [
+				{
+					label: "#40183",
+					href: "https://github.com/BerriAI/litellm/pull/40183",
+					contribution: "补充 OpenRouter GPT-5.6 Sol 元数据",
+				},
+			],
+		},
+		{
+			project: "Lightpanda",
+			stars: 35173,
+			pullRequests: [
+				{
+					label: "#3440",
+					href: "https://github.com/lightpanda-io/browser/pull/3440",
+					contribution: "在 computed styles 中保留 CSS 自定义属性",
+				},
+			],
+		},
+		{
+			project: "Portless",
+			stars: 12358,
+			pullRequests: [
+				{
+					label: "#413",
+					href: "https://github.com/vercel-labs/portless/pull/413",
+					contribution: "自守护命令退出时保留路由",
+				},
+			],
+		},
+		{
+			project: "Chrome DevTools MCP",
+			stars: 51394,
+			pullRequests: [
+				{
+					label: "#2686",
+					href: "https://github.com/ChromeDevTools/chrome-devtools-mcp/pull/2686",
+					contribution: "补充定时脚本导航回归测试",
+				},
+			],
+		},
+		{
+			project: "Context Mode",
+			stars: 21474,
+			pullRequests: [
+				{
+					label: "#1128",
+					href: "https://github.com/mksglu/context-mode/pull/1128",
+					contribution: "修复 curl/wget 管道与多行路由边界",
+				},
+			],
+		},
+		{
+			project: "MCP Servers",
+			stars: 90176,
+			pullRequests: [
+				{
+					label: "#4775",
+					href: "https://github.com/modelcontextprotocol/servers/pull/4775",
+					contribution: "让 filesystem server 输出 object input schema",
+				},
+			],
+		},
+		{
+			project: "Tabler Icons",
+			stars: 21631,
+			pullRequests: [
+				{
+					label: "#1590",
+					href: "https://github.com/tabler/tabler-icons/pull/1590",
+					contribution: "保留 Vite SSR 所需的 SolidJS JSX source export",
+				},
+			],
+		},
+		{
+			project: "Bitcoin Dev Kit",
+			stars: 1067,
+			pullRequests: [
+				{
+					label: "#2276",
+					href: "https://github.com/bitcoindevkit/bdk/pull/2276",
+					contribution: "保留首个 floating transaction output",
+				},
+			],
+		},
+		{
+			project: "Backstage",
+			stars: 34376,
+			pullRequests: [
+				{
+					label: "#35564",
+					href: "https://github.com/backstage/backstage/pull/35564",
+					contribution: "修复 undici 安全依赖告警",
+				},
+			],
+		},
+		{
+			project: "BBj Language Server",
+			stars: 13,
+			pullRequests: [
+				{
+					label: "#665",
+					href: "https://github.com/BBx-Kitchen/bbj-language-server/pull/665",
+					contribution: "统一语言服务器日志输出格式",
+				},
+			],
+		},
+		{
+			project: "Web Testownik",
+			stars: 103,
+			pullRequests: [
+				{
+					label: "#323",
+					href: "https://github.com/Solvro/web-testownik/pull/323",
+					contribution: "强化维护恢复处理",
+				},
+			],
+		},
+		{
+			project: "Paperclip",
+			stars: 0,
+			pullRequests: [
+				{
+					label: "#2",
+					href: "https://github.com/adamteale/paperclip/pull/2",
+					contribution: "覆盖 runJob invocation scope resolution",
+				},
+			],
+		},
+		{
+			project: "Slopshop",
+			stars: 0,
+			pullRequests: [
+				{
+					label: "#21",
+					href: "https://github.com/fireship-dev/slopshop/pull/21",
+					contribution: "强化逐用户限流",
+				},
+			],
+		},
+		{
+			project: "Vite",
+			stars: 82766,
+			pullRequests: [
+				{
+					label: "#23235",
+					href: "https://github.com/vitejs/vite/pull/23235",
+					contribution: "补充 SSR server-only module reload 文档",
+				},
+			],
+		},
+		{
+			project: "Google WebCrypto",
+			stars: 116,
+			pullRequests: [
+				{
+					label: "#398",
+					href: "https://github.com/google/webcrypto.dart/pull/398",
+					contribution: "提取 RSA-OAEP PKCS#8 导入示例",
+				},
+			],
+		},
+	]);
+	const openSourceRepositories = [
+		...openSourceContributions.map((item) => ({
+			project: item.project,
+			stars: item.stars,
+			href: item.pullRequests[0]?.href.replace(/\/pull\/\d+.*$/, "") ?? "#",
+			merged: item.pullRequests.length,
+			open: 0,
+		})),
+		...openSourceContributionsInReview.map((item) => ({
+			project: item.project,
+			stars: item.stars,
+			href: item.pullRequests[0]?.href.replace(/\/pull\/\d+.*$/, "") ?? "#",
+			merged: 0,
+			open: item.pullRequests.length,
+		})),
+	].reduce<Array<{ project: string; stars: number; href: string; merged: number; open: number }>>(
+		(repositories, item) => {
+			const existing = repositories.find((repository) => repository.project === item.project);
+			if (existing) {
+				existing.merged += item.merged;
+				existing.open += item.open;
+				existing.stars = Math.max(existing.stars, item.stars);
+			} else {
+				repositories.push({ ...item });
+			}
+			return repositories;
+		},
+		[],
+	).sort((left, right) => right.stars - left.stars);
 
 	return (
 		<div className="portfolio-surface relative left-1/2 w-screen max-w-none -translate-x-1/2 overflow-x-hidden bg-[#f7f1e3] text-[#071d34]">
@@ -199,11 +504,80 @@ export function DashboardContent() {
 				</div>
 			</header>
 
+			<PortfolioVoyageHero />
+
 			<main
 				className={`${PORTFOLIO_FRAME_CLASS} portfolio-dashboard-main relative py-8 md:py-12`}
 			>
+				<section className="scroll-mt-24" id="skills">
+					<SectionTitle
+						icon={<Compass aria-hidden="true" size={18} />}
+						kicker="Core Competencies"
+						title="个人简历"
+					/>
+					<div className="portfolio-dashboard-module-card portfolio-glass-panel mt-5 border border-[#cfd5db] bg-white/84 p-5 shadow-sm md:p-8">
+						<p className="max-w-4xl text-[#344252] text-sm leading-relaxed">
+							全栈工程师，拥有政企低代码与 FDE
+							交付经验，负责前台应用与中台能力的架构实现；当前专注 AI
+							Agent、Web3、Cloud / Edge 与可验证工程交付。
+						</p>
+						<article className="portfolio-glass-subpanel mt-5 border border-[#d8cfbd] bg-[#f8f3e8] p-5">
+							<div className="flex flex-wrap items-baseline justify-between gap-2">
+								<div>
+									<p className="font-bold text-[#b21f35] text-xs tracking-[0.14em]">
+										{professionalExperience.period}
+									</p>
+									<h3 className="mt-1 font-semibold font-serif text-lg">
+										{professionalExperience.title}
+									</h3>
+								</div>
+								<p className="font-bold text-[#4d5863] text-xs">
+									{professionalExperience.location}
+								</p>
+							</div>
+							<p className="mt-3 text-[#344252] text-sm leading-relaxed">
+								{professionalExperience.body}
+							</p>
+							<p className="mt-3 border-[#bf1737]/25 border-t pt-3 text-[#5a6470] text-xs leading-relaxed">
+								政企项目仅公开职责与能力范围，不公开内部系统名称、数据、接口、部署拓扑或安全架构。
+							</p>
+						</article>
+
+						<div className="mt-7">
+							<h3 className="font-bold font-serif text-lg">
+								2026 北京京城一灯兼职项目
+							</h3>
+							<p className="mt-1 text-[#5a6470] text-xs leading-relaxed">
+								仅收录个人仓库中已有实际实现的项目；空仓库、模板仓库和仅有规划的项目不列入经历。
+							</p>
+							<div className="mt-4 grid gap-4 md:grid-cols-2">
+								{partTimeProjects.map((block) => (
+									<ResumeProjectCard block={block} key={block.title} />
+								))}
+							</div>
+						</div>
+
+						<div className="mt-7">
+							<h3 className="font-bold font-serif text-lg">
+								个人工程能力与作品系统
+							</h3>
+							<p className="mt-1 text-[#5a6470] text-xs leading-relaxed">
+								以下项目用于展示个人工程能力，不作为兼职或客户项目经历。
+							</p>
+							<div className="mt-4 grid gap-4 md:grid-cols-2">
+								{personalEngineeringShowcases.map((block) => (
+									<ResumeProjectCard block={block} key={block.title} />
+								))}
+							</div>
+						</div>
+
+					</div>
+				</section>
+
+				<TechnologyCapabilityMap />
+
 				<section
-					className="portfolio-dashboard-hero max-w-4xl scroll-mt-24 text-left"
+					className="portfolio-dashboard-hero mt-10 max-w-4xl scroll-mt-24 text-left md:mt-14"
 					id="about"
 				>
 					<h1 className="font-bold font-serif text-4xl leading-tight md:text-6xl">
@@ -218,107 +592,47 @@ export function DashboardContent() {
 					</p>
 				</section>
 
-				<section className="mt-10 scroll-mt-24 md:mt-14" id="skills">
-					<SectionTitle
-						icon={<Compass aria-hidden="true" size={18} />}
-						kicker="Core Competencies"
-						title="个人简历"
-					/>
-					<div className="portfolio-dashboard-module-card portfolio-glass-panel mt-5 border border-[#cfd5db] bg-white/84 p-5 shadow-sm md:p-8">
-						<div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-							{skillGroups.map((skill) => (
-								<div
-									className="portfolio-glass-subpanel min-h-16 border border-[#d8cfbd] bg-[#f8f3e8] px-4 py-3"
-									key={skill.name}
-								>
-									<p className="font-bold text-sm">{skill.name}</p>
-									<p className="mt-1 text-[#4d5863] text-xs leading-relaxed">
-										{skill.source}
-									</p>
-								</div>
-							))}
-						</div>
-						<div className="mt-6 grid gap-4 md:grid-cols-2">
-							{resumeBlocks.map((block) => (
-								<article
-									className="portfolio-glass-subpanel border border-[#e1d8c7] bg-[#fbf8ef] p-4"
-									key={block.title}
-								>
-									<div className="flex items-start gap-3">
-										<div className="grid size-11 shrink-0 place-items-center bg-[#eadfcf] text-[#bf1737]">
-											<Code2 aria-hidden="true" size={19} />
-										</div>
-										<div>
-											<h3 className="font-semibold font-serif text-base">
-												{block.title}
-											</h3>
-											<p className="mt-1 font-bold text-[#3f4650] text-xs">
-												{block.meta}
-											</p>
-										</div>
-									</div>
-									<p className="mt-3 text-[#344252] text-sm leading-relaxed">
-										{block.body}
-									</p>
-								</article>
-							))}
-						</div>
-					</div>
-				</section>
-
-				{performanceProjects.length > 0 ? (
-					<section className="mt-10 scroll-mt-24 md:mt-14" id="performance">
-						<SectionTitle
-							icon={<BadgeCheck aria-hidden="true" size={18} />}
-							kicker="Verified Snapshot"
-							title="性能观测与成本控制"
-						/>
-						<div className="portfolio-dashboard-module-card mt-5 p-5 md:p-7">
-							<p className="max-w-3xl text-[#344252] text-sm leading-relaxed">
-								观测链路停止或故障时，只展示最后一次通过校验的真实快照；没有可信快照时明确显示无数据。启停入口进入受保护控制面，不直接暴露
-								AWS 管理权限。
-							</p>
-							<div className="mt-5 grid gap-5">
-								{performanceProjects.map((project) => {
-									const performance = project.performance;
-									if (!performance) return null;
-
-									return (
-										<PerformanceStatusCard
-											key={project.id}
-											projectId={project.id}
-											projectName={project.title}
-											status={resolvePerformanceView(performance)}
-										/>
-									);
-								})}
-							</div>
-						</div>
-					</section>
-				) : null}
-
-				<section className="mt-10 scroll-mt-24 md:mt-14" id="projects">
-					<div className="sr-only">
-						<SectionTitle
-							icon={<LayoutGrid aria-hidden="true" size={18} />}
-							kicker="Project Portfolio"
-							title="项目列表"
-						/>
-					</div>
+				<div className="mt-10 scroll-mt-24 md:mt-14" id="projects">
 					<p className="sr-only">
 						{syncedAt
 							? "GitHub App 自动同步 · " +
 								new Date(syncedAt).toLocaleString("zh-CN")
 							: "GitHub App 即时同步 · 静态项目索引兜底"}
 					</p>
-					<div className="mt-6 grid gap-7 md:grid-cols-2 md:gap-x-8 md:gap-y-9 xl:grid-cols-3">
-						{displayProjects.map((project, index) => {
+					<div className="mt-6 space-y-12 md:space-y-16">
+						{projectGroups.map((group) => {
+							const groupProjects = displayProjects.filter((project) =>
+								group.projectIds.includes(project.id),
+							);
+							if (groupProjects.length === 0) return null;
+
+							return (
+								<section
+									aria-labelledby={`project-group-${group.id}`}
+									key={group.id}
+								>
+									<header className="portfolio-section-title border-[#d8cfbd] border-b pb-3">
+										<h2
+											className="font-bold font-serif text-2xl md:text-xl"
+											id={`project-group-${group.id}`}
+										>
+											{group.title}
+										</h2>
+										<p className="mt-2 max-w-3xl text-[#4d5863] text-xs leading-relaxed md:text-sm">
+											{group.description}
+										</p>
+									</header>
+									<div className="mt-6 grid gap-7 md:grid-cols-2 md:gap-x-8 md:gap-y-9 xl:grid-cols-3">
+										{groupProjects.map((project) => {
+											const index = displayProjects.findIndex(
+												(candidate) => candidate.id === project.id,
+											);
 							const pageLinks = getProjectPageLinks(project);
 							const defaultPage =
 								pageLinks.find((link) => link.id === "evidence") ??
 								pageLinks[0];
 
-							return (
+											return (
 								<article
 									className="portfolio-project-card group relative min-w-0 overflow-hidden border border-transparent transition hover:-translate-y-0.5"
 									key={project.id}
@@ -419,10 +733,83 @@ export function DashboardContent() {
 										) : null}
 									</div>
 								</article>
+											);
+										})}
+									</div>
+								</section>
 							);
 						})}
 					</div>
+				</div>
+
+				<section className="mt-10 scroll-mt-24 md:mt-14" id="open-source">
+					<SectionTitle
+						icon={<GitPullRequest aria-hidden="true" size={18} />}
+							kicker="Merged & Open"
+						title="开源社区共建"
+					/>
+					<div className="portfolio-dashboard-module-card portfolio-glass-panel mt-5 border border-[#cfd5db] bg-white/84 p-5 shadow-sm md:p-7">
+						<p className="max-w-3xl text-[#344252] text-sm leading-relaxed">
+							按上游仓库聚合社区贡献，仅展示仓库规模和贡献状态，不公开罗列具体 PR 内容。数据核验于 2026-09-09。
+						</p>
+						<div className="mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-3">
+							{openSourceRepositories.map((item) => (
+								<article
+									className="portfolio-glass-subpanel border border-[#e1d8c7] bg-[#fbf8ef] p-4 transition hover:-translate-y-0.5"
+									key={item.project}
+								>
+									<a
+										className="flex items-center justify-between gap-3"
+										href={item.href}
+										rel="noreferrer"
+										target="_blank"
+									>
+										<h3 className="font-semibold font-serif text-base">
+											{item.project}
+										</h3>
+										<span className="shrink-0 text-[#5a6470] text-xs">
+											★ {item.stars.toLocaleString("en-US")}
+										</span>
+									</a>
+									<p className="mt-3 text-[#344252] text-xs">
+										已合并 {item.merged} · 开放 {item.open}
+									</p>
+								</article>
+							))}
+						</div>
+					</div>
 				</section>
+
+				{performanceProjects.length > 0 ? (
+					<section className="mt-10 scroll-mt-24 md:mt-14" id="performance">
+						<SectionTitle
+							icon={<BadgeCheck aria-hidden="true" size={18} />}
+							kicker="Verified Snapshot"
+							title="性能观测与成本控制"
+						/>
+						<div className="portfolio-dashboard-module-card mt-5 p-5 md:p-7">
+							<p className="max-w-3xl text-[#344252] text-sm leading-relaxed">
+								观测链路停止或故障时，只展示最后一次通过校验的真实快照；没有可信快照时明确显示无数据。启停入口进入受保护控制面，不直接暴露
+								AWS 管理权限。
+							</p>
+							<div className="mt-5 grid gap-5">
+								{performanceProjects.map((project) => {
+									const performance = project.performance;
+									if (!performance) return null;
+
+									return (
+										<PerformanceStatusCard
+											key={project.id}
+											projectId={project.id}
+											projectName={project.title}
+											status={resolvePerformanceView(performance)}
+										/>
+									);
+								})}
+							</div>
+						</div>
+					</section>
+				) : null}
 			</main>
 
 			<footer className="portfolio-glass-footer relative mt-6 border-[#c8c0b0] border-t bg-[#ebe6da]">
@@ -454,6 +841,31 @@ export function DashboardContent() {
 				<PortfolioPrimaryNavigation current="dashboard" />
 			</div>
 		</div>
+	);
+}
+
+function ResumeProjectCard({
+	block,
+}: {
+	block: { title: string; meta: string; body: string };
+}) {
+	return (
+		<article className="portfolio-glass-subpanel border border-[#e1d8c7] bg-[#fbf8ef] p-4">
+			<div className="flex items-start gap-3">
+				<div className="grid size-11 shrink-0 place-items-center bg-[#eadfcf] text-[#bf1737]">
+					<Code2 aria-hidden="true" size={19} />
+				</div>
+				<div>
+					<h4 className="font-semibold font-serif text-base">{block.title}</h4>
+					<p className="mt-1 font-bold text-[#3f4650] text-xs">
+						{block.meta}
+					</p>
+				</div>
+			</div>
+			<p className="mt-3 text-[#344252] text-sm leading-relaxed">
+				{block.body}
+			</p>
+		</article>
 	);
 }
 

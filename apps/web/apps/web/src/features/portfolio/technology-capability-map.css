@@ -1,0 +1,264 @@
+.technology-map {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  min-height: 760px;
+  margin-block: 24px 72px;
+  padding: clamp(28px, 4vw, 58px);
+  color: #edf4ff;
+  background:
+    radial-gradient(circle at 50% 54%, rgba(65, 52, 142, 0.34), transparent 28%),
+    radial-gradient(circle at 13% 78%, rgba(24, 131, 126, 0.16), transparent 25%),
+    radial-gradient(circle at 88% 20%, rgba(38, 114, 170, 0.16), transparent 25%),
+    linear-gradient(145deg, #07101d, #080a18 62%, #11101e);
+  border: 1px solid rgba(162, 184, 207, 0.24);
+  box-shadow: 0 30px 70px rgba(9, 21, 38, 0.24);
+  clip-path: polygon(0 1%, 3% 0, 7% 1%, 12% 0, 18% 1%, 24% 0, 31% 1%, 39% 0, 47% 1%, 56% 0, 64% 1%, 73% 0, 82% 1%, 90% 0, 96% 1%, 100% 0, 100% 99%, 96% 100%, 90% 99%, 83% 100%, 76% 99%, 68% 100%, 59% 99%, 51% 100%, 43% 99%, 35% 100%, 27% 99%, 18% 100%, 10% 99%, 4% 100%, 0 99%);
+}
+
+
+.technology-map::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  opacity: 0.2;
+  background-image: radial-gradient(rgba(199, 218, 240, 0.42) 0.6px, transparent 0.6px);
+  background-size: 18px 18px;
+}
+
+.technology-map__header {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  justify-content: space-between;
+  gap: 28px;
+  align-items: end;
+  border-bottom: 1px solid rgba(172, 190, 213, 0.2);
+  padding-bottom: 20px;
+}
+
+.technology-map__eyebrow,
+.technology-map__header p,
+.technology-map__domain p,
+.technology-map__detail p,
+.technology-map__detail small {
+  color: #aebbd0;
+}
+
+.technology-map__eyebrow { letter-spacing: 0.26em; font: 700 11px/1.6 ui-monospace, monospace; }
+.technology-map__header h2 { margin: 0; font: 700 clamp(27px, 3vw, 42px)/1.1 "Noto Serif SC", serif; }
+.technology-map__header p { margin: 8px 0 0; }
+.technology-map__controls { display: flex; align-items: center; gap: 14px; min-width: 236px; padding: 9px 12px; border: 1px solid rgba(177, 193, 214, .2); border-radius: 18px; background: rgba(3, 9, 18, .32); backdrop-filter: blur(14px); }
+.technology-map__controls button { display: inline-flex; align-items: center; gap: 6px; min-height: 34px; padding: 0 10px; color: #dfe7f1; border: 1px solid rgba(209, 220, 235, .24); border-radius: 11px; background: rgba(255,255,255,.055); cursor: pointer; }
+.technology-map__controls button svg { width: 14px; height: 14px; }
+.technology-map__controls label { display: flex; flex: 1; align-items: center; gap: 8px; color: #93a2b8; font-size: 10px; }
+.technology-map__controls input { width: 100%; accent-color: #d3554b; }
+.technology-map__stage { position: relative; min-height: 610px; margin-top: 10px; }
+.technology-map__particle-canvas { position: absolute; inset: 0; z-index: 0; width: 100%; height: 100%; outline: none; cursor: grab; touch-action: pan-y; }
+.technology-map__particle-canvas:active { cursor: grabbing; }
+.technology-map__orbits { position: absolute; inset: 0; z-index: 1; width: 100%; height: 100%; pointer-events: none; transform-origin: center; animation: capability-orbit 24s linear infinite; }
+.technology-map__orbits ellipse,
+.technology-map__orbits path { fill: none; stroke: rgba(138, 122, 218, 0.18); stroke-width: 1; }
+
+.technology-map__identity {
+  position: absolute;
+  z-index: 3;
+  top: 50%;
+  left: 50%;
+  width: 210px;
+  min-height: 210px;
+  transform: translate(-50%, -50%);
+  display: grid;
+  place-content: center;
+  text-align: center;
+  border: 1px solid rgba(196, 185, 255, 0.78);
+  border-radius: 34px;
+  background: linear-gradient(145deg, rgba(103, 88, 178, 0.6), rgba(27, 30, 67, 0.78));
+  box-shadow: 0 0 0 10px rgba(107, 89, 194, 0.08), 0 0 62px rgba(120, 95, 224, 0.42), inset 0 1px 0 rgba(255,255,255,.3);
+  backdrop-filter: blur(22px);
+}
+
+.technology-map__identity-mark { margin: auto; display: grid; place-items: center; width: 52px; height: 52px; border-radius: 17px; color: #f2eefe; background: rgba(225, 218, 255, 0.12); font: 700 28px/1 "Noto Serif SC", serif; }
+.technology-map__identity h3 { margin: 14px 0 5px; font-size: 25px; }
+.technology-map__identity p { margin: 0; color: #d8d9e9; font-size: 13px; }
+.technology-map__identity small { margin-top: 18px; color: #a7a7c6; letter-spacing: .14em; }
+.technology-map__domains { position: absolute; inset: 0; z-index: 2; pointer-events: none; }
+.technology-map__domain { position: absolute; width: min(32%, 350px); transform: scale(var(--map-range, 1)); transition: transform .35s ease; }
+.technology-map__node { pointer-events: auto; }
+.technology-map__domain:nth-child(1) { left: 1%; top: 8%; }
+.technology-map__domain:nth-child(2) { right: 1%; top: 8%; }
+.technology-map__domain:nth-child(3) { right: 1%; bottom: 3%; }
+.technology-map__domain:nth-child(4) { left: 1%; bottom: 3%; }
+
+.technology-map__domain-title { display: flex; gap: 12px; align-items: center; margin-bottom: 14px; }
+.technology-map__domain-title > span { color: var(--domain-color); font: 700 11px/1 ui-monospace, monospace; letter-spacing: .15em; }
+.technology-map__domain h3 { margin: 0; font-size: 18px; }
+.technology-map__domain p { margin: 4px 0 0; font-size: 12px; }
+.technology-map__domain--violet { --domain-color: #ad91ff; --domain-glow: rgba(138, 104, 255, .24); }
+.technology-map__domain--blue { --domain-color: #66c5ff; --domain-glow: rgba(67, 175, 244, .22); }
+.technology-map__domain--vermilion { --domain-color: #ff8c83; --domain-glow: rgba(218, 75, 75, .2); }
+.technology-map__domain--jade { --domain-color: #55dec8; --domain-glow: rgba(53, 200, 177, .22); }
+.technology-map__nodes { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.technology-map__node { appearance: none; min-width: 0; padding: 11px 6px 9px; color: #cbd4e4; border: 1px solid color-mix(in srgb, var(--domain-color), transparent 68%); border-radius: 17px; background: linear-gradient(145deg, rgba(255,255,255,.085), rgba(255,255,255,.025)); box-shadow: inset 0 1px 0 rgba(255,255,255,.14), 0 10px 28px rgba(0,0,0,.18); backdrop-filter: blur(14px); cursor: pointer; transform: translateY(0); transition: border-color .2s ease, color .2s ease, transform .2s ease, box-shadow .2s ease; animation: capability-arrive .6s both; animation-delay: var(--node-delay); }
+.technology-map__node:hover,
+.technology-map__node:focus-visible { transform: translateY(-4px); color: #fff; border-color: var(--domain-color); box-shadow: 0 0 24px var(--domain-glow), inset 0 1px 0 rgba(255,255,255,.22); outline: none; }
+.technology-map__node-icon { display: grid; place-items: center; width: 39px; height: 39px; margin: 0 auto 7px; color: var(--domain-color); border: 1px solid color-mix(in srgb, var(--domain-color), transparent 50%); border-radius: 13px; background: var(--domain-glow); }
+.technology-map__node-icon img { width: 23px; height: 23px; object-fit: contain; opacity: 1; }
+.technology-map__node-label { display: block; min-height: 2.6em; overflow-wrap: anywhere; color: #102b3b; font: 700 10px/1.3 "Noto Sans SC", "PingFang SC", sans-serif; letter-spacing: .015em; }
+.technology-map__domain--violet .technology-map__node-icon img { filter: brightness(0) saturate(100%) invert(43%) sepia(18%) saturate(1450%) hue-rotate(221deg) brightness(88%) contrast(91%); }
+.technology-map__domain--blue .technology-map__node-icon img { filter: brightness(0) saturate(100%) invert(43%) sepia(25%) saturate(1050%) hue-rotate(164deg) brightness(85%) contrast(90%); }
+.technology-map__domain--vermilion .technology-map__node-icon img { filter: brightness(0) saturate(100%) invert(45%) sepia(35%) saturate(1060%) hue-rotate(318deg) brightness(92%) contrast(91%); }
+.technology-map__domain--jade .technology-map__node-icon img { filter: brightness(0) saturate(100%) invert(50%) sepia(21%) saturate(790%) hue-rotate(113deg) brightness(83%) contrast(88%); }
+
+.technology-map__detail { position: absolute; z-index: 6; left: 50%; bottom: 34px; width: min(540px, calc(100% - 48px)); transform: translateX(-50%); padding: 22px 56px 22px 24px; border: 1px solid rgba(205, 215, 234, .38); border-radius: 20px; background: rgba(17, 23, 39, .82); box-shadow: 0 20px 60px rgba(0,0,0,.4); backdrop-filter: blur(24px); }
+.technology-map__detail > button { position: absolute; top: 16px; right: 16px; color: #cdd6e5; border: 0; background: transparent; cursor: pointer; }
+.technology-map__detail > button svg { width: 20px; }
+.technology-map__detail > p:first-of-type { margin: 0; font: 700 10px/1.4 ui-monospace, monospace; letter-spacing: .18em; }
+.technology-map__detail h3 { margin: 7px 0; font-size: 22px; }
+.technology-map__detail > p { margin: 0 0 10px; }
+.technology-map__detail small { display: block; }
+.technology-map__detail a { display: inline-block; margin-top: 14px; color: #fff; text-underline-offset: 4px; }
+
+@keyframes capability-arrive { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes capability-orbit { to { transform: rotate(360deg); } }
+.technology-map__stage[data-paused="true"] .technology-map__orbits,
+.technology-map__stage[data-paused="true"] .technology-map__node { animation-play-state: paused; }
+
+@media (max-width: 900px) {
+  .technology-map { min-height: auto; }
+	.technology-map__header { align-items: start; flex-direction: column; }
+	.technology-map__controls { width: 100%; }
+  .technology-map__stage { display: flex; flex-direction: column; min-height: 0; gap: 20px; padding-top: 26px; }
+	.technology-map__orbits { display: none; }
+	.technology-map__particle-canvas { display: none; }
+  .technology-map__identity { position: relative; top: auto; left: auto; width: min(100%, 300px); min-height: 170px; transform: none; margin: 0 auto; }
+  .technology-map__domains { position: relative; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; }
+	.technology-map__domain,
+	.technology-map__domain:nth-child(n) { position: relative; inset: auto; width: auto; transform: none; }
+}
+
+@media (max-width: 620px) {
+  .technology-map { margin-inline: -16px; padding: 30px 18px 48px; clip-path: none; }
+  .technology-map__domains { grid-template-columns: 1fr; }
+  .technology-map__nodes { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .technology-map__node { animation: none; transition: none; }
+}
+
+/* Light paper-glass variant aligned with the portfolio surface. */
+.technology-map {
+	background:
+		radial-gradient(circle at 50% 46%, rgba(128, 151, 166, 0.2), transparent 31rem),
+		linear-gradient(145deg, rgba(229, 235, 229, 0.96), rgba(213, 225, 226, 0.9) 58%, rgba(241, 235, 222, 0.94));
+	color: #071d34;
+	box-shadow:
+		inset 0 1px 0 rgba(255, 255, 255, 0.72),
+		0 18px 44px rgba(7, 29, 52, 0.1);
+}
+
+.technology-map__header,
+.technology-map__header h2,
+.technology-map__header p,
+.technology-map__eyebrow,
+.technology-map__domain-title,
+.technology-map__domain-title h3,
+.technology-map__domain-title p,
+.technology-map__node,
+.technology-map__identity,
+.technology-map__identity p {
+	color: #071d34;
+}
+
+.technology-map__stage::before {
+	opacity: 0.32;
+}
+
+.technology-map__node,
+.technology-map__identity {
+	border-color: rgba(7, 29, 52, 0.18);
+	background: rgba(255, 252, 245, 0.4);
+	box-shadow:
+		inset 0 1px 0 rgba(255, 255, 255, 0.72),
+		0 8px 20px rgba(7, 29, 52, 0.06);
+	backdrop-filter: blur(12px) saturate(0.82);
+}
+
+.technology-map__node-icon,
+.technology-map__identity-mark {
+	background: rgba(255, 252, 245, 0.5);
+	box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+.technology-map__controls {
+	border-color: rgba(7, 29, 52, 0.18);
+	background: rgba(255, 252, 245, 0.48);
+	color: #071d34;
+}
+
+/* Morandi glass: muted blue-grey, sage and warm stone in one field. */
+.technology-map {
+	background:
+		radial-gradient(circle at 18% 24%, rgba(91, 117, 132, 0.2), transparent 26rem),
+		radial-gradient(circle at 78% 70%, rgba(112, 135, 122, 0.2), transparent 30rem),
+		radial-gradient(circle at 52% 48%, rgba(145, 126, 141, 0.14), transparent 25rem),
+		linear-gradient(145deg, #a8b7b4 0%, #bec1b6 48%, #a3b5ba 100%);
+	color: #102b3b;
+	box-shadow: 0 18px 44px rgba(30, 47, 58, 0.14);
+}
+
+.technology-map__header,
+.technology-map__header h2,
+.technology-map__header p,
+.technology-map__eyebrow,
+.technology-map__domain-title,
+.technology-map__domain-title h3,
+.technology-map__domain-title p,
+.technology-map__node,
+.technology-map__identity,
+.technology-map__identity p {
+	color: #102b3b;
+}
+
+.technology-map__node,
+.technology-map__identity {
+	border-color: rgba(31, 59, 72, 0.2);
+	background: rgba(239, 236, 223, 0.36);
+	box-shadow:
+		inset 0 1px 0 rgba(255, 252, 242, 0.42),
+		0 8px 22px rgba(30, 47, 58, 0.1);
+}
+
+.technology-map__controls {
+	border-color: rgba(31, 59, 72, 0.2);
+	background: rgba(239, 236, 223, 0.4);
+	color: #102b3b;
+}
+
+.technology-map :is(h2, h3, p, span, label, button) {
+	color: #102b3b;
+}
+
+.technology-map__node-icon,
+.technology-map__identity-mark {
+	border-color: rgba(36, 68, 80, 0.28);
+	background: rgba(218, 222, 213, 0.74);
+	color: #17394a;
+}
+
+.technology-map__identity * {
+	color: #102b3b !important;
+}
+.technology-map__controls {
+	display: none !important;
+}
+
+.technology-map__domain-title p {
+	display: block !important;
+	max-width: 24ch;
+	color: #365263 !important;
+	font-size: 12px;
+	line-height: 1.65;
+}

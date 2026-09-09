@@ -16,6 +16,9 @@
 		"visual:test": "BACKSTOP_VALIDATE_REVIEWED_ENVIRONMENT=1 backstop test --config=backstop.config.cjs"
 	},
 	"dependencies": {
+		"@babylonjs/core": "^9.25.0",
+		"@babylonjs/loaders": "^9.25.0",
+		"@babylonjs/materials": "9.25.0",
 		"@hookform/resolvers": "^5.5.7",
 		"@tailwindcss/vite": "^4.3.3",
 		"@tanstack/react-router": "^1.170.18",
