@@ -59,7 +59,7 @@ export function DashboardContent() {
 	const projectGroups = [
 		{
 			id: "part-time",
-			title: "2026 北京京城一灯兼职项目",
+			title: "2026 北京兼职项目",
 			description:
 				"按业务完整度、岗位覆盖面与生产证据排序；仅收录个人仓库中已有实际实现的项目。",
 			projectIds: ["babysteps", "agent-market"],
@@ -545,7 +545,7 @@ export function DashboardContent() {
 
 						<div className="mt-7">
 							<h3 className="font-bold font-serif text-lg">
-								2026 北京京城一灯兼职项目
+								2026 北京兼职项目
 							</h3>
 							<p className="mt-1 text-[#5a6470] text-xs leading-relaxed">
 								仅收录个人仓库中已有实际实现的项目；空仓库、模板仓库和仅有规划的项目不列入经历。
