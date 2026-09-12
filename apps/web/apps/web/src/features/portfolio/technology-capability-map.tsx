@@ -193,7 +193,7 @@ export function TechnologyCapabilityMap() {
         <p className="technology-map__eyebrow">CAPABILITY CONSTELLATION</p>
         <div>
           <h2 id="technology-map-title">岗位 × 技能知识图谱</h2>
-          <p>默认展示核心能力；展开或悬浮节点，可查看术语别名、大白话解释和面试切入点。</p>
+          <p>默认展示核心能力；展开或悬浮节点，可查看术语别名、大白话解释和岗位沟通切入点。</p>
         </div>
       </header>
 
@@ -264,7 +264,7 @@ export function TechnologyCapabilityMap() {
                       >
                         <strong>{node.aliases.length ? node.aliases.join(" · ") : node.label}</strong>
                         <span>{node.plainLanguage}</span>
-                        <small>面试：{node.interviewAngle}</small>
+                        <small>交流：{node.interviewAngle}</small>
                         <em>项目：{node.projectIds.join(" · ")}</em>
                       </span>
                     </button>
@@ -317,7 +317,7 @@ export function TechnologyCapabilityMap() {
                 <dd>{selectedNode.plainLanguage}</dd>
               </div>
               <div>
-                <dt>面试展开</dt>
+                <dt>技术交流</dt>
                 <dd>{selectedNode.interviewAngle}</dd>
               </div>
               <div>
