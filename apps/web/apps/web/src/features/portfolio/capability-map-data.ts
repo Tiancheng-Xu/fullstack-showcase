@@ -7,6 +7,7 @@ export type CapabilityNode = {
   summary: string;
   projectIds: string[];
   evidence: string;
+  linkLabel?: string;
 };
 
 export type CapabilityDomain = {
@@ -51,7 +52,7 @@ export const CAPABILITY_DOMAINS: CapabilityDomain[] = [
 			{ id: "react-tanstack", iconSlug: "react", label: "React / TanStack", summary: "构建可路由、可水合、可测试的复杂前端产品。", projectIds: ["fullstack-showcase", "github-profile-studio"], evidence: evidence.dashboard },
 			{ id: "typescript", iconSlug: "typescript", label: "TypeScript", summary: "以类型合同贯穿浏览器、服务端、构建和自动化脚本。", projectIds: ["fullstack-showcase", "agent-market"], evidence: evidence.dashboard },
 			{ id: "hono-go", iconSlug: "go", label: "Hono / Go", summary: "用同一 API 契约验证 Hono/Node 与 Go 双后端。", projectIds: ["github-profile-studio"], evidence: evidence.profileStudio },
-			{ id: "node-runtime", iconSlug: "nodedotjs", label: "Node Runtime", summary: "实现服务端聚合、工作流与本地优先的工程运行入口。", projectIds: ["github-profile-studio", "agent-market"], evidence: evidence.profileStudio },
+			{ id: "cocos-creator", iconSlug: "cocos", label: "Cocos Creator", summary: "以 Cocos Creator 构建可运行的虚拟办公室，让 Agent Market 的任务协作以交互式场景呈现。", projectIds: ["agent-market"], evidence: "https://agent-market.baby2b.online/office/", linkLabel: "查看虚拟办公室 →" },
 			{ id: "postgres-sqlite", iconSlug: "postgresql", label: "PostgreSQL / SQLite", summary: "覆盖生产聚合数据链路与本地优先状态存储。", projectIds: ["babysteps", "github-profile-studio"], evidence: evidence.babySteps },
 			{ id: "edge-ssr", iconSlug: "cloudflare-workers", label: "Edge SSR / Hydration", summary: "静态首屏、精确水合门禁和纯 CSR 降级保持同一事实。", projectIds: ["babysteps", "fullstack-showcase"], evidence: evidence.babySteps },
     ],

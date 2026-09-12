@@ -202,7 +202,7 @@ export function TechnologyCapabilityMap() {
           <h3>{selected.label}</h3>
           <p>{selected.summary}</p>
           <small>关联项目：{selected.projectIds.join(" · ")}</small>
-          <a href={selected.evidence}>查看项目证据 →</a>
+          <a href={selected.evidence}>{selected.linkLabel ?? "查看项目证据 →"}</a>
         </aside>
       ) : null}
     </section>
