@@ -67,5 +67,9 @@ describe("performance observability Evidence integration", () => {
 		expect(screen.getAllByText(/共享 VPC/)).not.toHaveLength(0);
 		expect(screen.getAllByText(/DLQ/)).not.toHaveLength(0);
 		expect(screen.getAllByText(/清理验证/)).not.toHaveLength(0);
+		expect(screen.getByRole("link", { name: /进入成本控制/ })).toHaveAttribute(
+			"href",
+			"/performance-control/babysteps",
+		);
 	});
 });

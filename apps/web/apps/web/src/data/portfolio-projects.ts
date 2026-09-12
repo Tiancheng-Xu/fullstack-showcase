@@ -561,7 +561,8 @@ export const PORTFOLIO_PROJECTS: PortfolioProject[] = [
 			"仓库存在 Baby2B 发布清单且声明 Evidence URL 时才进入作品集，避免把学习仓库和普通实验误收录。",
 			"主要难点是同时处理 webhook 验签、短期安装令牌、KV 最终一致性与主站静态回退。",
 		],
-		ownerPage: "https://portfolio-sync.baby2b.online/",
+		ownerPage:
+			"https://github.com/Tiancheng-Xu/fullstack-showcase/tree/main/workers/portfolio-sync-webhook",
 	},
 	{
 		id: "tc-workflow",

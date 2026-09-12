@@ -1,0 +1,69 @@
+{
+  "schemaVersion": "performance-control-production-readback/v1",
+  "checkedAt": "2026-09-12T08:27:38Z",
+  "mode": "read-only",
+  "cloudMutationPerformed": false,
+  "production": {
+    "statusEndpoint": {
+      "url": "https://baby2b.online/api/performance/status?project=performance-observability-control",
+      "httpStatus": 200,
+      "controlState": "stopped",
+      "dataMode": "historical",
+      "cleanupVerified": true,
+      "snapshotAvailable": false,
+      "estimatedCostUsd": 0.2,
+      "maximumRuntimeMinutes": 45,
+      "updatedAt": "2026-09-01T09:17:24.000Z"
+    },
+    "snapshotEndpoint": {
+      "url": "https://baby2b.online/api/performance/snapshot?project=performance-observability-control",
+      "httpStatus": 404,
+      "error": "verified_snapshot_not_found"
+    }
+  },
+  "githubWorkflow": {
+    "repository": "Tiancheng-Xu/babysteps",
+    "path": ".github/workflows/aws-performance-control.yml",
+    "workflowId": 342744936,
+    "state": "disabled_manually",
+    "latestObservedRunId": 33697265838,
+    "latestObservedRunConclusion": "success",
+    "latestObservedRunEvent": "schedule",
+    "latestObservedRunCreatedAt": "2026-09-02T23:55:32Z",
+    "preflightRunId": 34684132902,
+    "preflightConclusion": "failure",
+    "preflightBoundary": "blocked before AWS OIDC credentials",
+    "preflightReason": "PerformanceCluster temporary approval expired on 2026-09-02"
+  },
+  "localGates": {
+    "workerTests": { "testFiles": 10, "tests": 90, "result": "pass" },
+    "webTests": { "testFiles": 29, "tests": 85, "result": "pass" },
+    "evidenceRouteRegressionTests": { "testFiles": 2, "tests": 3, "result": "pass" },
+    "workerTypecheck": "pass",
+    "workspaceTypecheck": "pass",
+    "productionBuild": "pass",
+    "staticFirstRoutes": 14,
+    "routeSemantics": "known=200, unknown=404",
+    "responsive": "390px and 1440px with zero root overflow",
+    "browserConsoleErrors": 0,
+    "sensitivePatternScan": "pass"
+  },
+  "awsReadOnly": {
+    "result": "deferred",
+    "reason": "AWS account is temporarily suspended; all AWS reads and mutations are postponed"
+  },
+  "cloudMutation": {
+    "workflowEnabled": false,
+    "preflightDispatched": true,
+    "awsCredentialsConfigured": false,
+    "awsResourcesCreated": false,
+    "cloudflareStateWritten": false
+  },
+  "remaining": [
+    "after AWS recovery: renew the exact temporary ECS cluster exception",
+    "after AWS recovery: complete the GitHub OIDC and AWS read-only preflight",
+    "after AWS recovery: complete one TOTP-controlled start and stop-or-TTL lifecycle",
+    "after AWS recovery: read back an immutable R2 snapshot",
+    "after AWS recovery: verify zero project residue and protected shared resources"
+  ]
+}
