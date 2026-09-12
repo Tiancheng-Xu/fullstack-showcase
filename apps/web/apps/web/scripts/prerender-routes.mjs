@@ -8,6 +8,10 @@ export const STATIC_FIRST_ROUTES = [
 		output: "projects/index.html",
 	},
 	{
+		url: "/open-source",
+		output: "open-source/index.html",
+	},
+	{
 		url: "/evidence",
 		output: "evidence/index.html",
 	},

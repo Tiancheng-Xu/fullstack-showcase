@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="BBX">
+  <rect width="128" height="128" rx="28" fill="#BE123C"/>
+  <circle cx="64" cy="64" r="47" fill="#ffffff" fill-opacity=".12"/>
+  <text x="64" y="72" fill="#ffffff" font-family="ui-sans-serif, sans-serif" font-size="30" font-weight="800" text-anchor="middle">BBX</text>
+</svg>

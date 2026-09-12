@@ -101,7 +101,7 @@
 .technology-map__domain--vermilion { --domain-color: #ff8c83; --domain-glow: rgba(218, 75, 75, .2); }
 .technology-map__domain--jade { --domain-color: #55dec8; --domain-glow: rgba(53, 200, 177, .22); }
 .technology-map__nodes { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
-.technology-map__node { appearance: none; min-width: 0; padding: 11px 6px 9px; color: #cbd4e4; border: 1px solid color-mix(in srgb, var(--domain-color), transparent 68%); border-radius: 17px; background: linear-gradient(145deg, rgba(255,255,255,.085), rgba(255,255,255,.025)); box-shadow: inset 0 1px 0 rgba(255,255,255,.14), 0 10px 28px rgba(0,0,0,.18); backdrop-filter: blur(14px); cursor: pointer; transform: translateY(0); transition: border-color .2s ease, color .2s ease, transform .2s ease, box-shadow .2s ease; animation: capability-arrive .6s both; animation-delay: var(--node-delay); }
+.technology-map__node { appearance: none; min-width: 0; padding: 11px 6px 9px; color: #cbd4e4; border: 1px solid color-mix(in srgb, var(--domain-color), transparent 68%); border-radius: 17px; background: linear-gradient(145deg, rgba(255,255,255,.085), rgba(255,255,255,.025)); box-shadow: inset 0 1px 0 rgba(255,255,255,.14), 0 10px 28px rgba(0,0,0,.18); backdrop-filter: blur(14px); cursor: pointer; transform: translateY(0); transition: border-color .2s ease, color .2s ease, transform .2s ease, box-shadow .2s ease; animation: capability-arrive .6s both; animation-delay: var(--node-delay, 0ms); }
 .technology-map__node:hover,
 .technology-map__node:focus-visible { transform: translateY(-4px); color: #fff; border-color: var(--domain-color); box-shadow: 0 0 24px var(--domain-glow), inset 0 1px 0 rgba(255,255,255,.22); outline: none; }
 .technology-map__node-icon { display: grid; place-items: center; width: 39px; height: 39px; margin: 0 auto 7px; color: var(--domain-color); border: 1px solid color-mix(in srgb, var(--domain-color), transparent 50%); border-radius: 13px; background: var(--domain-glow); }
@@ -113,6 +113,8 @@
 .technology-map__domain--jade .technology-map__node-icon img { filter: brightness(0) saturate(100%) invert(50%) sepia(21%) saturate(790%) hue-rotate(113deg) brightness(83%) contrast(88%); }
 
 .technology-map__detail { position: absolute; z-index: 6; left: 50%; bottom: 34px; width: min(540px, calc(100% - 48px)); transform: translateX(-50%); padding: 22px 56px 22px 24px; color: #102b3b; border: 1px solid rgba(31, 59, 72, .24); border-radius: 20px; background: linear-gradient(135deg, rgba(251, 248, 239, .92), rgba(224, 232, 226, .86)); box-shadow: inset 0 1px 0 rgba(255, 255, 255, .84), 0 20px 44px rgba(30, 47, 58, .22); backdrop-filter: blur(20px) saturate(.9); }
+.technology-map__dialog-backdrop { position: fixed; inset: 0; z-index: 40; display: grid; place-items: center; padding: 24px; background: rgba(20, 36, 45, .3); backdrop-filter: blur(4px); }
+.technology-map__dialog-backdrop .technology-map__dialog { position: relative; left: auto; bottom: auto; width: min(540px, 100%); max-height: min(680px, calc(100vh - 48px)); overflow: auto; transform: none; }
 .technology-map__detail > button { position: absolute; top: 13px; right: 13px; display: grid; width: 34px; height: 34px; place-items: center; color: #17394a; border: 1px solid rgba(31, 59, 72, .16); border-radius: 50%; background: rgba(255, 252, 245, .58); cursor: pointer; transition: background .3s ease, color .3s ease, transform .3s ease; }
 .technology-map__detail > button:hover,
 .technology-map__detail > button:focus-visible { color: #fff; background: #365263; transform: rotate(90deg); outline: none; }
@@ -266,4 +268,236 @@
 	color: #365263 !important;
 	font-size: 12px;
 	line-height: 1.65;
+}
+
+/* Expanded capability inventory */
+.technology-map__domains {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.technology-map__node {
+  position: relative;
+  overflow: visible;
+}
+
+.technology-map__node-tooltip {
+  position: absolute;
+  z-index: 20;
+  left: 50%;
+  bottom: calc(100% + 12px);
+  width: min(290px, 76vw);
+  padding: 14px 15px;
+  color: #173342;
+  text-align: left;
+  pointer-events: none;
+  opacity: 0;
+  transform: translate(-50%, 8px);
+  transition: opacity 180ms ease, transform 180ms ease;
+  border: 1px solid rgb(255 255 255 / 72%);
+  background: rgb(240 244 237 / 94%);
+  box-shadow: 0 18px 42px rgb(28 53 61 / 18%);
+  backdrop-filter: blur(16px) saturate(112%);
+  clip-path: polygon(0 0, 96% 0, 100% 13%, 100% 100%, 5% 100%, 0 87%);
+}
+
+.technology-map__node-tooltip strong,
+.technology-map__node-tooltip span,
+.technology-map__node-tooltip small,
+.technology-map__node-tooltip em {
+  display: block;
+}
+
+.technology-map__node-tooltip strong {
+  margin-bottom: 7px;
+  color: #a34439;
+  font-family: "IBM Plex Mono", "Noto Sans SC", monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.04em;
+}
+
+.technology-map__node-tooltip span {
+  font-size: 0.78rem;
+  line-height: 1.6;
+}
+
+.technology-map__node-tooltip small {
+  margin-top: 8px;
+  color: #405c65;
+  font-size: 0.68rem;
+  line-height: 1.5;
+}
+
+.technology-map__node-tooltip em {
+  margin-top: 7px;
+  color: #6c7d7d;
+  font-size: 0.64rem;
+  font-style: normal;
+}
+
+.technology-map__node:hover .technology-map__node-tooltip,
+.technology-map__node:focus-visible .technology-map__node-tooltip {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+.technology-map__node[data-tooltip-align="left"] .technology-map__node-tooltip {
+  left: 0;
+  transform: translate(0, 8px);
+}
+
+.technology-map__node[data-tooltip-align="right"] .technology-map__node-tooltip {
+  right: 0;
+  left: auto;
+  transform: translate(0, 8px);
+}
+
+.technology-map__node[data-tooltip-align="left"]:hover .technology-map__node-tooltip,
+.technology-map__node[data-tooltip-align="left"]:focus-visible .technology-map__node-tooltip,
+.technology-map__node[data-tooltip-align="right"]:hover .technology-map__node-tooltip,
+.technology-map__node[data-tooltip-align="right"]:focus-visible .technology-map__node-tooltip {
+  transform: translate(0, 0);
+}
+
+.technology-map__more {
+  position: relative;
+  z-index: 4;
+  margin-top: 12px;
+  padding: 8px 13px;
+  border: 1px solid rgb(76 105 110 / 24%);
+  color: #294955;
+  background: rgb(244 245 238 / 68%);
+  font-family: "IBM Plex Mono", "Noto Sans SC", monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  pointer-events: auto;
+  transition: transform 300ms ease, border-color 300ms ease, background-color 300ms ease;
+}
+
+.technology-map__domain[data-expanded="true"] {
+  z-index: 8;
+  width: min(38%, 430px);
+  padding: 16px;
+  border: 1px solid rgb(255 255 255 / 62%);
+  background: rgb(226 233 227 / 92%);
+  box-shadow: 0 24px 54px rgb(30 47 58 / 20%);
+  backdrop-filter: blur(18px) saturate(110%);
+}
+
+.technology-map__more:hover,
+.technology-map__more:focus-visible {
+  transform: translateY(-2px);
+  border-color: rgb(169 75 63 / 52%);
+  background: rgb(255 250 239 / 88%);
+}
+
+.technology-map__dialog dl {
+  display: grid;
+  gap: 12px;
+  margin: 18px 0;
+}
+
+.technology-map__dialog dl > div {
+  padding-left: 12px;
+  border-left: 2px solid rgb(177 74 61 / 56%);
+}
+
+.technology-map__dialog dt {
+  color: #a34439;
+  font-family: "IBM Plex Mono", "Noto Sans SC", monospace;
+  font-size: 0.67rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.technology-map__dialog dd {
+  margin: 4px 0 0;
+  color: #294955;
+  font-size: 0.84rem;
+  line-height: 1.65;
+}
+
+.technology-map__dialog-aliases {
+  color: #667b7d;
+  font-family: "IBM Plex Mono", "Noto Sans SC", monospace;
+  font-size: 0.7rem;
+}
+
+@media (min-width: 901px) {
+  .technology-map__canvas[data-active="true"] {
+    opacity: 0.16;
+    filter: saturate(0.72) contrast(0.82);
+  }
+
+  .technology-map__domain-title {
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+
+  .technology-map__domain-title h3 {
+    font-size: 16px;
+    line-height: 1.2;
+  }
+
+  .technology-map__domain-title p {
+    margin-top: 3px;
+    font-size: 11px;
+    line-height: 1.45;
+  }
+
+  .technology-map__nodes {
+    gap: 8px;
+  }
+
+  .technology-map__node {
+    min-height: 80px;
+    padding: 8px 5px 7px;
+  }
+
+  .technology-map__more {
+    margin-top: 8px;
+    padding: 5px 11px;
+  }
+
+  .technology-map__domain:nth-child(1),
+  .technology-map__domain:nth-child(2) {
+    top: 3%;
+  }
+
+  .technology-map__domain:nth-child(3),
+  .technology-map__domain:nth-child(4) {
+    bottom: 1%;
+  }
+}
+
+@media (max-width: 760px) {
+  .technology-map__node-tooltip {
+    width: min(260px, 82vw);
+  }
+
+  .technology-map__more {
+    width: 100%;
+  }
+}
+
+@media (max-width: 900px) {
+  .technology-map__domains {
+    position: relative;
+    inset: auto;
+    pointer-events: auto;
+  }
+
+  .technology-map__domain[data-expanded="true"] {
+    width: auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .technology-map__node-tooltip,
+  .technology-map__more {
+    transition: none;
+  }
 }

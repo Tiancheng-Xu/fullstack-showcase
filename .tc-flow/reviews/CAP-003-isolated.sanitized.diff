@@ -1,0 +1,169 @@
+--- .tc-flow/reviews/cap003-baseline/dashboard-content.before.tsx	2026-09-12 11:28:47
++++ apps/web/apps/web/src/features/portfolio/dashboard-content.tsx	2026-09-12 11:22:29
+@@ -93,8 +93,8 @@
+ 	const partTimeProjects = [
+ 		{
+ 			title: "Agent Market",
+-			meta: "AI Agents、LangGraph、Sepolia、Cloudflare",
+-			body: "构建可验证 AI Agent 任务市场，覆盖标签匹配、多 Agent DAG、任务协作与链上状态锚定；难点是让本地编排、公开生产页面和 24 笔 Sepolia Evidence 保持同一事实边界。",
++			meta: "Aladdin · AI Agent 交易与任务分发平台",
++			body: "面向 AI Agent 众包交易场景，构建任务自动拆解、候选 Agent 过滤与评分、人工或自动选定、多阶段生产分发及可审计交付闭环；以 LangGraph DAG、多运行时服务、PostgreSQL Checkpoint、异步队列、信誉评分与 LLM 质量评测处理暂停恢复、冷启动和复杂任务分发。",
+ 		},
+ 		{
+ 			title: "BabySteps",
+@@ -106,8 +106,8 @@
+ 	const personalEngineeringShowcases = [
+ 		{
+ 			title: "Personal AI Agent",
+-			meta: "Qwen3-8B、QLoRA / NF4、GGUF、Ollama",
+-			body: "完成双卡 QLoRA 微调、冻结集对照、模型合并和 GGUF 量化，形成 Mac/Ollama 离线交付；难点是训练结果、模型身份和可复现验收之间的证据闭环。",
++			meta: "AI 智能客服与私有化模型交付",
++			body: "面向智能客服场景，构建意图识别、领域模型微调、知识图谱 / RAG、Tool Calling、多轮问答和人工分流链路；基于 Qwen3-8B、QLoRA / NF4、Qwen Embedding、LlamaFactory、GGUF 与 Ollama，覆盖咨询分类、语义检索、低置信度转人工和离线私有化交付。",
+ 		},
+ 		{
+ 			title: "GitHub Profile Studio",
+--- .tc-flow/reviews/cap003-baseline/portfolio-projects.before.ts	2026-09-12 11:28:47
++++ apps/web/apps/web/src/data/portfolio-projects.ts	2026-09-12 11:23:09
+@@ -75,17 +75,23 @@
+ 		architectureAsset:
+ 			"architecture/agent-market.visual-check.1440x900.light.png",
+ 		title: "Agent Market",
+-		desc: "面向 Sepolia 的可验证 AI Agent 任务市场，完成结构化 Agent/Task 标签、多 Agent 编排、链上状态闭环与项目自有 Evidence。",
++		desc: "Aladdin · AI Agent 交易与任务分发平台。面向众包交易场景，覆盖任务自动拆解、候选 Agent 过滤与评分、人工或自动选定、多阶段生产分发、暂停恢复和质量评测。",
+ 		status: "已完成",
+ 		progress: 100,
+ 		architecture:
+-			"Cloudflare Pages Edge SSR + React Hydration + GraphQL/LangGraph DAG + 指数衰减匹配评分 + Sepolia 任务/仲裁/质押锚定 + Evidence Gate；本地 Transaction Engine 作为 verified-local 运行入口。",
++			"Edge SSR + React Hydration + GraphQL / LangGraph DAG + Node / Hono、Python 与 Go 多运行时服务 + PostgreSQL Checkpoint + 异步队列 / DLQ + 信誉评分与 LLM 评测；以结构化任务状态支撑暂停恢复、人工介入和复杂任务分发。",
+ 		evidenceUrl: "https://agent-market.baby2b.online/evidence/",
+ 		repo: "Tiancheng-Xu/agent-market",
+ 		skills: [
+ 			"Web3",
+ 			"AI Agents",
+ 			"LangGraph",
++			"Multi-Agent",
++			"Checkpoint / Resume",
++			"Queue / DLQ",
++			"LLM Evaluation",
++			"REST / GraphQL",
++			"Trust / Auth",
+ 			"React",
+ 			"TypeScript",
+ 			"Sepolia",
+@@ -460,16 +466,22 @@
+ 		architectureAsset:
+ 			"architecture/personal-ai-agent.visual-check.1440x900.light.png",
+ 		title: "Personal AI Agent 模型训练与本地推理",
+-		desc: "独立完成 Qwen3-8B 双卡 QLoRA、冻结集对照、GGUF 量化与 Mac/Ollama 离线交付；公开模型门禁与能力边界。",
++		desc: "AI 智能客服与私有化模型交付。覆盖意图识别、知识图谱 / RAG、Tool Calling、多轮问答、低置信度转人工，以及 Qwen3-8B 领域微调和 Ollama 离线运行。",
+ 		status: "已完成",
+ 		progress: 100,
+ 		architecture:
+-			"数据审计 → SFT 320/40/40 → 单节点双 RTX 5090 D NF4 QLoRA → 冻结评测 → Adapter 合并 → F16→Q4_K_M GGUF → SHA-256 → Mac/Ollama 离线验收。",
++			"意图路由 → Qwen Embedding 检索与知识图谱 / RAG → Tool Calling 与结构化业务规则 → 低置信度 / 敏感问题转人工；训练侧以 LlamaFactory、Qwen3-8B、NF4 QLoRA、Adapter 合并、GGUF 量化和 Ollama 完成私有化交付。",
+ 		evidenceUrl: "https://personal-ai-agent.baby2b.online/evidence/",
+ 		repo: "Tiancheng-Xu/personal-ai-agent",
+ 		skills: [
+ 			"Qwen3-8B",
+ 			"QLoRA / NF4",
++			"LlamaFactory",
++			"Intent Routing",
++			"Knowledge Graph / RAG",
++			"Qwen Embedding",
++			"Tool Calling",
++			"Human Handoff",
+ 			"CUDA / NCCL",
+ 			"GGUF / Q4_K_M",
+ 			"Ollama",
+diff --git a/apps/web/apps/web/src/features/portfolio/__tests__/portfolio-interview-narratives.test.ts b/apps/web/apps/web/src/features/portfolio/__tests__/portfolio-interview-narratives.test.ts
+new file mode 100644
+index 0000000..01c97eb
+--- /dev/null
++++ b/apps/web/apps/web/src/features/portfolio/__tests__/portfolio-interview-narratives.test.ts
+@@ -0,0 +1,43 @@
++import { readFileSync } from "node:fs";
++import { resolve } from "node:path";
++
++import { describe, expect, it } from "vitest";
++
++import { PORTFOLIO_PROJECTS } from "../../../data/portfolio-projects";
++
++describe("portfolio interview narratives", () => {
++  it("presents Agent Market as the Aladdin task distribution system", () => {
++    const project = PORTFOLIO_PROJECTS.find((item) => item.id === "agent-market");
++
++    expect(project?.title).toBe("Agent Market");
++    expect(project?.desc).toContain("Aladdin · AI Agent 交易与任务分发平台");
++    expect(project?.architecture).toContain("PostgreSQL Checkpoint");
++    expect(project?.architecture).toContain("异步队列 / DLQ");
++    expect(project?.skills).toEqual(
++      expect.arrayContaining(["Multi-Agent", "LLM Evaluation", "Trust / Auth"]),
++    );
++  });
++
++  it("presents Personal AI Agent as an intelligent customer service system", () => {
++    const project = PORTFOLIO_PROJECTS.find((item) => item.id === "personal-ai-agent");
++
++    expect(project?.title).toContain("Personal AI Agent");
++    expect(project?.desc).toContain("AI 智能客服与私有化模型交付");
++    expect(project?.architecture).toContain("低置信度 / 敏感问题转人工");
++    expect(project?.skills).toEqual(
++      expect.arrayContaining(["Intent Routing", "Knowledge Graph / RAG", "Human Handoff"]),
++    );
++  });
++
++  it("keeps the dashboard resume summaries aligned with project data", () => {
++    const source = readFileSync(
++      resolve(process.cwd(), "src/features/portfolio/dashboard-content.tsx"),
++      "utf8",
++    );
++
++    expect(source).toContain("Aladdin · AI Agent 交易与任务分发平台");
++    expect(source).toContain("AI 智能客服与私有化模型交付");
++    expect(source).toContain("候选 Agent 过滤与评分");
++    expect(source).toContain("低置信度转人工");
++  });
++});
+--- .tc-flow/reviews/cap003-baseline/profile-README.before.md	2026-09-12 11:28:47
++++ /Users/shier/Desktop/repos/.worktrees/tiancheng-profile-dashboard-capability-a653dda5/README.md	2026-09-12 11:22:29
+@@ -20,7 +20,7 @@
+ 
+ | Project | What I built | Evidence |
+ | --- | --- | --- |
+-| Agent Market | 构建可验证 AI Agent 任务市场，覆盖标签匹配、多 Agent DAG、任务协作与链上状态锚定；难点是让本地编排、公开生产页面和 24 笔 Sepolia Evidence 保持同一事实边界。 | [Live](https://agent-market.baby2b.online/) · [Repository](https://github.com/Tiancheng-Xu/agent-market) · [Evidence](https://agent-market.baby2b.online/evidence/) |
++| Agent Market | **Aladdin · AI Agent 交易与任务分发平台。** 面向 Agent 众包交易，构建任务自动拆解、候选过滤与评分、人工或自动选定、多阶段分发和暂停恢复；以 LangGraph DAG、多运行时服务、PostgreSQL Checkpoint、异步队列、信誉评分与 LLM 质量评测支撑复杂任务协作。 | [Live](https://agent-market.baby2b.online/) · [Repository](https://github.com/Tiancheng-Xu/agent-market) · [Evidence](https://agent-market.baby2b.online/evidence/) |
+ | BabySteps | 完成成长任务、家长中心、纪念馆、Provider 与链上交互等产品模块，并建立 Edge SSR、水合降级和真实性能观测链路；难点是隔离身份、钱包和服务端渲染边界。 | [Live](https://babysteps.baby2b.online/) · [Repository](https://github.com/Tiancheng-Xu/babysteps) · [Evidence](https://babysteps.baby2b.online/evidence/) |
+ 
+ ## Personal engineering portfolio system
+@@ -29,7 +29,7 @@
+ 
+ | Project | What it demonstrates | Links |
+ | --- | --- | --- |
+-| Personal AI Agent | 完成双卡 QLoRA 微调、冻结集对照、模型合并和 GGUF 量化，形成 Mac/Ollama 离线交付；难点是训练结果、模型身份和可复现验收之间的证据闭环。 | [Evidence](https://personal-ai-agent.baby2b.online/evidence/) |
++| Personal AI Agent | **AI 智能客服与私有化模型交付。** 构建意图识别、知识图谱 / RAG、Tool Calling、多轮问答和低置信度转人工链路；基于 Qwen3-8B、LlamaFactory、QLoRA / NF4、Qwen Embedding、GGUF 与 Ollama 完成领域微调和离线运行。 | [Evidence](https://personal-ai-agent.baby2b.online/evidence/) |
+ | GitHub Profile Studio | 构建本地优先的 GitHub 公开资料工作台，以统一 API 契约验证 Hono / Node 与 Go 双后端，并通过服务端白名单和 macOS 钥匙串隔离浏览器凭据。 | [Repository](https://github.com/Tiancheng-Xu/github-profile-studio) · [Evidence](https://baby2b.online/evidence/github-profile-studio) |
+ | Showcase Dashboard | 把项目状态、Evidence、Portfolio Sync、性能观测与受保护控制入口整合为个人工程作品系统；保持静态首屏、水合后数据和项目自有链接一致，并让未知路由返回真实 404。 | [Repository](https://github.com/Tiancheng-Xu/fullstack-showcase) · [Live](https://baby2b.online/dashboard/) · [Evidence](https://baby2b.online/evidence/fullstack-showcase) |
+ | Portfolio Sync | 以 GitHub App Webhook、HMAC 验签与 Cloudflare Worker/KV 汇总真实项目发布清单，并用定时任务补齐事件遗漏；难点是同步状态、静态首屏与项目自有 Evidence 的一致性。 | [Live](https://portfolio-sync.baby2b.online/) · [Evidence](https://baby2b.online/evidence/portfolio-sync) |
+diff --git a/Users/shier/Desktop/repos/.worktrees/tiancheng-profile-dashboard-capability-a653dda5/tests/profile-narratives.test.mjs b/Users/shier/Desktop/repos/.worktrees/tiancheng-profile-dashboard-capability-a653dda5/tests/profile-narratives.test.mjs
+new file mode 100644
+index 0000000..a96afad
+--- /dev/null
++++ b/Users/shier/Desktop/repos/.worktrees/tiancheng-profile-dashboard-capability-a653dda5/tests/profile-narratives.test.mjs
+@@ -0,0 +1,17 @@
++import { readFileSync } from "node:fs";
++import test from "node:test";
++import assert from "node:assert/strict";
++
++const readme = readFileSync(new URL("../README.md", import.meta.url), "utf8");
++
++test("Agent Market keeps its official name, Aladdin subtitle, and public links", () => {
++  assert.match(readme, /\| Agent Market \| \*\*Aladdin · AI Agent 交易与任务分发平台。\*\*/);
++  assert.match(readme, /https:\/\/agent-market\.baby2b\.online\//);
++  assert.match(readme, /https:\/\/github\.com\/Tiancheng-Xu\/agent-market/);
++  assert.match(readme, /https:\/\/agent-market\.baby2b\.online\/evidence\//);
++});
++
++test("Personal AI Agent keeps its official name, customer-service subtitle, and public link", () => {
++  assert.match(readme, /\| Personal AI Agent \| \*\*AI 智能客服与私有化模型交付。\*\*/);
++  assert.match(readme, /https:\/\/personal-ai-agent\.baby2b\.online\/evidence\//);
++});

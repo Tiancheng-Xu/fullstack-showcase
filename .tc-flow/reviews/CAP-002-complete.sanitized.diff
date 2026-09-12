@@ -1,0 +1,630 @@
+diff --git a/apps/web/apps/web/src/index.css b/apps/web/apps/web/src/index.css
+index 13f4489..a7bca1e 100644
+--- a/apps/web/apps/web/src/index.css
++++ b/apps/web/apps/web/src/index.css
+@@ -1638,7 +1638,7 @@ header#top.portfolio-glass-bar {
+ 	.portfolio-primary-navigation {
+ 		width: 100%;
+ 		display: grid;
+-		grid-template-columns: repeat(3, 1fr);
++		grid-template-columns: repeat(4, 1fr);
+ 		order: 3;
+ 	}
+ 	.portfolio-primary-navigation a {
+@@ -1743,3 +1743,306 @@ header#top.portfolio-glass-bar {
+ .portfolio-dashboard-main :is(a, button) {
+ 	text-decoration-color: rgba(159, 57, 55, 0.48);
+ }
++
++/* Keep the torn-paper edge shallow on cards of every height. Percentage-based
++   vertical points scaled into large masks on long Evidence and resume cards. */
++.portfolio-dashboard-module-card,
++.portfolio-project-card,
++.portfolio-module-stack > [data-slot="card"],
++.portfolio-index-card,
++.portfolio-evidence-card,
++.portfolio-index-note {
++	clip-path: polygon(
++		0 8px,
++		8% 3px,
++		18% 7px,
++		30% 2px,
++		43% 6px,
++		56% 2px,
++		69% 7px,
++		82% 3px,
++		93% 7px,
++		100% 4px,
++		calc(100% - 3px) 24%,
++		100% 50%,
++		calc(100% - 3px) 76%,
++		100% calc(100% - 7px),
++		88% calc(100% - 3px),
++		74% calc(100% - 8px),
++		60% calc(100% - 2px),
++		46% calc(100% - 7px),
++		32% calc(100% - 2px),
++		18% calc(100% - 7px),
++		7% calc(100% - 3px),
++		0 calc(100% - 8px),
++		3px 75%,
++		0 50%,
++		3px 25%
++	);
++}
++
++/* Open-source index: compact PR rows using the Dashboard paper-glass language. */
++.portfolio-open-source-grid {
++	gap: 1rem;
++}
++
++.portfolio-open-source-card {
++	isolation: isolate;
++	overflow: hidden;
++	padding: 1.2rem;
++	background: linear-gradient(
++		145deg,
++		rgba(251, 248, 242, 0.54),
++		rgba(229, 232, 230, 0.3)
++	);
++	-webkit-backdrop-filter: blur(12px) saturate(0.76);
++	backdrop-filter: blur(12px) saturate(0.76);
++	box-shadow:
++		inset 0 1px rgba(255, 255, 255, 0.88),
++		0 8px 18px rgba(7, 29, 52, 0.1);
++	transition: transform 1s ease, box-shadow 1s ease, border-color 1s ease;
++}
++
++.portfolio-open-source-card::before,
++.portfolio-open-source-pr::before {
++	position: absolute;
++	inset: 0;
++	z-index: -1;
++	content: "";
++	pointer-events: none;
++	background: linear-gradient(
++		105deg,
++		transparent 8%,
++		rgba(182, 207, 199, 0.08) 30%,
++		rgba(255, 240, 218, 0.42) 47%,
++		rgba(188, 204, 218, 0.18) 62%,
++		transparent 84%
++	);
++	transform: translateX(-115%);
++	transition: transform 1s ease;
++}
++
++.portfolio-open-source-card:hover {
++	border-color: rgba(255, 255, 255, 0.92);
++	box-shadow:
++		inset 0 1px rgba(255, 255, 255, 0.94),
++		0 14px 26px rgba(7, 29, 52, 0.14);
++	transform: translateY(-4px);
++}
++
++.portfolio-open-source-card:hover::before,
++.portfolio-open-source-pr:hover::before {
++	transform: translateX(115%);
++}
++
++.portfolio-open-source-card h3 {
++	margin: 0;
++}
++
++.portfolio-open-source-repository {
++	display: inline-flex;
++	align-items: center;
++	gap: 0.65rem;
++}
++
++.portfolio-open-source-repository-icon {
++	position: relative;
++	display: grid;
++	width: 2.5rem;
++	height: 2.5rem;
++	flex: none;
++	place-items: center;
++	overflow: hidden;
++	border: 1px solid rgba(39, 65, 74, 0.2);
++	border-radius: 0.65rem;
++	background: rgba(224, 224, 212, 0.68);
++	color: #9f3937;
++	box-shadow: inset 0 1px rgba(255, 255, 255, 0.78);
++}
++
++.portfolio-open-source-repository-icon img {
++	position: absolute;
++	inset: 0;
++	width: 100%;
++	height: 100%;
++	object-fit: cover;
++}
++
++.portfolio-open-source-card > p {
++	margin-top: 0.55rem;
++}
++
++.portfolio-open-source-pr-list {
++	display: grid;
++	gap: 0.55rem;
++	margin-top: 0.9rem;
++}
++
++.portfolio-open-source-pr {
++	position: relative;
++	isolation: isolate;
++	display: grid;
++	grid-template-columns: minmax(7.5rem, 0.58fr) minmax(0, 1.7fr) auto;
++	align-items: center;
++	gap: 0.75rem;
++	overflow: hidden;
++	border: 1px solid rgba(114, 101, 82, 0.2);
++	padding: 0.68rem 0.78rem;
++	background: linear-gradient(
++		145deg,
++		rgba(251, 248, 242, 0.32),
++		rgba(232, 233, 228, 0.16)
++	);
++	-webkit-backdrop-filter: blur(7px) saturate(0.74);
++	backdrop-filter: blur(7px) saturate(0.74);
++	clip-path: polygon(
++		0 4px, 12% 1px, 27% 4px, 44% 1px, 62% 4px, 80% 1px, 100% 3px,
++		calc(100% - 2px) 50%, 100% calc(100% - 4px), 78% calc(100% - 1px),
++		55% calc(100% - 4px), 30% calc(100% - 1px), 0 calc(100% - 3px), 2px 50%
++	);
++	box-shadow: inset 0 1px rgba(255, 255, 255, 0.68);
++	transition: transform 1s ease, background-color 1s ease, border-color 1s ease;
++}
++
++.portfolio-open-source-pr:hover {
++	border-color: rgba(159, 57, 55, 0.28);
++	transform: translateY(-2px);
++}
++
++.portfolio-open-source-pr-heading {
++	display: flex;
++	align-items: center;
++	justify-content: space-between;
++	gap: 0.5rem;
++	font-size: 0.78rem;
++}
++
++.portfolio-open-source-pr-heading span {
++	flex: none;
++	font-size: 0.68rem;
++	font-weight: 800;
++}
++
++.portfolio-open-source-pr-summary {
++	margin: 0;
++	color: #344252;
++	font-size: 0.76rem;
++	line-height: 1.5;
++}
++
++.portfolio-index-card nav.portfolio-open-source-pr-links {
++	justify-content: flex-end;
++	flex-wrap: nowrap;
++	gap: 0.35rem;
++	margin-top: 0;
++}
++
++.portfolio-index-card nav.portfolio-open-source-pr-links a {
++	min-height: 2rem;
++	padding: 0 0.55rem;
++	font-size: 0.68rem;
++	white-space: nowrap;
++}
++
++@media (max-width: 767px) {
++	.portfolio-open-source-grid {
++		gap: 0.8rem;
++	}
++
++	.portfolio-open-source-card {
++		padding: 1rem;
++	}
++
++	.portfolio-open-source-pr {
++		grid-template-columns: 1fr;
++		gap: 0.4rem;
++		padding: 0.7rem;
++	}
++
++	.portfolio-index-card nav.portfolio-open-source-pr-links {
++		justify-content: flex-start;
++	}
++}
++
++/* Shared capability constellation for the open-source index. */
++.open-source-particle-backdrop {
++  position: fixed;
++  z-index: 0;
++  inset: 72px 0 0;
++  overflow: hidden;
++  pointer-events: none;
++  opacity: 0.5;
++  background:
++    radial-gradient(circle at 22% 18%, rgb(184 209 202 / 26%), transparent 34%),
++    radial-gradient(circle at 78% 36%, rgb(211 160 140 / 18%), transparent 30%);
++  mask-image: linear-gradient(to bottom, transparent 0, #000 10%, #000 76%, transparent 100%);
++}
++
++.open-source-particle-backdrop__canvas,
++.open-source-particle-backdrop__static {
++  position: absolute;
++  inset: 0;
++  width: 100%;
++  height: 100%;
++}
++
++.open-source-particle-backdrop__canvas {
++  opacity: 0;
++  transition: opacity 1s ease;
++}
++
++.open-source-particle-backdrop[data-scene-state="active"] .open-source-particle-backdrop__canvas {
++  opacity: 0.72;
++}
++
++.open-source-particle-backdrop__static {
++  background-image:
++    radial-gradient(circle, rgb(66 105 112 / 26%) 0 1px, transparent 1.7px),
++    radial-gradient(circle, rgb(174 80 65 / 18%) 0 1px, transparent 1.8px);
++  background-position: 0 0, 37px 51px;
++  background-size: 92px 92px, 131px 131px;
++  opacity: 0.5;
++}
++
++.open-source-particle-backdrop[data-scene-state="active"] .open-source-particle-backdrop__static {
++  opacity: 0.16;
++}
++
++.portfolio-page-shell:has(.open-source-particle-backdrop) {
++  position: relative;
++  isolation: isolate;
++}
++
++.portfolio-page-shell:has(.open-source-particle-backdrop) > *:not(.open-source-particle-backdrop) {
++  position: relative;
++  z-index: 1;
++}
++
++.portfolio-index-surface:has(.open-source-particle-backdrop) {
++  position: relative;
++  isolation: isolate;
++}
++
++.portfolio-index-main:has(> .open-source-particle-backdrop) {
++  position: relative;
++  z-index: 1;
++}
++
++.portfolio-index-main:has(> .open-source-particle-backdrop) > *:not(.open-source-particle-backdrop),
++.portfolio-index-surface:has(.open-source-particle-backdrop) > header,
++.portfolio-index-surface:has(.open-source-particle-backdrop) > footer,
++.portfolio-index-surface:has(.open-source-particle-backdrop) > .portfolio-glass-mobile-nav {
++  position: relative;
++  z-index: 1;
++}
++
++@media (max-width: 760px), (prefers-reduced-motion: reduce) {
++  .open-source-particle-backdrop {
++    position: absolute;
++    opacity: 0.34;
++  }
++
++  .open-source-particle-backdrop__canvas {
++    display: none;
++  }
++}
+diff --git a/apps/web/apps/web/src/features/portfolio/technology-particle-backdrop.tsx b/apps/web/apps/web/src/features/portfolio/technology-particle-backdrop.tsx
+new file mode 100644
+index 0000000..2a3fdd5
+--- /dev/null
++++ b/apps/web/apps/web/src/features/portfolio/technology-particle-backdrop.tsx
+@@ -0,0 +1,117 @@
++import { useEffect, useRef, useState } from "react";
++
++import { CAPABILITY_DOMAINS } from "./capability-map-data";
++import type { CapabilityParticleController } from "./technology-capability-particle-scene";
++import { hasWebGLSupport, shouldEnableVoyageScene } from "./voyage-scene-policy";
++
++export function TechnologyParticleBackdrop() {
++  const rootRef = useRef<HTMLDivElement | null>(null);
++  const canvasRef = useRef<HTMLCanvasElement | null>(null);
++  const controllerRef = useRef<CapabilityParticleController | null>(null);
++  const [sceneState, setSceneState] = useState<"static" | "loading" | "active" | "failed">("static");
++
++  useEffect(() => {
++    const root = rootRef.current;
++    const canvas = canvasRef.current;
++    if (!root || !canvas) return undefined;
++
++    const reducedMotion =
++      typeof window.matchMedia === "function" &&
++      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
++    if (
++      !shouldEnableVoyageScene({
++        reducedMotion,
++        viewportWidth: window.innerWidth,
++        webglAvailable: hasWebGLSupport(),
++      })
++    ) {
++      return undefined;
++    }
++
++    let disposed = false;
++    let observer: IntersectionObserver | undefined;
++    let idleHandle: number | undefined;
++    let paintFrame: number | undefined;
++    const idleWindow = window as Window & {
++      requestIdleCallback?: (
++        callback: IdleRequestCallback,
++        options?: IdleRequestOptions,
++      ) => number;
++      cancelIdleCallback?: (handle: number) => void;
++    };
++
++    const mountScene = () => {
++      if (disposed || controllerRef.current) return;
++      setSceneState("loading");
++      void import("./technology-capability-particle-scene")
++        .then(({ mountTechnologyCapabilityParticleScene }) => {
++          if (disposed || !canvasRef.current) return;
++          const controller = mountTechnologyCapabilityParticleScene(
++            canvasRef.current,
++            CAPABILITY_DOMAINS,
++            () => {
++              if (!disposed) setSceneState("active");
++            },
++          );
++          controllerRef.current = controller;
++          controller.setPaused(false);
++          controller.setRange(1);
++        })
++        .catch(() => {
++          if (!disposed) setSceneState("failed");
++        });
++    };
++
++    const scheduleMount = () => {
++      paintFrame = window.requestAnimationFrame(() => {
++        if (typeof idleWindow.requestIdleCallback === "function") {
++          idleHandle = idleWindow.requestIdleCallback(mountScene, { timeout: 1800 });
++        } else {
++          idleHandle = window.setTimeout(mountScene, 400);
++        }
++      });
++    };
++
++    if (typeof IntersectionObserver === "function") {
++      observer = new IntersectionObserver(
++        ([entry]) => {
++          if (!entry?.isIntersecting) return;
++          observer?.disconnect();
++          scheduleMount();
++        },
++        { rootMargin: "280px 0px" },
++      );
++      observer.observe(root);
++    } else {
++      scheduleMount();
++    }
++
++    return () => {
++      disposed = true;
++      observer?.disconnect();
++      if (paintFrame !== undefined) window.cancelAnimationFrame(paintFrame);
++      if (idleHandle !== undefined) {
++        if (typeof idleWindow.cancelIdleCallback === "function") {
++          idleWindow.cancelIdleCallback(idleHandle);
++        } else {
++          window.clearTimeout(idleHandle);
++        }
++      }
++      controllerRef.current?.dispose();
++      controllerRef.current = null;
++    };
++  }, []);
++
++  return (
++    <div
++      ref={rootRef}
++      className="open-source-particle-backdrop"
++      data-scene-state={sceneState}
++      data-testid="technology-particle-backdrop"
++      aria-hidden="true"
++    >
++      <canvas ref={canvasRef} className="open-source-particle-backdrop__canvas" />
++      <div className="open-source-particle-backdrop__static" />
++    </div>
++  );
++}
+diff --git a/apps/web/apps/web/src/features/portfolio/__tests__/technology-particle-backdrop.test.tsx b/apps/web/apps/web/src/features/portfolio/__tests__/technology-particle-backdrop.test.tsx
+new file mode 100644
+index 0000000..3b4bee4
+--- /dev/null
++++ b/apps/web/apps/web/src/features/portfolio/__tests__/technology-particle-backdrop.test.tsx
+@@ -0,0 +1,80 @@
++import { render, screen, waitFor } from "@testing-library/react";
++import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
++
++const scene = vi.hoisted(() => ({
++  dispose: vi.fn(),
++  mount: vi.fn(),
++  setPaused: vi.fn(),
++  setRange: vi.fn(),
++}));
++
++const policy = vi.hoisted(() => ({
++  allow: true,
++  shouldEnable: vi.fn(() => policy.allow),
++}));
++
++vi.mock("../voyage-scene-policy", () => ({
++  hasWebGLSupport: () => true,
++  shouldEnableVoyageScene: policy.shouldEnable,
++}));
++
++vi.mock("../technology-capability-particle-scene", () => ({
++  mountTechnologyCapabilityParticleScene: scene.mount,
++}));
++
++import { TechnologyParticleBackdrop } from "../technology-particle-backdrop";
++
++describe("TechnologyParticleBackdrop", () => {
++  beforeEach(() => {
++    vi.clearAllMocks();
++    policy.allow = true;
++    scene.mount.mockImplementation((_canvas, _domains, onReady) => {
++      onReady();
++      return {
++        dispose: scene.dispose,
++        setPaused: scene.setPaused,
++        setRange: scene.setRange,
++      };
++    });
++    vi.stubGlobal("IntersectionObserver", undefined);
++    vi.spyOn(window, "requestAnimationFrame").mockImplementation((callback) => {
++      callback(0);
++      return 1;
++    });
++    vi.stubGlobal("requestIdleCallback", (callback: IdleRequestCallback) => {
++      callback({ didTimeout: false, timeRemaining: () => 50 });
++      return 1;
++    });
++    vi.stubGlobal("matchMedia", () => ({ matches: false }));
++  });
++
++  afterEach(() => {
++    vi.unstubAllGlobals();
++    vi.restoreAllMocks();
++  });
++
++  it("renders a static SSR-safe backdrop before Babylon is available", () => {
++    policy.allow = false;
++    render(<TechnologyParticleBackdrop />);
++
++    expect(screen.getByTestId("technology-particle-backdrop")).toHaveAttribute(
++      "data-scene-state",
++      "static",
++    );
++    expect(scene.mount).not.toHaveBeenCalled();
++  });
++
++  it("deferred-mounts the shared 48-node capability scene", async () => {
++    render(<TechnologyParticleBackdrop />);
++
++    await waitFor(() => expect(scene.mount).toHaveBeenCalledTimes(1));
++    const domains = scene.mount.mock.calls[0][1];
++    expect(domains.flatMap((domain: { nodes: unknown[] }) => domain.nodes)).toHaveLength(48);
++    expect(scene.setPaused).toHaveBeenCalledWith(false);
++    expect(scene.setRange).toHaveBeenCalledWith(1);
++    expect(screen.getByTestId("technology-particle-backdrop")).toHaveAttribute(
++      "data-scene-state",
++      "active",
++    );
++  });
++});
+diff --git a/apps/web/apps/web/src/features/portfolio/open-source-index-content.tsx b/apps/web/apps/web/src/features/portfolio/open-source-index-content.tsx
+new file mode 100644
+index 0000000..e560c1a
+--- /dev/null
++++ b/apps/web/apps/web/src/features/portfolio/open-source-index-content.tsx
+@@ -0,0 +1,95 @@
++import { ArrowUpRight, CircleDot, GitMerge, GitPullRequest, Star } from "lucide-react";
++
++import { openSourceRepositoryDetails } from "@/features/portfolio/open-source-data";
++import {
++	PortfolioIndexSection,
++	PortfolioIndexShell,
++} from "@/features/portfolio/portfolio-index-shell";
++import { TechnologyParticleBackdrop } from "@/features/portfolio/technology-particle-backdrop";
++
++function getRepositoryAvatarUrl(repositoryUrl: string) {
++	const owner = new URL(repositoryUrl).pathname.split("/").filter(Boolean)[0];
++	return owner ? `https://github.com/${owner}.png?size=80` : "";
++}
++
++export function OpenSourceIndexContent() {
++	return (
++		<PortfolioIndexShell
++			current="open-source"
++			description="按上游仓库聚合公开贡献，展示每项修复内容、当前状态以及可核验的 PR 与 Issue 入口。"
++			kicker="Open Source Contributions"
++			title="开源社区共建"
++		>
++			<TechnologyParticleBackdrop />
++			<PortfolioIndexSection title="全部共建仓库">
++				<p className="portfolio-index-freshness">
++					已合并贡献优先，同组按仓库 Star 数排序；贡献状态以当前公开记录为准。
++				</p>
++				<div className="portfolio-index-grid portfolio-open-source-grid">
++					{openSourceRepositoryDetails.map((repository) => (
++						<article className="portfolio-index-card portfolio-open-source-card" key={repository.project}>
++							<div className="portfolio-index-card-heading">
++								<h3>
++									<a className="portfolio-open-source-repository" href={repository.href} rel="noreferrer" target="_blank">
++										<span aria-hidden="true" className="portfolio-open-source-repository-icon">
++											<GitPullRequest size={18} />
++											<img
++												alt=""
++												height="40"
++												loading="lazy"
++												onError={(event) => event.currentTarget.remove()}
++												src={getRepositoryAvatarUrl(repository.href)}
++												width="40"
++											/>
++										</span>
++										<span>{repository.project}</span>
++									</a>
++								</h3>
++								<p className="inline-flex items-center gap-1 text-[#59636d]">
++									<Star aria-hidden="true" size={14} />
++									{repository.stars.toLocaleString("en-US")}
++								</p>
++							</div>
++							<p className="mt-3 flex flex-wrap gap-2 text-sm">
++								<span className="inline-flex items-center gap-1 text-[#187044]">
++									<GitMerge aria-hidden="true" size={15} /> 已合并 {repository.merged}
++								</span>
++								<span className="inline-flex items-center gap-1 text-[#a85b19]">
++									<CircleDot aria-hidden="true" size={15} /> Review 中 {repository.open}
++								</span>
++							</p>
++							<div className="portfolio-open-source-pr-list">
++								{repository.pullRequests.map((pullRequest) => (
++									<section
++										className="portfolio-glass-subpanel portfolio-open-source-pr"
++										key={pullRequest.href}
++									>
++										<div className="portfolio-open-source-pr-heading">
++											<strong>{pullRequest.label}</strong>
++											<span className={pullRequest.status === "merged" ? "text-[#187044]" : "text-[#a85b19]"}>
++												{pullRequest.status === "merged" ? "已合并" : "Review 中"}
++											</span>
++										</div>
++										<p className="portfolio-open-source-pr-summary">
++											{pullRequest.contribution}
++										</p>
++										<nav className="portfolio-open-source-pr-links" aria-label={repository.project + " " + pullRequest.label + " 相关链接"}>
++											<a href={pullRequest.href} rel="noreferrer" target="_blank">
++												查看 PR <ArrowUpRight aria-hidden="true" size={14} />
++											</a>
++											{pullRequest.issueHref ? (
++												<a href={pullRequest.issueHref} rel="noreferrer" target="_blank">
++													查看 Issue <ArrowUpRight aria-hidden="true" size={14} />
++												</a>
++											) : null}
++										</nav>
++									</section>
++								))}
++							</div>
++						</article>
++					))}
++				</div>
++			</PortfolioIndexSection>
++		</PortfolioIndexShell>
++	);
++}

@@ -1,0 +1,16 @@
+{
+  "runId": "dashboard-capability-interview-20260912-a653dda5",
+  "contractHash": "a653dda5de6a35a30c6323468b708f479c777400528c77bc99396972aa80f8a4",
+  "taskId": "CAP-001",
+  "verdict": "pass",
+  "repairRounds": 2,
+  "reviewer": "01a09622-7fe4-78d1-825f-2c8eb2aca2f3",
+  "evidence": {
+    "focusedTests": "2 files, 9 tests passed",
+    "typecheck": "tsc --noEmit passed",
+    "diffCheck": "git diff --check passed",
+    "secretScan": "clean",
+    "sanitizedDiff": ".tc-flow/reviews/CAP-001-round-2.sanitized.diff"
+  },
+  "completedAt": "2026-09-12T15:13:37.203Z"
+}

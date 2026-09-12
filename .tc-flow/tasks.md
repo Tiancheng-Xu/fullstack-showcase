@@ -1,4 +1,7 @@
-# Performance MFA Control Tasks
+# Dashboard Capability Interview Tasks
 
-- [ ] Atomic review unit T-101 + T-102 + T-103: failing security tests, Worker/D1/R2/GitHub control implementation, and truthful control-page behavior must move through red, green, and independent review together. Local green evidence does not mark any member complete before the reviewer passes the whole unit.
-- [ ] T-104: Add sanitized architecture, sequence, security, cost, recovery, and production Evidence plus deterministic release gates.
+- [x] CAP-001: Expand the four-domain capability map with featured skills, More Skills disclosure, tooltip explanations, and richer details.
+- [x] CAP-002: Extract and reuse the deferred Babylon capability backdrop on the open-source index.
+- [x] CAP-003: Synchronize Agent Market and Personal AI Agent interview narratives across Dashboard project data and GitHub Profile.
+- [x] CAP-004: Use repository data and local repository avatars for the open-source Babylon backdrop.
+- [x] CAP-005: Add static-first Archify previews and on-demand interactive architecture diagrams to project surfaces.

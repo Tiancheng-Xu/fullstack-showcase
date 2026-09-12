@@ -1,14 +1,40 @@
 {
-  "schemaVersion": 1,
-  "runId": "d35c7307-4a53-4b75-9d51-b7d9e5002026",
-  "feature": "performance-mfa-control",
-  "version": 1,
-  "contractHash": "b7d9e5003a74291de098ddbd6e2af9730b25782a43acc6422c56ce347a99a575",
-  "goal": "Expose a fail-closed Baby2B performance control plane protected by Cloudflare Access independent MFA and backed by fixed BabySteps GitHub Actions.",
-  "nonGoals": ["Device posture as an authorization factor", "Custom MFA or WebAuthn implementation inside the Worker", "Arbitrary repository, workflow, AWS command, duration, region, or stack inputs", "Exposing Access JWTs, GitHub App credentials, callback secrets, or raw operator identity", "Changing unrelated Dashboard projects or retired Evidence infrastructure"],
-  "repositories": ["/Users/shier/Desktop/repos/babysteps/.worktrees/performance-mfa-control-b7d9e500", "/Users/shier/Desktop/.tc-worktrees/fullstack-showcase-performance-mfa-control-b7d9e500"],
-  "allowedWritePaths": ["apps/web/apps/performance-control-worker/", "apps/web/apps/web/src/features/performance/", "apps/web/apps/web/src/data/portfolio-projects.ts", "apps/web/apps/web/src/routes/performance-control.tsx", "docs/", ".github/", ".tc-flow/"],
-  "networkScope": ["Cloudflare Access and Worker services for baby2b.online", "GitHub App installation restricted to Tiancheng-Xu/babysteps Actions dispatch", "Public read-only Dashboard status and protected control endpoints"],
-  "acceptanceCriteria": ["Public status and snapshot reads remain available without MFA", "All control session, start, and stop routes require a verified Cloudflare Access JWT for the exact allowlisted operator", "Cloudflare Access independent MFA is the authentication authority; the Worker does not implement custom MFA", "Mutations require same-origin requests, a single-use nonce, and an idempotency key", "The Worker dispatches only the fixed BabySteps workflow through a repository-scoped GitHub App installation token", "D1 records generation, operation, expiry, sanitized actor hash, cost estimate, callback, and cleanup state", "R2 stores only validated immutable snapshots and D1 exposes their verified projection", "The page shows 45-minute TTL, USD 0.20 cap, truthful pending/running/cleanup-required states, and disables unsafe actions", "Evidence records architecture, sequence, auth boundary, recovery, tests, limitations, and sanitized production proof"],
-  "production": "explicitly-authorized-after-gates"
+  "goal": "Complete the local Dashboard capability-map interview narrative, shared Babylon backdrop, and synchronized Agent Market and Personal AI Agent descriptions.",
+  "context": {
+    "schemaVersion": 1,
+    "runId": "dashboard-capability-interview-20260912-a653dda5",
+    "feature": "dashboard-capability-interview",
+    "repositories": [
+      "/Users/shier/Desktop/course-homework/.tc-worktrees/fullstack-showcase-dashboard-capability-a653dda5",
+      "/Users/shier/Desktop/repos/.worktrees/tiancheng-profile-dashboard-capability-a653dda5"
+    ],
+    "allowedWritePaths": ["apps/web/apps/web/src/features/portfolio/", "apps/web/apps/web/src/data/portfolio-projects.ts", "apps/web/apps/web/src/index.css", "docs/superpowers/", ".tc-flow/", "README.md"],
+    "nonGoals": ["AWS execution or validation", "production deployment", "push or pull request creation", "changes to global Evidence gates", "new AI model or RAG runtime implementation"],
+    "rendering": "ssg-plus-hydration-with-deferred-csr-babylon",
+    "aiEngineering": {
+      "successCriteria": ["Four capability domains render with no more than six featured nodes each", "Secondary skills are accessible by keyboard and pointer", "Project narratives remain synchronized across Dashboard and GitHub Profile"],
+      "deterministicGates": ["focused Vitest capability and portfolio tests", "TypeScript noEmit validation", "excluded-technology source assertions"],
+      "llmJudge": {"enabled": false, "reason": "Presentation-only feature with deterministic copy and DOM contracts"},
+      "rag": {"runtimeChanged": false, "fallback": "not-applicable"},
+      "dag": {"runtimeChanged": false, "failureRecovery": "not-applicable", "cancellation": "not-applicable", "humanApproval": "not-applicable"},
+      "serviceLevels": {"babylonLoading": "intersection plus idle dynamic import", "mobileFallback": "static DOM with no Babylon scene"},
+      "feedback": {"source": "user-reviewed interview narrative", "trainingUse": false},
+      "proof": {"location": ".tc-flow/qa/feature-result.json", "public": false, "sanitized": true}
+    }
+  },
+  "allowedTools": ["apply_patch", "exec_command", "view_image", "local-browser-preview"],
+  "acceptanceCriteria": [
+    "Capability map uses AI / Agent, Full Stack / Data, Cloud / Reliability, and Trust / Auth",
+    "Excluded job-specific technologies do not appear",
+    "Each domain initially shows at most six featured skills and exposes remaining skills through More Skills",
+    "Hover and focus tooltips provide aliases, plain-language explanations, and project context",
+    "LangGraph belongs to AI / Agent rather than Trust / Auth",
+    "Open-source page reuses the deferred Babylon particle backdrop without intercepting input",
+    "Agent Market presents the Aladdin task-distribution narrative",
+    "Personal AI Agent presents the AI customer-service and private-model narrative",
+    "Dashboard and GitHub Profile descriptions are synchronized",
+    "Focused tests and TypeScript validation pass locally",
+    "No AWS action, push, or production publication occurs"
+  ],
+  "contractHash": "a653dda5de6a35a30c6323468b708f479c777400528c77bc99396972aa80f8a4"
 }

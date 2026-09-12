@@ -18,18 +18,14 @@ import { DashboardContent } from "../dashboard-content";
 import { EvidenceContent } from "../evidence-content";
 
 describe("performance observability Evidence integration", () => {
-	it("shows the same trustworthy performance state and control entry on Dashboard", () => {
+	it("keeps the detailed performance snapshot and control entry off the Dashboard", () => {
 		render(<DashboardContent />);
 
+		expect(screen.queryByText("历史快照")).not.toBeInTheDocument();
+		expect(screen.queryByText("960 ms")).not.toBeInTheDocument();
 		expect(
-			screen.getAllByRole("heading", { name: "性能观测与成本控制" }),
-		).not.toHaveLength(0);
-		expect(screen.getByText("历史快照")).toBeVisible();
-		expect(screen.getAllByText("960 ms")).toHaveLength(6);
-		expect(screen.getByRole("link", { name: /进入成本控制/ })).toHaveAttribute(
-			"href",
-			"/performance-control/babysteps",
-		);
+			screen.queryByRole("link", { name: /进入成本控制/ }),
+		).not.toBeInTheDocument();
 	});
 
 	it("publishes the approved architecture, delivery, security, lifecycle and non-goal decisions on Evidence", () => {

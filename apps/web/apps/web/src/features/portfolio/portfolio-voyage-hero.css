@@ -170,6 +170,12 @@
 	opacity: .66;
 	transform: translate3d(-2%, 0, 0) scaleX(1.08);
 	animation: voyage-sunrise-clouds 38s ease-in-out infinite alternate;
+	transition: opacity .7s ease;
+}
+
+.portfolio-voyage[data-scene-state="active"] .portfolio-voyage__wash::before {
+	opacity: 0;
+	animation-play-state: paused;
 }
 
 .portfolio-voyage__content {

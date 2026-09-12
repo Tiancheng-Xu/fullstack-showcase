@@ -27,6 +27,10 @@ describe("static-first route delivery", () => {
 					output: "evidence/index.html",
 				}),
 				expect.objectContaining({
+					url: "/open-source",
+					output: "open-source/index.html",
+				}),
+				expect.objectContaining({
 					url: "/performance-control/babysteps",
 					output: "performance-control/babysteps/index.html",
 				}),
@@ -117,6 +121,8 @@ describe("static-first route delivery", () => {
 		for (const rule of [
 			"/projects /projects/index.html 200",
 			"/projects/ /projects/index.html 200",
+				"/open-source /open-source/index.html 200",
+				"/open-source/ /open-source/index.html 200",
 			"/evidence /evidence/index.html 200",
 			"/evidence/ /evidence/index.html 200",
 			"/evidence/:slug /evidence/:slug/index.html 200",

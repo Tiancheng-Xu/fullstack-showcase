@@ -10,7 +10,6 @@ import { Mesh } from "@babylonjs/core/Meshes/mesh.js";
 import { ParticleSystem } from "@babylonjs/core/Particles/particleSystem.js";
 import { Scene } from "@babylonjs/core/scene.js";
 
-import type { CapabilityDomain } from "./capability-map-data";
 import { createTechnologyParticleLayout } from "./technology-particle-layout";
 import {
 	advanceVoyageReadiness,
@@ -22,6 +21,27 @@ export type CapabilityParticleController = {
 	setPaused: (paused: boolean) => void;
 	setRange: (range: number) => void;
 };
+
+export type TechnologyParticleNode = {
+	id: string;
+	iconSlug?: string;
+	iconSrc?: string;
+	fallbackIconSrc?: string;
+	particleLabel?: string;
+};
+
+export type TechnologyParticleDomain = {
+	nodes: readonly TechnologyParticleNode[];
+};
+
+export const TECHNOLOGY_PARTICLE_ICON_FALLBACK =
+	"/assets/portfolio/tech-icons/github.svg";
+
+export function resolveTechnologyParticleIconSrc(node: TechnologyParticleNode) {
+	if (node.iconSrc) return node.iconSrc;
+	if (node.iconSlug) return `/assets/portfolio/tech-icons/${node.iconSlug}.svg`;
+	return node.fallbackIconSrc ?? TECHNOLOGY_PARTICLE_ICON_FALLBACK;
+}
 
 const DOMAIN_COLORS = [
 	new Color4(0.08, 0.2, 0.32, 0.78),
@@ -47,7 +67,7 @@ function createParticleTexture(scene: Scene) {
 
 export function mountTechnologyCapabilityParticleScene(
 	canvas: HTMLCanvasElement,
-	domains: CapabilityDomain[],
+	domains: readonly TechnologyParticleDomain[],
 	onReady?: () => void,
 ): CapabilityParticleController {
 	const dpr = getVoyageDevicePixelRatio(window.innerWidth, window.devicePixelRatio || 1);
@@ -109,9 +129,11 @@ export function mountTechnologyCapabilityParticleScene(
 	const layout = createTechnologyParticleLayout(nodes.length);
 	const iconPlanes = nodes.map((node, index) => {
 		const position = layout[index];
+		const hasLabel = Boolean(node.particleLabel);
+		const textureSize = hasLabel ? 256 : 192;
 		const texture = new DynamicTexture(
 			`capability-icon-texture-${node.id}`,
-			{ width: 192, height: 192 },
+			{ width: textureSize, height: textureSize },
 			scene,
 			false,
 		);
@@ -141,16 +163,31 @@ export function mountTechnologyCapabilityParticleScene(
 		image.decoding = "async";
 		image.onload = () => {
 			const context = texture.getContext() as CanvasRenderingContext2D;
-			context.clearRect(0, 0, 192, 192);
-			context.drawImage(image, 20, 20, 152, 152);
+			context.clearRect(0, 0, textureSize, textureSize);
+			const iconInset = hasLabel ? 40 : 20;
+			const iconSize = hasLabel ? 176 : 152;
+			context.drawImage(image, iconInset, hasLabel ? 12 : 20, iconSize, iconSize);
 			context.globalCompositeOperation = "source-in";
 			context.fillStyle = "rgba(18, 52, 68, 0.9)";
-			context.fillRect(0, 0, 192, 192);
+			context.fillRect(0, 0, textureSize, textureSize);
 			context.globalCompositeOperation = "source-over";
+			if (node.particleLabel) {
+				context.fillStyle = "rgba(18, 52, 68, 0.96)";
+				context.font = '700 18px "Noto Sans SC", sans-serif';
+				context.textAlign = "center";
+				context.textBaseline = "middle";
+				context.fillText(node.particleLabel, textureSize / 2, 222, 232);
+			}
 			texture.update(true);
 			plane.setEnabled(true);
 		};
-		image.src = `/assets/portfolio/tech-icons/${node.iconSlug}.svg`;
+		let attemptedFallback = false;
+		image.onerror = () => {
+			if (attemptedFallback) return;
+			attemptedFallback = true;
+			image.src = node.fallbackIconSrc ?? TECHNOLOGY_PARTICLE_ICON_FALLBACK;
+		};
+		image.src = resolveTechnologyParticleIconSrc(node);
 		return { plane, base: new Vector3(position.x, position.y, position.z), phase: position.phase };
 	});
 
