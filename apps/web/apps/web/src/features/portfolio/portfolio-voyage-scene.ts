@@ -138,14 +138,25 @@ Effect.ShadersStore[`${SKY_SHADER_NAME}FragmentShader`] = `
 	color += vec3(.13, .095, .072) * horizonScatter * .24;
 	color += vec3(.09, .07, .045) * horizonHaze;
 
-	float cloudField = sin(vPosition.x * .026 + sin(vPosition.z * .018) * 2.1)
-		+ sin(vPosition.z * .041 - vPosition.x * .013) * .55;
-	float cloudMask = smoothstep(.62, 1.22, cloudField)
-		* smoothstep(.10, .24, altitude)
-		* (1.0 - smoothstep(.58, .82, altitude));
-	color = mix(color, vec3(.70, .73, .70), cloudMask * .12);
+	vec2 cloudDirection = vec2(
+		atan(direction.z, direction.x),
+		direction.y
+	);
+	float cloudBase = sin(cloudDirection.x * 5.2 + sin(cloudDirection.y * 13.0) * 1.7)
+		+ sin(cloudDirection.x * 9.4 - cloudDirection.y * 18.0) * .46;
+	float cloudDetail = sin(cloudDirection.x * 18.0 + cloudDirection.y * 31.0)
+		+ sin(cloudDirection.x * 31.0 - cloudDirection.y * 43.0) * .42;
+	float cloudBand = smoothstep(.075, .18, altitude)
+		* (1.0 - smoothstep(.52, .76, altitude));
+	float cloudShape = cloudBase + cloudDetail * .24;
+	float cloudMask = smoothstep(.42, 1.05, cloudShape) * cloudBand;
+	float cloudCore = smoothstep(.72, 1.34, cloudShape) * cloudBand;
+	vec3 cloudShadow = mix(vec3(.55, .62, .62), vec3(.67, .70, .67), altitude);
+	vec3 cloudLight = mix(vec3(.82, .82, .75), vec3(.94, .78, .64), pow(sunDot, 5.0));
+	color = mix(color, cloudShadow, cloudMask * .34);
+	color = mix(color, cloudLight, cloudCore * (.34 + horizonHaze * .16));
 	float sunDisc = smoothstep(.9985, .99955, sunDot);
-	sunDisc *= 1.0 - cloudMask * .42;
+	sunDisc *= 1.0 - cloudMask * .3;
 	color = mix(color, vec3(.90, .52, .29), sunDisc * .94);
 	gl_FragColor = vec4(color, 1.0);
 	}

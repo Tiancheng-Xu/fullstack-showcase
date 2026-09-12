@@ -1,7 +1,8 @@
-import { BadgeCheck, LayoutGrid, PenTool, UserRound } from "lucide-react";
+import { Code2, PenTool } from "lucide-react";
 import type { ReactNode } from "react";
 
 import { PORTFOLIO_FRAME_CLASS } from "@/features/portfolio/portfolio-layout";
+import { PortfolioPrimaryNavigation } from "@/features/portfolio/portfolio-primary-navigation";
 
 type PortfolioPage = "portfolio" | "project" | "evidence";
 
@@ -22,11 +23,7 @@ export function PortfolioPageShell({
 	projectHomeUrl: string;
 	title: string;
 }) {
-	const links = [
-		{ id: "portfolio" as const, href: "/dashboard", label: "作品集首页", icon: LayoutGrid },
-		{ id: "project" as const, href: projectHomeUrl, label: "项目主页", icon: UserRound },
-		{ id: "evidence" as const, href: evidenceUrl, label: "工作证明", icon: BadgeCheck },
-	];
+	const primaryCurrent = current === "evidence" ? "evidence" : current === "portfolio" ? "dashboard" : "projects";
 
 	return (
 		<div className="portfolio-surface relative left-1/2 min-h-screen w-screen max-w-none -translate-x-1/2 overflow-x-hidden bg-[#f7f1e3] pb-24 text-[#071d34] md:pb-0">
@@ -40,31 +37,31 @@ export function PortfolioPageShell({
 				}}
 			/>
 
-			<header className="portfolio-glass-bar relative border-[#071d34] border-b bg-[#fbf6ea]/95">
-				<div className={`${PORTFOLIO_FRAME_CLASS} flex min-h-16 items-center justify-between gap-4 py-2`}>
-					<a className="flex min-h-11 items-center gap-3 font-serif font-bold" href="/dashboard">
-						<span className="portfolio-glass-control grid size-9 place-items-center border border-[#d9ccb5] bg-[#eef0ec] text-[#bf1737]">
-							<PenTool aria-hidden="true" size={17} />
+			<header className="portfolio-glass-bar portfolio-index-header relative" id="top">
+				<div className={`${PORTFOLIO_FRAME_CLASS} portfolio-index-header-inner`}>
+					<a className="portfolio-index-brand" href="/dashboard">
+						<span aria-label="徐天成印" className="portfolio-seal" role="img">
+							<i>徐</i>
+							<i>天</i>
+							<i>成</i>
+							<i>印</i>
 						</span>
-						<span className="hidden sm:inline">Tiancheng Xu Portfolio</span>
-						<span className="sm:hidden">PORTFOLIO</span>
+						<span>
+							<strong>TIANCHENG XU · PORTFOLIO</strong>
+							<small>徐天成 · 工程作品集</small>
+						</span>
 					</a>
-					<nav aria-label="项目导航" className="portfolio-primary-nav hidden items-center gap-2 md:flex">
-						{links.map((link) => (
-							<a
-								aria-current={current === link.id ? "page" : undefined}
-								className={`inline-flex min-h-11 items-center border px-4 font-bold text-xs tracking-[0.12em] transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-[#bf1737] ${
-									current === link.id
-										? "border-[#bf1737] bg-[#bf1737] text-white shadow-[3px_3px_0_#071d34]"
-										: "border-[#c8bda9] bg-[#fbf6ea] text-[#344252] hover:border-[#bf1737] hover:bg-[#f3e7d7] hover:text-[#9f102a]"
-								}`}
-								href={link.href}
-								key={link.id}
-							>
-								{link.label}
-							</a>
-						))}
-					</nav>
+					<PortfolioPrimaryNavigation current={primaryCurrent} />
+					<a
+						aria-label="Tiancheng Xu GitHub"
+						className="portfolio-index-github"
+						href="https://github.com/Tiancheng-Xu"
+						rel="noreferrer"
+						target="_blank"
+					>
+						<Code2 aria-hidden="true" size={18} />
+						<span>GitHub</span>
+					</a>
 				</div>
 			</header>
 
@@ -94,25 +91,9 @@ export function PortfolioPageShell({
 				</div>
 			</footer>
 
-			<nav aria-label="项目快捷导航" className="portfolio-glass-mobile-nav fixed inset-x-0 bottom-0 z-50 border-[#d8cfbd] border-t bg-[#f7f1e3]/96 px-3 py-2 backdrop-blur md:hidden">
-				<div className="mx-auto grid max-w-md grid-cols-3 gap-1.5">
-					{links.map(({ href, icon: Icon, id, label }) => (
-						<a
-							aria-current={current === id ? "page" : undefined}
-							className={`flex min-h-14 flex-col items-center justify-center gap-1 border px-1 font-bold text-[11px] ${
-								current === id
-									? "border-[#bf1737] bg-[#bf1737] text-white shadow-[2px_2px_0_#071d34]"
-									: "border-[#d8cfbd] bg-[#fbf6ea] text-[#4d5863]"
-							}`}
-							href={href}
-							key={id}
-						>
-							<Icon aria-hidden="true" size={18} />
-							<span>{label}</span>
-						</a>
-					))}
-				</div>
-			</nav>
+			<div className="portfolio-glass-mobile-nav fixed inset-x-0 bottom-0 z-50 border-[#d8cfbd] border-t bg-[#f7f1e3]/96 px-4 py-2 backdrop-blur md:hidden">
+				<PortfolioPrimaryNavigation current={primaryCurrent} />
+			</div>
 		</div>
 	);
 }

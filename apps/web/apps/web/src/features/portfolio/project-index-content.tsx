@@ -5,6 +5,7 @@ import {
 	PortfolioIndexSection,
 	PortfolioIndexShell,
 } from "@/features/portfolio/portfolio-index-shell";
+import { ProjectArchitecturePreview } from "@/features/portfolio/project-architecture-preview";
 import { usePortfolioProjects } from "@/features/portfolio/use-portfolio-projects";
 
 export function ProjectIndexContent() {
@@ -42,6 +43,7 @@ export function ProjectIndexContent() {
 								</div>
 								<h3>{project.title}</h3>
 								<p className="portfolio-index-description">{project.desc}</p>
+								<ProjectArchitecturePreview project={project} />
 								<dl>
 									<div>
 										<dt>

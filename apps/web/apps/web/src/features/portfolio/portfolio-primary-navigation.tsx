@@ -1,15 +1,16 @@
 import { Link, useRouter } from "@tanstack/react-router";
 
-export type PortfolioPrimaryRoute = "dashboard" | "projects" | "evidence";
+export type PortfolioPrimaryRoute = "dashboard" | "projects" | "evidence" | "open-source";
 
 const ITEMS: ReadonlyArray<{
 	id: PortfolioPrimaryRoute;
-	href: "/dashboard" | "/projects" | "/evidence";
+	href: "/dashboard" | "/projects" | "/evidence" | "/open-source";
 	label: string;
 }> = [
-	{ id: "dashboard", href: "/dashboard", label: "作品集首页" },
+	{ id: "dashboard", href: "/dashboard", label: "首页" },
 	{ id: "projects", href: "/projects", label: "项目" },
 	{ id: "evidence", href: "/evidence", label: "工作证明" },
+	{ id: "open-source", href: "/open-source", label: "开源共建" },
 ];
 
 export function PortfolioPrimaryNavigation({

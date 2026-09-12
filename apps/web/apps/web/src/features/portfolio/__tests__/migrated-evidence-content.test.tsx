@@ -3,6 +3,7 @@ import { describe, expect, it, vi } from "vitest";
 
 vi.mock("@tanstack/react-router", () => ({
 	Link: ({ children, to, ...props }: React.ComponentProps<"a"> & { to: string }) => <a href={to} {...props}>{children}</a>,
+	useRouter: () => undefined,
 }));
 
 import { EvidenceContent } from "../evidence-content";
@@ -28,7 +29,7 @@ describe("migrated Evidence content", () => {
 			expect(container).toHaveTextContent(heading);
 		}
 		const links = Array.from(container.querySelectorAll("a"));
-		for (const link of ["作品集首页", "项目主页", "工作证明"]) {
+		for (const link of ["首页", "项目主页", "工作证明"]) {
 			expect(links.some((anchor) => anchor.textContent === link)).toBe(true);
 		}
 	});

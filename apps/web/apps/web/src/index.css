@@ -1638,7 +1638,7 @@ header#top.portfolio-glass-bar {
 	.portfolio-primary-navigation {
 		width: 100%;
 		display: grid;
-		grid-template-columns: repeat(3, 1fr);
+		grid-template-columns: repeat(4, 1fr);
 		order: 3;
 	}
 	.portfolio-primary-navigation a {
@@ -1742,4 +1742,492 @@ header#top.portfolio-glass-bar {
 
 .portfolio-dashboard-main :is(a, button) {
 	text-decoration-color: rgba(159, 57, 55, 0.48);
+}
+
+/* Keep the torn-paper edge shallow on cards of every height. Percentage-based
+   vertical points scaled into large masks on long Evidence and resume cards. */
+.portfolio-dashboard-module-card,
+.portfolio-project-card,
+.portfolio-module-stack > [data-slot="card"],
+.portfolio-index-card,
+.portfolio-evidence-card,
+.portfolio-index-note {
+	clip-path: polygon(
+		0 8px,
+		8% 3px,
+		18% 7px,
+		30% 2px,
+		43% 6px,
+		56% 2px,
+		69% 7px,
+		82% 3px,
+		93% 7px,
+		100% 4px,
+		calc(100% - 3px) 24%,
+		100% 50%,
+		calc(100% - 3px) 76%,
+		100% calc(100% - 7px),
+		88% calc(100% - 3px),
+		74% calc(100% - 8px),
+		60% calc(100% - 2px),
+		46% calc(100% - 7px),
+		32% calc(100% - 2px),
+		18% calc(100% - 7px),
+		7% calc(100% - 3px),
+		0 calc(100% - 8px),
+		3px 75%,
+		0 50%,
+		3px 25%
+	);
+}
+
+/* Open-source index: compact PR rows using the Dashboard paper-glass language. */
+.portfolio-open-source-grid {
+	gap: 1rem;
+}
+
+.portfolio-open-source-card {
+	isolation: isolate;
+	overflow: hidden;
+	padding: 1.2rem;
+	background: linear-gradient(
+		145deg,
+		rgba(251, 248, 242, 0.54),
+		rgba(229, 232, 230, 0.3)
+	);
+	-webkit-backdrop-filter: blur(12px) saturate(0.76);
+	backdrop-filter: blur(12px) saturate(0.76);
+	box-shadow:
+		inset 0 1px rgba(255, 255, 255, 0.88),
+		0 8px 18px rgba(7, 29, 52, 0.1);
+	transition: transform 1s ease, box-shadow 1s ease, border-color 1s ease;
+}
+
+.portfolio-open-source-card::before,
+.portfolio-open-source-pr::before {
+	position: absolute;
+	inset: 0;
+	z-index: -1;
+	content: "";
+	pointer-events: none;
+	background: linear-gradient(
+		105deg,
+		transparent 8%,
+		rgba(182, 207, 199, 0.08) 30%,
+		rgba(255, 240, 218, 0.42) 47%,
+		rgba(188, 204, 218, 0.18) 62%,
+		transparent 84%
+	);
+	transform: translateX(-115%);
+	transition: transform 1s ease;
+}
+
+.portfolio-open-source-card:hover {
+	border-color: rgba(255, 255, 255, 0.92);
+	box-shadow:
+		inset 0 1px rgba(255, 255, 255, 0.94),
+		0 14px 26px rgba(7, 29, 52, 0.14);
+	transform: translateY(-4px);
+}
+
+.portfolio-open-source-card:hover::before,
+.portfolio-open-source-pr:hover::before {
+	transform: translateX(115%);
+}
+
+.portfolio-open-source-card h3 {
+	margin: 0;
+}
+
+.portfolio-open-source-repository {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.65rem;
+}
+
+.portfolio-open-source-repository-icon {
+	position: relative;
+	display: grid;
+	width: 2.5rem;
+	height: 2.5rem;
+	flex: none;
+	place-items: center;
+	overflow: hidden;
+	border: 1px solid rgba(39, 65, 74, 0.2);
+	border-radius: 0.65rem;
+	background: rgba(224, 224, 212, 0.68);
+	color: #9f3937;
+	box-shadow: inset 0 1px rgba(255, 255, 255, 0.78);
+}
+
+.portfolio-open-source-repository-icon img {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+
+.portfolio-open-source-card > p {
+	margin-top: 0.55rem;
+}
+
+.portfolio-open-source-pr-list {
+	display: grid;
+	gap: 0.55rem;
+	margin-top: 0.9rem;
+}
+
+.portfolio-open-source-pr {
+	position: relative;
+	isolation: isolate;
+	display: grid;
+	grid-template-columns: minmax(7.5rem, 0.58fr) minmax(0, 1.7fr) auto;
+	align-items: center;
+	gap: 0.75rem;
+	overflow: hidden;
+	border: 1px solid rgba(114, 101, 82, 0.2);
+	padding: 0.68rem 0.78rem;
+	background: linear-gradient(
+		145deg,
+		rgba(251, 248, 242, 0.32),
+		rgba(232, 233, 228, 0.16)
+	);
+	-webkit-backdrop-filter: blur(7px) saturate(0.74);
+	backdrop-filter: blur(7px) saturate(0.74);
+	clip-path: polygon(
+		0 4px, 12% 1px, 27% 4px, 44% 1px, 62% 4px, 80% 1px, 100% 3px,
+		calc(100% - 2px) 50%, 100% calc(100% - 4px), 78% calc(100% - 1px),
+		55% calc(100% - 4px), 30% calc(100% - 1px), 0 calc(100% - 3px), 2px 50%
+	);
+	box-shadow: inset 0 1px rgba(255, 255, 255, 0.68);
+	transition: transform 1s ease, background-color 1s ease, border-color 1s ease;
+}
+
+.portfolio-open-source-pr:hover {
+	border-color: rgba(159, 57, 55, 0.28);
+	transform: translateY(-2px);
+}
+
+.portfolio-open-source-pr-heading {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 0.5rem;
+	font-size: 0.78rem;
+}
+
+.portfolio-open-source-pr-heading span {
+	flex: none;
+	font-size: 0.68rem;
+	font-weight: 800;
+}
+
+.portfolio-open-source-pr-summary {
+	margin: 0;
+	color: #344252;
+	font-size: 0.76rem;
+	line-height: 1.5;
+}
+
+.portfolio-index-card nav.portfolio-open-source-pr-links {
+	justify-content: flex-end;
+	flex-wrap: nowrap;
+	gap: 0.35rem;
+	margin-top: 0;
+}
+
+.portfolio-index-card nav.portfolio-open-source-pr-links a {
+	min-height: 2rem;
+	padding: 0 0.55rem;
+	font-size: 0.68rem;
+	white-space: nowrap;
+}
+
+@media (max-width: 767px) {
+	.portfolio-open-source-grid {
+		gap: 0.8rem;
+	}
+
+	.portfolio-open-source-card {
+		padding: 1rem;
+	}
+
+	.portfolio-open-source-pr {
+		grid-template-columns: 1fr;
+		gap: 0.4rem;
+		padding: 0.7rem;
+	}
+
+	.portfolio-index-card nav.portfolio-open-source-pr-links {
+		justify-content: flex-start;
+	}
+}
+
+/* Shared capability constellation for the open-source index. */
+.open-source-particle-backdrop {
+  position: fixed;
+  z-index: 0;
+  inset: 72px 0 0;
+  overflow: hidden;
+  pointer-events: none;
+  opacity: 0.5;
+  background:
+    radial-gradient(circle at 22% 18%, rgb(184 209 202 / 26%), transparent 34%),
+    radial-gradient(circle at 78% 36%, rgb(211 160 140 / 18%), transparent 30%);
+  mask-image: linear-gradient(to bottom, transparent 0, #000 10%, #000 76%, transparent 100%);
+}
+
+.open-source-particle-backdrop__canvas,
+.open-source-particle-backdrop__static {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.open-source-particle-backdrop__canvas {
+  opacity: 0;
+  transition: opacity 1s ease;
+}
+
+.open-source-particle-backdrop[data-scene-state="active"] .open-source-particle-backdrop__canvas {
+  opacity: 0.72;
+}
+
+.open-source-particle-backdrop__static {
+  background-image:
+    radial-gradient(circle, rgb(66 105 112 / 26%) 0 1px, transparent 1.7px),
+    radial-gradient(circle, rgb(174 80 65 / 18%) 0 1px, transparent 1.8px);
+  background-position: 0 0, 37px 51px;
+  background-size: 92px 92px, 131px 131px;
+  opacity: 0.5;
+}
+
+.open-source-particle-backdrop[data-scene-state="active"] .open-source-particle-backdrop__static {
+  opacity: 0.16;
+}
+
+.portfolio-page-shell:has(.open-source-particle-backdrop) {
+  position: relative;
+  isolation: isolate;
+}
+
+.portfolio-page-shell:has(.open-source-particle-backdrop) > *:not(.open-source-particle-backdrop) {
+  position: relative;
+  z-index: 1;
+}
+
+.portfolio-index-surface:has(.open-source-particle-backdrop) {
+  position: relative;
+  isolation: isolate;
+}
+
+.portfolio-index-main:has(> .open-source-particle-backdrop) {
+  position: relative;
+  z-index: 1;
+}
+
+.portfolio-index-main:has(> .open-source-particle-backdrop) > *:not(.open-source-particle-backdrop),
+.portfolio-index-surface:has(.open-source-particle-backdrop) > header,
+.portfolio-index-surface:has(.open-source-particle-backdrop) > footer,
+.portfolio-index-surface:has(.open-source-particle-backdrop) > .portfolio-glass-mobile-nav {
+  position: relative;
+  z-index: 1;
+}
+
+@media (max-width: 760px), (prefers-reduced-motion: reduce) {
+  .open-source-particle-backdrop {
+    position: absolute;
+    opacity: 0.34;
+  }
+
+  .open-source-particle-backdrop__canvas {
+    display: none;
+  }
+}
+
+/* Static-first project architecture previews; Archify mounts only on demand. */
+.portfolio-architecture-preview {
+	position: relative;
+	margin: 0.65rem 0 0.2rem;
+}
+
+.portfolio-architecture-preview__trigger {
+	position: relative;
+	display: block;
+	width: 100%;
+	aspect-ratio: 16 / 9;
+	overflow: hidden;
+	border: 1px solid rgb(136 154 158 / 42%);
+	background: rgb(238 241 234 / 62%);
+	cursor: zoom-in;
+	clip-path: polygon(0 0, 97% 0, 100% 8%, 100% 100%, 3% 100%, 0 92%);
+}
+
+.portfolio-architecture-preview__trigger img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	object-position: center;
+	filter: saturate(0.78) contrast(0.94);
+	transition: transform 1s ease, filter 1s ease;
+}
+
+.portfolio-architecture-preview__shade {
+	position: absolute;
+	inset: 0;
+	background: linear-gradient(180deg, transparent 42%, rgb(11 42 55 / 72%));
+	opacity: 0.76;
+	transition: opacity 1s ease;
+}
+
+.portfolio-architecture-preview__label {
+	position: absolute;
+	right: 0.7rem;
+	bottom: 0.62rem;
+	display: inline-flex;
+	align-items: center;
+	gap: 0.4rem;
+	color: #f7f1e5;
+	font-size: 0.7rem;
+	font-weight: 750;
+	letter-spacing: 0.08em;
+}
+
+.portfolio-architecture-preview__trigger:hover img,
+.portfolio-architecture-preview__trigger:focus-visible img {
+	transform: scale(1.035);
+	filter: saturate(1) contrast(1);
+}
+
+.portfolio-architecture-preview__trigger:hover .portfolio-architecture-preview__shade,
+.portfolio-architecture-preview__trigger:focus-visible .portfolio-architecture-preview__shade {
+	opacity: 0.54;
+}
+
+.portfolio-architecture-preview figcaption {
+	margin-top: 0.35rem;
+	color: #69777c;
+	font-family: "IBM Plex Mono", "SFMono-Regular", monospace;
+	font-size: 0.58rem;
+	letter-spacing: 0.13em;
+}
+
+.portfolio-architecture-dialog {
+	position: fixed;
+	z-index: 120;
+	inset: 0;
+	display: grid;
+	width: 100vw;
+	max-width: none;
+	height: 100dvh;
+	max-height: none;
+	margin: 0;
+	border: 0;
+	place-items: center;
+	padding: clamp(0.65rem, 2vw, 1.5rem);
+	background: transparent;
+}
+
+.portfolio-architecture-dialog::backdrop {
+	background: rgb(18 35 43 / 72%);
+	backdrop-filter: blur(18px) saturate(0.82);
+}
+
+.portfolio-architecture-dialog__panel {
+	display: grid;
+	grid-template-rows: auto minmax(0, 1fr);
+	width: min(96vw, 1480px);
+	height: min(94vh, 960px);
+	overflow: hidden;
+	border: 1px solid rgb(239 236 222 / 62%);
+	background: #e8e9df;
+	box-shadow: 0 32px 90px rgb(10 28 36 / 42%);
+	clip-path: polygon(0 0, 98.8% 0, 100% 2.2%, 100% 100%, 1.2% 100%, 0 97.8%);
+}
+
+.portfolio-architecture-dialog__panel > header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 1rem;
+	padding: 0.75rem 0.9rem 0.75rem 1.1rem;
+	border-bottom: 1px solid rgb(78 103 110 / 24%);
+	background: rgb(241 239 229 / 94%);
+}
+
+.portfolio-architecture-dialog__panel header span {
+	color: #a82b35;
+	font-family: "IBM Plex Mono", "SFMono-Regular", monospace;
+	font-size: 0.58rem;
+	letter-spacing: 0.16em;
+}
+
+.portfolio-architecture-dialog__panel h2 {
+	margin: 0.18rem 0 0;
+	color: #163545;
+	font-family: "Noto Serif SC", serif;
+	font-size: clamp(0.95rem, 2vw, 1.25rem);
+}
+
+.portfolio-architecture-dialog__panel nav {
+	display: flex;
+	align-items: center;
+	gap: 0.45rem;
+}
+
+.portfolio-architecture-dialog__panel nav a,
+.portfolio-architecture-dialog__panel nav button {
+	display: inline-flex;
+	min-height: 2.35rem;
+	align-items: center;
+	justify-content: center;
+	gap: 0.3rem;
+	border: 1px solid rgb(116 133 137 / 42%);
+	background: rgb(255 255 255 / 58%);
+	color: #173747;
+	font-size: 0.7rem;
+	font-weight: 700;
+}
+
+.portfolio-architecture-dialog__panel nav a {
+	padding: 0 0.78rem;
+}
+
+.portfolio-architecture-dialog__panel nav button {
+	width: 2.35rem;
+	cursor: pointer;
+}
+
+.portfolio-architecture-dialog__panel iframe {
+	width: 100%;
+	height: 100%;
+	border: 0;
+	background: #e9ebe6;
+}
+
+@media (max-width: 640px) {
+	.portfolio-architecture-dialog {
+		padding: 0;
+	}
+
+	.portfolio-architecture-dialog__panel {
+		width: 100vw;
+		height: 100dvh;
+		padding-bottom: env(safe-area-inset-bottom);
+		clip-path: none;
+	}
+
+	.portfolio-architecture-dialog__panel > header {
+		padding:
+			max(0.62rem, env(safe-area-inset-top))
+			max(0.7rem, env(safe-area-inset-right))
+			0.62rem
+			max(0.7rem, env(safe-area-inset-left));
+	}
+
+	.portfolio-architecture-dialog__panel nav a {
+		padding: 0 0.55rem;
+	}
 }
