@@ -1,7 +1,9 @@
-import { createFileRoute } from "@tanstack/react-router";
-
-import { EvidenceIndexContent } from "@/features/portfolio/evidence-index-content";
+import { createFileRoute, Outlet } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/evidence")({
-	component: EvidenceIndexContent,
+	component: EvidenceRoute,
 });
+
+function EvidenceRoute() {
+	return <Outlet />;
+}

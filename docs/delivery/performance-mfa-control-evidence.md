@@ -2,7 +2,7 @@
 
 ## 结论与证据边界
 
-控制面已实现公开只读、共享 TOTP、多设备注册、失败锁定、同源、单次 nonce、幂等、固定 GitHub workflow、HMAC 回调、D1 状态与不可变 R2 快照。Cloudflare 上的 D1/R2、三个秘密名称和禁用态 Worker 已核对；本文暂不声称真实 GitHub 调度或 AWS 启停闭环完成。
+控制面已实现公开只读、共享 TOTP、多设备注册、失败锁定、同源、单次 nonce、幂等、固定 GitHub workflow、HMAC 回调、D1 状态与不可变 R2 快照。生产 D1 当前为安全停止态；由于 AWS 账户暂时被封，固定 GitHub workflow 已重新禁用，所有 AWS 在线验证与真实启停闭环转为恢复后的 Todo。R2 尚无可公开读回的最新可信快照；本文不声称 TOTP 驱动的 AWS 启停闭环已经完成。
 
 ## 架构
 
@@ -54,8 +54,8 @@ sequenceDiagram
 - 最大运行时间：45 分钟。
 - 预计增量费用上限：USD 0.20。
 - 单项目、单实例；上一次 cleanup 未验证时拒绝启动。
-- Cron 每五分钟处理过期运行并派发固定 stop 动作。
-- 当前未启动 AWS 资源，未升级 AWS 或 Cloudflare 套餐。
+- Cloudflare Cron 每五分钟处理过期运行并派发固定 stop 动作；GitHub workflow 的 schedule 只作为安全兜底。
+- 当前未启动 AWS 资源，未升级 AWS 或 Cloudflare 套餐；AWS 账户恢复前不执行 OIDC、部署、采集或清理工作流。
 
 ## 必需配置
 
@@ -80,3 +80,12 @@ Bindings：`CONTROL_DB`、`SNAPSHOTS`。
 - 当前安全 bootstrap 仍有缺口：固定 `preflight` 会验证 OIDC 与项目零残留，但尚未向无状态的中央 D1 发布专用 `stopped + cleanupVerified + zeroResidualVerified` 初始化回调，因此生产状态仍不能安全进入可启动状态。
 - Worker 默认域名硬化补丁 PR #25 已通过远端 Gate，但尚未合并到主分支；本地候选已同步 `workers_dev=false` 与 `preview_urls=false`，Worker 52/52 和类型检查通过。重新部署前仍必须先将该补丁正式纳入主分支，避免默认域名重新暴露。
 - 本轮未执行 AWS、Cloudflare 或 GitHub 写操作；AWS CLI 会话与 Cloudflare 非交互 Token 均不可用，因此账户预算、实时 OIDC/IAM、Worker 变量和 D1/R2 库存仍标记为待补验。
+
+## 2026-09-12 生产只读复核
+
+- 生产状态接口返回 HTTP 200，`controlState=stopped`、`dataMode=historical`、`cleanupVerified=true`、`maximumRuntimeMinutes=45`、`estimatedCostUsd=0.20`。
+- 生产快照接口仍返回 HTTP 404 `verified_snapshot_not_found`，因此静态可信历史卡不能替代 R2 最新指针的闭环证明。
+- BabySteps 固定 workflow `aws-performance-control.yml` 曾恢复；`preflight` Run `34684132902` 在配置 AWS OIDC 前被预算守卫阻断，原因是 `PerformanceCluster` 临时例外已于 2026-09-02 到期。获知 AWS 账户被封后，workflow 已重新禁用。
+- 本地 Worker 10 个测试文件、90 项通过；Web 29 个测试文件、85 项通过；Worker 与全工作区 TypeScript 检查通过。
+- AWS CLI 会话已过期且 AWS 账户暂时被封；账户、预算、共享 Foundation 和零残留实时读回均延期至账户恢复后。
+- 本轮已恢复 workflow 并运行 `preflight`；校验在 `validate-performance-budget.mjs` 阶段安全失败，未取得 AWS 凭据，未创建 AWS 资源，也未写入 Cloudflare D1/R2 状态。

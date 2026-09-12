@@ -2,7 +2,7 @@
 
 > 认证方案更新：本文保留早期 Cloudflare Access/JWT 设计讨论，不能作为当前控制认证实现的证明。当前实现以共享 RFC 6238 TOTP、多设备注册、失败锁定、单次 nonce 和同源校验为准，权威边界见 `performance-mfa-control-evidence.md`。在安全 bootstrap、真实 GitHub App dispatch、TOTP start/stop、HMAC 回调、R2 快照和 TTL 停机完成同一轮生产闭环前，中央控制面不得标记为已上线。
 >
-> 状态：本地页面、D1 状态机、R2 快照契约和公开只读 Worker 已实现；BabySteps AWS 临时性能链已通过 Run 32917816824 完成一次真实云端闭环并精确清理。固定启停控制、Cloudflare Access 和 GitHub App 回调尚未上线，控制写入口继续失败关闭。
+> 状态：页面、D1 状态机、R2 快照契约、TOTP 控制、固定 GitHub App dispatch、HMAC 回调和 TTL 对账均已实现。BabySteps 已有独立 AWS 临时性能链与精确清理历史证据；中央控制面当前安全停在 `stopped`。由于 AWS 账户暂时被封，固定 workflow 已禁用，OIDC、真实启停、R2 最新快照和零残留复核均转为账户恢复后的 Todo。
 
 ## 1. 目标与验收边界
 
@@ -19,26 +19,34 @@
 | --- | --- | --- | --- | --- |
 | 性能 SDK 数据可视化 | 统一的实时、历史、不可用三态数据模型与指标卡 | `apps/web/apps/web/src/features/performance/performance-types.ts`、`performance-state.ts`、`performance-status-card.tsx` | 状态/快照单元测试；Web 全量测试通过 | 本地已实现 |
 | AWS 停止时保留上次结果 | 仅展示校验通过的最后快照；无快照时显示可信空状态，不生成假数据 | `apps/web/apps/web/src/features/performance/performance-state.ts` | 非法时间、提交哈希、摘要、样本率、指标顺序的拒绝测试 | 本地已实现 |
-| Dashboard 与 Evidence 都有成本入口 | 两页复用同一状态卡并链接到单一受保护控制面 | `dashboard-content.tsx`、`evidence-content.tsx`、`performance-control-content.tsx` | 组件与页面集成测试 | 本地已实现；云端控制未部署 |
+| Dashboard 与 Evidence 都有成本入口 | 两页复用同一状态卡并链接到单一受保护控制面 | `dashboard-content.tsx`、`evidence-content.tsx`、`performance-control-content.tsx` | 组件与页面集成测试；生产控制路由 HTTP 200 | 已部署；预算批准过期时失败关闭 |
 | 完整架构与流程说明 | 运行架构、Actions/预览/灰度、启停时序、信任与费用边界 | `performance-evidence-diagrams.tsx`、本文 | Evidence 页面集成测试；本文版本记录 | 本地已实现 |
-| Cloudflare 状态与快照接口 | D1 状态/审计、R2 不可变快照、摘要校验、ETag 与失败关闭写入口 | `apps/web/apps/performance-control-worker/src/`、`migrations/0001_performance_control.sql` | Worker 3 个测试文件、13 个测试通过；类型检查通过 | 本地已实现 |
-| GitHub Actions + AWS + Cloudflare 控制 | Access 保护控制面，GitHub App 触发固定工作流，OIDC 获取短期 AWS 身份 | 本文第 4、5、6 节；云端实现待接入 | 尚无本项目真实云端闭环 Run | 设计已确认，未部署 |
-| 费用可控且不破坏共享资源 | 临时资源按项目前缀清理；复用共享 VPC/NAT/RDS/OIDC；共享资源显式保护 | 本文第 8、9 节 | 已核实共享基础设施清单；真实清理证据待运行 | 设计已确认 |
+| Cloudflare 状态与快照接口 | D1 状态/审计、R2 不可变快照、摘要校验、ETag 与失败关闭写入口 | `apps/web/apps/performance-control-worker/src/`、`migrations/0001_performance_control.sql` | Worker 10 个测试文件、90 项通过；类型检查通过 | 已部署；R2 latest 待生成 |
+| GitHub Actions + AWS + Cloudflare 控制 | TOTP 控制面经 GitHub App 触发固定工作流，OIDC 获取短期 AWS 身份 | 本文第 4、5、6 节；BabySteps 固定 workflow | 合同与本地 Gate 已通过；Run `34684132902` 在 OIDC 前拒绝过期预算批准 | 已实现；最终闭环待运行 |
+| 费用可控且不破坏共享资源 | 临时资源按项目前缀清理；复用共享 VPC/NAT/RDS/OIDC；共享资源显式保护 | 本文第 8、9 节 | 历史 Run 已证明精确清理；2026-09-12 实时 AWS 读回待认证 | 历史已验证；本轮待补验 |
 
 ## 3. 当前可验证结果
 
 | 验证项 | 观察结果 |
 | --- | --- |
-| Web 单元/集成测试 | 6 个测试文件、15 个测试通过 |
-| Web 构建与类型检查 | Vite 构建和 TypeScript 检查通过 |
-| Worker 状态机、快照与只读 API | 3 个测试文件、13 个测试通过；TypeScript 检查通过 |
-| Worker 写入口安全状态 | 无论单个环境变量如何配置，当前 POST 控制入口均失败关闭并返回 503 |
+| Web 单元/集成测试 | 29 个测试文件、85 项通过（2026-09-12） |
+| Web 构建与类型检查 | 全工作区 TypeScript 检查通过；生产构建、14 条静态路由预渲染及 known=200/unknown=404 语义检查通过（2026-09-12） |
+| Worker 状态机、快照、readiness 与控制 API | 10 个测试文件、90 项通过；TypeScript 检查通过（2026-09-12） |
+| Worker 写入口安全状态 | workflow 未就绪、readiness 过期或预算批准过期时，控制链失败关闭且不创建 AWS 资源 |
 | 页面数据真实性 | 无可信实时数据和无可信快照时显示空状态，不回退到示例指标 |
-| 控制按钮 | 在云端控制未部署前保持禁用，并显示“云端控制尚未部署” |
+| 控制按钮 | workflow 未就绪时保持禁用，并明确显示 dispatch readiness 原因 |
 | 响应式与可访问性检查 | 390 px 与 1440 px 视口均无横向溢出；Evidence 返回入口最小高度为 44 px |
 | 公开内容安全检查 | 页面源码与公开 Evidence 未发现 AWS 账号 ID、访问密钥、私钥、NAT/VPC 实例 ID 或本机绝对路径 |
 | 对话设计收录 | 本轮确认的运行架构、控制时序、费用取舍、安全边界和非目标已归并到第 4—13 节 |
-| 云端启停闭环 | 尚未执行；不得标记为完成 |
+| 云端启停闭环 | 既有 AWS 采集与清理已有独立历史 Run；AWS 被封期间暂停，TOTP 驱动的 start -> R2 snapshot -> stop/TTL 闭环列入恢复后 Todo |
+
+### 2026-09-12 非 AWS 发布 Gate
+
+- 修复 `/evidence` 父路由未渲染 `Outlet` 导致项目 Evidence 深链被索引页遮挡的问题，并补充独立 Evidence 索引路由。
+- 性能 Evidence 深链在 390 px 与 1440 px 均展示完整架构和“进入成本控制”入口，根级横向溢出为 0，浏览器控制台错误为 0。
+- 生产构建完成 14 条静态首屏路由；已知路由返回 200、未知路由返回 404 的语义检查通过。
+- 10 个公开项目与 Evidence 链接中，9 个页面返回 HTTP 200；Portfolio Sync 根路径返回 404，因此项目主页已改为真实 GitHub Worker 实现目录，其 `/health` 与 `/projects.json` API 均返回 HTTP 200。
+- 构建产物与本轮 Evidence 文档未检出 AWS Access Key、私钥正文、明文 Secret 赋值等敏感模式。
 
 ## 4. 运行架构
 
@@ -186,7 +194,7 @@ sequenceDiagram
 7. Stop Workflow 先禁止新上报，记录主队列/DLQ 数量和最终快照，再停止任务、删除项目 Schema/Stack，并验证空集。
 8. Cloudflare Cron 定期对照 D1、GitHub Run 和 AWS 只读状态，处理超时、孤儿运行和 TTL 自动停止。
 
-其中第 1、3、6 项的数据契约、状态机、公开只读接口与失败关闭写入口已经在本地 Worker 落地；第 2、4、5、7、8 项涉及 Access、GitHub App、Actions 或真实 AWS 状态，当前仍是已确认设计，必须等真实部署和 Run 证据后才能改成完成。
+上述八项均已有实现；生产最终门槛是重新启用固定 workflow、通过只读 `preflight`，再由 TOTP 控制面完成一次 start、快照、stop/TTL 与零残留回读。
 
 ## 7. 状态、审计与快照契约
 
@@ -299,7 +307,7 @@ snapshots/<projectSlug>/latest.json
 4. 一次停止/TTL：禁用入口、排空记录、最终快照、项目资源空集和共享资源未变；
 5. 每张截图记录“看哪里”和“证明什么”，并在清单中保存文件名、字节数和 SHA-256。
 
-当前尚未完成真实云端闭环，因此上述五项不能标为已完成。
+独立 AWS 运行已覆盖启动、采集、故障回退和精确清理；中央 TOTP 控制面尚未把这些步骤串成同一轮生产闭环，因此上述五项仍不能整体标为完成。
 
 ## 12. Evidence 更新规则
 
