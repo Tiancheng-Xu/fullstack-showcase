@@ -15,3 +15,4 @@
 - [x] CAP-013: Remove duplicate capability-domain eyebrow labels and retain one clear module title plus subtitle.
 - [x] CAP-014: Raise the recruiter-facing minimum text size from 0.82rem to 0.92rem and preserve layout breathing room.
 - [x] CAP-015: Increase world-space Babylon cloud contrast and coverage so clouds remain visible while following camera direction.
+- [x] CAP-016: Repair release-gate tests for the intentionally removed Evidence nav item and strengthened Personal AI Agent recruiter narrative.

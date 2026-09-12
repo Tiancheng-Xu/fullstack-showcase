@@ -484,7 +484,7 @@ export const PORTFOLIO_PROJECTS: PortfolioProject[] = [
 		architectureAsset:
 			"architecture/personal-ai-agent.visual-check.1440x900.light.png",
 		title: "Personal AI Agent 模型训练与本地推理",
-		desc: "AI 智能客服与私有化模型交付。面向售前咨询、售后处理与技术问答，把领域模型训练、知识检索、业务工具和人工兜底组织成完整客服链路。",
+		desc: "AI 智能客服与私有化模型交付。已完成 Qwen3-8B 领域微调、量化与 Ollama 私有化运行，并以系统设计覆盖售前咨询、售后处理、技术问答、知识检索、业务工具和人工兜底的完整客服链路。",
 		summaryPoints: [
 			"训练链路：使用 LlamaFactory 对 Qwen3-8B 做 NF4 QLoRA 领域微调，完成 Adapter 合并、GGUF Q4_K_M 量化与 Ollama 私有化运行。",
 			"客服链路：以 BERT / 规则完成意图路由，经 Qwen Embedding、知识图谱 / RAG 检索后生成回答，并通过 Tool Calling 连接价格、退换与业务规则。",
