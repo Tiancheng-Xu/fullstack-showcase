@@ -43,6 +43,13 @@ export function ProjectIndexContent() {
 								</div>
 								<h3>{project.title}</h3>
 								<p className="portfolio-index-description">{project.desc}</p>
+								{project.summaryPoints ? (
+									<ul className="portfolio-index-highlights">
+										{project.summaryPoints.map((point) => (
+											<li key={point}>{point}</li>
+										))}
+									</ul>
+								) : null}
 								<ProjectArchitecturePreview project={project} />
 								<dl>
 									<div>

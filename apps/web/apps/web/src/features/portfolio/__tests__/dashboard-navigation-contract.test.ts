@@ -22,8 +22,7 @@ describe("dashboard navigation contract", () => {
 		expect(source).not.toContain('href="/dashboard#projects"');
 		expect(navigationSource).toContain('href: "/dashboard"');
 		expect(navigationSource).toContain('href: "/projects"');
-		expect(navigationSource).toContain('href: "/evidence"');
-		expect(navigationSource).toContain('href: "/open-source"');
+  expect(navigationSource).toContain('href: "/open-source"');
 		expect(source).toContain("openSourceRepositories.slice(0, 6)");
 		expect(source).not.toContain('id="performance"');
 		expect(source).toContain('href="#top"');

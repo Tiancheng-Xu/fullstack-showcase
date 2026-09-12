@@ -210,7 +210,10 @@ export function TechnologyCapabilityMap() {
         <article className="technology-map__identity" aria-label="个人能力定位">
           <p className="technology-map__identity-kicker">FULL STACK · AI AGENT</p>
           <h3>徐天成</h3>
-          <p>全栈 · AI Agent · Cloud / Trust 工程师</p>
+          <p className="technology-map__identity-role">
+            <span>全栈 · AI Agent</span>
+            <span>Cloud / Trust 工程师</span>
+          </p>
           <small>BUILD · CONNECT · VERIFY</small>
         </article>
 
@@ -230,7 +233,6 @@ export function TechnologyCapabilityMap() {
                 className={`technology-map__domain technology-map__domain--${domain.tone}`}
               >
                 <div className="technology-map__domain-title technology-map__domain-heading">
-                  <span>{domain.eyebrow}</span>
                   <div>
                     <h3>{domain.title}</h3>
                     <p>{domain.summary}</p>

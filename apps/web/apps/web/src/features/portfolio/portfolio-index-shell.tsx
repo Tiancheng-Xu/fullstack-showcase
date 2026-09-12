@@ -1,4 +1,4 @@
-import { Code2, PenTool } from "lucide-react";
+import { PenTool } from "lucide-react";
 import type { PropsWithChildren, ReactNode } from "react";
 
 import { PORTFOLIO_FRAME_CLASS } from "@/features/portfolio/portfolio-layout";
@@ -6,6 +6,7 @@ import {
 	PortfolioPrimaryNavigation,
 	type PortfolioPrimaryRoute,
 } from "@/features/portfolio/portfolio-primary-navigation";
+import { PortfolioGithubLink } from "@/features/portfolio/portfolio-github-link";
 
 export function PortfolioIndexShell({
 	children,
@@ -38,16 +39,7 @@ export function PortfolioIndexShell({
 						</span>
 					</a>
 					<PortfolioPrimaryNavigation current={current} />
-					<a
-						aria-label="Tiancheng Xu GitHub"
-						className="portfolio-index-github"
-						href="https://github.com/Tiancheng-Xu"
-						rel="noreferrer"
-						target="_blank"
-					>
-						<Code2 aria-hidden="true" size={18} />
-						<span>GitHub</span>
-					</a>
+					<PortfolioGithubLink />
 				</div>
 			</header>
 

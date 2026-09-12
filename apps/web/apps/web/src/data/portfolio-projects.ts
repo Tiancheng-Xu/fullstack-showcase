@@ -45,6 +45,7 @@ export type PortfolioProject = {
 	id: string;
 	title: string;
 	desc: string;
+	summaryPoints?: string[];
 	status: "已完成" | "进行中";
 	progress: number;
 	architecture: string;
@@ -76,6 +77,11 @@ export const PORTFOLIO_PROJECTS: PortfolioProject[] = [
 			"architecture/agent-market.visual-check.1440x900.light.png",
 		title: "Agent Market",
 		desc: "Aladdin · AI Agent 交易与任务分发平台。面向众包交易场景，覆盖任务自动拆解、候选 Agent 过滤与评分、人工或自动选定、多阶段生产分发、暂停恢复和质量评测。",
+		summaryPoints: [
+			"业务链路：Queen 将需求拆成 DAG，候选 Agent 经标签硬过滤、向量相关度与信誉评分排序，再支持人工确认或自动选定。",
+			"执行链路：Agent 分阶段生产，Judge 结合规则与 LLM 多维评测；不合格结果进入 Repair，最终由 Final Arbiter 汇总交付。",
+			"工程链路：Node / Hono、Python / LangGraph 与 Go 执行器协作，以 PostgreSQL Checkpoint、队列 / DLQ、幂等和版本冲突保护支撑暂停恢复。",
+		],
 		status: "已完成",
 		progress: 100,
 		architecture:
@@ -124,6 +130,11 @@ export const PORTFOLIO_PROJECTS: PortfolioProject[] = [
 			"architecture/performance-observability-control.visual-check.1440x900.light.png",
 		title: "性能观测与成本控制",
 		desc: "以 BabySteps 完成 AWS 临时性能观测、真实聚合与精确清理，并保留可信历史快照和可追溯 Evidence。",
+		summaryPoints: [
+			"采集链路：浏览器上报 Core Web Vitals 与资源耗时，临时观测服务按应用聚合分位值、样本量和错误事件。",
+			"控制链路：受保护控制面通过固定工作流启停观测，使用 nonce、幂等键与 HMAC 回调限制重复执行和伪造状态。",
+			"成本链路：运行前做预算检查，停止后封入口、清理项目资源并固化不可变历史快照；AWS 当前停用，相关恢复工作保留为 TODO。",
+		],
 		status: "进行中",
 		progress: 85,
 		architecture:
@@ -354,6 +365,11 @@ export const PORTFOLIO_PROJECTS: PortfolioProject[] = [
 			"architecture/shared-evidence-verifier.visual-check.1440x900.light.png",
 		title: "Shared Evidence Verifier",
 		desc: "以 GitHub OIDC、AWS 最小权限 Lambda 与公开语义检查，串行验证多个项目的 Production、Evidence 和精确版本边界；Run 33290528028 完成 6/6 串行项目检查。",
+		summaryPoints: [
+			"身份链路：GitHub Actions 通过 OIDC 换取绑定仓库与 main 的短期权限，不保存长期云凭据。",
+			"验证链路：按固定清单串行检查生产地址、HTTP 语义、Evidence 入口与版本边界，并对失败结果分级。",
+			"输出链路：每个项目生成独立脱敏 Artifact，限制响应体、重试与日志字段；该服务只验证公开交付面，不替代业务功能测试。",
+		],
 		status: "已完成",
 		progress: 100,
 		architecture:
@@ -468,7 +484,12 @@ export const PORTFOLIO_PROJECTS: PortfolioProject[] = [
 		architectureAsset:
 			"architecture/personal-ai-agent.visual-check.1440x900.light.png",
 		title: "Personal AI Agent 模型训练与本地推理",
-		desc: "AI 智能客服与私有化模型交付。已完成 Qwen3-8B 领域微调、量化和 Ollama 离线运行；以系统设计覆盖意图识别、知识图谱 / RAG、Tool Calling、多轮问答与低置信度转人工。",
+		desc: "AI 智能客服与私有化模型交付。已完成 Qwen3-8B 领域微调、量化与 Ollama 私有化运行，并以系统设计覆盖售前咨询、售后处理、技术问答、知识检索、业务工具和人工兜底的完整客服链路。",
+		summaryPoints: [
+			"训练链路：使用 LlamaFactory 对 Qwen3-8B 做 NF4 QLoRA 领域微调，完成 Adapter 合并、GGUF Q4_K_M 量化与 Ollama 私有化运行。",
+			"客服链路：以 BERT / 规则完成意图路由，经 Qwen Embedding、知识图谱 / RAG 检索后生成回答，并通过 Tool Calling 连接价格、退换与业务规则。",
+			"兜底链路：保留多轮上下文，对低置信度、敏感问题和检索无答案场景转人工，兼顾响应质量、隐私与可维护性。",
+		],
 		status: "已完成",
 		progress: 100,
 		architecture:
@@ -509,6 +530,11 @@ export const PORTFOLIO_PROJECTS: PortfolioProject[] = [
 			"architecture/fullstack-showcase.visual-check.1440x900.light.png",
 		title: "Showcase Dashboard",
 		desc: "汇总真实项目、项目自有 Evidence、自动同步状态与静态首屏交付的个人作品看板。",
+		summaryPoints: [
+			"内容链路：以人工审核索引定义项目身份、定位与链接，再合并 GitHub App 推送的发布清单，避免自动同步污染核心叙事。",
+			"渲染链路：先输出可读 SSG 页面，水合后接管动态数据，Babylon 与 Archify 等重型交互按需在浏览器加载。",
+			"发布链路：Cloudflare Pages 承载生产与预览，兼容旧域名重定向、项目深链和真实 404，并保留静态回退。",
+		],
 		status: "已完成",
 		progress: 100,
 		architecture:
@@ -534,6 +560,11 @@ export const PORTFOLIO_PROJECTS: PortfolioProject[] = [
 			"architecture/github-profile-studio.visual-check.1440x900.light.png",
 		title: "GitHub Profile Studio",
 		desc: "本地优先的 GitHub 公开资料工作台，前后端与双运行时已完成，公网部署仍在规划。",
+		summaryPoints: [
+			"产品链路：读取 GitHub 公开资料，在本地工作台编辑显示名称、简介与项目呈现，再以幂等写入保存草稿。",
+			"运行链路：React / TanStack 前端共享一套 API 契约，可切换 Hono / Node 或 Go 后端，SQLite / Drizzle 负责本地持久化。",
+			"安全链路：访问令牌留在服务端与 macOS 钥匙串，浏览器只接触白名单字段；公网部署仍是规划状态。",
+		],
 		status: "进行中",
 		progress: 85,
 		architecture:
@@ -555,6 +586,11 @@ export const PORTFOLIO_PROJECTS: PortfolioProject[] = [
 			"architecture/portfolio-sync.visual-check.1440x900.light.png",
 		title: "Portfolio Sync",
 		desc: "GitHub App 与 Cloudflare Worker 驱动的作品集同步系统，把真实项目仓库的发布清单自动汇总到 Dashboard。",
+		summaryPoints: [
+			"发现链路：只收录声明 Baby2B 发布清单与 Evidence 地址的仓库，普通实验、模板和空仓库不会进入作品集。",
+			"同步链路：Webhook 通过 HMAC 验签后触发即时更新，GitHub App 使用短期只读 Installation Token 拉取清单。",
+			"一致性链路：Cloudflare Worker / KV 保存聚合结果，30 分钟定时全量刷新补齐遗漏，主站保留人工审核的静态回退。",
+		],
 		status: "已完成",
 		progress: 100,
 		architecture:
@@ -582,6 +618,11 @@ export const PORTFOLIO_PROJECTS: PortfolioProject[] = [
 		id: "tc-workflow",
 		title: "TC Flow 2.1",
 		desc: "本地 Skill 与工程工作流，把 Feature 开发拆成可恢复、可审查、可阻断的 N1-N8 交付流程。",
+		summaryPoints: [
+			"规划链路：从 Contract 与 Context 开始，明确范围、验收标准、模型路由以及 Agent / Skill / Tool 分工。",
+			"执行链路：N1-N8 节点串联实现、审查、P0 / PII / Fallback / Human Gate 与 Feature QA，问题可回到对应节点修复。",
+			"恢复链路：Checkpoint、事件流与 RunResult 持久化过程状态，使长任务在中断、续跑和多人协作时仍可追踪。",
+		],
 		status: "已完成",
 		progress: 100,
 		architecture:
@@ -605,6 +646,11 @@ export const PORTFOLIO_PROJECTS: PortfolioProject[] = [
 		architectureAsset: "architecture/babysteps.visual-check.1440x900.light.png",
 		title: "BabySteps",
 		desc: "家庭成长 DApp，并以真实生产链验证 Edge SSR、安全摘要壳、精确水合、浏览器能力激活与一次性纯 CSR 降级。",
+		summaryPoints: [
+			"产品链路：覆盖成长任务、家长中心、纪念馆、Provider 与链上交互，把家庭协作、身份和资产状态放进同一产品流程。",
+			"渲染链路：Cloudflare Edge SSR 先返回安全摘要壳，再按 marker、路径和版本门禁精确水合身份、钱包、Web3 与性能 SDK。",
+			"降级链路：水合不一致时执行一次性纯 CSR fallback，隔离浏览器专属依赖，并用多运行矩阵保护路由与首屏语义。",
+		],
 		status: "已完成",
 		progress: 100,
 		architecture:

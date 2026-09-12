@@ -54,7 +54,7 @@
 .technology-map__controls button svg { width: 14px; height: 14px; }
 .technology-map__controls label { display: flex; flex: 1; align-items: center; gap: 8px; color: #93a2b8; font-size: 10px; }
 .technology-map__controls input { width: 100%; accent-color: #d3554b; }
-.technology-map__stage { position: relative; min-height: 610px; margin-top: 10px; }
+.technology-map__stage { position: relative; min-height: 780px; margin-top: 10px; }
 .technology-map__particle-canvas { position: absolute; inset: 0; z-index: 0; width: 100%; height: 100%; opacity: 0; outline: none; cursor: grab; touch-action: pan-y; transition: opacity .8s ease; }
 .technology-map__particle-canvas[data-active="true"] { opacity: 1; }
 .technology-map__particle-canvas:active { cursor: grabbing; }
@@ -67,9 +67,10 @@
   z-index: 3;
   top: 50%;
   left: 50%;
-  width: 210px;
-  min-height: 210px;
-  transform: translate(-50%, -50%);
+  width: 260px;
+  min-height: 196px;
+  translate: -50% -50%;
+  transform: none;
   display: grid;
   place-content: center;
   text-align: center;
@@ -81,9 +82,11 @@
 }
 
 .technology-map__identity-mark { margin: auto; display: grid; place-items: center; width: 52px; height: 52px; border-radius: 17px; color: #f2eefe; background: rgba(225, 218, 255, 0.12); font: 700 28px/1 "Noto Serif SC", serif; }
-.technology-map__identity h3 { margin: 14px 0 5px; font-size: 25px; }
-.technology-map__identity p { margin: 0; color: #d8d9e9; font-size: 13px; }
-.technology-map__identity small { margin-top: 18px; color: #a7a7c6; letter-spacing: .14em; }
+.technology-map__identity h3 { margin: 12px 0 7px; font-size: 27px; }
+.technology-map__identity p { margin: 0; color: #d8d9e9; font-size: 15px; line-height: 1.55; }
+.technology-map__identity-role { display: grid; gap: 2px; }
+.technology-map__identity-role span { display: block; white-space: normal; }
+.technology-map__identity small { margin-top: 15px; color: #a7a7c6; font-size: 12px; line-height: 1.5; letter-spacing: .12em; }
 .technology-map__domains { position: absolute; inset: 0; z-index: 2; pointer-events: none; }
 .technology-map__domain { position: absolute; width: min(32%, 350px); transform: scale(var(--map-range, 1)); transition: transform .35s ease; }
 .technology-map__node { pointer-events: auto; }
@@ -92,10 +95,9 @@
 .technology-map__domain:nth-child(3) { right: 1%; bottom: 3%; }
 .technology-map__domain:nth-child(4) { left: 1%; bottom: 3%; }
 
-.technology-map__domain-title { display: flex; gap: 12px; align-items: center; margin-bottom: 14px; }
-.technology-map__domain-title > span { color: var(--domain-color); font: 700 11px/1 ui-monospace, monospace; letter-spacing: .15em; }
-.technology-map__domain h3 { margin: 0; font-size: 18px; }
-.technology-map__domain p { margin: 4px 0 0; font-size: 12px; }
+.technology-map__domain-title { display: grid; grid-template-columns: minmax(0, 1fr); gap: 3px; align-items: start; margin-bottom: 14px; }
+.technology-map__domain h3 { margin: 0; font-size: 19px; line-height: 1.3; }
+.technology-map__domain p { margin: 3px 0 0; max-width: none; font-size: 13px; line-height: 1.55; }
 .technology-map__domain--violet { --domain-color: #ad91ff; --domain-glow: rgba(138, 104, 255, .24); }
 .technology-map__domain--blue { --domain-color: #66c5ff; --domain-glow: rgba(67, 175, 244, .22); }
 .technology-map__domain--vermilion { --domain-color: #ff8c83; --domain-glow: rgba(218, 75, 75, .2); }
@@ -106,7 +108,7 @@
 .technology-map__node:focus-visible { transform: translateY(-4px); color: #fff; border-color: var(--domain-color); box-shadow: 0 0 24px var(--domain-glow), inset 0 1px 0 rgba(255,255,255,.22); outline: none; }
 .technology-map__node-icon { display: grid; place-items: center; width: 39px; height: 39px; margin: 0 auto 7px; color: var(--domain-color); border: 1px solid color-mix(in srgb, var(--domain-color), transparent 50%); border-radius: 13px; background: var(--domain-glow); }
 .technology-map__node-icon img { width: 23px; height: 23px; object-fit: contain; opacity: 1; }
-.technology-map__node-label { display: block; min-height: 2.6em; overflow-wrap: anywhere; color: #102b3b; font: 700 10px/1.3 "Noto Sans SC", "PingFang SC", sans-serif; letter-spacing: .015em; }
+.technology-map__node-label { display: block; min-height: 2.8em; overflow-wrap: anywhere; color: #102b3b; font: 700 12px/1.4 "Noto Sans SC", "PingFang SC", sans-serif; letter-spacing: .01em; }
 .technology-map__domain--violet .technology-map__node-icon img { filter: brightness(0) saturate(100%) invert(43%) sepia(18%) saturate(1450%) hue-rotate(221deg) brightness(88%) contrast(91%); }
 .technology-map__domain--blue .technology-map__node-icon img { filter: brightness(0) saturate(100%) invert(43%) sepia(25%) saturate(1050%) hue-rotate(164deg) brightness(85%) contrast(90%); }
 .technology-map__domain--vermilion .technology-map__node-icon img { filter: brightness(0) saturate(100%) invert(45%) sepia(35%) saturate(1060%) hue-rotate(318deg) brightness(92%) contrast(91%); }
@@ -139,7 +141,7 @@
   .technology-map__stage { display: flex; flex-direction: column; min-height: 0; gap: 20px; padding-top: 26px; }
 	.technology-map__orbits { display: none; }
 	.technology-map__particle-canvas { display: none; }
-  .technology-map__identity { position: relative; top: auto; left: auto; width: min(100%, 300px); min-height: 170px; transform: none; margin: 0 auto; }
+  .technology-map__identity { position: relative; top: auto; left: auto; width: min(100%, 300px); min-height: 170px; translate: none; transform: none; margin: 0 auto; }
   .technology-map__domains { position: relative; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; }
 	.technology-map__domain,
 	.technology-map__domain:nth-child(n) { position: relative; inset: auto; width: auto; transform: none; }
@@ -264,9 +266,9 @@
 
 .technology-map__domain-title p {
 	display: block !important;
-	max-width: 24ch;
+	max-width: none;
 	color: #365263 !important;
-	font-size: 12px;
+	font-size: 13px;
 	line-height: 1.65;
 }
 
@@ -370,7 +372,7 @@
   color: #294955;
   background: rgb(244 245 238 / 68%);
   font-family: "IBM Plex Mono", "Noto Sans SC", monospace;
-  font-size: 0.68rem;
+  font-size: 0.8rem;
   letter-spacing: 0.06em;
   cursor: pointer;
   pointer-events: auto;
@@ -427,25 +429,29 @@
 }
 
 @media (min-width: 901px) {
+	.technology-map__stage {
+		min-height: 780px;
+	}
+
   .technology-map__canvas[data-active="true"] {
     opacity: 0.16;
     filter: saturate(0.72) contrast(0.82);
   }
 
   .technology-map__domain-title {
-    gap: 8px;
-    margin-bottom: 8px;
+		gap: 3px;
+		margin-bottom: 11px;
   }
 
   .technology-map__domain-title h3 {
-    font-size: 16px;
-    line-height: 1.2;
+		font-size: 18px;
+		line-height: 1.3;
   }
 
   .technology-map__domain-title p {
-    margin-top: 3px;
-    font-size: 11px;
-    line-height: 1.45;
+		margin-top: 3px;
+		font-size: 13px;
+		line-height: 1.55;
   }
 
   .technology-map__nodes {
@@ -464,12 +470,12 @@
 
   .technology-map__domain:nth-child(1),
   .technology-map__domain:nth-child(2) {
-    top: 3%;
+		top: 2%;
   }
 
   .technology-map__domain:nth-child(3),
   .technology-map__domain:nth-child(4) {
-    bottom: 1%;
+		bottom: 2%;
   }
 }
 

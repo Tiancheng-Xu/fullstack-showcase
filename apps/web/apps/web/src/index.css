@@ -1288,7 +1288,7 @@ header#top.portfolio-glass-bar {
 	backdrop-filter: blur(14px);
 }
 .portfolio-index-main {
-	padding-top: 3.5rem;
+	padding-top: 2.4rem;
 	padding-bottom: 5rem;
 }
 .portfolio-index-hero {
@@ -1321,7 +1321,7 @@ header#top.portfolio-glass-bar {
 	line-height: 1.8;
 }
 .portfolio-index-section {
-	margin-top: 3.5rem;
+	margin-top: 2.5rem;
 }
 .portfolio-index-section > h2 {
 	border-bottom: 1px solid rgba(7, 29, 52, 0.2);
@@ -1340,7 +1340,7 @@ header#top.portfolio-glass-bar {
 .portfolio-evidence-grid {
 	display: grid;
 	grid-template-columns: repeat(2, minmax(0, 1fr));
-	gap: 1.5rem;
+	gap: 1.25rem;
 	margin-top: 1.5rem;
 }
 .portfolio-index-card,
@@ -1423,10 +1423,52 @@ header#top.portfolio-glass-bar {
 		serif;
 }
 .portfolio-index-description {
-	min-height: 3.4rem;
+	min-height: 0;
 	margin-top: 0.75rem;
 	color: #344252;
+	font-size: 0.98rem;
+	line-height: 1.78;
+}
+
+.portfolio-index-highlights,
+.portfolio-project-highlights {
+	display: grid;
+	gap: 0.55rem;
+	margin: 1rem 0 0;
+	padding: 0;
+	color: #253746;
+	font-size: 0.94rem;
 	line-height: 1.7;
+	list-style: none;
+}
+
+.portfolio-index-highlights li,
+.portfolio-project-highlights li {
+	position: relative;
+	padding-left: 1rem;
+}
+
+.portfolio-index-highlights li::before,
+.portfolio-project-highlights li::before {
+	position: absolute;
+	top: 0.72em;
+	left: 0;
+	width: 0.34rem;
+	height: 0.34rem;
+	border-radius: 999px;
+	background: #bf1737;
+	content: "";
+}
+
+.portfolio-project-summary {
+	font-size: 0.98rem !important;
+	line-height: 1.75 !important;
+}
+
+.portfolio-project-row,
+.portfolio-index-card dl,
+.portfolio-index-card nav {
+	font-size: 0.92rem;
 }
 .portfolio-index-card dl {
 	display: grid;
@@ -1518,17 +1560,19 @@ header#top.portfolio-glass-bar {
 	max-width: 100%;
 	min-width: 0;
 	margin-top: 1.2rem;
-	overflow-x: auto;
+	overflow: hidden;
 	border: 1px solid rgba(7, 29, 52, 0.2);
 	background: rgba(249, 247, 241, 0.7);
 	overscroll-behavior-inline: contain;
 }
 .portfolio-archify-image {
 	display: block;
-	width: 64rem;
-	max-width: none;
-	min-width: 64rem;
-	height: auto;
+	width: 100%;
+	max-width: 100%;
+	min-width: 0;
+	aspect-ratio: 16 / 10;
+	object-fit: cover;
+	object-position: center;
 	aspect-ratio: 16 / 10;
 	object-fit: contain;
 	border: 0;
@@ -1638,7 +1682,7 @@ header#top.portfolio-glass-bar {
 	.portfolio-primary-navigation {
 		width: 100%;
 		display: grid;
-		grid-template-columns: repeat(4, 1fr);
+		grid-template-columns: repeat(3, 1fr);
 		order: 3;
 	}
 	.portfolio-primary-navigation a {
@@ -1647,7 +1691,7 @@ header#top.portfolio-glass-bar {
 		font-size: 0.76rem;
 	}
 	.portfolio-index-main {
-		padding-top: 2.2rem;
+		padding-top: 1.75rem;
 		padding-bottom: 5.5rem;
 	}
 	.portfolio-index-grid,
@@ -2034,6 +2078,22 @@ header#top.portfolio-glass-bar {
 .portfolio-index-surface:has(.open-source-particle-backdrop) > .portfolio-glass-mobile-nav {
   position: relative;
   z-index: 1;
+}
+
+/* Recruiter-facing readability floor across portfolio surfaces. */
+.portfolio-surface .text-xs {
+	font-size: 0.92rem !important;
+	line-height: 1.55 !important;
+}
+
+.portfolio-surface .text-sm {
+	font-size: 0.96rem !important;
+	line-height: 1.7 !important;
+}
+
+.portfolio-surface small {
+	font-size: max(0.78rem, 12px);
+	line-height: 1.5;
 }
 
 @media (max-width: 760px), (prefers-reduced-motion: reduce) {

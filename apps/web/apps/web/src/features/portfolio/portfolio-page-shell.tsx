@@ -1,7 +1,8 @@
-import { Code2, PenTool } from "lucide-react";
+import { PenTool } from "lucide-react";
 import type { ReactNode } from "react";
 
 import { PORTFOLIO_FRAME_CLASS } from "@/features/portfolio/portfolio-layout";
+import { PortfolioGithubLink } from "@/features/portfolio/portfolio-github-link";
 import { PortfolioPrimaryNavigation } from "@/features/portfolio/portfolio-primary-navigation";
 
 type PortfolioPage = "portfolio" | "project" | "evidence";
@@ -52,16 +53,7 @@ export function PortfolioPageShell({
 						</span>
 					</a>
 					<PortfolioPrimaryNavigation current={primaryCurrent} />
-					<a
-						aria-label="Tiancheng Xu GitHub"
-						className="portfolio-index-github"
-						href="https://github.com/Tiancheng-Xu"
-						rel="noreferrer"
-						target="_blank"
-					>
-						<Code2 aria-hidden="true" size={18} />
-						<span>GitHub</span>
-					</a>
+					<PortfolioGithubLink />
 				</div>
 			</header>
 
