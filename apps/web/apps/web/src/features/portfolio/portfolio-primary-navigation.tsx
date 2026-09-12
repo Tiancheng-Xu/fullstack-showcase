@@ -9,7 +9,6 @@ const ITEMS: ReadonlyArray<{
 }> = [
 	{ id: "dashboard", href: "/dashboard", label: "首页" },
 	{ id: "projects", href: "/projects", label: "项目" },
-	{ id: "evidence", href: "/evidence", label: "工作证明" },
 	{ id: "open-source", href: "/open-source", label: "开源共建" },
 ];
 

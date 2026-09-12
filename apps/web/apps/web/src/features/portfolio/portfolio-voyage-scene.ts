@@ -17,7 +17,6 @@ import { Mesh } from "@babylonjs/core/Meshes/mesh.js";
 import { TransformNode } from "@babylonjs/core/Meshes/transformNode.js";
 import { Scene } from "@babylonjs/core/scene.js";
 import { Texture } from "@babylonjs/core/Materials/Textures/texture.js";
-import { SkyMaterial } from "@babylonjs/materials/sky/skyMaterial.js";
 import "@babylonjs/loaders/glTF/2.0/glTFLoader.js";
 
 import {
@@ -146,15 +145,15 @@ Effect.ShadersStore[`${SKY_SHADER_NAME}FragmentShader`] = `
 		+ sin(cloudDirection.x * 9.4 - cloudDirection.y * 18.0) * .46;
 	float cloudDetail = sin(cloudDirection.x * 18.0 + cloudDirection.y * 31.0)
 		+ sin(cloudDirection.x * 31.0 - cloudDirection.y * 43.0) * .42;
-	float cloudBand = smoothstep(.075, .18, altitude)
-		* (1.0 - smoothstep(.52, .76, altitude));
-	float cloudShape = cloudBase + cloudDetail * .24;
-	float cloudMask = smoothstep(.42, 1.05, cloudShape) * cloudBand;
-	float cloudCore = smoothstep(.72, 1.34, cloudShape) * cloudBand;
-	vec3 cloudShadow = mix(vec3(.55, .62, .62), vec3(.67, .70, .67), altitude);
-	vec3 cloudLight = mix(vec3(.82, .82, .75), vec3(.94, .78, .64), pow(sunDot, 5.0));
-	color = mix(color, cloudShadow, cloudMask * .34);
-	color = mix(color, cloudLight, cloudCore * (.34 + horizonHaze * .16));
+	float cloudBand = smoothstep(.025, .09, altitude)
+		* (1.0 - smoothstep(.62, .82, altitude));
+	float cloudShape = cloudBase + cloudDetail * .34 + .18;
+	float cloudMask = smoothstep(-.18, .34, cloudShape) * cloudBand;
+	float cloudCore = smoothstep(.18, .72, cloudShape) * cloudBand;
+	vec3 cloudShadow = mix(vec3(.46, .55, .58), vec3(.70, .73, .70), altitude);
+	vec3 cloudLight = mix(vec3(.94, .94, .88), vec3(1.0, .86, .72), pow(sunDot, 5.0));
+	color = mix(color, cloudShadow, cloudMask * .68);
+	color = mix(color, cloudLight, cloudCore * (.78 + horizonHaze * .12));
 	float sunDisc = smoothstep(.9985, .99955, sunDot);
 	sunDisc *= 1.0 - cloudMask * .3;
 	color = mix(color, vec3(.90, .52, .29), sunDisc * .94);
@@ -263,18 +262,12 @@ export async function mountPortfolioVoyageScene(
 	  sunLight.intensity = 1.55;
 	  sunLight.diffuse = new Color3(1, 0.84, 0.64);
 
-		const sky = CreateBox("voyage-sky", { size: 1000, sideOrientation: Mesh.BACKSIDE }, scene);
-	  const skyMaterial = new SkyMaterial("sky", scene);
+	  const sky = CreateBox("voyage-sky", { size: 1000, sideOrientation: Mesh.BACKSIDE }, scene);
+	  const skyMaterial = new ShaderMaterial("voyage-sky-material", scene, SKY_SHADER_NAME, {
+		attributes: ["position"],
+		uniforms: ["worldViewProjection"],
+	  });
 		const skySunDirection = new Vector3(-.253, .019, -.967).normalize();
-		skyMaterial.useSunPosition = false;
-		skyMaterial.inclination = .503;
-		skyMaterial.azimuth = .209;
-		skyMaterial.luminance = 1.12;
-		skyMaterial.turbidity = 10;
-		skyMaterial.rayleigh = 1.8;
-		skyMaterial.mieCoefficient = .014;
-		skyMaterial.mieDirectionalG = .91;
-		skyMaterial.dithering = true;
 	  skyMaterial.backFaceCulling = false;
 		skyMaterial.disableDepthWrite = true;
 	  sky.material = skyMaterial;
