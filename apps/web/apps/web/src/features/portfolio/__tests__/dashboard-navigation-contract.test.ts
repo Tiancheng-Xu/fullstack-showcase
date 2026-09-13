@@ -13,16 +13,21 @@ const navigationSource = readFileSync(
 	),
 	"utf8",
 );
+const headerSource = readFileSync(
+	resolve(process.cwd(), "src/features/portfolio/portfolio-site-header.tsx"),
+	"utf8",
+);
 const styles = readFileSync(resolve(process.cwd(), "src/index.css"), "utf8");
 
 describe("dashboard navigation contract", () => {
 	it("keeps the original portfolio brand and uses real page routes", () => {
 		expect(source).not.toContain("UKIYO-E PORTFOLIO");
-		expect(source).toContain("TIANCHENG XU · PORTFOLIO");
+		expect(headerSource).toContain("TIANCHENG XU · PORTFOLIO");
 		expect(source).not.toContain('href="/dashboard#projects"');
 		expect(navigationSource).toContain('href: "/dashboard"');
 		expect(navigationSource).toContain('href: "/projects"');
-  expect(navigationSource).toContain('href: "/open-source"');
+		expect(navigationSource).not.toContain('{ id: "evidence"');
+		expect(navigationSource).toContain('href: "/open-source"');
 		expect(source).toContain("openSourceRepositories.slice(0, 6)");
 		expect(source).not.toContain('id="performance"');
 		expect(source).toContain('href="#top"');

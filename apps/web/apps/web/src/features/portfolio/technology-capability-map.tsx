@@ -6,6 +6,7 @@ import {
   type CapabilityNode,
 } from "./capability-map-data";
 import type { CapabilityParticleController } from "./technology-capability-particle-scene";
+import { PretextRevealTitle } from "./pretext-reveal-title";
 import { hasWebGLSupport, shouldEnableVoyageScene } from "./voyage-scene-policy";
 import "./technology-capability-map.css";
 
@@ -190,9 +191,10 @@ export function TechnologyCapabilityMap() {
       <div className="technology-map__atmosphere" aria-hidden="true" />
 
       <header className="technology-map__header">
-        <p className="technology-map__eyebrow">CAPABILITY CONSTELLATION</p>
         <div>
-          <h2 id="technology-map-title">岗位 × 技能知识图谱</h2>
+          <h2 id="technology-map-title">
+            <PretextRevealTitle text="岗位 × 技能知识图谱" />
+          </h2>
           <p>默认展示核心能力；展开或悬浮节点，可查看术语别名、大白话解释和岗位沟通切入点。</p>
         </div>
       </header>

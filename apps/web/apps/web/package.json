@@ -19,6 +19,7 @@
 		"@babylonjs/core": "^9.25.0",
 		"@babylonjs/loaders": "^9.25.0",
 		"@babylonjs/materials": "9.25.0",
+		"@chenglou/pretext": "^0.0.9",
 		"@hookform/resolvers": "^5.5.7",
 		"@tailwindcss/vite": "^4.3.3",
 		"@tanstack/react-router": "^1.170.18",

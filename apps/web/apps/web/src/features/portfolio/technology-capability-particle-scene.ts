@@ -125,7 +125,13 @@ export function mountTechnologyCapabilityParticleScene(
 	stars.manualEmitCount = 420;
 	stars.start();
 
-	const nodes = domains.flatMap((domain) => domain.nodes);
+	const nodes = Array.from(
+		new Map(
+			domains
+				.flatMap((domain) => domain.nodes)
+				.map((node) => [resolveTechnologyParticleIconSrc(node), node]),
+		).values(),
+	);
 	const layout = createTechnologyParticleLayout(nodes.length);
 	const iconPlanes = nodes.map((node, index) => {
 		const position = layout[index];
@@ -142,15 +148,15 @@ export function mountTechnologyCapabilityParticleScene(
 		material.diffuseTexture = texture;
 		material.useAlphaFromDiffuseTexture = true;
 		material.emissiveTexture = texture;
-		material.diffuseColor = new Color3(0.82, 0.85, 0.84);
-		material.emissiveColor = new Color3(0.24, 0.31, 0.34);
+		material.diffuseColor = new Color3(0.9, 0.92, 0.9);
+		material.emissiveColor = new Color3(0.34, 0.43, 0.46);
 		material.disableLighting = true;
 		material.backFaceCulling = false;
-		material.alpha = 0.72;
+		material.alpha = 0.88;
 
 		const plane = CreatePlane(
 			`capability-icon-plane-${node.id}`,
-			{ size: 1.02 * position.scale },
+			{ size: 0.9 * position.scale },
 			scene,
 		);
 		plane.material = material;
@@ -168,7 +174,7 @@ export function mountTechnologyCapabilityParticleScene(
 			const iconSize = hasLabel ? 176 : 152;
 			context.drawImage(image, iconInset, hasLabel ? 12 : 20, iconSize, iconSize);
 			context.globalCompositeOperation = "source-in";
-			context.fillStyle = "rgba(18, 52, 68, 0.9)";
+			context.fillStyle = "rgba(18, 52, 68, 0.96)";
 			context.fillRect(0, 0, textureSize, textureSize);
 			context.globalCompositeOperation = "source-over";
 			if (node.particleLabel) {

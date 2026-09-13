@@ -23,9 +23,9 @@ import {
 } from "@/data/portfolio-projects";
 import { DashboardScrollProgress } from "@/features/portfolio/dashboard-scroll-progress";
 import { openSourceRepositories } from "@/features/portfolio/open-source-data";
-import { PortfolioGithubLink } from "@/features/portfolio/portfolio-github-link";
 import { PORTFOLIO_FRAME_CLASS } from "@/features/portfolio/portfolio-layout";
 import { PortfolioPrimaryNavigation } from "@/features/portfolio/portfolio-primary-navigation";
+import { PortfolioSiteHeader } from "@/features/portfolio/portfolio-site-header";
 import { PortfolioVoyageHero } from "@/features/portfolio/portfolio-voyage-hero";
 import { TechnologyCapabilityMap } from "@/features/portfolio/technology-capability-map";
 import { usePortfolioProjects } from "@/features/portfolio/use-portfolio-projects";
@@ -36,6 +36,7 @@ export function DashboardContent() {
 	const preferredProjectOrder = [
 		"babysteps",
 		"agent-market",
+		"aladdin",
 		"performance-observability-control",
 		"shared-evidence-verifier",
 		"portfolio-sync",
@@ -55,10 +56,10 @@ export function DashboardContent() {
 	const projectGroups = [
 		{
 			id: "part-time",
-			title: "2026 北京兼职项目",
+			title: "北京兼职项目",
 			description:
-				"按业务完整度、岗位覆盖面与生产证据排序；仅收录个人仓库中已有实际实现的项目。",
-			projectIds: ["babysteps", "agent-market"],
+				"按业务完整度、岗位覆盖面与实际参与职责整理；公开作品与非公开项目分别标注证据边界。",
+			projectIds: ["babysteps", "agent-market", "aladdin"],
 		},
 		{
 			id: "trusted-delivery",
@@ -94,13 +95,30 @@ export function DashboardContent() {
 	const partTimeProjects = [
 		{
 			title: "Agent Market",
-			meta: "Aladdin · AI Agent 交易与任务分发平台",
-			body: "面向 AI Agent 众包交易场景，构建任务自动拆解、候选 Agent 过滤与评分、人工或自动选定、多阶段生产分发及可审计交付闭环；以 LangGraph DAG、多运行时服务、PostgreSQL Checkpoint、异步队列、信誉评分与 LLM 质量评测处理暂停恢复、冷启动和复杂任务分发。",
+			meta: "AI Agent / 全栈工程",
+			bullets: [
+				"使用 LangGraph DAG 组织任务拆解、候选 Agent 过滤评分、人工或自动选定及多阶段生产分发。",
+				"以 PostgreSQL Checkpoint、异步队列与 DLQ 支撑任务暂停恢复、人工介入、失败重试和复杂状态流转。",
+				"结合信誉评分、LLM Evaluation 与 Web3 交付记录，形成从任务发布到结果验收的可审计闭环。",
+			],
 		},
 		{
 			title: "BabySteps",
-			meta: "全栈产品、Edge SSR、Web3、AWS 性能观测",
-			body: "完成成长任务、家长中心、纪念馆、Provider 与链上交互等产品模块，并建立 Edge SSR、水合降级和真实性能观测链路；难点是隔离身份、钱包和服务端渲染边界。",
+			meta: "全栈 / Edge Web3",
+			bullets: [
+				"完成成长任务、家长中心、纪念馆、Provider 与链上交互等核心产品模块。",
+				"建立 Edge SSR、精确水合、浏览器能力激活与一次性纯 CSR 降级链路，保证静态首屏与交互接管一致。",
+				"接入真实性能观测与发布 Gate，并隔离服务端渲染、身份认证和客户端钱包的运行边界。",
+			],
+		},
+		{
+			title: "Aladdin Web3 Agent 平台",
+			meta: "前端 / 全栈开发",
+			bullets: [
+				"参与 Agents Marketplace Web 端建设，覆盖 Job 发布、Agent 自动匹配与派单、生命周期管理及异构 Agent 调用适配。",
+				"参与合约托管与结算链路联调，并通过动态工作流与 RAG 将用户创意推进为剧本、角色、场景、分镜、视频片段及最终合成。",
+				"使用 Next.js / TypeScript 开发前端，协同 NestJS、Mastra、智能合约及 AWS Lambda、Aurora、SQS 处理接口、状态与异常链路。",
+			],
 		},
 	];
 
@@ -151,46 +169,7 @@ export function DashboardContent() {
 				}}
 			/>
 
-			<header
-				className="portfolio-glass-bar relative border-[#071d34] border-b bg-[#fbf6ea]/92"
-				id="top"
-			>
-				<div
-					className={`${PORTFOLIO_FRAME_CLASS} flex h-16 items-center justify-between`}
-				>
-					<div className="flex min-w-0 items-center gap-3">
-						<div
-							aria-label="徐天成篆刻姓名章"
-							className="portfolio-brand-seal portfolio-name-seal portfolio-glass-control hidden size-11 place-items-center border border-[#bf1737] bg-[#eef0ec] font-bold font-serif text-[#bf1737] md:grid"
-							role="img"
-						>
-							<span aria-hidden="true">
-								<i>徐</i>
-								<i>天</i>
-								<i>成</i>
-								<i>印</i>
-							</span>
-						</div>
-						<p className="truncate font-serif text-[#071d34] text-lg md:text-xl">
-							<span className="md:hidden">TIANCHENG XU · PORTFOLIO</span>
-							<span className="hidden md:flex md:flex-col">
-								<strong className="tracking-[0.08em]">
-									TIANCHENG XU · PORTFOLIO
-								</strong>
-								<small className="mt-0.5 font-sans text-[#344252] text-[11px] tracking-[0.18em]">
-									徐天成 · 工程作品集
-								</small>
-							</span>
-						</p>
-					</div>
-					<div className="hidden md:block">
-						<PortfolioPrimaryNavigation current="dashboard" />
-					</div>
-					<div className="flex items-center gap-3">
-						<PortfolioGithubLink />
-					</div>
-				</div>
-			</header>
+			<PortfolioSiteHeader current="dashboard" />
 
 			<PortfolioVoyageHero />
 
@@ -233,10 +212,10 @@ export function DashboardContent() {
 
 						<div className="mt-7">
 							<h3 className="font-bold font-serif text-lg">
-								2026 北京兼职项目
+								项目经历
 							</h3>
 							<p className="mt-1 text-[#5a6470] text-xs leading-relaxed">
-								仅收录个人仓库中已有实际实现的项目；空仓库、模板仓库和仅有规划的项目不列入经历。
+								按实际参与职责整理；公开作品与客户项目分别说明，不把规划或模板包装成项目经历。
 							</p>
 							<div className="mt-4 grid gap-4 md:grid-cols-2">
 								{partTimeProjects.map((block) => (
@@ -364,7 +343,7 @@ export function DashboardContent() {
 											{project.status}
 										</div>
 										<div className="portfolio-project-row">
-										<p className="font-bold text-xs">工程架构</p>
+											<p className="font-bold text-xs">工程架构</p>
 											<p className="portfolio-project-architecture text-[#344252] text-xs leading-relaxed">
 												{project.architecture}
 											</p>
@@ -518,7 +497,7 @@ export function DashboardContent() {
 function ResumeProjectCard({
 	block,
 }: {
-	block: { title: string; meta: string; body: string };
+	block: { title: string; meta: string; body?: string; bullets?: string[] };
 }) {
 	return (
 		<article className="portfolio-glass-subpanel border border-[#e1d8c7] bg-[#fbf8ef] p-4">
@@ -533,9 +512,17 @@ function ResumeProjectCard({
 					</p>
 				</div>
 			</div>
-			<p className="mt-3 text-[#344252] text-sm leading-relaxed">
-				{block.body}
-			</p>
+			{block.bullets ? (
+				<ul className="mt-3 grid list-disc gap-2 pl-5 text-[#344252] text-sm leading-relaxed marker:text-[#bf1737]">
+					{block.bullets.map((bullet) => (
+						<li key={bullet}>{bullet}</li>
+					))}
+				</ul>
+			) : (
+				<p className="mt-3 text-[#344252] text-sm leading-relaxed">
+					{block.body}
+				</p>
+			)}
 		</article>
 	);
 }

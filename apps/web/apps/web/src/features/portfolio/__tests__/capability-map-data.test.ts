@@ -6,9 +6,9 @@ import {
 } from "../capability-map-data";
 
 describe("capability map data", () => {
-  it("defines four domains with six featured and six secondary technologies each", () => {
+  it("defines four domains with six featured and a curated secondary inventory", () => {
     expect(CAPABILITY_DOMAINS).toHaveLength(4);
-    expect(CAPABILITY_DOMAINS.every((domain) => domain.nodes.length === 12)).toBe(
+    expect(CAPABILITY_DOMAINS.every((domain) => domain.nodes.length >= 6)).toBe(
       true,
     );
     expect(
@@ -18,7 +18,8 @@ describe("capability map data", () => {
     ).toBe(true);
 
     const nodes = CAPABILITY_DOMAINS.flatMap((domain) => domain.nodes);
-    expect(new Set(nodes.map((node) => node.id)).size).toBe(48);
+		expect(nodes).toHaveLength(41);
+		expect(new Set(nodes.map((node) => node.id)).size).toBe(nodes.length);
 		expect(
 			nodes.every(
 				(node) =>

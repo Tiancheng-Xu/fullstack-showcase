@@ -2036,7 +2036,11 @@ header#top.portfolio-glass-bar {
 }
 
 .open-source-particle-backdrop[data-scene-state="active"] .open-source-particle-backdrop__canvas {
-  opacity: 0.72;
+  opacity: 0.82;
+}
+
+.open-source-particle-backdrop[data-scene-state="active"] {
+  opacity: 1;
 }
 
 .open-source-particle-backdrop__static {

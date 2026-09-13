@@ -1,0 +1,36 @@
+.pretext-reveal-title {
+	position: relative;
+	display: block;
+	max-width: 100%;
+}
+
+.pretext-reveal-title__fallback {
+	display: block;
+	transition: opacity 180ms ease;
+}
+
+.pretext-reveal-title__animated {
+	display: block;
+	pointer-events: none;
+}
+
+.pretext-reveal-title__line {
+	display: block;
+	white-space: nowrap;
+}
+
+.pretext-reveal-title__glyph {
+	display: inline-block;
+	will-change: transform, opacity, filter;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.pretext-reveal-title__animated {
+		display: none;
+	}
+
+	.pretext-reveal-title__fallback {
+		opacity: 1 !important;
+		transition: none;
+	}
+}
