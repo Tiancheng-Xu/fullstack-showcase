@@ -2,6 +2,7 @@ import { PenTool } from "lucide-react";
 import type { ReactNode } from "react";
 
 import { PORTFOLIO_FRAME_CLASS } from "@/features/portfolio/portfolio-layout";
+import { PortfolioPrimaryNavigation } from "@/features/portfolio/portfolio-primary-navigation";
 import { PortfolioSiteHeader } from "@/features/portfolio/portfolio-site-header";
 
 type PortfolioPage = "portfolio" | "project" | "evidence";

@@ -24,6 +24,7 @@ import {
 import { DashboardScrollProgress } from "@/features/portfolio/dashboard-scroll-progress";
 import { openSourceRepositories } from "@/features/portfolio/open-source-data";
 import { PORTFOLIO_FRAME_CLASS } from "@/features/portfolio/portfolio-layout";
+import { PortfolioPrimaryNavigation } from "@/features/portfolio/portfolio-primary-navigation";
 import { PortfolioSiteHeader } from "@/features/portfolio/portfolio-site-header";
 import { PortfolioVoyageHero } from "@/features/portfolio/portfolio-voyage-hero";
 import { TechnologyCapabilityMap } from "@/features/portfolio/technology-capability-map";

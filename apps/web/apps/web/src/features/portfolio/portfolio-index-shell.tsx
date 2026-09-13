@@ -2,7 +2,10 @@ import { PenTool } from "lucide-react";
 import type { PropsWithChildren, ReactNode } from "react";
 
 import { PORTFOLIO_FRAME_CLASS } from "@/features/portfolio/portfolio-layout";
-import type { PortfolioPrimaryRoute } from "@/features/portfolio/portfolio-primary-navigation";
+import {
+	PortfolioPrimaryNavigation,
+	type PortfolioPrimaryRoute,
+} from "@/features/portfolio/portfolio-primary-navigation";
 import { PortfolioSiteHeader } from "@/features/portfolio/portfolio-site-header";
 
 export function PortfolioIndexShell({
