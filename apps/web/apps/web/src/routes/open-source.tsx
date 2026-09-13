@@ -4,4 +4,7 @@ import { OpenSourceIndexContent } from "@/features/portfolio/open-source-index-c
 
 export const Route = createFileRoute("/open-source")({
 	component: OpenSourceIndexContent,
+	head: () => ({
+		meta: [{ title: "开源共建 · 徐天成工程作品集" }],
+	}),
 });

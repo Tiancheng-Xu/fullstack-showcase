@@ -87,12 +87,12 @@ describe("CAP-004 particle data contracts", () => {
 		);
 	});
 
-	it("leaves the homepage capability scene contract at all 48 skill nodes", () => {
+	it("leaves the homepage capability scene contract at all curated skill nodes", () => {
 		const capabilityNodes = CAPABILITY_DOMAINS.flatMap(
 			(domain) => domain.nodes,
 		);
 
-		expect(capabilityNodes).toHaveLength(48);
+		expect(capabilityNodes).toHaveLength(41);
 		expect(capabilityNodes.every((node) => Boolean(node.iconSlug))).toBe(true);
 		expect(
 			capabilityNodes.some((node) => node.id.startsWith("open-source-")),

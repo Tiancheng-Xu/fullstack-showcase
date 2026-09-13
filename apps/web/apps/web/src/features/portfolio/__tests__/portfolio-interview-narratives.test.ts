@@ -6,16 +6,22 @@ import { describe, expect, it } from "vitest";
 import { PORTFOLIO_PROJECTS } from "../../../data/portfolio-projects";
 
 describe("portfolio interview narratives", () => {
-  it("presents Agent Market as the Aladdin task distribution system", () => {
+  it("keeps Agent Market and Aladdin as separate projects", () => {
     const project = PORTFOLIO_PROJECTS.find((item) => item.id === "agent-market");
+    const aladdin = PORTFOLIO_PROJECTS.find((item) => item.id === "aladdin");
 
     expect(project?.title).toBe("Agent Market");
-    expect(project?.desc).toContain("Aladdin · AI Agent 交易与任务分发平台");
+		expect(project?.desc).not.toContain("Aladdin");
     expect(project?.architecture).toContain("PostgreSQL Checkpoint");
     expect(project?.architecture).toContain("异步队列 / DLQ");
     expect(project?.skills).toEqual(
       expect.arrayContaining(["Multi-Agent", "LLM Evaluation", "Trust / Auth"]),
     );
+		expect(aladdin?.title).toBe("Aladdin Web3 Agent 平台");
+		expect(aladdin?.desc).toContain("Agents Marketplace");
+		expect(aladdin?.skills).toEqual(
+		expect.arrayContaining(["Next.js", "Mastra", "AWS Lambda"]),
+	);
   });
 
   it("presents Personal AI Agent as an intelligent customer service system", () => {
@@ -37,9 +43,10 @@ describe("portfolio interview narratives", () => {
       "utf8",
     );
 
-    expect(source).toContain("Aladdin · AI Agent 交易与任务分发平台");
+		expect(source).toContain("Aladdin Web3 Agent 平台");
+		expect(source).toContain("Agents Marketplace Web 端建设");
     expect(source).toContain("AI 智能客服与私有化模型交付");
-    expect(source).toContain("候选 Agent 过滤与评分");
+		expect(source).toContain("候选 Agent 过滤评分");
     expect(source).toContain("低置信度转人工");
   });
 });

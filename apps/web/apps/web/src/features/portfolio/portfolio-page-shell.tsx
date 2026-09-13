@@ -2,8 +2,7 @@ import { PenTool } from "lucide-react";
 import type { ReactNode } from "react";
 
 import { PORTFOLIO_FRAME_CLASS } from "@/features/portfolio/portfolio-layout";
-import { PortfolioGithubLink } from "@/features/portfolio/portfolio-github-link";
-import { PortfolioPrimaryNavigation } from "@/features/portfolio/portfolio-primary-navigation";
+import { PortfolioSiteHeader } from "@/features/portfolio/portfolio-site-header";
 
 type PortfolioPage = "portfolio" | "project" | "evidence";
 
@@ -38,24 +37,7 @@ export function PortfolioPageShell({
 				}}
 			/>
 
-			<header className="portfolio-glass-bar portfolio-index-header relative" id="top">
-				<div className={`${PORTFOLIO_FRAME_CLASS} portfolio-index-header-inner`}>
-					<a className="portfolio-index-brand" href="/dashboard">
-						<span aria-label="徐天成印" className="portfolio-seal" role="img">
-							<i>徐</i>
-							<i>天</i>
-							<i>成</i>
-							<i>印</i>
-						</span>
-						<span>
-							<strong>TIANCHENG XU · PORTFOLIO</strong>
-							<small>徐天成 · 工程作品集</small>
-						</span>
-					</a>
-					<PortfolioPrimaryNavigation current={primaryCurrent} />
-					<PortfolioGithubLink />
-				</div>
-			</header>
+			<PortfolioSiteHeader current={primaryCurrent} />
 
 			<main className={`${PORTFOLIO_FRAME_CLASS} relative py-8 md:py-12`}>
 				<header className="border-[#d8cfbd] border-b pb-6">

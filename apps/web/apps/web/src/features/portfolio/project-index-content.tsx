@@ -57,6 +57,7 @@ export function ProjectIndexContent() {
 											<Layers3 size={15} /> 架构
 										</dt>
 										<dd>{project.architecture}</dd>
+										<ProjectArchitecturePreview project={project} />
 									</div>
 									<div>
 										<dt>

@@ -72,11 +72,44 @@ const DASHBOARD_EVIDENCE_BASE_URL = "https://baby2b.online/evidence";
 
 export const PORTFOLIO_PROJECTS: PortfolioProject[] = [
 	{
+		id: "aladdin",
+		title: "Aladdin Web3 Agent 平台",
+		desc: "前端 / 全栈开发。参与 Aladdin Agents Marketplace 与内容生产 Agent：Marketplace 覆盖 Job 发布、Agent 自动匹配与派单、合约托管结算、生命周期管理和异构 Agent 调用；内容生产链将用户创意推进为剧本、角色 / 场景 / 道具、分镜、视频片段与最终合成。",
+		status: "已完成",
+		progress: 100,
+		architecture:
+			"Next.js / TypeScript Web 端 → NestJS 服务 → Mastra 动态工作流与 RAG → 异构 Agent 调用；智能合约承担押金托管与规则化结算，AWS Lambda、SQS 与 Aurora 支撑异步任务、状态流转和数据持久化。",
+		skills: [
+			"Next.js",
+			"TypeScript",
+			"NestJS",
+			"Mastra",
+			"Dynamic Workflow / RAG",
+			"Smart Contract",
+			"AWS Lambda",
+			"Aurora",
+			"SQS",
+		],
+		evidence: [
+			"完成 Next.js / TypeScript Web 功能，并与 NestJS、智能合约及 AWS 服务联调",
+			"参与自动匹配派单、Agent 生命周期管理、调用适配与异常兜底",
+			"参与押金托管、任务状态跟踪及完成后的规则化结算流程",
+			"参与创意到剧本、资产、分镜、视频片段和最终合成的内容生产链路",
+		],
+		details: [
+			"Marketplace 根据 Job 条件和 Agent 能力进行自动匹配与任务分配，减少人工筛选并提高任务流转效率。",
+			"用户选定 Agent 后进入合约托管和结算链路；任务执行期间跟踪状态，完成后按规则处理资金结算。",
+			"内容生产 Agent 使用动态工作流和 RAG 组织多阶段产物，从创意逐步生成剧本、角色、场景、道具、分镜和视频片段，再完成组合输出。",
+			"通过统一识别与调用适配接入不同规则的 Agent，并为失败、超时和异常状态提供回退边界。",
+			"该条目依据本人实际参与经历整理；未附公开仓库或线上 Evidence，不与 Agent Market 的交付证据混用。",
+		],
+	},
+	{
 		id: "agent-market",
 		architectureAsset:
 			"architecture/agent-market.visual-check.1440x900.light.png",
 		title: "Agent Market",
-		desc: "Aladdin · AI Agent 交易与任务分发平台。面向众包交易场景，覆盖任务自动拆解、候选 Agent 过滤与评分、人工或自动选定、多阶段生产分发、暂停恢复和质量评测。",
+		desc: "AI Agent 交易与任务分发平台。面向众包交易场景，覆盖任务自动拆解、候选 Agent 过滤与评分、人工或自动选定、多阶段生产分发、暂停恢复和质量评测。",
 		summaryPoints: [
 			"业务链路：Queen 将需求拆成 DAG，候选 Agent 经标签硬过滤、向量相关度与信誉评分排序，再支持人工确认或自动选定。",
 			"执行链路：Agent 分阶段生产，Judge 结合规则与 LLM 多维评测；不合格结果进入 Repair，最终由 Final Arbiter 汇总交付。",

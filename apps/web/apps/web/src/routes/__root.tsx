@@ -1,5 +1,6 @@
 import {
 	createRootRouteWithContext,
+	HeadContent,
 	Outlet,
 } from "@tanstack/react-router";
 import { Toaster } from "@web/ui/components/sonner";
@@ -15,7 +16,7 @@ export const Route = createRootRouteWithContext<RouterAppContext>()({
 	head: () => ({
 		meta: [
 			{
-				title: "Tiancheng Xu · Ukiyo-e Portfolio",
+				title: "徐天成工程作品集",
 			},
 			{
 				name: "description",
@@ -25,7 +26,8 @@ export const Route = createRootRouteWithContext<RouterAppContext>()({
 		links: [
 			{
 				rel: "icon",
-				href: "/favicon.ico",
+				type: "image/svg+xml",
+				href: "/favicon.svg",
 			},
 		],
 	}),
@@ -34,6 +36,7 @@ export const Route = createRootRouteWithContext<RouterAppContext>()({
 function RootComponent() {
 	return (
 		<>
+			<HeadContent />
 			<AppShell>
 				<Outlet />
 			</AppShell>

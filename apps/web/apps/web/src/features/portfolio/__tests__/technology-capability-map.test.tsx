@@ -26,6 +26,7 @@ vi.mock("../technology-capability-particle-scene", () => ({
 }));
 
 import { TechnologyCapabilityMap } from "../technology-capability-map";
+import { CAPABILITY_DOMAINS } from "../capability-map-data";
 
 describe("TechnologyCapabilityMap", () => {
   let innerWidthSpy: ReturnType<typeof vi.spyOn>;
@@ -74,7 +75,7 @@ describe("TechnologyCapabilityMap", () => {
     ).toBeInTheDocument();
     expect(screen.getAllByTestId("capability-domain")).toHaveLength(4);
 		expect(screen.getAllByTestId("capability-node")).toHaveLength(24);
-		expect(screen.getAllByRole("button", { name: /更多技能 \+6/ })).toHaveLength(4);
+		expect(screen.getAllByRole("button", { name: /更多技能 \+\d+/ })).toHaveLength(4);
 		expect(
 			screen.queryByRole("button", { name: "暂停图谱动效" }),
 		).not.toBeInTheDocument();
@@ -84,7 +85,7 @@ describe("TechnologyCapabilityMap", () => {
 		).toBeInTheDocument();
   });
 
-  it("feeds all 48 capabilities to the deferred Babylon scene", async () => {
+  it("feeds all curated capabilities to the deferred Babylon scene", async () => {
     render(<TechnologyCapabilityMap />);
 
     await waitFor(() => expect(scene.mount).toHaveBeenCalledTimes(1));
@@ -93,8 +94,10 @@ describe("TechnologyCapabilityMap", () => {
       domain.nodes.map((node) => node.id),
     );
 
-    expect(nodeIds).toHaveLength(48);
-    expect(new Set(nodeIds).size).toBe(48);
+		expect(nodeIds).toHaveLength(
+		CAPABILITY_DOMAINS.reduce((total, domain) => total + domain.nodes.length, 0),
+	);
+	expect(new Set(nodeIds).size).toBe(nodeIds.length);
     expect(scene.setPaused).toHaveBeenCalledWith(false);
     expect(scene.setRange).toHaveBeenCalledWith(1);
   });
@@ -150,9 +153,11 @@ describe("TechnologyCapabilityMap", () => {
   it("expands secondary skills for one domain without overloading the initial view", () => {
     render(<TechnologyCapabilityMap />);
 
-    fireEvent.click(screen.getAllByRole("button", { name: /更多技能 \+6/ })[0]);
+    fireEvent.click(screen.getAllByRole("button", { name: /更多技能 \+\d+/ })[0]);
 
-    expect(screen.getAllByTestId("capability-node")).toHaveLength(30);
+	expect(screen.getAllByTestId("capability-node")).toHaveLength(
+		18 + CAPABILITY_DOMAINS[0].nodes.length,
+	);
     expect(screen.getByRole("button", { name: "Intent Routing，查看能力说明" })).toBeVisible();
     expect(screen.getByRole("button", { name: "收起技能" })).toHaveAttribute("aria-expanded", "true");
   });
