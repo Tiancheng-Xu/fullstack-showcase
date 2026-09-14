@@ -201,6 +201,7 @@
 }
 
 .portfolio-voyage__content h1 {
+	position: relative;
 	max-width: 900px;
 	color: #11364a;
 	font-family: "Noto Sans SC", "Source Han Sans SC", sans-serif;
@@ -209,6 +210,42 @@
 	line-height: .98;
 	letter-spacing: -.055em;
 	text-shadow: 0 2px 0 rgba(255, 252, 240, .5), 0 14px 36px rgba(53, 85, 91, .12);
+}
+
+.portfolio-voyage__title-pretext,
+.portfolio-voyage__title-reactive {
+	display: block;
+	transition: opacity .28s ease;
+}
+
+.portfolio-voyage__title-reactive {
+	position: absolute;
+	inset: 0;
+	opacity: 0;
+	pointer-events: none;
+	white-space: nowrap;
+}
+
+.portfolio-voyage__title-reactive > span {
+	display: inline-block;
+	transform: translate3d(var(--voyage-glyph-x, 0), var(--voyage-glyph-y, 0), 0)
+		rotate(var(--voyage-glyph-rotate, 0));
+	transition: transform 90ms linear, text-shadow .2s ease;
+	will-change: transform;
+}
+
+.portfolio-voyage__content h1[data-voyage-reactive="true"] .portfolio-voyage__title-pretext {
+	opacity: 0;
+	transition-delay: .9s;
+}
+
+.portfolio-voyage__content h1[data-voyage-reactive="true"] .portfolio-voyage__title-reactive {
+	opacity: 1;
+	transition-delay: .9s;
+}
+
+.portfolio-voyage__content h1[data-boat-near="true"] .portfolio-voyage__title-reactive > span {
+	text-shadow: 0 2px 0 rgba(255, 252, 240, .62), 0 12px 28px rgba(29, 73, 83, .22);
 }
 
 .portfolio-voyage__rule {

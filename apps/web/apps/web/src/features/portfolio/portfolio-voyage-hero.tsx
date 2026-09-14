@@ -4,6 +4,7 @@ import {
   hasWebGLSupport,
   shouldEnableVoyageScene,
 } from "./voyage-scene-policy";
+import { PretextRevealTitle } from "./pretext-reveal-title";
 import type {
 	PortfolioVoyageSceneController,
 	VoyageCameraPreset,
@@ -51,6 +52,7 @@ export function VoyageLoadingOverlay({ progress }: { progress: number }) {
 
 export function PortfolioVoyageHero({ forceStatic = false }: PortfolioVoyageHeroProps) {
 	const canvasRef = useRef<HTMLCanvasElement>(null);
+	const titleRef = useRef<HTMLHeadingElement>(null);
 	const sceneControllerRef = useRef<PortfolioVoyageSceneController | null>(null);
 	const [sceneState, setSceneState] = useState<
 		"static" | "loading" | "active" | "failed"
@@ -131,7 +133,39 @@ export function PortfolioVoyageHero({ forceStatic = false }: PortfolioVoyageHero
 				void import("./portfolio-voyage-scene")
 				.then(async ({ mountPortfolioVoyageScene }) => {
 					if (disposed || !canvasRef.current) return;
-					const controller = await mountPortfolioVoyageScene(canvasRef.current);
+					const controller = await mountPortfolioVoyageScene(canvasRef.current, {
+						onBoatScreenPosition: ({ x, y, visible }) => {
+							const canvas = canvasRef.current;
+							const title = titleRef.current;
+							if (!canvas || !title || window.innerWidth < 768) return;
+
+							const glyphs = title.querySelectorAll<HTMLElement>("[data-voyage-title-glyph]");
+							const titleRect = title.getBoundingClientRect();
+							const canvasRect = canvas.getBoundingClientRect();
+							const boatX = canvasRect.left + x * canvasRect.width - titleRect.left;
+							const boatY = canvasRect.top + y * canvasRect.height - titleRect.top;
+							const radius = Math.max(118, titleRect.height * 1.7);
+							let titleInfluence = 0;
+
+							glyphs.forEach((glyph, index) => {
+								const centerX = ((index + .5) / glyphs.length) * titleRect.width;
+								const centerY = titleRect.height * .5;
+								let dx = centerX - boatX;
+								let dy = centerY - boatY;
+								if (Math.abs(dy) < 8) dy = index % 2 === 0 ? -18 : 18;
+								const distance = Math.hypot(dx, dy);
+								const influence = visible ? Math.max(0, 1 - distance / radius) : 0;
+								titleInfluence = Math.max(titleInfluence, influence);
+								if (distance < 1) dx = index % 2 === 0 ? -1 : 1;
+								const normal = Math.max(1, Math.hypot(dx, dy));
+								const arc = Math.sin(influence * Math.PI);
+								glyph.style.setProperty("--voyage-glyph-x", `${(dx / normal) * 42 * arc}px`);
+								glyph.style.setProperty("--voyage-glyph-y", `${(dy / normal) * 34 * arc}px`);
+								glyph.style.setProperty("--voyage-glyph-rotate", `${(dx / normal) * 5 * arc}deg`);
+							});
+							title.dataset.boatNear = titleInfluence > .08 ? "true" : "false";
+						},
+					});
 					sceneControllerRef.current = controller;
 					dispose = controller.dispose;
 						if (progressTimer !== undefined) window.clearInterval(progressTimer);
@@ -175,6 +209,14 @@ export function PortfolioVoyageHero({ forceStatic = false }: PortfolioVoyageHero
 			}
 			dispose?.();
 			sceneControllerRef.current = null;
+			if (titleRef.current) {
+				delete titleRef.current.dataset.boatNear;
+				for (const glyph of titleRef.current.querySelectorAll<HTMLElement>("[data-voyage-title-glyph]")) {
+					glyph.style.removeProperty("--voyage-glyph-x");
+					glyph.style.removeProperty("--voyage-glyph-y");
+					glyph.style.removeProperty("--voyage-glyph-rotate");
+				}
+			}
 		};
   }, [forceStatic]);
 
@@ -202,7 +244,22 @@ export function PortfolioVoyageHero({ forceStatic = false }: PortfolioVoyageHero
 				{sceneState === "loading" ? <VoyageLoadingOverlay progress={loadingProgress} /> : null}
       <div className="portfolio-voyage__content">
         <p>ENGINEERING VOYAGE · 2026</p>
-        <h1 id="portfolio-voyage-title">向复杂系统深处航行</h1>
+        <h1
+					data-voyage-reactive={sceneState === "active"}
+					id="portfolio-voyage-title"
+					ref={titleRef}
+				>
+					<span className="portfolio-voyage__title-pretext">
+						<PretextRevealTitle text="向复杂系统深处航行" />
+					</span>
+					<span aria-hidden="true" className="portfolio-voyage__title-reactive">
+						{Array.from("向复杂系统深处航行").map((character, index) => (
+							<span data-voyage-title-glyph key={`${character}-${index}`}>
+								{character}
+							</span>
+						))}
+					</span>
+				</h1>
         <div className="portfolio-voyage__rule" />
         <p className="portfolio-voyage__lead">
           从政企前中台架构，到 AI Agent、Web3 与 Cloud / Edge 工程；每一段航程都用可运行代码和可追溯 Evidence 落锚。

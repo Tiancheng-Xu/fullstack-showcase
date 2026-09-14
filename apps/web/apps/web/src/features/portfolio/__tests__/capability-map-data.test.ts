@@ -18,7 +18,7 @@ describe("capability map data", () => {
     ).toBe(true);
 
     const nodes = CAPABILITY_DOMAINS.flatMap((domain) => domain.nodes);
-		expect(nodes).toHaveLength(41);
+		expect(nodes).toHaveLength(43);
 		expect(new Set(nodes.map((node) => node.id)).size).toBe(nodes.length);
 		expect(
 			nodes.every(
