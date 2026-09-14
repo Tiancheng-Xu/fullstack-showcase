@@ -17,11 +17,26 @@ describe("portfolio interview narratives", () => {
     expect(project?.skills).toEqual(
       expect.arrayContaining(["Multi-Agent", "LLM Evaluation", "Trust / Auth"]),
     );
-		expect(aladdin?.title).toBe("Aladdin Web3 Agent 平台");
-		expect(aladdin?.desc).toContain("Agents Marketplace");
+		expect(aladdin?.title).toBe("Aladdin Web3 Agent");
+		expect(aladdin?.desc).toContain("AI Agent 分布式任务调度");
+		expect(aladdin?.summaryPoints).toEqual(
+			expect.arrayContaining([
+				expect.stringContaining("Webhook / SSE"),
+				expect.stringContaining("MetaMask"),
+			]),
+		);
 		expect(aladdin?.skills).toEqual(
-		expect.arrayContaining(["Next.js", "Mastra", "AWS Lambda"]),
-	);
+			expect.arrayContaining([
+				"React",
+				"Next.js",
+				"PostgreSQL / pgvector",
+				"GraphQL",
+				"IPFS",
+			]),
+		);
+		expect(JSON.stringify(aladdin)).not.toMatch(
+			/ANETU|TUG|67%|0\.21|UZFI|Claw|Acons/,
+		);
   });
 
   it("presents Personal AI Agent as an intelligent customer service system", () => {
@@ -43,10 +58,23 @@ describe("portfolio interview narratives", () => {
       "utf8",
     );
 
-		expect(source).toContain("Aladdin Web3 Agent 平台");
-		expect(source).toContain("Agents Marketplace Web 端建设");
-    expect(source).toContain("AI 智能客服与私有化模型交付");
+		expect(source).toContain("参与 AI Agent 与 Web3 平台的 Web 端和全栈协作");
+		expect(source).toContain("北京阿拉丁科技（兼职）");
+		expect(source).toContain("前端 / 全栈工程师（AI Agent / Web3）");
+		expect(source).toContain("任务发布与编辑、语义分类、子任务拆解");
+		expect(source).toContain("请求 ID、Webhook / SSE、消息队列和并发控制");
+		expect(source).toContain("MetaMask、合约托管 / 结算、IPFS / 链上证据");
+		expect(source).toContain("项目经历");
+		expect(source).toContain("AI 智能客服与私有化模型交付");
 		expect(source).toContain("候选 Agent 过滤评分");
-    expect(source).toContain("低置信度转人工");
-  });
+		expect(source).toContain("低置信度转人工");
+		expect(source).toContain(".text / .data / .bss");
+		expect(source).toContain("函数式编程中的纯函数、不可变数据、函数组合与高阶函数");
+		expect(source).toContain("浙江大学宁波理工学院");
+		expect(source).toContain("全日制本科");
+		expect(source).toContain("已取得学士学位证");
+		expect(source).toContain("xutiancheng04@gmail.com");
+		expect(source).toContain("17855813990");
+		expect(source).not.toMatch(/ANETU|TUG|67%|0\.21|UZFI|Claw|Acons/);
+	});
 });

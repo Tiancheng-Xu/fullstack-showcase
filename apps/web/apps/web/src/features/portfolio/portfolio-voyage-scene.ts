@@ -168,6 +168,16 @@ export type PortfolioVoyageSceneController = {
 	setCameraPreset: (preset: VoyageCameraPreset) => void;
 };
 
+export type VoyageBoatScreenPosition = {
+	x: number;
+	y: number;
+	visible: boolean;
+};
+
+type PortfolioVoyageSceneOptions = {
+	onBoatScreenPosition?: (position: VoyageBoatScreenPosition) => void;
+};
+
 function createBoatFallback(scene: Scene, root: TransformNode) {
 	const hull = CreateBox("fallback-hull", { width: 2.8, height: 0.5, depth: 6.2 }, scene);
   hull.parent = root;
@@ -224,6 +234,7 @@ function createWake(scene: Scene, root: TransformNode) {
 
 export async function mountPortfolioVoyageScene(
 	canvas: HTMLCanvasElement,
+	options: PortfolioVoyageSceneOptions = {},
 ): Promise<PortfolioVoyageSceneController> {
   const dpr = getVoyageDevicePixelRatio(window.innerWidth, window.devicePixelRatio || 1);
   const engine = new Engine(canvas, true, { preserveDrawingBuffer: false, stencil: false });
@@ -375,6 +386,21 @@ export async function mountPortfolioVoyageScene(
 		} else if (selectedPreset === "follow") {
 			camera.setTarget(Vector3.Lerp(camera.target, cameraTo.target, .035));
 		}
+		if (options.onBoatScreenPosition) {
+			const renderWidth = engine.getRenderWidth();
+			const renderHeight = engine.getRenderHeight();
+			const projected = Vector3.Project(
+				Vector3.Zero(),
+				boatRoot.getWorldMatrix(),
+				scene.getTransformMatrix(),
+				camera.viewport.toGlobal(renderWidth, renderHeight),
+			);
+			options.onBoatScreenPosition({
+				x: projected.x / renderWidth,
+				y: projected.y / renderHeight,
+				visible: projected.z >= 0 && projected.z <= 1,
+			});
+		}
 	  });
 
   const render = () => scene.render();
@@ -409,10 +435,10 @@ export async function mountPortfolioVoyageScene(
 	try {
 		await new Promise<void>((resolve, reject) => {
 			let stableFrames = 0;
-			const timeout = window.setTimeout(() => {
-				scene.onAfterRenderObservable.remove(frameObserver);
-				reject(new Error("Voyage ocean did not become ready in time"));
-			}, 12_000);
+			let remainingVisibleMs = 12_000;
+			let visibleStartedAt = 0;
+			let timeout: number | undefined;
+			let settled = false;
 			const frameObserver = scene.onAfterRenderObservable.add(() => {
 				const frameReady =
 					canvas.isConnected &&
@@ -423,10 +449,44 @@ export async function mountPortfolioVoyageScene(
 				const readiness = advanceVoyageReadiness(stableFrames, frameReady);
 				stableFrames = readiness.frames;
 				if (!readiness.ready) return;
-				window.clearTimeout(timeout);
-				scene.onAfterRenderObservable.remove(frameObserver);
+				settled = true;
+				cleanupReadinessWait();
 				resolve();
 			});
+			const cleanupReadinessWait = () => {
+				if (timeout !== undefined) window.clearTimeout(timeout);
+				timeout = undefined;
+				document.removeEventListener("visibilitychange", handleVisibilityChange);
+				scene.onAfterRenderObservable.remove(frameObserver);
+			};
+			const failReadinessWait = () => {
+				if (settled) return;
+				settled = true;
+				cleanupReadinessWait();
+				reject(new Error("Voyage ocean did not become ready in time"));
+			};
+			const armVisibleTimeout = () => {
+				if (settled || document.visibilityState === "hidden") return;
+				if (remainingVisibleMs <= 0) {
+					failReadinessWait();
+					return;
+				}
+				visibleStartedAt = performance.now();
+				timeout = window.setTimeout(failReadinessWait, remainingVisibleMs);
+			};
+			const handleVisibilityChange = () => {
+				if (document.visibilityState === "hidden") {
+					if (timeout !== undefined) {
+						remainingVisibleMs -= performance.now() - visibleStartedAt;
+						window.clearTimeout(timeout);
+						timeout = undefined;
+					}
+					return;
+				}
+				armVisibleTimeout();
+			};
+			document.addEventListener("visibilitychange", handleVisibilityChange);
+			armVisibleTimeout();
 		});
 	} catch (error) {
 		dispose();
