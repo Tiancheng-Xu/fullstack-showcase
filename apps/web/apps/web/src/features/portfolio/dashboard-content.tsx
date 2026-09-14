@@ -85,11 +85,36 @@ export function DashboardContent() {
 			],
 		},
 	];
-	const professionalExperience = {
-		period: "2023–2026",
-		title: "政企低代码 / FDE 工程师",
-		location: "宁波 · 驻场交付",
-		body: "驻场服务宁波市公安局科信、特警等相关业务部门，参与低代码与 FDE 项目建设，负责前台业务应用与中台能力的架构实现，以及相关模块的工程交付和持续迭代。",
+	const professionalExperiences = [
+		{
+			period: "2026",
+			title: "北京阿拉丁科技（兼职）",
+			location: "前端 / 全栈工程师（AI Agent / Web3）",
+			body: "参与 AI Agent 与 Web3 平台的 Web 端和全栈协作，围绕任务编排、分布式调度、异步执行、状态聚合、链上交付与内容生产工作流推进产品实现。",
+			bullets: [
+				"参与任务发布与编辑、语义分类、子任务拆解、Agent 匹配派发、执行状态和结果聚合等端到端流程。",
+				"使用 React、Vite、Next.js、TypeScript 开发前端，协同 PostgreSQL / pgvector、GraphQL、Webhook / SSE、消息队列及 AWS 完成异步任务、并发控制和状态联调。",
+				"参与 MetaMask 签名、智能合约托管 / 结算、IPFS / 链上结果证据及 AI 内容生产工作流的接口与端到端联调。",
+			],
+		},
+		{
+			period: "2023–2026",
+			title: "政企低代码 / FDE 工程师",
+			location: "宁波 · 驻场交付",
+			body: "参与政企低代码与 FDE 项目建设，负责前台业务应用与中台能力的架构实现，以及相关模块的工程交付和持续迭代。",
+			note: "政企项目仅公开职责与能力范围，不公开内部系统名称、数据、接口、部署拓扑或安全架构。",
+		},
+	];
+	const personalProfile = {
+		name: "徐天成",
+		email: "xutiancheng04@gmail.com",
+		phone: "17855813990",
+	};
+	const educationExperience = {
+		period: "2019",
+		school: "浙江大学宁波理工学院",
+		degree: "全日制本科",
+		credential: "已取得学士学位证",
 	};
 
 	const partTimeProjects = [
@@ -112,12 +137,12 @@ export function DashboardContent() {
 			],
 		},
 		{
-			title: "Aladdin Web3 Agent 平台",
-			meta: "前端 / 全栈开发",
+			title: "Aladdin Web3 Agent",
+			meta: "AI Agent 分布式任务调度 / Web3 Agent 平台",
 			bullets: [
-				"参与 Agents Marketplace Web 端建设，覆盖 Job 发布、Agent 自动匹配与派单、生命周期管理及异构 Agent 调用适配。",
-				"参与合约托管与结算链路联调，并通过动态工作流与 RAG 将用户创意推进为剧本、角色、场景、分镜、视频片段及最终合成。",
-				"使用 Next.js / TypeScript 开发前端，协同 NestJS、Mastra、智能合约及 AWS Lambda、Aurora、SQS 处理接口、状态与异常链路。",
+				"参与 Job 编辑与发布流程，覆盖分类、标签、预算、时限、技能和交付物，并支持自动拆解与人工编排。",
+				"接入 Agent 匹配、派发、生命周期、异步反馈和结果聚合；以请求 ID、Webhook / SSE、消息队列和并发控制保证可追踪与可恢复。",
+				"联调 MetaMask、合约托管 / 结算、IPFS / 链上证据与 AI 内容生产链路，协同 PostgreSQL / pgvector、GraphQL 和 AWS 服务。",
 			],
 		},
 	];
@@ -186,29 +211,75 @@ export function DashboardContent() {
 						<p className="max-w-4xl text-[#344252] text-sm leading-relaxed">
 							全栈工程师，拥有政企低代码与 FDE
 							交付经验，负责前台应用与中台能力的架构实现；当前专注 AI
-							Agent、Web3、Cloud / Edge 与可验证工程交付。
+							Agent、Web3、Cloud / Edge 与可验证工程交付。熟悉函数式编程中的纯函数、不可变数据、函数组合与高阶函数，并将其用于状态建模和复杂流程拆解；具备计算机系统基础，理解从编译、链接、装载到运行的程序生命周期，以及 ELF、Section / Segment、.text / .data / .bss、符号重定位和 GOT / PLT 等关键机制。
 						</p>
-						<article className="portfolio-glass-subpanel mt-5 border border-[#d8cfbd] bg-[#f8f3e8] p-5">
-							<div className="flex flex-wrap items-baseline justify-between gap-2">
-								<div>
-									<p className="font-bold text-[#b21f35] text-xs tracking-[0.14em]">
-										{professionalExperience.period}
-									</p>
-									<h3 className="mt-1 font-semibold font-serif text-lg">
-										{professionalExperience.title}
-									</h3>
-								</div>
-								<p className="font-bold text-[#4d5863] text-xs">
-									{professionalExperience.location}
+						<div className="mt-5 grid gap-4">
+							{professionalExperiences.map((experience) => (
+								<article
+									className="portfolio-glass-subpanel border border-[#d8cfbd] bg-[#f8f3e8] p-5"
+									key={`${experience.period}-${experience.title}`}
+								>
+									<div className="flex flex-wrap items-baseline justify-between gap-2">
+										<div>
+											<p className="font-bold text-[#b21f35] text-xs tracking-[0.14em]">
+												{experience.period}
+											</p>
+											<h3 className="mt-1 font-semibold font-serif text-lg">
+												{experience.title}
+											</h3>
+										</div>
+										<p className="font-bold text-[#4d5863] text-xs">
+											{experience.location}
+										</p>
+									</div>
+									{experience.body ? (
+										<p className="mt-3 text-[#344252] text-sm leading-relaxed">
+											{experience.body}
+										</p>
+									) : null}
+									{experience.bullets ? (
+										<ul className="mt-3 grid list-disc gap-2 pl-5 text-[#344252] text-sm leading-relaxed">
+											{experience.bullets.map((bullet) => (
+												<li key={bullet}>{bullet}</li>
+											))}
+										</ul>
+									) : null}
+									{experience.note ? (
+										<p className="mt-3 border-[#bf1737]/25 border-t pt-3 text-[#5a6470] text-xs leading-relaxed">
+											{experience.note}
+										</p>
+									) : null}
+								</article>
+							))}
+						</div>
+
+						<div className="mt-7 grid gap-4 md:grid-cols-2">
+							<article className="portfolio-glass-subpanel border border-[#d8cfbd] bg-[#f8f3e8] p-5">
+								<p className="font-bold text-[#b21f35] text-xs tracking-[0.14em]">
+									{educationExperience.period} 毕业
 								</p>
-							</div>
-							<p className="mt-3 text-[#344252] text-sm leading-relaxed">
-								{professionalExperience.body}
-							</p>
-							<p className="mt-3 border-[#bf1737]/25 border-t pt-3 text-[#5a6470] text-xs leading-relaxed">
-								政企项目仅公开职责与能力范围，不公开内部系统名称、数据、接口、部署拓扑或安全架构。
-							</p>
-						</article>
+								<h3 className="mt-1 font-semibold font-serif text-lg">教育经历</h3>
+								<p className="mt-3 font-semibold text-[#263746] text-sm">
+									{educationExperience.school}
+								</p>
+								<p className="mt-1 text-[#5a6470] text-sm">
+									{educationExperience.degree} · {educationExperience.credential}
+								</p>
+							</article>
+							<address className="portfolio-glass-subpanel border border-[#d8cfbd] bg-[#f8f3e8] p-5 not-italic">
+								<p className="font-bold text-[#b21f35] text-xs tracking-[0.14em]">CONTACT</p>
+								<h3 className="mt-1 font-semibold font-serif text-lg">个人信息与联系方式</h3>
+								<p className="mt-3 font-semibold text-[#263746] text-sm">{personalProfile.name}</p>
+								<div className="mt-2 flex flex-wrap gap-x-5 gap-y-1 text-sm">
+									<a className="text-[#315d66] underline-offset-4 hover:underline" href={`mailto:${personalProfile.email}`}>
+										{personalProfile.email}
+									</a>
+									<a className="text-[#315d66] underline-offset-4 hover:underline" href={`tel:${personalProfile.phone}`}>
+										{personalProfile.phone}
+									</a>
+								</div>
+							</address>
+						</div>
 
 						<div className="mt-7">
 							<h3 className="font-bold font-serif text-lg">

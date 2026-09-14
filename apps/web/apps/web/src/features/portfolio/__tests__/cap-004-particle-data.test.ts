@@ -92,7 +92,7 @@ describe("CAP-004 particle data contracts", () => {
 			(domain) => domain.nodes,
 		);
 
-		expect(capabilityNodes).toHaveLength(41);
+		expect(capabilityNodes).toHaveLength(43);
 		expect(capabilityNodes.every((node) => Boolean(node.iconSlug))).toBe(true);
 		expect(
 			capabilityNodes.some((node) => node.id.startsWith("open-source-")),
