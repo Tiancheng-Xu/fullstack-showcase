@@ -50,7 +50,6 @@ export function ProjectIndexContent() {
 										))}
 									</ul>
 								) : null}
-								<ProjectArchitecturePreview project={project} />
 								<dl>
 									<div>
 										<dt>
