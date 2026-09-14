@@ -26,6 +26,19 @@ describe("portfolio index routes", () => {
 		}
 	});
 
+	it("renders each Archify preview once inside the architecture module", () => {
+		render(<ProjectIndexContent />);
+		for (const project of PORTFOLIO_PROJECTS.filter(
+			(project) => project.architectureAsset,
+		)) {
+			expect(
+				screen.getAllByRole("button", {
+					name: `查看 ${project.title} 动态架构图`,
+				}),
+			).toHaveLength(1);
+		}
+	});
+
 	it("renders reviewed non-executable Archify diagrams for systems and skips Skill projects", () => {
 		render(<EvidenceIndexContent />);
 		const systemProjects = PORTFOLIO_PROJECTS.filter(

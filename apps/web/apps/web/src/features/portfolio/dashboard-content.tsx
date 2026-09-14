@@ -213,6 +213,24 @@ export function DashboardContent() {
 							交付经验，负责前台应用与中台能力的架构实现；当前专注 AI
 							Agent、Web3、Cloud / Edge 与可验证工程交付。熟悉函数式编程中的纯函数、不可变数据、函数组合与高阶函数，并将其用于状态建模和复杂流程拆解；具备计算机系统基础，理解从编译、链接、装载到运行的程序生命周期，以及 ELF、Section / Segment、.text / .data / .bss、符号重定位和 GOT / PLT 等关键机制。
 						</p>
+						<div className="resume-core-capabilities mt-5 grid gap-3 text-[#344252] text-sm leading-relaxed">
+							<p>
+								<strong className="text-[#071d34]">核心能力：</strong>
+								拥有 10 年软件开发经验，具备扎实的软件工程、前端架构和复杂业务系统交付能力；近年来重点实践 AI Agent 系统设计、LLM 应用、MCP 工具调用、上下文工程、RAG 与工作流编排。
+							</p>
+							<p>
+								持续跟踪国内外 AI 大会、基础模型发布与 Agent 生态演进，关注模型训练与推理、Agent Runtime、MCP、RAG、评测和工程化落地，并将前沿信息沉淀为可验证的架构判断、技术选型与实践路线。
+							</p>
+							<p>
+								具备从业务分析到工程落地的 Agent 全链路实践，能够设计任务规划、模型调用、工具执行、上下文注入、Session 状态、结构化输出、人工审批、安全边界与运行追踪。
+							</p>
+							<p>
+								具备 Agent 应用与运行中台建设经验，覆盖 Agent、Workflow、Prompt、Model、Knowledge、Skill、Tool / MCP 等资源的配置、版本、发布、运行与治理；并在企业项目中落地 Claude + GPT / Codex 协同开发工作流，覆盖需求分析、代码理解、任务拆解、编码实现、Code Review、测试验证、文档同步与交付复盘。
+							</p>
+							<p>
+								熟悉 TypeScript、JavaScript、React、Vue，具备 Python、Node.js、FastAPI、PostgreSQL、WebSocket 与 AWS Serverless 开发实践；核心方向包括 Prompt Engineering、Tool Calling、Function Calling、MCP、RAG、上下文管理、多 Agent 协作、Agent Harness、JSON Schema、人工审批、安全边界与运行追踪。
+							</p>
+						</div>
 						<div className="mt-5 grid gap-4">
 							{professionalExperiences.map((experience) => (
 								<article
