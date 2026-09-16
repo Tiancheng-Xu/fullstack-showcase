@@ -98,17 +98,17 @@ export function DashboardContent() {
 			],
 		},
 		{
+			period: "2023–2026",
+			title: "政企低零代码 / FDE 工程师",
+			location: "宁波市公安局 · 驻场交付",
+			body: "驻场服务宁波市公安局科信、特警等相关业务部门，参与低代码与 FDE 项目建设，负责前台业务应用与中台能力的架构实现，以及相关模块的工程交付和持续迭代。",
+			note: "政企项目仅公开职责与能力范围，不公开内部系统名称、数据、接口、部署拓扑或安全架构。",
+		},
+		{
 			period: "2020–2023",
 			title: "中兴软创 · 交警大屏 FDE 工程师",
 			location: "宁波市交警局 · 驻场交付",
 			body: "就职于中兴软创，驻场宁波市交警局，参与交警大屏 FDE 项目建设，负责前台展示应用与中台能力的工程实现、现场交付和持续迭代。",
-			note: "政企项目仅公开职责与能力范围，不公开内部系统名称、数据、接口、部署拓扑或安全架构。",
-		},
-		{
-			period: "2023–2026",
-			title: "政企低代码 / FDE 工程师",
-			location: "宁波 · 驻场交付",
-			body: "驻场服务宁波市公安局科信、特警等相关业务部门，参与低代码与 FDE 项目建设，负责前台业务应用与中台能力的架构实现，以及相关模块的工程交付和持续迭代。",
 			note: "政企项目仅公开职责与能力范围，不公开内部系统名称、数据、接口、部署拓扑或安全架构。",
 		},
 	];
@@ -120,8 +120,8 @@ export function DashboardContent() {
 	const educationExperience = {
 		period: "2019",
 		school: "浙江大学宁波理工学院",
-		degree: "全日制本科",
-		credential: "已取得学士学位证",
+		degree: "全日制本科 · 学士学位",
+		credential: "",
 	};
 
 	const partTimeProjects = [
@@ -286,9 +286,10 @@ export function DashboardContent() {
 								<p className="mt-3 font-semibold text-[#263746] text-sm">
 									{educationExperience.school}
 								</p>
-								<p className="mt-1 text-[#5a6470] text-sm">
-									{educationExperience.degree} · {educationExperience.credential}
-								</p>
+				<p className="mt-1 text-[#5a6470] text-sm">
+					{educationExperience.degree}
+					{educationExperience.credential ? ` · ${educationExperience.credential}` : ""}
+				</p>
 							</article>
 							<address className="portfolio-glass-subpanel border border-[#d8cfbd] bg-[#f8f3e8] p-5 not-italic">
 								<p className="font-bold text-[#b21f35] text-xs tracking-[0.14em]">CONTACT</p>
