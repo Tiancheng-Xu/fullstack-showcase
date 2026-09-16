@@ -104,6 +104,13 @@ export function DashboardContent() {
 			body: "就职于中兴软创，驻场宁波市交警局，参与交警大屏 FDE 项目建设，负责前台展示应用与中台能力的工程实现、现场交付和持续迭代。",
 			note: "政企项目仅公开职责与能力范围，不公开内部系统名称、数据、接口、部署拓扑或安全架构。",
 		},
+		{
+			period: "2023–2026",
+			title: "政企低代码 / FDE 工程师",
+			location: "宁波 · 驻场交付",
+			body: "驻场服务宁波市公安局科信、特警等相关业务部门，参与低代码与 FDE 项目建设，负责前台业务应用与中台能力的架构实现，以及相关模块的工程交付和持续迭代。",
+			note: "政企项目仅公开职责与能力范围，不公开内部系统名称、数据、接口、部署拓扑或安全架构。",
+		},
 	];
 	const personalProfile = {
 		name: "徐天成",
@@ -209,8 +216,7 @@ export function DashboardContent() {
 					/>
 					<div className="portfolio-dashboard-module-card portfolio-glass-panel mt-5 border border-[#cfd5db] bg-white/84 p-5 shadow-sm md:p-8">
 						<p className="max-w-4xl text-[#344252] text-sm leading-relaxed">
-							全栈工程师，2020–2023 年就职于中兴软创，驻场宁波市交警局参与交警大屏 FDE
-							项目建设；当前专注 AI
+							全栈工程师，具备交警大屏 FDE 与政企低代码交付经验，负责前台应用与中台能力的工程实现；当前专注 AI
 							Agent、Web3、Cloud / Edge 与可验证工程交付。熟悉函数式编程中的纯函数、不可变数据、函数组合与高阶函数，并将其用于状态建模和复杂流程拆解；具备计算机系统基础，理解从编译、链接、装载到运行的程序生命周期，了解 DLL（Dynamic Linking Library）动态链接库、ELF、Section / Segment、.text / .data / .bss、符号重定位，以及 GOT（Global Offset Table）、PLT（Procedure Linkage Table）与库打桩（library interposition / function wrapping）等机制。
 						</p>
 						<div className="resume-core-capabilities mt-5 grid gap-3 text-[#344252] text-sm leading-relaxed">
