@@ -47,70 +47,141 @@ export const openSourceContributions = orderOpenSourceContributions([
 			},
 		],
 	},
+	{
+		project: "Vite",
+		stars: 82851,
+		pullRequests: [
+			{
+				label: "#23235",
+				href: "https://github.com/vitejs/vite/pull/23235",
+				contribution: "补充 SSR server-only module reload 文档",
+			},
+		],
+	},
+	{
+		project: "Web Testownik",
+		stars: 103,
+		pullRequests: [
+			{
+				label: "#323",
+				href: "https://github.com/Solvro/web-testownik/pull/323",
+				contribution: "强化维护恢复处理",
+			},
+		],
+	},
+	{
+		project: "BBj Language Server",
+		stars: 13,
+		pullRequests: [
+			{
+				label: "#665",
+				href: "https://github.com/BBx-Kitchen/bbj-language-server/pull/665",
+				contribution: "统一语言服务器日志输出格式",
+			},
+		],
+	},
 ]);
 export const openSourceContributionsInReview = orderOpenSourceContributions([
 	{
 		project: "Deno",
-		stars: 108406,
+		stars: 108444,
 		pullRequests: [
 			{
-				label: "#36794",
-				href: "https://github.com/denoland/deno/pull/36794",
-				contribution: "保留 CLI 入口前的 -- 分隔符",
+				label: "#36855",
+				href: "https://github.com/denoland/deno/pull/36855",
+				contribution: "保留同步子进程的 stdio 文件描述符",
+			},
+			{
+				label: "#36851",
+				href: "https://github.com/denoland/deno/pull/36851",
+				contribution: "测试失败时避免输出 Rust backtrace",
+			},
+			{
+				label: "#36849",
+				href: "https://github.com/denoland/deno/pull/36849",
+				contribution: "在 registerHooks 中暴露模块格式",
+			},
+		],
+	},
+	{
+		project: "Vite",
+		stars: 82851,
+		pullRequests: [
+			{
+				label: "#23499",
+				href: "https://github.com/vitejs/vite/pull/23499",
+				contribution: "初始化失败后释放旧环境",
+			},
+		],
+	},
+	{
+		project: "MCP Servers",
+		stars: 90176,
+		pullRequests: [
+			{
+				label: "#4810",
+				href: "https://github.com/modelcontextprotocol/servers/pull/4810",
+				contribution: "将 session resources 限定到所属 server",
+			},
+		],
+	},
+	{
+		project: "VS Code",
+		stars: 192574,
+		pullRequests: [
+			{
+				label: "#335428",
+				href: "https://github.com/microsoft/vscode/pull/335428",
+				contribution: "支持编辑器拖放时使用鼠标修饰键",
+			},
+		],
+	},
+	{
+		project: "quicklink",
+		stars: 11292,
+		pullRequests: [
+			{
+				label: "#501",
+				href: "https://github.com/GoogleChromeLabs/quicklink/pull/501",
+				contribution: "为页面描述使用唯一值",
+			},
+		],
+	},
+	{
+		project: "GoogleTest",
+		stars: 39544,
+		pullRequests: [
+			{
+				label: "#5092",
+				href: "https://github.com/google/googletest/pull/5092",
+				contribution: "避免 INSTANTIATE_TEST_SUITE_P 参数遮蔽",
+			},
+			{
+				label: "#5091",
+				href: "https://github.com/google/googletest/pull/5091",
+				contribution: "CTest 捕获 Windows stdout 时保留强制 ANSI 颜色",
+			},
+		],
+	},
+	{
+		project: "Google WebCrypto",
+		stars: 116,
+		pullRequests: [
+			{
+				label: "#398",
+				href: "https://github.com/google/webcrypto.dart/pull/398",
+				contribution: "提取 RSA-OAEP PKCS#8 导入示例",
 			},
 		],
 	},
 	{
 		project: "RTK",
-		stars: 79560,
+		stars: 12358,
 		pullRequests: [
 			{
 				label: "#3933",
 				href: "https://github.com/rtk-ai/rtk/pull/3933",
 				contribution: "让 Ruff format 路由匹配首个参数",
-			},
-			{
-				label: "#3922",
-				href: "https://github.com/rtk-ai/rtk/pull/3922",
-				contribution: "增加 gitleaks TOML 输出过滤",
-			},
-		],
-	},
-	{
-		project: "pnpm",
-		stars: 36465,
-		pullRequests: [
-			{
-				label: "#14675",
-				href: "https://github.com/pnpm/pnpm/pull/14675",
-				contribution: "澄清 workspace package patterns",
-			},
-			{
-				label: "#14674",
-				href: "https://github.com/pnpm/pnpm/pull/14674",
-				contribution: "在安全支持策略中列出 pnpm v12",
-			},
-		],
-	},
-	{
-		project: "LiteLLM",
-		stars: 58324,
-		pullRequests: [
-			{
-				label: "#40183",
-				href: "https://github.com/BerriAI/litellm/pull/40183",
-				contribution: "补充 OpenRouter GPT-5.6 Sol 元数据",
-			},
-		],
-	},
-	{
-		project: "Lightpanda",
-		stars: 35173,
-		pullRequests: [
-			{
-				label: "#3440",
-				href: "https://github.com/lightpanda-io/browser/pull/3440",
-				contribution: "在 computed styles 中保留 CSS 自定义属性",
 			},
 		],
 	},
@@ -170,51 +241,6 @@ export const openSourceContributionsInReview = orderOpenSourceContributions([
 		],
 	},
 	{
-		project: "Bitcoin Dev Kit",
-		stars: 1067,
-		pullRequests: [
-			{
-				label: "#2276",
-				href: "https://github.com/bitcoindevkit/bdk/pull/2276",
-				issueHref: "https://github.com/bitcoindevkit/bdk/issues/2274",
-				contribution: "保留首个 floating transaction output",
-			},
-		],
-	},
-	{
-		project: "Backstage",
-		stars: 34376,
-		pullRequests: [
-			{
-				label: "#35564",
-				href: "https://github.com/backstage/backstage/pull/35564",
-				contribution: "修复 undici 安全依赖告警",
-			},
-		],
-	},
-	{
-		project: "BBj Language Server",
-		stars: 13,
-		pullRequests: [
-			{
-				label: "#665",
-				href: "https://github.com/BBx-Kitchen/bbj-language-server/pull/665",
-				contribution: "统一语言服务器日志输出格式",
-			},
-		],
-	},
-	{
-		project: "Web Testownik",
-		stars: 103,
-		pullRequests: [
-			{
-				label: "#323",
-				href: "https://github.com/Solvro/web-testownik/pull/323",
-				contribution: "强化维护恢复处理",
-			},
-		],
-	},
-	{
 		project: "Paperclip",
 		stars: 0,
 		pullRequests: [
@@ -222,39 +248,6 @@ export const openSourceContributionsInReview = orderOpenSourceContributions([
 				label: "#2",
 				href: "https://github.com/adamteale/paperclip/pull/2",
 				contribution: "覆盖 runJob invocation scope resolution",
-			},
-		],
-	},
-	{
-		project: "Slopshop",
-		stars: 0,
-		pullRequests: [
-			{
-				label: "#21",
-				href: "https://github.com/fireship-dev/slopshop/pull/21",
-				contribution: "强化逐用户限流",
-			},
-		],
-	},
-	{
-		project: "Vite",
-		stars: 82766,
-		pullRequests: [
-			{
-				label: "#23235",
-				href: "https://github.com/vitejs/vite/pull/23235",
-				contribution: "补充 SSR server-only module reload 文档",
-			},
-		],
-	},
-	{
-		project: "Google WebCrypto",
-		stars: 116,
-		pullRequests: [
-			{
-				label: "#398",
-				href: "https://github.com/google/webcrypto.dart/pull/398",
-				contribution: "提取 RSA-OAEP PKCS#8 导入示例",
 			},
 		],
 	},
@@ -288,6 +281,12 @@ const OPEN_SOURCE_REPOSITORY_PNG_KEYS = new Set([
 	"vitejs--vite",
 ]);
 
+const OPEN_SOURCE_REPOSITORY_FALLBACK_KEYS = new Set([
+	"googlechromelabs--quicklink",
+	"google--googletest",
+	"microsoft--vscode",
+]);
+
 export function getOpenSourceRepositoryAssetKey(repositoryUrl: string) {
 	const [owner, repository] = new URL(repositoryUrl).pathname
 		.split("/")
@@ -303,6 +302,9 @@ export function getOpenSourceRepositoryAssetKey(repositoryUrl: string) {
 
 export function getOpenSourceRepositoryIconSrc(repositoryUrl: string) {
 	const assetKey = getOpenSourceRepositoryAssetKey(repositoryUrl);
+	if (!assetKey || OPEN_SOURCE_REPOSITORY_FALLBACK_KEYS.has(assetKey)) {
+		return OPEN_SOURCE_REPOSITORY_ICON_FALLBACK;
+	}
 	return assetKey
 		? `/assets/portfolio/repository-icons/${assetKey}.${OPEN_SOURCE_REPOSITORY_PNG_KEYS.has(assetKey) ? "png" : "svg"}`
 		: OPEN_SOURCE_REPOSITORY_ICON_FALLBACK;
