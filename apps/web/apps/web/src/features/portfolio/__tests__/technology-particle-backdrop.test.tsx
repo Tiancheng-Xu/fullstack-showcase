@@ -23,6 +23,7 @@ vi.mock("../technology-capability-particle-scene", () => ({
 }));
 
 import { TechnologyParticleBackdrop } from "../technology-particle-backdrop";
+import { openSourceRepositoryDetails } from "../open-source-data";
 
 describe("TechnologyParticleBackdrop", () => {
   beforeEach(() => {
@@ -69,7 +70,9 @@ describe("TechnologyParticleBackdrop", () => {
 
     await waitFor(() => expect(scene.mount).toHaveBeenCalledTimes(1));
     const domains = scene.mount.mock.calls[0][1];
-    expect(domains.flatMap((domain: { nodes: unknown[] }) => domain.nodes)).toHaveLength(21);
+    expect(domains.flatMap((domain: { nodes: unknown[] }) => domain.nodes)).toHaveLength(
+      openSourceRepositoryDetails.length,
+    );
     expect(scene.setPaused).toHaveBeenCalledWith(false);
     expect(scene.setRange).toHaveBeenCalledWith(1);
     expect(screen.getByTestId("technology-particle-backdrop")).toHaveAttribute(
