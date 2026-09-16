@@ -71,8 +71,7 @@ describe("portfolio interview narratives", () => {
 		expect(source).toContain(".text / .data / .bss");
 		expect(source).toContain("函数式编程中的纯函数、不可变数据、函数组合与高阶函数");
 		expect(source).toContain("浙江大学宁波理工学院");
-		expect(source).toContain("全日制本科");
-		expect(source).toContain("已取得学士学位证");
+		expect(source).toContain("全日制本科 · 学士学位");
 		expect(source).toContain("xutiancheng04@gmail.com");
 		expect(source).toContain("17855813990");
 		expect(source).not.toMatch(/ANETU|TUG|67%|0\.21|UZFI|Claw|Acons/);
