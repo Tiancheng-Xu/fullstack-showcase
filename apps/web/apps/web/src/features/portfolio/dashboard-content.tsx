@@ -211,7 +211,7 @@ export function DashboardContent() {
 						<p className="max-w-4xl text-[#344252] text-sm leading-relaxed">
 							全栈工程师，拥有政企低代码与 FDE
 							交付经验，负责前台应用与中台能力的架构实现；当前专注 AI
-							Agent、Web3、Cloud / Edge 与可验证工程交付。熟悉函数式编程中的纯函数、不可变数据、函数组合与高阶函数，并将其用于状态建模和复杂流程拆解；具备计算机系统基础，理解从编译、链接、装载到运行的程序生命周期，以及 ELF、Section / Segment、.text / .data / .bss、符号重定位和 GOT / PLT 等关键机制。
+							Agent、Web3、Cloud / Edge 与可验证工程交付。熟悉函数式编程中的纯函数、不可变数据、函数组合与高阶函数，并将其用于状态建模和复杂流程拆解；具备计算机系统基础，理解从编译、链接、装载到运行的程序生命周期，了解 DLL（Dynamic Linking Library）动态链接库、ELF、Section / Segment、.text / .data / .bss、符号重定位，以及 GOT（Global Offset Table）、PLT（Procedure Linkage Table）与库打桩（library interposition / function wrapping）等机制。
 						</p>
 						<div className="resume-core-capabilities mt-5 grid gap-3 text-[#344252] text-sm leading-relaxed">
 							<p>
