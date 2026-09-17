@@ -683,6 +683,28 @@ export const PORTFOLIO_PROJECTS: PortfolioProject[] = [
 			"https://github.com/Tiancheng-Xu/personal-skills/tree/main/skills/tc-flow",
 	},
 	{
+		id: "oss-contributions",
+		title: "OSS 共建",
+		desc: "围绕 Deno、Next.js、MCP 等高影响力 Web / AI 基础设施项目，按认领、复现、回归测试、评审和上游结果记录真实贡献链路。",
+		status: "进行中",
+		progress: 60,
+		architecture:
+			"Issue claim → reproducible fixture → focused regression → minimal fix → upstream review；公开状态严格区分已合并、开放 PR 与调查中问题。",
+		repo: "Tiancheng-Xu/Tiancheng-Xu",
+		skills: ["TypeScript", "Deno", "Next.js", "MCP", "Web Performance"],
+		evidence: [
+			"9 个已合并贡献与 18 个开放 PR 持续接受上游评审",
+			"Next.js #98732 已完成自定义缓存冷启动 500 的可复现验证",
+			"Next.js #98791 已认领，正在追踪 pnpm hoisted-store 悬空链接问题",
+		],
+		details: [
+			"只在确认无竞争后认领问题；没有可复现证据或必要验证工具时不推送。",
+			"所有公开提交使用 Tiancheng-Xu 身份，状态页不把开放 PR 冒充为上游已接受。",
+		],
+		ownerPage: "https://github.com/Tiancheng-Xu",
+		sourceUpdatedAt: "2026-09-17",
+	},
+	{
 		id: "babysteps",
 		architectureAsset: "architecture/babysteps.visual-check.1440x900.light.png",
 		title: "BabySteps",
