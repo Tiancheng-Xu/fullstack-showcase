@@ -5,7 +5,10 @@
 .portfolio-voyage__canvas { z-index: 1; display: block; opacity: 0; transition: opacity .8s ease; }
 .portfolio-voyage__canvas[data-active="true"] { opacity: 1; }
 .portfolio-voyage__fallback { z-index: 0; overflow: hidden; background: linear-gradient(180deg, #123149 0%, #315267 43%, #d2a27d 50%, #315c68 52%, #0c374c 100%); }
-.portfolio-voyage__sun { position: absolute; top: 21%; left: 67%; width: 94px; aspect-ratio: 1; border-radius: 50%; background: #db6752; box-shadow: 0 0 65px rgba(235, 131, 92, .5); }
+.portfolio-voyage__sun { position: absolute; top: 25%; left: 67%; width: clamp(138px, 15vw, 210px); aspect-ratio: 1; border-radius: 50%; background: #f5f0df; box-shadow: 0 0 65px rgba(235, 131, 92, .32); overflow: hidden; }
+.portfolio-voyage__sun img { display: block; width: 89%; height: 89%; margin: 5.5%; object-fit: contain; mix-blend-mode: multiply; opacity: .94; }
+.portfolio-voyage__twos-complement { position: absolute; z-index: 3; top: 27%; left: calc(67% + clamp(150px, 16vw, 220px)); display: grid; gap: 5px; color: #314b54; font: 700 10px/1.35 ui-monospace, monospace; letter-spacing: .14em; text-shadow: 0 1px 0 rgba(240, 240, 222, .76); }
+.portfolio-voyage__twos-complement span { color: #7a5b47; font-size: 8px; letter-spacing: .1em; }
 .portfolio-voyage__mountain { position: absolute; inset: auto -5% 43%; height: 31%; background: #182d3b; opacity: .72; clip-path: polygon(0 100%, 0 72%, 12% 48%, 20% 73%, 31% 37%, 43% 78%, 54% 50%, 67% 74%, 78% 22%, 87% 64%, 100% 45%, 100% 100%); }
 .portfolio-voyage__mountain--back { opacity: .35; transform: translateY(-42px) scale(1.08); }
 .portfolio-voyage__sea { position: absolute; inset: 54% 0 0; background: repeating-radial-gradient(ellipse at 60% 0, rgba(255,220,174,.35) 0 1px, transparent 2px 17px), linear-gradient(#315f6c, #092f45); }
@@ -27,7 +30,7 @@
 .portfolio-voyage__content a { display: inline-flex; margin-top: 16px; padding: 11px 0 8px; color: #fff7ea; border-bottom: 1px solid #d95347; font-weight: 700; text-decoration: none; }
 .portfolio-voyage__status { position: absolute; z-index: 4; right: 24px; bottom: 20px; margin: 0; padding: 7px 10px; color: rgba(239,244,246,.72); background: rgba(5,20,31,.34); border: 1px solid rgba(231,237,239,.18); backdrop-filter: blur(10px); font-size: 10px; }
 .portfolio-voyage__credit { position: absolute; z-index: 4; left: 24px; bottom: 20px; margin: 0; color: rgba(239,244,246,.48); font-size: 9px; }
-@media (max-width: 767px) { .portfolio-voyage { min-height: 610px; } .portfolio-voyage__canvas { display: none; } .portfolio-voyage__wash { background: linear-gradient(180deg, rgba(5,18,29,.28), rgba(5,18,29,.78)); } .portfolio-voyage__content { width: calc(100% - 36px); padding-top: 110px; } .portfolio-voyage__boat { left: 57%; top: 61%; } .portfolio-voyage__status { right: 18px; } .portfolio-voyage__credit { left: 18px; max-width: 45%; } }
+@media (max-width: 767px) { .portfolio-voyage { min-height: 610px; } .portfolio-voyage__canvas { display: none; } .portfolio-voyage__wash { background: linear-gradient(180deg, rgba(5,18,29,.28), rgba(5,18,29,.78)); } .portfolio-voyage__content { width: calc(100% - 36px); padding-top: 110px; } .portfolio-voyage__boat { left: 57%; top: 61%; } .portfolio-voyage__sun { top: 25%; left: 58%; width: 112px; } .portfolio-voyage__twos-complement { top: 26%; left: 18px; } .portfolio-voyage__status { right: 18px; } .portfolio-voyage__credit { left: 18px; max-width: 45%; } }
 @media (prefers-reduced-motion: reduce) { .portfolio-voyage__canvas { display: none; } }
 
 [data-portfolio-reveal] {
@@ -91,7 +94,7 @@
 }
 
 .portfolio-voyage__sun {
-	background: #c96550;
+	background: #f5f0df;
 	box-shadow: 0 0 72px rgba(215, 145, 100, 0.42);
 }
 
@@ -138,11 +141,20 @@
 .portfolio-voyage[data-scene-state="active"] .portfolio-voyage__fallback { opacity: 0; }
 .portfolio-voyage__mountain { display: none; }
 .portfolio-voyage__sun {
-	top: 31%;
-	left: 69%;
-	width: 76px;
-	background: #d69569;
+	top: 22%;
+	left: 68%;
+	width: clamp(200px, 22vw, 330px);
+	background: #f5f0df;
 	box-shadow: 0 0 54px rgba(218, 163, 116, .46);
+}
+
+.portfolio-voyage__twos-complement {
+	top: 16%;
+	left: 68%;
+}
+@media (max-width: 767px) {
+	.portfolio-voyage__sun { top: 25%; left: 58%; width: clamp(124px, 38vw, 190px); }
+	.portfolio-voyage__twos-complement { top: 26%; left: 18px; }
 }
 .portfolio-voyage__sea {
 	inset: 49% 0 0;

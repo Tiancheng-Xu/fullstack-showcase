@@ -98,17 +98,17 @@ export function DashboardContent() {
 			],
 		},
 		{
+			period: "2023–2026",
+			title: "政企低零代码 / FDE 工程师",
+			location: "宁波市公安局 · 驻场交付",
+			body: "驻场服务宁波市公安局科信、特警等相关业务部门，参与低代码与 FDE 项目建设，负责前台业务应用与中台能力的架构实现，以及相关模块的工程交付和持续迭代。",
+			note: "政企项目仅公开职责与能力范围，不公开内部系统名称、数据、接口、部署拓扑或安全架构。",
+		},
+		{
 			period: "2020–2023",
 			title: "中兴软创 · 交警大屏 FDE 工程师",
 			location: "宁波市交警局 · 驻场交付",
 			body: "就职于中兴软创，驻场宁波市交警局，参与交警大屏 FDE 项目建设，负责前台展示应用与中台能力的工程实现、现场交付和持续迭代。",
-			note: "政企项目仅公开职责与能力范围，不公开内部系统名称、数据、接口、部署拓扑或安全架构。",
-		},
-		{
-			period: "2023–2026",
-			title: "政企低代码 / FDE 工程师",
-			location: "宁波 · 驻场交付",
-			body: "驻场服务宁波市公安局科信、特警等相关业务部门，参与低代码与 FDE 项目建设，负责前台业务应用与中台能力的架构实现，以及相关模块的工程交付和持续迭代。",
 			note: "政企项目仅公开职责与能力范围，不公开内部系统名称、数据、接口、部署拓扑或安全架构。",
 		},
 	];
@@ -120,8 +120,8 @@ export function DashboardContent() {
 	const educationExperience = {
 		period: "2019",
 		school: "浙江大学宁波理工学院",
-		degree: "全日制本科",
-		credential: "已取得学士学位证",
+		degree: "全日制本科 · 学士学位",
+		credential: "",
 	};
 
 	const partTimeProjects = [
@@ -215,20 +215,20 @@ export function DashboardContent() {
 						title="个人简历"
 					/>
 					<div className="portfolio-dashboard-module-card portfolio-glass-panel mt-5 border border-[#cfd5db] bg-white/84 p-5 shadow-sm md:p-8">
-						<p className="max-w-4xl text-[#344252] text-sm leading-relaxed">
+						<p className="max-w-5xl text-[#344252] text-base leading-8">
 							全栈工程师，具备交警大屏 FDE 与政企低代码交付经验，负责前台应用与中台能力的工程实现；当前专注 AI
 							Agent、Web3、Cloud / Edge 与可验证工程交付。熟悉函数式编程中的纯函数、不可变数据、函数组合与高阶函数，并将其用于状态建模和复杂流程拆解；具备计算机系统基础，理解从编译、链接、装载到运行的程序生命周期，了解 DLL（Dynamic Linking Library）动态链接库、ELF、Section / Segment、.text / .data / .bss、符号重定位，以及 GOT（Global Offset Table）、PLT（Procedure Linkage Table）与库打桩（library interposition / function wrapping）等机制。
 						</p>
-						<div className="resume-core-capabilities mt-5 grid gap-3 text-[#344252] text-sm leading-relaxed">
+						<div className="resume-core-capabilities mt-8 grid max-w-5xl gap-5 text-[#344252] text-base leading-8">
 							<p>
-								<strong className="text-[#071d34]">核心能力：</strong>
-								拥有 10 年软件开发经验，具备扎实的软件工程、前端架构和复杂业务系统交付能力；近年来重点实践 AI Agent 系统设计、LLM 应用、MCP 工具调用、上下文工程、RAG 与工作流编排。
+								<strong className="mb-2 block text-lg text-[#071d34]">核心能力</strong>
+								拥有 10 年软件开发经验，具备扎实的软件工程、前端架构和复杂业务系统交付能力；重视系统鲁棒性、容错、可恢复性与可观测性，近年来重点实践 AI Agent 系统设计、LLM 应用、MCP 工具调用、上下文工程、RAG 与工作流编排。
 							</p>
 							<p>
 								持续跟踪国内外 AI 大会、基础模型发布与 Agent 生态演进，关注模型训练与推理、Agent Runtime、MCP、RAG、评测和工程化落地，并将前沿信息沉淀为可验证的架构判断、技术选型与实践路线。
 							</p>
 							<p>
-								具备从业务分析到工程落地的 Agent 全链路实践，能够设计任务规划、模型调用、工具执行、上下文注入、Session 状态、结构化输出、人工审批、安全边界与运行追踪。
+								具备从业务分析到工程落地的 Agent 全链路实践，能够设计任务规划、模型调用、工具执行、上下文注入、Session 状态、结构化输出、人工审批、安全边界、失败降级与运行追踪，提升复杂任务链路的鲁棒性。
 							</p>
 							<p>
 								具备 Agent 应用与运行中台建设经验，覆盖 Agent、Workflow、Prompt、Model、Knowledge、Skill、Tool / MCP 等资源的配置、版本、发布、运行与治理；并在企业项目中落地 Claude + GPT / Codex 协同开发工作流，覆盖需求分析、代码理解、任务拆解、编码实现、Code Review、测试验证、文档同步与交付复盘。
@@ -286,9 +286,10 @@ export function DashboardContent() {
 								<p className="mt-3 font-semibold text-[#263746] text-sm">
 									{educationExperience.school}
 								</p>
-								<p className="mt-1 text-[#5a6470] text-sm">
-									{educationExperience.degree} · {educationExperience.credential}
-								</p>
+				<p className="mt-1 text-[#5a6470] text-sm">
+					{educationExperience.degree}
+					{educationExperience.credential ? ` · ${educationExperience.credential}` : ""}
+				</p>
 							</article>
 							<address className="portfolio-glass-subpanel border border-[#d8cfbd] bg-[#f8f3e8] p-5 not-italic">
 								<p className="font-bold text-[#b21f35] text-xs tracking-[0.14em]">CONTACT</p>
