@@ -150,7 +150,7 @@ export const PORTFOLIO_PROJECTS: PortfolioProject[] = [
 			"Cloudflare Production、项目自有 Evidence、深链 SSR 与真实 404 已完成语义回读",
 			"24 笔 Sepolia V3 状态交易全部成功，覆盖 DAG 锚定、接单、异议、仲裁、质押返还与收益领取",
 			"AWS V2 已以 verified-production 完成浏览器到 HMAC API、SNS/SQS、Lambda、ECS Fargate、PostgreSQL 与聚合回读闭环，并记录暂停、零队列与零 ECS Task",
-      "最终 TODO 已收口并由 PR #28 合并；最新 main 0c47139946c274d93db024b47c151aececb40376、PR Verify Run 34706347471、Cloudflare Production deployment 8c556e3b-c4de-4c43-a6d4-ce1c6582f074 当前 Active，部署页与自定义域 /evidence/ 均为 200，未知路由返回 404",
+			"最终发布闭环已由 PR #28 合并；source 0c47139946c274d93db024b47c151aececb40376、PR Verify Run 34706347471、Cloudflare Production deployment 与自定义域 /evidence/ 均完成语义核验，未知路由返回 404。",
 		],
 		details: [
 			"Cloudflare Web、AWS V2 Runtime 与 Sepolia V3 分别为 verified-production，三套证据互不替代；本地 Transaction Engine、视觉与模型证据仍仅为 verified-local。",
@@ -158,7 +158,7 @@ export const PORTFOLIO_PROJECTS: PortfolioProject[] = [
 			"Sepolia 验证使用单一测试钱包复用多个角色，不等同于多钱包生产隔离证明，也不证明网页生产环境直接提交交易。",
       "业务录屏版本绑定 source 2dfe6d0aa6fa40b65762c07ed687921233b0e0c6、Cloudflare Production deployment d8cf5994-ce54-47f1-8979-0c799eca8b79 与 main Actions Run 34697552824；录屏入口保持 /evidence/agent-market-v3-full-workflow.mp4，Range 请求返回 206。",
       "Evidence 发布版本绑定 source a9278665d25dad64ab22477a10a39974a2712744、Cloudflare Production deployment de287f0d-8e89-4eca-bb0c-b08a1fb5af8f；PR #27 已合并，PR Verify Run 34705871834。",
-      "最终 TODO 版本绑定 source 0c47139946c274d93db024b47c151aececb40376、Cloudflare Production deployment 8c556e3b-c4de-4c43-a6d4-ce1c6582f074；PR #28 已合并，PR Verify Run 34706347471，部署状态 Active，部署页与自定义域 /evidence/ 均为 200，未知路由返回 404。",
+			"最终发布版本绑定 source 0c47139946c274d93db024b47c151aececb40376、PR Verify Run 34706347471 与 Cloudflare Production deployment 8c556e3b-c4de-4c43-a6d4-ce1c6582f074；PR #28 已合并，部署状态 Active，部署页与自定义域 /evidence/ 均完成核验，未知路由返回 404。",
       "生产录屏只证明生产 UI 流程，不作为实时市场成交或 AWS Runtime 证据。本轮未触发 AWS mutation、钱包签名、Sepolia 交易或模型 Runtime。",
 		],
 		renderingModes: ["Edge SSR", "Hydration", "Client-only Web3"],

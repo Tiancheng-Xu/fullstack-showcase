@@ -234,12 +234,18 @@ export function PortfolioVoyageHero({ forceStatic = false }: PortfolioVoyageHero
 				aria-hidden="true"
 			/>
       <div className="portfolio-voyage__fallback" aria-hidden="true">
-        <span className="portfolio-voyage__sun" />
+        <span className="portfolio-voyage__sun">
+          <img src="/assets/portfolio/twos-complement-ring.png" alt="" />
+        </span>
         <span className="portfolio-voyage__mountain portfolio-voyage__mountain--back" />
         <span className="portfolio-voyage__mountain portfolio-voyage__mountain--front" />
         <span className="portfolio-voyage__sea" />
         <span className="portfolio-voyage__boat">舟</span>
       </div>
+			<div className="portfolio-voyage__twos-complement" aria-hidden="true">
+				<strong>TWO'S COMPLEMENT</strong>
+				<span>FUNCTION NAME IS LOCATION</span>
+			</div>
 			<div className="portfolio-voyage__wash" />
 				{sceneState === "loading" ? <VoyageLoadingOverlay progress={loadingProgress} /> : null}
       <div className="portfolio-voyage__content">

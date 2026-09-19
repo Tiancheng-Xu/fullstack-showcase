@@ -8,6 +8,7 @@ import { SceneLoader } from "@babylonjs/core/Loading/sceneLoader.js";
 import { Effect } from "@babylonjs/core/Materials/effect.js";
 import { ShaderMaterial } from "@babylonjs/core/Materials/shaderMaterial.js";
 import { StandardMaterial } from "@babylonjs/core/Materials/standardMaterial.js";
+import { DynamicTexture } from "@babylonjs/core/Materials/Textures/dynamicTexture.js";
 import { Color3, Color4 } from "@babylonjs/core/Maths/math.color.js";
 import { Vector3 } from "@babylonjs/core/Maths/math.vector.js";
 import { CreateBox } from "@babylonjs/core/Meshes/Builders/boxBuilder.js";
@@ -154,9 +155,6 @@ Effect.ShadersStore[`${SKY_SHADER_NAME}FragmentShader`] = `
 	vec3 cloudLight = mix(vec3(.94, .94, .88), vec3(1.0, .86, .72), pow(sunDot, 5.0));
 	color = mix(color, cloudShadow, cloudMask * .68);
 	color = mix(color, cloudLight, cloudCore * (.78 + horizonHaze * .12));
-	float sunDisc = smoothstep(.9985, .99955, sunDot);
-	sunDisc *= 1.0 - cloudMask * .3;
-	color = mix(color, vec3(.90, .52, .29), sunDisc * .94);
 	gl_FragColor = vec4(color, 1.0);
 	}
 `;
@@ -213,6 +211,60 @@ async function loadBoat(scene: Scene, root: TransformNode) {
   } catch {
     createBoatFallback(scene, root);
   }
+}
+
+async function createTwosComplementSun(
+	scene: Scene,
+	camera: ArcRotateCamera,
+	sunDirection: Vector3,
+) {
+	const textureSize = 512;
+	const texture = new DynamicTexture(
+		"twos-complement-sun-texture",
+		{ width: textureSize, height: textureSize },
+		scene,
+		false,
+	);
+	texture.hasAlpha = true;
+	const image = new Image();
+	image.decoding = "async";
+	const plane = CreatePlane("twos-complement-sun", { size: 27 }, scene);
+	const material = new StandardMaterial("twos-complement-sun-material", scene);
+	material.diffuseTexture = texture;
+	material.emissiveTexture = texture;
+	material.useAlphaFromDiffuseTexture = true;
+	material.disableLighting = true;
+	material.backFaceCulling = false;
+	material.alpha = 0.92;
+	plane.material = material;
+	plane.billboardMode = Mesh.BILLBOARDMODE_ALL;
+	plane.isPickable = false;
+	plane.position.copyFrom(camera.position.add(sunDirection.scale(92)));
+	plane.setEnabled(false);
+
+	await new Promise<void>((resolve) => {
+		image.onload = () => {
+			const context = texture.getContext() as CanvasRenderingContext2D;
+			context.clearRect(0, 0, textureSize, textureSize);
+			context.save();
+			context.beginPath();
+			context.arc(textureSize / 2, textureSize / 2, textureSize * 0.47, 0, Math.PI * 2);
+			context.clip();
+			const imageInset = textureSize * 0.055;
+			context.drawImage(image, imageInset, imageInset, textureSize - imageInset * 2, textureSize - imageInset * 2);
+			context.restore();
+			texture.update(true);
+			plane.setEnabled(true);
+			resolve();
+		};
+		image.onerror = () => resolve();
+		image.src = "/assets/portfolio/twos-complement-ring.png";
+	});
+
+	return {
+		plane,
+		sync: () => plane.position.copyFrom(camera.position.add(sunDirection.scale(92))),
+	};
 }
 
 function createWake(scene: Scene, root: TransformNode) {
@@ -281,10 +333,15 @@ export async function mountPortfolioVoyageScene(
 		const skySunDirection = new Vector3(-.253, .019, -.967).normalize();
 	  skyMaterial.backFaceCulling = false;
 		skyMaterial.disableDepthWrite = true;
-	  sky.material = skyMaterial;
+		sky.material = skyMaterial;
 		sky.applyFog = false;
 		sky.infiniteDistance = true;
 		sunLight.direction = skySunDirection.negate();
+		const twosComplementSun = await createTwosComplementSun(
+			scene,
+			camera,
+			skySunDirection,
+		);
 
 		const ocean = CreateGround("voyage-ocean", { width: 1200, height: 1200, subdivisions: 160 }, scene);
 	  ocean.position.z = -180;
@@ -356,8 +413,9 @@ export async function mountPortfolioVoyageScene(
 	  scene.onBeforeRenderObservable.add(() => {
 	    elapsed += engine.getDeltaTime() / 1000;
 	    oceanMaterial.setFloat("time", elapsed);
-	    oceanMaterial.setVector3("cameraPosition", camera.position);
+			oceanMaterial.setVector3("cameraPosition", camera.position);
 			sky.position.copyFrom(camera.position);
+			twosComplementSun.sync();
 			const travelProgress = (elapsed * .012) % 1;
 	    const pose = sampleVoyagePose(.16 + travelProgress * .64, elapsed);
 			boatRoot.position.set(

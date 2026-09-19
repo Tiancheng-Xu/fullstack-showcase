@@ -163,20 +163,37 @@ export function mountTechnologyCapabilityParticleScene(
 		plane.position.set(position.x, position.y, position.z);
 		plane.billboardMode = Mesh.BILLBOARDMODE_ALL;
 		plane.isPickable = false;
-		plane.setEnabled(false);
+		const placeholderContext = texture.getContext() as CanvasRenderingContext2D;
+		placeholderContext.clearRect(0, 0, textureSize, textureSize);
+		placeholderContext.fillStyle = "rgba(238, 237, 222, 0.94)";
+		placeholderContext.beginPath();
+		placeholderContext.arc(textureSize / 2, textureSize / 2, textureSize * 0.38, 0, Math.PI * 2);
+		placeholderContext.fill();
+		placeholderContext.strokeStyle = "rgba(18, 52, 68, 0.42)";
+		placeholderContext.lineWidth = 8;
+		placeholderContext.stroke();
+		texture.update(false);
+		plane.setEnabled(true);
 
 		const image = new Image();
 		image.decoding = "async";
+		image.crossOrigin = "anonymous";
 		image.onload = () => {
 			const context = texture.getContext() as CanvasRenderingContext2D;
 			context.clearRect(0, 0, textureSize, textureSize);
 			const iconInset = hasLabel ? 40 : 20;
 			const iconSize = hasLabel ? 176 : 152;
-			context.drawImage(image, iconInset, hasLabel ? 12 : 20, iconSize, iconSize);
-			context.globalCompositeOperation = "source-in";
-			context.fillStyle = "rgba(18, 52, 68, 0.96)";
-			context.fillRect(0, 0, textureSize, textureSize);
-			context.globalCompositeOperation = "source-over";
+			const iconTop = hasLabel ? 12 : 20;
+			context.fillStyle = "rgba(238, 237, 222, 0.94)";
+			context.beginPath();
+			context.arc(textureSize / 2, iconTop + iconSize / 2, iconSize / 2, 0, Math.PI * 2);
+			context.fill();
+			context.save();
+			context.beginPath();
+			context.arc(textureSize / 2, iconTop + iconSize / 2, iconSize / 2, 0, Math.PI * 2);
+			context.clip();
+			context.drawImage(image, iconInset, iconTop, iconSize, iconSize);
+			context.restore();
 			if (node.particleLabel) {
 				context.fillStyle = "rgba(18, 52, 68, 0.96)";
 				context.font = '700 18px "Noto Sans SC", sans-serif';
