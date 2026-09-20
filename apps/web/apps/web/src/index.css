@@ -1636,10 +1636,14 @@ header#top.portfolio-glass-bar {
 
 @media (max-width: 767px) {
 	.portfolio-archify-viewport {
+		overflow-x: auto;
+		overflow-y: hidden;
 		-webkit-overflow-scrolling: touch;
 		touch-action: pan-x pan-y;
 	}
 	.portfolio-archify-image {
+		min-width: 1024px;
+		max-width: none;
 		pointer-events: none;
 	}
 	.portfolio-glass-mobile-nav {

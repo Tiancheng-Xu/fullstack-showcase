@@ -60,6 +60,23 @@ module.exports = async (page) => {
 				scrollWidth: viewport.scrollWidth,
 			};
 		});
+		let resumeWidthHealthy = true;
+		if (window.location.pathname === "/dashboard" && window.innerWidth >= 1024) {
+			const panel = document.querySelector("#skills > .portfolio-dashboard-module-card");
+			const introduction = panel?.querySelector(":scope > p");
+			const capabilities = panel?.querySelector(".resume-core-capabilities");
+			if (!panel || !introduction || !capabilities) {
+				resumeWidthHealthy = false;
+			} else {
+				const style = getComputedStyle(panel);
+				const availableWidth = panel.clientWidth -
+					Number.parseFloat(style.paddingLeft) - Number.parseFloat(style.paddingRight);
+				resumeWidthHealthy = availableWidth > 0 &&
+					[introduction, capabilities].every(
+						(element) => element.getBoundingClientRect().width >= availableWidth * 0.9,
+					);
+			}
+		}
 		let mobileArchitectureInteractable = true;
 		if (window.location.pathname === "/evidence" && window.innerWidth < 768) {
 			for (const viewport of document.querySelectorAll(
@@ -90,6 +107,7 @@ module.exports = async (page) => {
 				document.documentElement.scrollWidth -
 				document.documentElement.clientWidth,
 			mobileArchitectureReadable: mobileArchitectureInteractable,
+			resumeWidthHealthy,
 			architectureGeometry,
 		};
 	});
@@ -97,7 +115,8 @@ module.exports = async (page) => {
 		gate.httpStatus !== 200 ||
 		!gate.marker ||
 		gate.overflow > 1 ||
-		!gate.mobileArchitectureReadable
+		!gate.mobileArchitectureReadable ||
+		!gate.resumeWidthHealthy
 	) {
 		throw new Error(`visual route gate failed: ${JSON.stringify(gate)}`);
 	}

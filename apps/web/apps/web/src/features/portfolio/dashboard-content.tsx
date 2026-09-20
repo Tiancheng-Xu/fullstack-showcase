@@ -216,11 +216,11 @@ export function DashboardContent() {
 						title="个人简历"
 					/>
 					<div className="portfolio-dashboard-module-card portfolio-glass-panel mt-5 border border-[#cfd5db] bg-white/84 p-5 shadow-sm md:p-8">
-						<p className="max-w-5xl text-[#344252] text-base leading-8">
+						<p className="text-[#344252] text-base leading-8">
 							全栈工程师，具备交警大屏 FDE 与政企低代码交付经验，负责前台应用与中台能力的工程实现；当前专注 AI
 							Agent、Web3、Cloud / Edge 与可验证工程交付。熟悉函数式编程中的纯函数、不可变数据、函数组合与高阶函数，并将其用于状态建模和复杂流程拆解；具备计算机系统基础，理解从编译、链接、装载到运行的程序生命周期，了解 DLL（Dynamic Linking Library）动态链接库、ELF、Section / Segment、.text / .data / .bss、符号重定位，以及 GOT（Global Offset Table）、PLT（Procedure Linkage Table）与库打桩（library interposition / function wrapping）等机制。
 						</p>
-						<div className="resume-core-capabilities mt-8 grid max-w-5xl gap-5 text-[#344252] text-base leading-8">
+						<div className="resume-core-capabilities mt-8 grid gap-5 text-[#344252] text-base leading-8">
 							<p>
 								<strong className="mb-2 block text-lg text-[#071d34]">核心能力</strong>
 								拥有 10 年软件开发经验，具备扎实的软件工程、前端架构和复杂业务系统交付能力；重视系统鲁棒性、容错、可恢复性与可观测性，近年来重点实践 AI Agent 系统设计、LLM 应用、MCP 工具调用、上下文工程、RAG 与工作流编排。
