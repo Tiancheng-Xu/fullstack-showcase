@@ -5,7 +5,7 @@ const { arch, platform } = require("node:os");
 const macChrome =
 	"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
 const visualEnvironment = {
-	browser: "Google Chrome 152.0.7977.77",
+	browser: "Google Chrome 153.0.8010.50",
 	platform: "darwin",
 	architecture: "arm64",
 	locale: "zh-CN",
@@ -66,7 +66,20 @@ module.exports = {
 		delay: 250,
 		onBeforeScript: "puppet/onBefore.cjs",
 		onReadyScript: "puppet/onReady.cjs",
-	})),
+	})).concat({
+		label: "dashboard-resume-desktop",
+		url: "http://127.0.0.1:4184/dashboard?visual=local-reviewed",
+		viewports: [1440, 1536].map((width) => ({
+			label: `${width}px`, width, height: 1100,
+		})),
+		selectors: ["#skills > .portfolio-dashboard-module-card"],
+		selectorExpansion: true,
+		misMatchThreshold: 0.1,
+		requireSameDimensions: true,
+		delay: 250,
+		onBeforeScript: "puppet/onBefore.cjs",
+		onReadyScript: "puppet/onReady.cjs",
+	}),
 	paths: {
 		bitmaps_reference: "backstop_data/bitmaps_reference",
 		bitmaps_test: "backstop_data/bitmaps_test",
