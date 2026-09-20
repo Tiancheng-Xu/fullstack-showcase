@@ -82,6 +82,7 @@ export function DashboardContent() {
 				"github-profile-studio",
 				"fullstack-showcase",
 				"tc-workflow",
+				"hatch-pet",
 			],
 		},
 	];

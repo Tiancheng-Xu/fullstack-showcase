@@ -683,6 +683,29 @@ export const PORTFOLIO_PROJECTS: PortfolioProject[] = [
 			"https://github.com/Tiancheng-Xu/personal-skills/tree/main/skills/tc-flow",
 	},
 	{
+		id: "hatch-pet",
+		title: "Hatch Pet",
+		desc: "Codex v2 动态宠物生成工作流的公开产品规格。已发布脱敏 PRD；生成实现、宠物素材和可下载样例尚未在公开仓库发布。",
+		summaryPoints: [
+			"产品定义：从概念或获准参考图建立统一角色身份，再规划动画、方向姿态和质量审查。",
+			"格式契约：目标为九种动画状态、16 个顺时针方向和 1536 × 2288 的 Codex v2 透明图集。",
+			"公开边界：仓库仅含 README 与 PRD，私人照片、角色素材、生成产物和内部实现均未公开。",
+		],
+		status: "进行中",
+		progress: 20,
+		architecture:
+			"概念 / 获准参考 → 角色身份基准 → 动画与方向姿态 → 几何及视觉质量门禁 → Codex v2 包；这是 PRD 目标，不代表公开实现已交付。",
+		repo: "Tiancheng-Xu/hatch-pet",
+		skills: ["Codex Pets", "Sprite Atlas", "Image Generation", "Visual QA"],
+		evidence: ["公开仓库已发布脱敏 README 和 PRD；代码与宠物样例未公开。"],
+		details: [
+			"公开版本只定义输入输出、9 种动画状态、16 个方向、确定性校验与人工视觉审查；暂无可下载生成器。",
+			"私人参考图、角色素材、运行日志和凭据不进入公开仓库；后续代码与示例需另行完成权利和隐私审查。",
+		],
+		ownerPage: "https://github.com/Tiancheng-Xu/hatch-pet",
+		sourceUpdatedAt: "2026-09-20",
+	},
+	{
 		id: "oss-contributions",
 		title: "OSS 共建",
 		desc: "围绕 Deno、Next.js、MCP 等高影响力 Web / AI 基础设施项目，按认领、复现、回归测试、评审和上游结果记录真实贡献链路。",
