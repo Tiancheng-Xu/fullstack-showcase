@@ -121,7 +121,8 @@ export const PORTFOLIO_PROJECTS: PortfolioProject[] = [
 		summaryPoints: [
 			"业务链路：Queen 将需求拆成 DAG，候选 Agent 经标签硬过滤、向量相关度与信誉评分排序，再支持人工确认或自动选定。",
 			"执行链路：Agent 分阶段生产，Judge 结合规则与 LLM 多维评测；不合格结果进入 Repair，最终由 Final Arbiter 汇总交付。",
-			"工程链路：Node / Hono、Python / LangGraph 与 Go 执行器协作，以 PostgreSQL Checkpoint、队列 / DLQ、幂等和版本冲突保护支撑暂停恢复。",
+			"可靠性链路：将模型判断与确定性 Gate 分层，以 Checkpoint、幂等、人工审批和 Evidence 约束高风险任务。",
+			"证据边界：V1 保留已验证生产 Evidence；V2 的多模型路由、LangGraph Checkpoint 与部分外部集成仅按代码 / 本地验证描述。",
 		],
 		status: "已完成",
 		progress: 100,
@@ -528,8 +529,8 @@ export const PORTFOLIO_PROJECTS: PortfolioProject[] = [
 		desc: "AI 智能客服与私有化模型交付。已完成 Qwen3-8B 领域微调、量化与 Ollama 私有化运行，并以系统设计覆盖售前咨询、售后处理、技术问答、知识检索、业务工具和人工兜底的完整客服链路。",
 		summaryPoints: [
 			"训练链路：使用 LlamaFactory 对 Qwen3-8B 做 NF4 QLoRA 领域微调，完成 Adapter 合并、GGUF Q4_K_M 量化与 Ollama 私有化运行。",
-			"客服链路：以 BERT / 规则完成意图路由，经 Qwen Embedding、知识图谱 / RAG 检索后生成回答，并通过 Tool Calling 连接价格、退换与业务规则。",
-			"兜底链路：保留多轮上下文，对低置信度、敏感问题和检索无答案场景转人工，兼顾响应质量、隐私与可维护性。",
+			"评测链路：使用同一 49 条冻结集评估版本；v2 bigram F1 为 0.2146，v3 为 0.2129，因此保留 v2、拒绝 v3 晋级。",
+			"方案边界：意图路由、知识图谱 / RAG、Tool Calling 与低置信度转人工仍按系统方案描述，不扩大为已交付能力。",
 		],
 		status: "已完成",
 		progress: 100,

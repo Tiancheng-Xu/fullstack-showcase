@@ -14,6 +14,13 @@ describe("portfolio interview narratives", () => {
 		expect(project?.desc).not.toContain("Aladdin");
     expect(project?.architecture).toContain("PostgreSQL Checkpoint");
     expect(project?.architecture).toContain("异步队列 / DLQ");
+		expect(project?.summaryPoints).toEqual(
+			expect.arrayContaining([
+				expect.stringContaining("确定性 Gate"),
+				expect.stringContaining("V1 保留已验证生产 Evidence"),
+				expect.stringContaining("代码 / 本地验证"),
+			]),
+		);
     expect(project?.skills).toEqual(
       expect.arrayContaining(["Multi-Agent", "LLM Evaluation", "Trust / Auth"]),
     );
@@ -47,6 +54,14 @@ describe("portfolio interview narratives", () => {
     expect(project?.desc).toContain("已完成 Qwen3-8B");
     expect(project?.desc).toContain("以系统设计覆盖");
     expect(project?.architecture).toContain("低置信度 / 敏感问题转人工");
+		expect(project?.summaryPoints).toEqual(
+			expect.arrayContaining([
+				expect.stringContaining("同一 49 条冻结集"),
+				expect.stringContaining("v2 bigram F1 为 0.2146"),
+				expect.stringContaining("拒绝 v3 晋级"),
+				expect.stringContaining("仍按系统方案描述"),
+			]),
+		);
     expect(project?.skills).toEqual(
       expect.arrayContaining(["Intent Routing", "Knowledge Graph / RAG", "Human Handoff"]),
     );
@@ -67,13 +82,15 @@ describe("portfolio interview narratives", () => {
 		expect(source).toContain("项目经历");
 		expect(source).toContain("AI 智能客服与私有化模型交付");
 		expect(source).toContain("候选 Agent 过滤评分");
-		expect(source).toContain("低置信度转人工");
+		expect(source).toContain("同一 49 条冻结集");
+		expect(source).toContain("uncertain / manual_review");
+		expect(source).toContain("SLO / Runbook");
 		expect(source).toContain(".text / .data / .bss");
 		expect(source).toContain("函数式编程中的纯函数、不可变数据、函数组合与高阶函数");
 		expect(source).toContain("浙江大学宁波理工学院");
 		expect(source).toContain("全日制本科 · 学士学位");
 		expect(source).toContain("xutiancheng04@gmail.com");
 		expect(source).toContain("17855813990");
-		expect(source).not.toMatch(/ANETU|TUG|67%|0\.21|UZFI|Claw|Acons/);
+		expect(source).not.toMatch(/ANETU|TUG|67%|UZFI|Claw|Acons/);
 	});
 });
