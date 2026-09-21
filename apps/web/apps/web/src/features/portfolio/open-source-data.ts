@@ -3,6 +3,10 @@ import {
 	orderOpenSourceContributions,
 } from "@/features/portfolio/open-source-contributions";
 
+// Keep lower-star historical work in this source file, but not on the public page.
+// Re-check the upstream star count before updating these snapshots.
+const PUBLIC_MINIMUM_STARS = 1000;
+
 export const openSourceContributions = orderOpenSourceContributions([
 	{
 		project: "PR-Agent",
@@ -80,7 +84,7 @@ export const openSourceContributions = orderOpenSourceContributions([
 			},
 		],
 	},
-]);
+].filter(({ stars }) => stars >= PUBLIC_MINIMUM_STARS));
 export const openSourceContributionsInReview = orderOpenSourceContributions([
 	{
 		project: "Deno",
@@ -230,17 +234,6 @@ export const openSourceContributionsInReview = orderOpenSourceContributions([
 		],
 	},
 	{
-		project: "Tabler Icons",
-		stars: 21631,
-		pullRequests: [
-			{
-				label: "#1590",
-				href: "https://github.com/tabler/tabler-icons/pull/1590",
-				contribution: "保留 Vite SSR 所需的 SolidJS JSX source export",
-			},
-		],
-	},
-	{
 		project: "Paperclip",
 		stars: 0,
 		pullRequests: [
@@ -251,7 +244,7 @@ export const openSourceContributionsInReview = orderOpenSourceContributions([
 			},
 		],
 	},
-]);
+].filter(({ stars }) => stars >= PUBLIC_MINIMUM_STARS));
 
 export const openSourceRepositoryDetails = buildOpenSourceRepositoryDetails(
 	openSourceContributions,

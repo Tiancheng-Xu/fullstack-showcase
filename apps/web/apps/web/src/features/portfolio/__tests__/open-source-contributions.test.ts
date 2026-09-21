@@ -1,6 +1,20 @@
 import { describe, expect, it } from "vitest";
 
 import { buildOpenSourceRepositoryDetails, orderOpenSourceContributions } from "../open-source-contributions";
+import { openSourceContributions, openSourceContributionsInReview } from "../open-source-data";
+
+describe("public open-source contributions", () => {
+	it("only shows repositories with at least 1,000 stars", () => {
+		for (const repository of [...openSourceContributions, ...openSourceContributionsInReview]) {
+			expect(repository.stars, repository.project).toBeGreaterThanOrEqual(1000);
+		}
+	});
+
+	it("does not present closed PRs as under review", () => {
+		expect(openSourceContributionsInReview.flatMap(({ pullRequests }) => pullRequests.map(({ href }) => href)))
+			.not.toContain("https://github.com/tabler/tabler-icons/pull/1590");
+	});
+});
 
 describe("orderOpenSourceContributions", () => {
 	it("sorts repositories by stars and keeps same-repository PRs together in descending order", () => {
