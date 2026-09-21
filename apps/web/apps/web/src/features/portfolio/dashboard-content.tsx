@@ -129,8 +129,8 @@ export function DashboardContent() {
 			meta: "AI Agent / 全栈工程",
 			bullets: [
 				"使用 LangGraph DAG 组织任务拆解、候选 Agent 过滤评分、人工或自动选定及多阶段生产分发。",
-				"以 PostgreSQL Checkpoint、异步队列与 DLQ 支撑任务暂停恢复、人工介入、失败重试和复杂状态流转。",
-				"结合信誉评分、LLM Evaluation 与 Web3 交付记录，形成从任务发布到结果验收的可审计闭环。",
+				"将模型判断与确定性 Gate 分层，以 Checkpoint、幂等、人工审批和 Evidence 约束高风险任务。",
+				"V1 保留已验证生产 Evidence；V2 多模型路由、LangGraph Checkpoint 与部分外部集成仅按代码 / 本地验证描述。",
 			],
 		},
 		{
@@ -157,7 +157,7 @@ export function DashboardContent() {
 		{
 			title: "Personal AI Agent",
 			meta: "AI 智能客服与私有化模型交付",
-			body: "面向智能客服场景完成 Qwen3-8B 领域微调、量化与 Ollama 私有化交付，并以系统方案设计覆盖意图识别、知识图谱 / RAG、Tool Calling、多轮问答和低置信度转人工；技术交流可展开 QLoRA / NF4、Qwen Embedding、LlamaFactory、GGUF 与客服路由的工程取舍。",
+			body: "完成 Qwen3-8B 领域微调、量化与 Ollama 私有化交付；使用同一 49 条冻结集评估版本，v2 bigram F1 为 0.2146，v3 为 0.2129，因此保留 v2、拒绝 v3 晋级。意图路由、知识图谱 / RAG、Tool Calling 与转人工仍按系统方案描述。",
 		},
 		{
 			title: "GitHub Profile Studio",
@@ -215,26 +215,33 @@ export function DashboardContent() {
 					/>
 					<div className="portfolio-dashboard-module-card portfolio-glass-panel mt-5 border border-[#cfd5db] bg-white/84 p-5 shadow-sm md:p-8">
 						<p className="text-[#344252] text-base leading-8">
-							全栈工程师，具备交警大屏 FDE 与政企低代码交付经验，负责前台应用与中台能力的工程实现；当前专注 AI
+							全栈工程师，具备交警大屏与政企低零代码项目的 FDE 交付经验，负责前台应用与中台能力的工程实现；当前专注 AI
 							Agent、Web3、Cloud / Edge 与可验证工程交付。熟悉函数式编程中的纯函数、不可变数据、函数组合与高阶函数，并将其用于状态建模和复杂流程拆解；具备计算机系统基础，理解从编译、链接、装载到运行的程序生命周期，了解 DLL（Dynamic Linking Library）动态链接库、ELF、Section / Segment、.text / .data / .bss、符号重定位，以及 GOT（Global Offset Table）、PLT（Procedure Linkage Table）与库打桩（library interposition / function wrapping）等机制。
 						</p>
-						<div className="resume-core-capabilities mt-8 grid gap-5 text-[#344252] text-base leading-8">
-							<p>
-								<strong className="mb-2 block text-lg text-[#071d34]">核心能力</strong>
-								拥有 10 年软件开发经验，具备扎实的软件工程、前端架构和复杂业务系统交付能力；重视系统鲁棒性、容错、可恢复性与可观测性，近年来重点实践 AI Agent 系统设计、LLM 应用、MCP 工具调用、上下文工程、RAG 与工作流编排。
-							</p>
-							<p>
-								持续跟踪国内外 AI 大会、基础模型发布与 Agent 生态演进，关注模型训练与推理、Agent Runtime、MCP、RAG、评测和工程化落地，并将前沿信息沉淀为可验证的架构判断、技术选型与实践路线。
-							</p>
-							<p>
-								具备从业务分析到工程落地的 Agent 全链路实践，能够设计任务规划、模型调用、工具执行、上下文注入、Session 状态、结构化输出、人工审批、安全边界、失败降级与运行追踪，提升复杂任务链路的鲁棒性。
-							</p>
-							<p>
-								具备 Agent 应用与运行中台建设经验，覆盖 Agent、Workflow、Prompt、Model、Knowledge、Skill、Tool / MCP 等资源的配置、版本、发布、运行与治理；并在企业项目中落地 Claude + GPT / Codex 协同开发工作流，覆盖需求分析、代码理解、任务拆解、编码实现、Code Review、测试验证、文档同步与交付复盘。
-							</p>
-							<p>
-								熟悉 TypeScript、JavaScript、React、Vue，具备 Python、Node.js、FastAPI、PostgreSQL、WebSocket 与 AWS Serverless 开发实践；核心方向包括 Prompt Engineering、Tool Calling、Function Calling、MCP、RAG、上下文管理、多 Agent 协作、Agent Harness、JSON Schema、人工审批、安全边界与运行追踪。
-							</p>
+						<div className="resume-core-capabilities mt-8">
+							<h3 className="font-semibold font-serif text-[#071d34] text-lg">核心能力</h3>
+							<ol className="mt-4 grid gap-3 text-[#344252] text-sm leading-7 md:text-base">
+								<li className="grid grid-cols-[2.75rem_1fr] gap-3 border border-[#d8cfbd] bg-[#f8f3e8]/70 p-4">
+									<span className="font-bold font-serif text-[#b21f35] text-lg">01</span>
+									<p>拥有 10 年软件开发经验，具备扎实的软件工程、前端架构和复杂业务系统交付能力；重视系统鲁棒性、容错、可恢复性与可观测性，近年来重点实践 AI Agent 系统设计、LLM 应用、MCP 工具调用、上下文工程、RAG 与工作流编排。</p>
+								</li>
+								<li className="grid grid-cols-[2.75rem_1fr] gap-3 border border-[#d8cfbd] bg-[#f8f3e8]/70 p-4">
+									<span className="font-bold font-serif text-[#b21f35] text-lg">02</span>
+									<p>持续跟踪国内外 AI 大会、基础模型发布与 Agent 生态演进，关注模型训练与推理、Agent Runtime、MCP、RAG、评测和工程化落地，并将前沿信息沉淀为可验证的架构判断、技术选型与实践路线。</p>
+								</li>
+								<li className="grid grid-cols-[2.75rem_1fr] gap-3 border border-[#d8cfbd] bg-[#f8f3e8]/70 p-4">
+									<span className="font-bold font-serif text-[#b21f35] text-lg">03</span>
+									<p>具备从业务分析到工程落地的 Agent 全链路实践，将模型判断与确定性规则分层，覆盖多模型路由、工具调用、Checkpoint、幂等执行、人工审批、失败降级与运行追踪。</p>
+								</li>
+								<li className="grid grid-cols-[2.75rem_1fr] gap-3 border border-[#d8cfbd] bg-[#f8f3e8]/70 p-4">
+									<span className="font-bold font-serif text-[#b21f35] text-lg">04</span>
+									<p>能够按资产权限、事实基线、可观测性、回滚演练与 SLO / Runbook 分阶段接管复杂系统；外部副作用结果未知时先进入 uncertain / manual_review 对账，模型供应商不可用时再切换备用 Provider、本地 Ollama 或人工兜底。</p>
+								</li>
+								<li className="grid grid-cols-[2.75rem_1fr] gap-3 border border-[#d8cfbd] bg-[#f8f3e8]/70 p-4">
+									<span className="font-bold font-serif text-[#b21f35] text-lg">05</span>
+									<p>熟悉 TypeScript、JavaScript、React、Vue，具备 Python、Node.js、FastAPI、PostgreSQL、WebSocket 与 AWS Serverless 开发实践；核心方向包括 Prompt Engineering、Tool Calling、Function Calling、MCP、RAG、上下文管理、多 Agent 协作、Agent Harness、JSON Schema、人工审批、安全边界与运行追踪。</p>
+								</li>
+							</ol>
 						</div>
 						<div className="mt-5 grid gap-4">
 							{professionalExperiences.map((experience) => (
