@@ -53,6 +53,7 @@ export function VoyageLoadingOverlay({ progress }: { progress: number }) {
 export function PortfolioVoyageHero({ forceStatic = false }: PortfolioVoyageHeroProps) {
 	const canvasRef = useRef<HTMLCanvasElement>(null);
 	const titleRef = useRef<HTMLHeadingElement>(null);
+	const twosComplementRef = useRef<HTMLDivElement>(null);
 	const sceneControllerRef = useRef<PortfolioVoyageSceneController | null>(null);
 	const [sceneState, setSceneState] = useState<
 		"static" | "loading" | "active" | "failed"
@@ -134,6 +135,13 @@ export function PortfolioVoyageHero({ forceStatic = false }: PortfolioVoyageHero
 				.then(async ({ mountPortfolioVoyageScene }) => {
 					if (disposed || !canvasRef.current) return;
 					const controller = await mountPortfolioVoyageScene(canvasRef.current, {
+						onTwosComplementScreenPosition: ({ x, y, visible }) => {
+							const label = twosComplementRef.current;
+							if (!label || window.innerWidth < 768) return;
+							label.style.setProperty("--voyage-twos-x", `${x * 100}%`);
+							label.style.setProperty("--voyage-twos-y", `${y * 100}%`);
+							label.dataset.worldVisible = visible ? "true" : "false";
+						},
 						onBoatScreenPosition: ({ x, y, visible }) => {
 							const canvas = canvasRef.current;
 							const title = titleRef.current;
@@ -209,6 +217,11 @@ export function PortfolioVoyageHero({ forceStatic = false }: PortfolioVoyageHero
 			}
 			dispose?.();
 			sceneControllerRef.current = null;
+			if (twosComplementRef.current) {
+				twosComplementRef.current.style.removeProperty("--voyage-twos-x");
+				twosComplementRef.current.style.removeProperty("--voyage-twos-y");
+				delete twosComplementRef.current.dataset.worldVisible;
+			}
 			if (titleRef.current) {
 				delete titleRef.current.dataset.boatNear;
 				for (const glyph of titleRef.current.querySelectorAll<HTMLElement>("[data-voyage-title-glyph]")) {
@@ -242,7 +255,11 @@ export function PortfolioVoyageHero({ forceStatic = false }: PortfolioVoyageHero
         <span className="portfolio-voyage__sea" />
         <span className="portfolio-voyage__boat">舟</span>
       </div>
-			<div className="portfolio-voyage__twos-complement" aria-hidden="true">
+			<div
+				className="portfolio-voyage__twos-complement"
+				aria-hidden="true"
+				ref={twosComplementRef}
+			>
 				<strong>TWO'S COMPLEMENT</strong>
 				<span>FUNCTION NAME IS LOCATION</span>
 			</div>
