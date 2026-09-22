@@ -11,8 +11,22 @@ describe("public open-source contributions", () => {
 	});
 
 	it("does not present closed PRs as under review", () => {
-		expect(openSourceContributionsInReview.flatMap(({ pullRequests }) => pullRequests.map(({ href }) => href)))
-			.not.toContain("https://github.com/tabler/tabler-icons/pull/1590");
+		const openPullRequestHrefs = openSourceContributionsInReview.flatMap(({ pullRequests }) =>
+			pullRequests.map(({ href }) => href),
+		);
+
+		expect(openPullRequestHrefs).not.toContain(
+			"https://github.com/tabler/tabler-icons/pull/1590",
+		);
+		expect(openPullRequestHrefs).not.toContain(
+			"https://github.com/ChromeDevTools/chrome-devtools-mcp/pull/2686",
+		);
+		expect(openPullRequestHrefs).toContain(
+			"https://github.com/wevm/wagmi/pull/5250",
+		);
+		expect(openPullRequestHrefs).toContain(
+			"https://github.com/Crosstalk-Solutions/project-nomad/pull/1358",
+		);
 	});
 });
 

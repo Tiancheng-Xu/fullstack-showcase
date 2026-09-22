@@ -166,14 +166,15 @@ export type PortfolioVoyageSceneController = {
 	setCameraPreset: (preset: VoyageCameraPreset) => void;
 };
 
-export type VoyageBoatScreenPosition = {
+export type VoyageScreenPosition = {
 	x: number;
 	y: number;
 	visible: boolean;
 };
 
 type PortfolioVoyageSceneOptions = {
-	onBoatScreenPosition?: (position: VoyageBoatScreenPosition) => void;
+	onBoatScreenPosition?: (position: VoyageScreenPosition) => void;
+	onTwosComplementScreenPosition?: (position: VoyageScreenPosition) => void;
 };
 
 function createBoatFallback(scene: Scene, root: TransformNode) {
@@ -415,7 +416,6 @@ export async function mountPortfolioVoyageScene(
 	    oceanMaterial.setFloat("time", elapsed);
 			oceanMaterial.setVector3("cameraPosition", camera.position);
 			sky.position.copyFrom(camera.position);
-			twosComplementSun.sync();
 			const travelProgress = (elapsed * .012) % 1;
 	    const pose = sampleVoyagePose(.16 + travelProgress * .64, elapsed);
 			boatRoot.position.set(
@@ -444,20 +444,30 @@ export async function mountPortfolioVoyageScene(
 		} else if (selectedPreset === "follow") {
 			camera.setTarget(Vector3.Lerp(camera.target, cameraTo.target, .035));
 		}
-		if (options.onBoatScreenPosition) {
-			const renderWidth = engine.getRenderWidth();
-			const renderHeight = engine.getRenderHeight();
+		twosComplementSun.sync();
+		const renderWidth = engine.getRenderWidth();
+		const renderHeight = engine.getRenderHeight();
+		const viewport = camera.viewport.toGlobal(renderWidth, renderHeight);
+		const projectNode = (node: TransformNode): VoyageScreenPosition => {
 			const projected = Vector3.Project(
 				Vector3.Zero(),
-				boatRoot.getWorldMatrix(),
+				node.getWorldMatrix(),
 				scene.getTransformMatrix(),
-				camera.viewport.toGlobal(renderWidth, renderHeight),
+				viewport,
 			);
-			options.onBoatScreenPosition({
+			return {
 				x: projected.x / renderWidth,
 				y: projected.y / renderHeight,
 				visible: projected.z >= 0 && projected.z <= 1,
-			});
+			};
+		};
+		if (options.onBoatScreenPosition) {
+			options.onBoatScreenPosition(projectNode(boatRoot));
+		}
+		if (options.onTwosComplementScreenPosition) {
+			options.onTwosComplementScreenPosition(
+				projectNode(twosComplementSun.plane),
+			);
 		}
 	  });
 

@@ -49,6 +49,7 @@ const routes = [
 	["dashboard", "/dashboard"],
 	["projects", "/projects"],
 	["evidence", "/evidence"],
+	["open-source", "/open-source"],
 	["performance-control", "/performance-control/babysteps"],
 ];
 

@@ -87,6 +87,19 @@ export const openSourceContributions = orderOpenSourceContributions([
 ].filter(({ stars }) => stars >= PUBLIC_MINIMUM_STARS));
 export const openSourceContributionsInReview = orderOpenSourceContributions([
 	{
+		project: "Project NOMAD",
+		stars: 37911,
+		pullRequests: [
+			{
+				label: "#1358",
+				href: "https://github.com/Crosstalk-Solutions/project-nomad/pull/1358",
+				issueHref: "https://github.com/Crosstalk-Solutions/project-nomad/issues/1350",
+				contribution:
+					"修复 Night Ops 暗色主题标题、统计文字与 Builder Tag 控件的 WCAG 对比度，并补齐 hover、80% hover 与 group-hover 前景变体",
+			},
+		],
+	},
+	{
 		project: "Deno",
 		stars: 108444,
 		pullRequests: [
@@ -201,13 +214,15 @@ export const openSourceContributionsInReview = orderOpenSourceContributions([
 		],
 	},
 	{
-		project: "Chrome DevTools MCP",
-		stars: 51394,
+		project: "wagmi",
+		stars: 6750,
 		pullRequests: [
 			{
-				label: "#2686",
-				href: "https://github.com/ChromeDevTools/chrome-devtools-mcp/pull/2686",
-				contribution: "补充定时脚本导航回归测试",
+				label: "#5250",
+				href: "https://github.com/wevm/wagmi/pull/5250",
+				issueHref: "https://github.com/wevm/wagmi/issues/5248",
+				contribution:
+					"保留未配置 connector chain 时的兼容行为，并从默认 client 转发 dataSuffix",
 			},
 		],
 	},
@@ -275,9 +290,11 @@ const OPEN_SOURCE_REPOSITORY_PNG_KEYS = new Set([
 ]);
 
 const OPEN_SOURCE_REPOSITORY_FALLBACK_KEYS = new Set([
+	"crosstalk-solutions--project-nomad",
 	"googlechromelabs--quicklink",
 	"google--googletest",
 	"microsoft--vscode",
+	"wevm--wagmi",
 ]);
 
 export function getOpenSourceRepositoryAssetKey(repositoryUrl: string) {

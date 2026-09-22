@@ -42,6 +42,7 @@ module.exports = async (page) => {
 			"/dashboard": "展示看板",
 			"/projects": "项目索引",
 			"/evidence": "工作证明索引",
+			"/open-source": "开源社区共建",
 			"/performance-control/babysteps": "性能观测成本控制",
 		};
 		const response = await fetch(window.location.pathname, {
@@ -98,6 +99,23 @@ module.exports = async (page) => {
 					reachedDiagramEnd;
 			}
 		}
+		let openSourcePrLayoutHealthy = true;
+		if (window.location.pathname === "/open-source") {
+			for (const row of document.querySelectorAll(".portfolio-open-source-pr")) {
+				const summary = row.querySelector(".portfolio-open-source-pr-summary");
+				const links = row.querySelector(".portfolio-open-source-pr-links");
+				if (!summary || !links) {
+					openSourcePrLayoutHealthy = false;
+					continue;
+				}
+				const rowRect = row.getBoundingClientRect();
+				const summaryRect = summary.getBoundingClientRect();
+				const linksRect = links.getBoundingClientRect();
+				openSourcePrLayoutHealthy &&=
+					summaryRect.width >= Math.min(192, rowRect.width * .48) &&
+					linksRect.top >= summaryRect.bottom - 1;
+			}
+		}
 		return {
 			httpStatus: response.status,
 			marker: document.body.innerText.includes(
@@ -108,6 +126,7 @@ module.exports = async (page) => {
 				document.documentElement.clientWidth,
 			mobileArchitectureReadable: mobileArchitectureInteractable,
 			resumeWidthHealthy,
+			openSourcePrLayoutHealthy,
 			architectureGeometry,
 		};
 	});
@@ -116,7 +135,8 @@ module.exports = async (page) => {
 		!gate.marker ||
 		gate.overflow > 1 ||
 		!gate.mobileArchitectureReadable ||
-		!gate.resumeWidthHealthy
+		!gate.resumeWidthHealthy ||
+		!gate.openSourcePrLayoutHealthy
 	) {
 		throw new Error(`visual route gate failed: ${JSON.stringify(gate)}`);
 	}
