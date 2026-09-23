@@ -223,7 +223,7 @@ export function DashboardContent() {
 							<ol className="mt-4 grid gap-3 text-[#344252] text-sm leading-7 md:text-base">
 								<li className="grid grid-cols-[2.75rem_1fr] gap-3 border border-[#d8cfbd] bg-[#f8f3e8]/70 p-4">
 									<span className="font-bold font-serif text-[#b21f35] text-lg">01</span>
-									<p>拥有 10 年软件开发经验，具备扎实的软件工程、前端架构和复杂业务系统交付能力；重视系统鲁棒性、容错、可恢复性与可观测性，近年来重点实践 AI Agent 系统设计、LLM 应用、MCP 工具调用、上下文工程、RAG 与工作流编排。</p>
+									<p>拥有 8 年软件开发经验，具备扎实的软件工程、前端架构和复杂业务系统交付能力；重视系统鲁棒性、容错、可恢复性与可观测性，近年来重点实践 AI Agent 系统设计、LLM 应用、MCP 工具调用、上下文工程、RAG 与工作流编排。</p>
 								</li>
 								<li className="grid grid-cols-[2.75rem_1fr] gap-3 border border-[#d8cfbd] bg-[#f8f3e8]/70 p-4">
 									<span className="font-bold font-serif text-[#b21f35] text-lg">02</span>
