@@ -83,7 +83,7 @@ export const PORTFOLIO_PROJECTS: PortfolioProject[] = [
 		status: "已完成",
 		progress: 100,
 		architecture:
-			"React / Vite / Next.js / TypeScript Web 端 → GraphQL 与任务服务 → PostgreSQL / pgvector → Webhook / SSE、消息队列与 AWS 异步执行 → MetaMask、智能合约及 IPFS / 链上结果证据。",
+			"React / Vite / Next.js / TypeScript 应用层 → GraphQL 与任务服务 → PostgreSQL / pgvector → Webhook / SSE、消息队列与 AWS 异步执行 → MetaMask、智能合约及 IPFS / 链上结果证据。",
 		skills: [
 			"React",
 			"Vite",
@@ -99,7 +99,7 @@ export const PORTFOLIO_PROJECTS: PortfolioProject[] = [
 			"AWS",
 		],
 		evidence: [
-			"参与任务发布 / 编辑、语义分类、子任务拆解、Agent 匹配派发、执行状态与结果聚合的 Web 端流程",
+			"参与任务发布 / 编辑、语义分类、子任务拆解、Agent 匹配派发、执行状态与结果聚合的应用流程",
 			"协同 PostgreSQL / pgvector、GraphQL、Webhook / SSE、消息队列和 AWS 完成异步任务、并发控制及状态联调",
 			"参与 MetaMask 签名、合约托管 / 结算、IPFS / 链上结果证据和端到端验证",
 			"参与剧本、角色、场景、分镜、视频片段到最终合成的 AI 内容工作流",
@@ -123,6 +123,7 @@ export const PORTFOLIO_PROJECTS: PortfolioProject[] = [
 			"执行链路：Agent 分阶段生产，Judge 结合规则与 LLM 多维评测；不合格结果进入 Repair，最终由 Final Arbiter 汇总交付。",
 			"可靠性链路：将模型判断与确定性 Gate 分层，以 Checkpoint、幂等、人工审批和 Evidence 约束高风险任务。",
 			"证据边界：V1 保留已验证生产 Evidence；V2 的多模型路由、LangGraph Checkpoint 与部分外部集成仅按代码 / 本地验证描述。",
+			"Jev + Laya 双影子扩展目前是本地未发布代码：确定性基线立即返回并保持决策权，`calibrated: false`；Node 22 测试已通过，离线模型冷启动和冻结标注评估待验。",
 		],
 		status: "已完成",
 		progress: 100,
@@ -155,6 +156,7 @@ export const PORTFOLIO_PROJECTS: PortfolioProject[] = [
 		],
 		details: [
 			"Cloudflare Web、AWS V2 Runtime 与 Sepolia V3 分别为 verified-production，三套证据互不替代；本地 Transaction Engine、视觉与模型证据仍仅为 verified-local。",
+			"Jev + Laya 双影子为本地未合并/未发布扩展，Node 22 Agent Runner 测试通过；Laya 模型资产、断网冷启动、冻结标注评估未验收，模型没有业务决策权。",
 			"AWS V2 运行证据来自项目自有 2026-08-27 closure JSON；公开 Evidence 已修正陈旧文件名，并由服务端首屏直接输出完整证据链。",
 			"Sepolia 验证使用单一测试钱包复用多个角色，不等同于多钱包生产隔离证明，也不证明网页生产环境直接提交交易。",
       "业务录屏版本绑定 source 2dfe6d0aa6fa40b65762c07ed687921233b0e0c6、Cloudflare Production deployment d8cf5994-ce54-47f1-8979-0c799eca8b79 与 main Actions Run 34697552824；录屏入口保持 /evidence/agent-market-v3-full-workflow.mp4，Range 请求返回 206。",

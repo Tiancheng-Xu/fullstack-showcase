@@ -19,6 +19,14 @@ describe("portfolio interview narratives", () => {
 				expect.stringContaining("确定性 Gate"),
 				expect.stringContaining("V1 保留已验证生产 Evidence"),
 				expect.stringContaining("代码 / 本地验证"),
+				expect.stringContaining("Jev + Laya 双影子"),
+				expect.stringContaining("calibrated: false"),
+			]),
+		);
+		expect(project?.details).toEqual(
+			expect.arrayContaining([
+				expect.stringContaining("本地未合并/未发布扩展"),
+				expect.stringContaining("断网冷启动"),
 			]),
 		);
     expect(project?.skills).toEqual(
@@ -73,9 +81,11 @@ describe("portfolio interview narratives", () => {
       "utf8",
     );
 
-		expect(source).toContain("参与 AI Agent 与 Web3 平台的 Web 端和全栈协作");
+		expect(source).toContain("参与 AI Agent 与 Web3 平台的全栈工程协作");
 		expect(source).toContain("北京阿拉丁科技（兼职）");
-		expect(source).toContain("前端 / 全栈工程师（AI Agent / Web3）");
+		expect(source).toContain("全栈工程师（AI Agent / Web3）");
+		expect(source).not.toContain("开发前端");
+		expect(source).not.toContain("Web 端和全栈协作");
 		expect(source).toContain("任务发布与编辑、语义分类、子任务拆解");
 		expect(source).toContain("请求 ID、Webhook / SSE、消息队列和并发控制");
 		expect(source).toContain("MetaMask、合约托管 / 结算、IPFS / 链上证据");
