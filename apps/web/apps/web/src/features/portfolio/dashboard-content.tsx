@@ -90,11 +90,11 @@ export function DashboardContent() {
 		{
 			period: "2026",
 			title: "北京阿拉丁科技（兼职）",
-			location: "前端 / 全栈工程师（AI Agent / Web3）",
-			body: "参与 AI Agent 与 Web3 平台的 Web 端和全栈协作，围绕任务编排、分布式调度、异步执行、状态聚合、链上交付与内容生产工作流推进产品实现。",
+			location: "全栈工程师（AI Agent / Web3）",
+			body: "参与 AI Agent 与 Web3 平台的全栈工程协作，围绕任务编排、分布式调度、异步执行、状态聚合、链上交付与内容生产工作流推进产品实现。",
 			bullets: [
 				"参与任务发布与编辑、语义分类、子任务拆解、Agent 匹配派发、执行状态和结果聚合等端到端流程。",
-				"使用 React、Vite、Next.js、TypeScript 开发前端，协同 PostgreSQL / pgvector、GraphQL、Webhook / SSE、消息队列及 AWS 完成异步任务、并发控制和状态联调。",
+				"参与 React、Vite、Next.js、TypeScript 应用工程协作，协同 PostgreSQL / pgvector、GraphQL、Webhook / SSE、消息队列及 AWS 完成异步任务、并发控制和状态联调。",
 				"参与 MetaMask 签名、智能合约托管 / 结算、IPFS / 链上结果证据及 AI 内容生产工作流的接口与端到端联调。",
 			],
 		},
@@ -131,6 +131,7 @@ export function DashboardContent() {
 				"使用 LangGraph DAG 组织任务拆解、候选 Agent 过滤评分、人工或自动选定及多阶段生产分发。",
 				"将模型判断与确定性 Gate 分层，以 Checkpoint、幂等、人工审批和 Evidence 约束高风险任务。",
 				"V1 保留已验证生产 Evidence；V2 多模型路由、LangGraph Checkpoint 与部分外部集成仅按代码 / 本地验证描述。",
+				"Jev + Laya 双影子扩展目前是本地未发布代码：确定性基线立即返回并保持决策权，`calibrated: false`；Node 22 测试已通过，离线模型冷启动和冻结标注评估待验。",
 			],
 		},
 		{
