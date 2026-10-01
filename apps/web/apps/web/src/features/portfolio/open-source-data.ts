@@ -380,3 +380,7 @@ export function getOpenSourceRepositoryIconSrc(repositoryUrl: string) {
 		? `/assets/portfolio/repository-icons/${assetKey}.${OPEN_SOURCE_REPOSITORY_PNG_KEYS.has(assetKey) ? "png" : "svg"}`
 		: OPEN_SOURCE_REPOSITORY_ICON_FALLBACK;
 }
+
+export const openSourceRepositories = openSourceRepositoryDetails.map(
+	({ pullRequests: _pullRequests, ...repository }) => repository,
+);
