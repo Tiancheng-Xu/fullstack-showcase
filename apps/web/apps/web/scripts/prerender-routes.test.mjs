@@ -73,6 +73,32 @@ describe("static-first route delivery", () => {
 		);
 	});
 
+	it("pre-renders every sharing detail and rewrites both URL forms", () => {
+		const redirects = readFileSync(
+			resolve(process.cwd(), "public/_redirects"),
+			"utf8",
+		);
+		for (const url of [
+			"/sharing",
+			"/ai-conferences",
+			"/ai-conference-notes/yunqi-2026",
+			"/ai-conference-notes/openai-devday-2026",
+			"/ai-conference-notes/berkeley-agentic-ai-2026",
+			"/ai-conference-notes/waic-2026",
+			"/ai-conference-notes/baai-2026-rl",
+			"/ai-conference-notes/build-2026-harness",
+			"/ai-conference-notes/build-2026-agent-control",
+			"/ai-conference-notes/google-io-2026",
+			"/ai-conference-notes/nvidia-gtc-2026",
+			"/overreacted-reading-route",
+		]) {
+			const output = `${url.slice(1)}/index.html`;
+			expect(STATIC_FIRST_ROUTES).toContainEqual({ url, output });
+			expect(redirects).toContain(`${url} /${output} 200`);
+			expect(redirects).toContain(`${url}/ /${output} 200`);
+		}
+	});
+
 	it("keeps the Vite client entry in the CSR fallback instead of writing a dead redirect", () => {
 		const html = createCsrFallbackHtml(
 			'<html lang="en"><head><title>web</title></head><body><div id="app"></div><script type="module" src="/assets/app.js"></script></body></html>',
