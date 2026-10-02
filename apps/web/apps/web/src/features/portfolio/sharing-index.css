@@ -1,0 +1,60 @@
+.sharing-index { max-width: 1220px; margin: 0 auto; padding: clamp(2rem, 5vw, 5rem) clamp(1rem, 3vw, 2.5rem) 6rem; color: #16354a; }
+.sharing-intro { max-width: 790px; margin-bottom: clamp(2rem, 5vw, 4rem); font-size: 1.05rem; line-height: 1.8; }
+.sharing-eyebrow, .sharing-card-top, .conference-number { color: #a3283a; font: 700 .75rem/1.4 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .13em; text-transform: uppercase; }
+.sharing-intro p { margin: .8rem 0 0; }
+.sharing-intro a, .conference-upcoming a { color: #a3283a; text-decoration-thickness: 1px; text-underline-offset: .25em; }
+.sharing-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.25rem; }
+.sharing-feature-card { min-height: 360px; display: flex; flex-direction: column; padding: clamp(1.5rem, 3vw, 2.6rem); background: #f5f0e7; border: 1px solid #c9c0b1; border-top: 5px solid #aa3042; box-shadow: 9px 9px 0 rgba(7, 29, 52, .08); }
+.sharing-feature-card--conference { background: #e6ece8; border-top-color: #1b6070; }
+.sharing-card-top { display: flex; justify-content: space-between; gap: 1rem; }
+.sharing-feature-card h2, .conference-item h2, .conference-upcoming h2, .reading-route-body h1, .reading-route-body h2 { font-family: "Noto Serif SC", "Songti SC", Georgia, serif; line-height: 1.28; color: #092740; }
+.sharing-feature-card h2 { font-size: clamp(1.8rem, 3vw, 2.7rem); margin: 2.5rem 0 1rem; }
+.sharing-feature-card p { max-width: 36rem; line-height: 1.8; margin: 0 0 1.5rem; }
+.sharing-card-meta { margin-top: auto; padding: 1rem 0; font-size: .84rem; color: #5c6b70; border-top: 1px solid #b9c5c4; }
+.sharing-action { display: inline-flex; justify-content: space-between; align-items: center; gap: 1rem; width: fit-content; min-width: 10rem; padding: .75rem 1rem; border: 1px solid #a3283a; color: #9b2437; text-decoration: none; font-size: .82rem; font-weight: 700; letter-spacing: .06em; }
+.sharing-action:hover, .sharing-action:focus-visible { color: white; background: #9b2437; }
+.sharing-bottom-note { margin-top: 3rem; padding-top: 1rem; border-top: 1px solid #bdc6c2; font-size: .82rem; color: #657278; }
+.sharing-back { display: inline-block; margin-bottom: 1rem; font-weight: 700; }
+.conference-list { border-top: 2px solid #16354a; }
+.conference-item { display: grid; grid-template-columns: 3rem minmax(0, 1fr) auto; align-items: start; gap: 1.5rem; padding: 1.75rem .25rem; border-bottom: 1px solid #b8c4c1; }
+.conference-number { padding-top: .3rem; }
+.conference-meta, .conference-foot { display: flex; flex-wrap: wrap; gap: .4rem 1.2rem; font: 700 .73rem/1.5 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .04em; color: #5d6c71; }
+.conference-item h2 { margin: .6rem 0; font-size: clamp(1.4rem, 2vw, 2rem); }
+.conference-item p { max-width: 48rem; margin: 0 0 .8rem; line-height: 1.75; }
+.conference-status { color: #9b2437; }
+.conference-source { margin-top: .2rem; }
+.conference-actions { display: flex; flex-direction: column; align-items: flex-start; gap: .6rem; }
+.conference-actions .conference-source { margin-top: 0; }
+.conference-note { scroll-margin-top: 2rem; padding: 2rem 0; border-top: 1px solid #b8c4c1; }
+.conference-note:first-of-type { border-top: 2px solid #16354a; }
+.conference-note:target { background: rgba(245, 240, 231, .8); box-shadow: 0 0 0 1rem rgba(245, 240, 231, .8); }
+.conference-note h2 { font-family: "Noto Serif SC", "Songti SC", Georgia, serif; font-size: clamp(1.5rem, 2.4vw, 2.2rem); color: #092740; }
+.conference-note ul { max-width: 65rem; padding-left: 1.4rem; line-height: 1.8; }
+.conference-note li { margin-bottom: .8rem; }
+.conference-note-boundary { max-width: 65rem; color: #657278; font-size: .88rem; line-height: 1.7; }
+.conference-original-note { max-width: 940px; }
+.portfolio-index-surface:has(.conference-original-note) .portfolio-index-hero h1 { max-width: 22ch; font-size: clamp(2.8rem, 5vw, 4.75rem); line-height: 1.12; letter-spacing: -.035em; overflow-wrap: normal; }
+.portfolio-index-surface:has(.conference-original-note) .portfolio-index-hero strong { max-width: 48rem; font-size: clamp(.95rem, 1.4vw, 1.15rem); line-height: 1.65; }
+.conference-original-note .reading-route-body { overflow-wrap: anywhere; }
+.conference-original-note .reading-route-body h1 { margin-top: 0; font-size: clamp(1.9rem, 3.2vw, 2.8rem); line-height: 1.35; letter-spacing: -.015em; }
+.conference-original-note .reading-route-body h4 { margin-top: 1.5rem; }
+.conference-original-note .reading-route-body ul,
+.conference-original-note .reading-route-body ol { padding-left: 1.5rem; }
+.conference-original-note .reading-route-body pre { max-width: 100%; overflow-x: auto; padding: 1rem; background: #e8e2d7; font-size: .82rem; line-height: 1.5; }
+.conference-original-note .reading-route-body code { padding: .1rem .25rem; background: #e8e2d7; font-size: .86em; }
+.conference-original-note .reading-route-body pre code { padding: 0; background: none; }
+.conference-original-note .reading-route-body table { display: block; max-width: 100%; overflow-x: auto; border-collapse: collapse; font-size: .85rem; }
+.conference-original-note .reading-route-body th,
+.conference-original-note .reading-route-body td { min-width: 8rem; padding: .55rem .7rem; border: 1px solid #c9c0b1; text-align: left; vertical-align: top; }
+.conference-original-note .reading-route-body th { background: #e8e2d7; }
+.conference-note-local-ref { color: #6b7476; text-decoration: underline dotted; text-underline-offset: .2em; }
+.reading-route-page { max-width: 940px; }
+.reading-route-body { padding: clamp(1.5rem, 4vw, 3.5rem); background: #f5f0e7; border: 1px solid #c9c0b1; line-height: 1.9; }
+.reading-route-body h1 { font-size: clamp(2rem, 4vw, 3.4rem); }
+.reading-route-body h2 { margin-top: 2.6rem; padding-top: 1rem; border-top: 1px solid #c9c0b1; font-size: 1.7rem; }
+.reading-route-body h3 { margin-top: 1.8rem; font-size: 1.25rem; }
+.reading-route-body p, .reading-route-body li { max-width: 70ch; }
+.reading-route-body a { color: #a3283a; text-underline-offset: .2em; }
+.reading-route-body li { padding-left: .3rem; margin-bottom: .45rem; }
+.reading-route-body blockquote { margin: 1.5rem 0; padding: .2rem 1.5rem; border-left: 3px solid #a3283a; color: #54656d; }
+@media (max-width: 700px) { .sharing-grid { grid-template-columns: 1fr; } .sharing-feature-card { min-height: 320px; } .conference-item { grid-template-columns: 2.2rem minmax(0, 1fr); gap: .7rem; } .conference-actions { grid-column: 2; margin-top: .4rem; } .sharing-card-top { flex-wrap: wrap; } }

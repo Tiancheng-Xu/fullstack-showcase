@@ -1686,7 +1686,7 @@ header#top.portfolio-glass-bar {
 	.portfolio-primary-navigation {
 		width: 100%;
 		display: grid;
-		grid-template-columns: repeat(3, 1fr);
+		grid-template-columns: repeat(4, 1fr);
 		order: 3;
 	}
 	.portfolio-primary-navigation a {
