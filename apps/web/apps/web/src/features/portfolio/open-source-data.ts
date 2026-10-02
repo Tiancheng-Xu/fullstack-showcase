@@ -63,6 +63,39 @@ export const openSourceContributions = orderOpenSourceContributions([
 		],
 	},
 	{
+		project: "pnpm",
+		stars: 36719,
+		pullRequests: [
+			{
+				label: "#14674",
+				href: "https://github.com/pnpm/pnpm/pull/14674",
+				contribution: "在安全支持策略中列出 pnpm v12",
+			},
+		],
+	},
+	{
+		project: "Tabler Icons",
+		stars: 21826,
+		pullRequests: [
+			{
+				label: "#1590",
+				href: "https://github.com/tabler/tabler-icons/pull/1590",
+				contribution: "修复 SolidJS source export 的 Vite SSR 入口扩展名",
+			},
+		],
+	},
+	{
+		project: "Project NOMAD",
+		stars: 38830,
+		pullRequests: [
+			{
+				label: "#1358",
+				href: "https://github.com/Crosstalk-Solutions/project-nomad/pull/1358",
+				contribution: "修复 Night Ops 暗色主题 WCAG 对比度，并补充回归测试（合并至 dev）",
+			},
+		],
+	},
+	{
 		project: "Web Testownik",
 		stars: 103,
 		pullRequests: [
@@ -86,19 +119,6 @@ export const openSourceContributions = orderOpenSourceContributions([
 	},
 ].filter(({ stars }) => stars >= PUBLIC_MINIMUM_STARS));
 export const openSourceContributionsInReview = orderOpenSourceContributions([
-	{
-		project: "Project NOMAD",
-		stars: 37911,
-		pullRequests: [
-			{
-				label: "#1358",
-				href: "https://github.com/Crosstalk-Solutions/project-nomad/pull/1358",
-				issueHref: "https://github.com/Crosstalk-Solutions/project-nomad/issues/1350",
-				contribution:
-					"修复 Night Ops 暗色主题标题、统计文字与 Builder Tag 控件的 WCAG 对比度，并补齐 hover、80% hover 与 group-hover 前景变体",
-			},
-		],
-	},
 	{
 		project: "Deno",
 		stars: 108444,
@@ -193,12 +213,17 @@ export const openSourceContributionsInReview = orderOpenSourceContributions([
 	},
 	{
 		project: "RTK",
-		stars: 12358,
+		stars: 82144,
 		pullRequests: [
 			{
 				label: "#3933",
 				href: "https://github.com/rtk-ai/rtk/pull/3933",
 				contribution: "让 Ruff format 路由匹配首个参数",
+			},
+			{
+				label: "#3922",
+				href: "https://github.com/rtk-ai/rtk/pull/3922",
+				contribution: "新增 gitleaks TOML filter，保留关键 findings 与扫描摘要",
 			},
 		],
 	},
@@ -209,7 +234,7 @@ export const openSourceContributionsInReview = orderOpenSourceContributions([
 			{
 				label: "#413",
 				href: "https://github.com/vercel-labs/portless/pull/413",
-				contribution: "自守护命令退出时保留路由",
+				contribution: "自守护命令退出时保留路由；原 PR 尚未合并，后续上游 #444 标注共同作者",
 			},
 		],
 	},
@@ -245,6 +270,39 @@ export const openSourceContributionsInReview = orderOpenSourceContributions([
 				label: "#4775",
 				href: "https://github.com/modelcontextprotocol/servers/pull/4775",
 				contribution: "让 filesystem server 输出 object input schema",
+			},
+		],
+	},
+	{
+		project: "cmux",
+		stars: 27541,
+		pullRequests: [
+			{
+				label: "#15795",
+				href: "https://github.com/manaflow-ai/cmux/pull/15795",
+				contribution: "恢复通过旧版浏览器回退路径重新打开时的会话交互状态",
+			},
+		],
+	},
+	{
+		project: "Avante",
+		stars: 18171,
+		pullRequests: [
+			{
+				label: "#3266",
+				href: "https://github.com/avante-corp/avante.nvim/pull/3266",
+				contribution: "草稿 PR：在 Provider 切换列表标注 ACP 类型，同时保持既有标签与 API",
+			},
+		],
+	},
+	{
+		project: "OpenResearch",
+		stars: 6331,
+		pullRequests: [
+			{
+				label: "#477",
+				href: "https://github.com/alphaXiv/OpenResearch/pull/477",
+				contribution: "草稿 PR：展示实验最近一次运行耗时，运行中每秒刷新计时",
 			},
 		],
 	},
@@ -290,9 +348,12 @@ const OPEN_SOURCE_REPOSITORY_PNG_KEYS = new Set([
 ]);
 
 const OPEN_SOURCE_REPOSITORY_FALLBACK_KEYS = new Set([
+	"alphaxiv--openresearch",
+	"avante-corp--avante.nvim",
 	"crosstalk-solutions--project-nomad",
 	"googlechromelabs--quicklink",
 	"google--googletest",
+	"manaflow-ai--cmux",
 	"microsoft--vscode",
 	"wevm--wagmi",
 ]);

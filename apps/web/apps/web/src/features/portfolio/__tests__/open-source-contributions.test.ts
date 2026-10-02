@@ -14,6 +14,9 @@ describe("public open-source contributions", () => {
 		const openPullRequestHrefs = openSourceContributionsInReview.flatMap(({ pullRequests }) =>
 			pullRequests.map(({ href }) => href),
 		);
+		const mergedPullRequestHrefs = openSourceContributions.flatMap(({ pullRequests }) =>
+			pullRequests.map(({ href }) => href),
+		);
 
 		expect(openPullRequestHrefs).not.toContain(
 			"https://github.com/tabler/tabler-icons/pull/1590",
@@ -24,7 +27,10 @@ describe("public open-source contributions", () => {
 		expect(openPullRequestHrefs).toContain(
 			"https://github.com/wevm/wagmi/pull/5250",
 		);
-		expect(openPullRequestHrefs).toContain(
+		expect(openPullRequestHrefs).not.toContain(
+			"https://github.com/Crosstalk-Solutions/project-nomad/pull/1358",
+		);
+		expect(mergedPullRequestHrefs).toContain(
 			"https://github.com/Crosstalk-Solutions/project-nomad/pull/1358",
 		);
 	});
