@@ -9,6 +9,18 @@ export const STATIC_FIRST_ROUTES = [
 	},
 	{
 		url: "/open-source",
+  "/sharing",
+  "/ai-conferences",
+  "/ai-conference-notes/yunqi-2026",
+  "/ai-conference-notes/openai-devday-2026",
+  "/ai-conference-notes/berkeley-agentic-ai-2026",
+  "/ai-conference-notes/waic-2026",
+  "/ai-conference-notes/baai-2026-rl",
+  "/ai-conference-notes/build-2026-harness",
+  "/ai-conference-notes/build-2026-agent-control",
+  "/ai-conference-notes/google-io-2026",
+  "/ai-conference-notes/nvidia-gtc-2026",
+  "/overreacted-reading-route",
 		output: "open-source/index.html",
 	},
 	{
