@@ -26,7 +26,7 @@ vi.mock("../technology-capability-particle-scene", () => ({
 }));
 
 import { TechnologyCapabilityMap } from "../technology-capability-map";
-import { CAPABILITY_DOMAINS } from "../capability-map-data";
+import { CAPABILITY_DOMAINS, getCapabilityNode } from "../capability-map-data";
 
 describe("TechnologyCapabilityMap", () => {
   let innerWidthSpy: ReturnType<typeof vi.spyOn>;
@@ -175,7 +175,7 @@ describe("TechnologyCapabilityMap", () => {
     expect(closeButton).toHaveFocus();
     fireEvent.keyDown(document, { key: "Tab", shiftKey: true });
     expect(projectLink).toHaveFocus();
-    expect(within(dialog).getByText(/用少量领域数据低成本训练大模型/)).toBeVisible();
+    expect(within(dialog).getByText(getCapabilityNode("qwen3-qlora")!.plainLanguage)).toBeVisible();
     expect(projectLink).toHaveAttribute(
       "href",
       expect.stringContaining("personal-ai-agent"),
