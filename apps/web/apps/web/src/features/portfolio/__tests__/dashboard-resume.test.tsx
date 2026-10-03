@@ -31,9 +31,9 @@ describe("Dashboard resume", () => {
 		]) {
 			expect(resume.getByRole("heading", { name: project })).toBeVisible();
 		}
-		expect(resume.getByText("拥有 8 年软件开发经验", { exact: false })).toBeVisible();
+		expect(introduction).toHaveTextContent("拥有 8 年软件开发经验");
 		expect(resume.getByText("全栈工程师（AI Agent / Web3）")).toBeVisible();
 		expect(resume.queryByText("前端 / 全栈工程师（AI Agent / Web3）")).not.toBeInTheDocument();
-		expect(resume.getByText(/Jev \+ Laya 双影子扩展目前是本地未发布代码/)).toBeVisible();
+		expect(resume.getByText(/开发扩展尚未发布，按代码 \/ 本地验证描述/)).toBeVisible();
 	});
 });

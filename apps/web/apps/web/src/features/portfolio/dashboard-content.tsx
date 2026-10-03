@@ -91,10 +91,10 @@ export function DashboardContent() {
 			period: "2026",
 			title: "北京阿拉丁科技（兼职）",
 			location: "全栈工程师（AI Agent / Web3）",
-			body: "参与 AI Agent 与 Web3 平台的全栈工程协作，围绕任务编排、分布式调度、异步执行、状态聚合、链上交付与内容生产工作流推进产品实现。",
+			body: "参与 AI Agent 与 Web3 平台的 Web 端和全栈协作，连接任务发布、异步状态与结果反馈。",
 			bullets: [
 				"参与任务发布与编辑、语义分类、子任务拆解、Agent 匹配派发、执行状态和结果聚合等端到端流程。",
-				"参与 React、Vite、Next.js、TypeScript 应用工程协作，协同 PostgreSQL / pgvector、GraphQL、Webhook / SSE、消息队列及 AWS 完成异步任务、并发控制和状态联调。",
+				"使用 React、Vite、Next.js、TypeScript 开发前端，协同 PostgreSQL / pgvector、GraphQL、Webhook / SSE、消息队列及 AWS 完成异步任务、并发控制和状态联调。",
 				"参与 MetaMask 签名、智能合约托管 / 结算、IPFS / 链上结果证据及 AI 内容生产工作流的接口与端到端联调。",
 			],
 		},
@@ -102,7 +102,7 @@ export function DashboardContent() {
 			period: "2023–2026",
 			title: "政企低零代码 / FDE 工程师",
 			location: "宁波市公安局 · 驻场交付",
-			body: "驻场服务宁波市公安局科信、特警等相关业务部门，参与低零代码与 FDE 项目建设；围绕业务需求梳理、前台应用与中台能力的模块划分、组件复用、系统集成和状态联动推进工程实现。与市局、分局科信部门及派出所保持业务沟通，协调需求变更、联调验收与持续迭代。通过从大屏展示应用到复杂政企业务系统的连续交付，工程能力由页面实现逐步拓展至前中台协作、模块边界设计和问题闭环，对系统鲁棒性、可维护性与交付质量形成更全面、深入的理解。",
+			body: "驻场服务宁波市公安局科信、特警等相关业务部门，参与政企低零代码与 FDE 应用交付；将业务需求转为应用、接口和验收条目，围绕模块复用、系统集成与状态联动推进开发。与市局、分局科信部门及派出所保持业务沟通，协调需求变更、联调验收和持续迭代；连续交付使工程能力由前台实现拓展至前中台协作、模块边界设计和问题闭环。",
 		},
 		{
 			period: "2020–2023",
@@ -126,21 +126,20 @@ export function DashboardContent() {
 	const partTimeProjects = [
 		{
 			title: "Agent Market",
-			meta: "AI Agent / 全栈工程",
+			meta: "任务分发与可恢复执行 · V1 历史交付 / 当前开发扩展",
 			bullets: [
-				"使用 LangGraph DAG 组织任务拆解、候选 Agent 过滤评分、人工或自动选定及多阶段生产分发。",
-				"将模型判断与确定性 Gate 分层，以 Checkpoint、幂等、人工审批和 Evidence 约束高风险任务。",
-				"V1 保留已验证生产 Evidence；V2 多模型路由、LangGraph Checkpoint 与部分外部集成仅按代码 / 本地验证描述。",
-				"Jev + Laya 双影子扩展目前是本地未发布代码：确定性基线立即返回并保持决策权，`calibrated: false`；Node 22 测试已通过，离线模型冷启动和冻结标注评估待验。",
+				"现有开发分支围绕任务派发、审批、执行和结果验收，以 LangGraph 任务图串联候选 Agent 过滤评分、评审与有限修复，用确定性 Gate 控制交付。",
+				"用 Checkpoint 恢复流程进度、操作账本记录动作身份与结果状态，避免把恢复当作重放；审批绑定任务版本与方案指纹，结果未知时先核对再决定是否重试。",
+				"V1 保留已验证生产 Evidence；当前多模型路由与 Checkpoint 开发扩展尚未发布，按代码 / 本地验证描述。",
 			],
 		},
 		{
 			title: "BabySteps",
 			meta: "全栈 / Edge Web3",
 			bullets: [
-				"完成成长任务、家长中心、纪念馆、Provider 与链上交互等核心产品模块。",
-				"建立 Edge SSR、精确水合、浏览器能力激活与一次性纯 CSR 降级链路，保证静态首屏与交互接管一致。",
-				"接入真实性能观测与发布 Gate，并隔离服务端渲染、身份认证和客户端钱包的运行边界。",
+				"参与成长任务、家长中心与链上交互的全栈协作；分别校验钱包连接、网络就绪、业务授权和交易确认。",
+				"以 Edge SSR 提供受控初始化，按路径、版本和 DOM 前提接管水合；未捕获错误或同步异常触发受控 CSR 回退，可恢复错误仅记录。",
+				"隔离服务端、身份和钱包边界，通过性能观测检查页面表现；区分真实样本、无样本与不可采集，历史快照仅作为历史参考。",
 			],
 		},
 		{
@@ -148,8 +147,8 @@ export function DashboardContent() {
 			meta: "AI Agent 分布式任务调度 / Web3 Agent 平台",
 			bullets: [
 				"参与 Job 编辑与发布流程，覆盖分类、标签、预算、时限、技能和交付物，并支持自动拆解与人工编排。",
-				"接入 Agent 匹配、派发、生命周期、异步反馈和结果聚合；以请求 ID、Webhook / SSE、消息队列和并发控制保证可追踪与可恢复。",
-				"联调 MetaMask、合约托管 / 结算、IPFS / 链上证据与 AI 内容生产链路，协同 PostgreSQL / pgvector、GraphQL 和 AWS 服务。",
+				"参与 Agent 匹配、派发、生命周期、异步反馈和结果聚合；以请求 ID、Webhook / SSE、消息队列和并发控制串联任务状态。",
+				"参与联调 MetaMask、合约托管 / 结算、IPFS / 链上证据与 AI 内容生产接口。",
 			],
 		},
 	];
@@ -157,8 +156,8 @@ export function DashboardContent() {
 	const personalEngineeringShowcases = [
 		{
 			title: "Personal AI Agent",
-			meta: "AI 智能客服与私有化模型交付",
-			body: "完成 Qwen3-8B 领域微调、量化与 Ollama 私有化交付；使用同一 49 条冻结集评估版本，v2 bigram F1 为 0.2146，v3 为 0.2129，因此保留 v2、拒绝 v3 晋级。意图路由、知识图谱 / RAG、Tool Calling 与转人工仍按系统方案描述。",
+			meta: "本地知识问答 / 私有化模型实践",
+			body: "本地检索编排分支以 Markdown 分块、BM25 / 向量混合召回、RRF 与相关度重排组织带来源回答，并为向量或重排服务异常设置回退。引用规则覆盖 ID 校验与空证据拒答，语义质量评测待补。历史 Qwen3-8B 微调、量化与 Ollama 本地运行使用同一 49 条冻结集比较版本；业务工具与转人工仍按系统方案描述。",
 		},
 		{
 			title: "GitHub Profile Studio",
@@ -216,31 +215,30 @@ export function DashboardContent() {
 					/>
 					<div className="portfolio-dashboard-module-card portfolio-glass-panel mt-5 border border-[#cfd5db] bg-white/84 p-5 shadow-sm md:p-8">
 						<p className="text-[#344252] text-base leading-8">
-							全栈工程师，具备交警大屏与政企低零代码项目的 FDE 交付经验，负责前台应用与中台能力的工程实现；当前专注 AI
-							Agent、Web3、Cloud / Edge 与可验证工程交付。熟悉函数式编程中的纯函数、不可变数据、函数组合与高阶函数，并将其用于状态建模和复杂流程拆解；具备计算机系统基础，理解从编译、链接、装载到运行的程序生命周期，了解 DLL（Dynamic Linking Library）动态链接库、ELF、Section / Segment、.text / .data / .bss、符号重定位，以及 GOT（Global Offset Table）、PLT（Procedure Linkage Table）与库打桩（library interposition / function wrapping）等机制。
+							拥有 8 年软件开发经验，长期参与宁波交警大屏与政企低零代码项目的 FDE 驻场交付，连接业务需求、应用 / API、联调与验收。关注 AI Agent 与 AI 全栈工程中的任务状态与恢复、工具授权、带来源检索和失败降级；结合 Web3 与 Cloud / Edge 实践，解释异步交互、钱包及运行边界。
 						</p>
 						<div className="resume-core-capabilities mt-8">
 							<h3 className="font-semibold font-serif text-[#071d34] text-lg">核心能力</h3>
 							<ol className="mt-4 grid gap-3 text-[#344252] text-sm leading-7 md:text-base">
 								<li className="grid grid-cols-[2.75rem_1fr] gap-3 border border-[#d8cfbd] bg-[#f8f3e8]/70 p-4">
 									<span className="font-bold font-serif text-[#b21f35] text-lg">01</span>
-									<p>拥有 8 年软件开发经验，具备扎实的软件工程、前端架构和复杂业务系统交付能力；重视系统鲁棒性、容错、可恢复性与可观测性，近年来重点实践 AI Agent 系统设计、LLM 应用、MCP 工具调用、上下文工程、RAG 与工作流编排。</p>
+									<p>全栈交付：参与宁波政企应用开发、接口联调与验收迭代，将业务需求转为应用功能、接口契约与可验收结果。</p>
 								</li>
 								<li className="grid grid-cols-[2.75rem_1fr] gap-3 border border-[#d8cfbd] bg-[#f8f3e8]/70 p-4">
 									<span className="font-bold font-serif text-[#b21f35] text-lg">02</span>
-									<p>持续跟踪国内外 AI 大会、基础模型发布与 Agent 生态演进，关注模型训练与推理、Agent Runtime、MCP、RAG、评测和工程化落地，并将前沿信息沉淀为可验证的架构判断、技术选型与实践路线。</p>
+									<p>Agent 工程：项目重点覆盖任务拆解、状态编排、人工审批与恢复；区分流程检查点和外部动作账本，处理重试与结果未知。</p>
 								</li>
 								<li className="grid grid-cols-[2.75rem_1fr] gap-3 border border-[#d8cfbd] bg-[#f8f3e8]/70 p-4">
 									<span className="font-bold font-serif text-[#b21f35] text-lg">03</span>
-									<p>具备从业务分析到工程落地的 Agent 全链路实践，将模型判断与确定性规则分层，覆盖多模型路由、工具调用、Checkpoint、幂等执行、人工审批、失败降级与运行追踪。</p>
+									<p>RAG 与模型：项目包含混合召回、融合重排、来源引用与异常降级；结合 Qwen3 微调和本地推理，分别解释知识更新、行为训练与质量评测。</p>
 								</li>
 								<li className="grid grid-cols-[2.75rem_1fr] gap-3 border border-[#d8cfbd] bg-[#f8f3e8]/70 p-4">
 									<span className="font-bold font-serif text-[#b21f35] text-lg">04</span>
-									<p>能够按资产权限、事实基线、可观测性、回滚演练与 SLO / Runbook 分阶段接管复杂系统；外部副作用结果未知时先进入 uncertain / manual_review 对账，模型供应商不可用时再切换备用 Provider、本地 Ollama 或人工兜底。</p>
+									<p>运行边界：围绕权限、失败状态与观测设计回退；外部结果未知先进入 uncertain / manual_review 核对，结合 SLO / Runbook 说明恢复与人工接管方案。</p>
 								</li>
 								<li className="grid grid-cols-[2.75rem_1fr] gap-3 border border-[#d8cfbd] bg-[#f8f3e8]/70 p-4">
 									<span className="font-bold font-serif text-[#b21f35] text-lg">05</span>
-									<p>熟悉 TypeScript、JavaScript、React、Vue，具备 Python、Node.js、FastAPI、PostgreSQL、WebSocket 与 AWS Serverless 开发实践；核心方向包括 Prompt Engineering、Tool Calling、Function Calling、MCP、RAG、上下文管理、多 Agent 协作、Agent Harness、JSON Schema、人工审批、安全边界与运行追踪。</p>
+									<p>技术底盘：TypeScript / JavaScript、React / Vue、Node.js / Python，以及 API、数据库与 Cloud / Edge 实践。理解函数式编程中的纯函数、不可变数据、函数组合与高阶函数；了解 ELF 的 .text / .data / .bss、编译链接与运行边界。</p>
 								</li>
 							</ol>
 						</div>
