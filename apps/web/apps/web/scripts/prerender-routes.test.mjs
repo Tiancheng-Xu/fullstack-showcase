@@ -82,6 +82,7 @@ describe("static-first route delivery", () => {
 			"/sharing",
 			"/ai-conferences",
 			"/ai-conference-notes/yunqi-2026",
+			"/ai-conference-notes/yunqi-2026-agentic-os",
 			"/ai-conference-notes/openai-devday-2026",
 			"/ai-conference-notes/berkeley-agentic-ai-2026",
 			"/ai-conference-notes/waic-2026",
