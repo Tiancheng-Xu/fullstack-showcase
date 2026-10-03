@@ -1,4 +1,3 @@
-import { Link } from "@tanstack/react-router";
 import type { ReactNode } from "react";
 import type { ConferenceEntry } from "./sharing-data";
 import "./sharing-index.css";
@@ -84,7 +83,7 @@ export function AiConferenceOriginalNoteContent({ entry, markdown }: { entry: Co
   return (
     <article className="sharing-index conference-original-note">
       <div className="sharing-intro">
-        <Link to="/ai-conferences" className="sharing-back">← 返回会议归档</Link>
+        <a href="/sharing#sharing-articles" className="sharing-back">← 返回文章列表</a>
         <p>以下为资料库原笔记正文。为适配网页，Obsidian 内链与本地素材链接只显示名称、不提供无效跳转；正文内容和证据限制保持原样。</p>
         <div className="conference-meta"><span>{entry.event}</span><span>{entry.date}</span><span>{entry.status}</span><span>核对 {entry.reviewed}</span></div>
       </div>

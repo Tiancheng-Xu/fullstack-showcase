@@ -22,6 +22,16 @@ export const conferenceEntries: ConferenceEntry[] = [
     source: "https://www.alibabagroup.com/zh-CN/document-2039431633571938304",
   },
   {
+    slug: "yunqi-2026-agentic-os",
+    title: "AI Agent 原生操作系统：论坛会后回顾",
+    event: "云栖大会 2026",
+    date: "2026.09.23",
+    reviewed: "2026.10.02",
+    status: "官方摘要已整理",
+    summary: "依据龙蜥社区账号的会后文字回顾，整理 Agentic OS 运行底座、系统维护、端边云协同与 SkillHub 质量推荐；不是演讲全文，产品效果仍属发布方陈述。",
+    source: "https://developer.aliyun.com/article/1767343",
+  },
+  {
     slug: "openai-devday-2026",
     title: "OpenAI DevDay 2026：官方发布总览",
     event: "OpenAI DevDay 2026",
@@ -80,6 +90,16 @@ export const conferenceEntries: ConferenceEntry[] = [
     status: "官方摘要已整理",
     summary: "依据官方 Session 摘要，整理 Agent 失败类型、策略驱动评测、运行时检查点以及评测与控制的分工；不标作完整文字稿。",
     source: "https://build.microsoft.com/en-US/sessions/1774018716553001rOhY",
+  },
+  {
+    slug: "build-2026-windows-ml",
+    title: "Expand local AI reach with Windows ML：官方文字整理",
+    event: "Microsoft Build 2026 · OD851",
+    date: "2026.06.02–03",
+    reviewed: "2026.10.02",
+    status: "官方摘要已整理",
+    summary: "依据 Build 2026 官方发布、Windows AI 产品页及 2025 年 Windows ML 机制资料，梳理端侧 AI 接入分层、ORT/EP 硬件适配和模型准备；单场全文待核对，验收清单为整理者推导。",
+    source: "https://blogs.windows.com/windowsdeveloper/2026/06/02/build-2026-furthering-windows-as-the-trusted-platform-for-development/",
   },
   {
     slug: "google-io-2026",

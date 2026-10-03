@@ -1,3 +1,15 @@
+import { readFileSync } from "node:fs";
+import { resolve } from "node:path";
+
+const v8ArticleSlugs = ["sparkplug", "maglev", "leaving-the-sea-of-nodes", "fast-properties", "elements-kinds", "json-stringify", "trash-talk", "pointer-compression", "sandbox"];
+const overreactedNotePath = resolve(process.cwd(), "src/features/portfolio/content/overreacted-reading-route.md");
+const overreactedSource = readFileSync(overreactedNotePath, "utf8");
+const overreactedArticleSlugs = [...overreactedSource.matchAll(/^\d+\. \[[^\]]+\]\(https:\/\/overreacted\.io\/([^/)]+)\/?\)$/gm)].map((match) => match[1]);
+const sharingNoteRoutes = [
+  ...v8ArticleSlugs.map((slug) => ({ url: `/sharing-notes/v8/${slug}`, output: `sharing-notes/v8/${slug}/index.html` })),
+  ...overreactedArticleSlugs.map((slug) => ({ url: `/sharing-notes/overreacted/${slug}`, output: `sharing-notes/overreacted/${slug}/index.html` })),
+];
+
 export const STATIC_FIRST_ROUTES = [
 	{
 		url: "/dashboard",
@@ -20,9 +32,11 @@ export const STATIC_FIRST_ROUTES = [
 	{ url: "/ai-conference-notes/baai-2026-rl", output: "ai-conference-notes/baai-2026-rl/index.html" },
 	{ url: "/ai-conference-notes/build-2026-harness", output: "ai-conference-notes/build-2026-harness/index.html" },
 	{ url: "/ai-conference-notes/build-2026-agent-control", output: "ai-conference-notes/build-2026-agent-control/index.html" },
+	{ url: "/ai-conference-notes/build-2026-windows-ml", output: "ai-conference-notes/build-2026-windows-ml/index.html" },
 	{ url: "/ai-conference-notes/google-io-2026", output: "ai-conference-notes/google-io-2026/index.html" },
 	{ url: "/ai-conference-notes/nvidia-gtc-2026", output: "ai-conference-notes/nvidia-gtc-2026/index.html" },
 	{ url: "/overreacted-reading-route", output: "overreacted-reading-route/index.html" },
+  ...sharingNoteRoutes,
 	{
 		url: "/evidence",
 		output: "evidence/index.html",
