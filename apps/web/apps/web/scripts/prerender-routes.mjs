@@ -26,6 +26,7 @@ export const STATIC_FIRST_ROUTES = [
 	{ url: "/sharing", output: "sharing/index.html" },
 	{ url: "/ai-conferences", output: "ai-conferences/index.html" },
 	{ url: "/ai-conference-notes/yunqi-2026", output: "ai-conference-notes/yunqi-2026/index.html" },
+	{ url: "/ai-conference-notes/yunqi-2026-agentic-os", output: "ai-conference-notes/yunqi-2026-agentic-os/index.html" },
 	{ url: "/ai-conference-notes/openai-devday-2026", output: "ai-conference-notes/openai-devday-2026/index.html" },
 	{ url: "/ai-conference-notes/berkeley-agentic-ai-2026", output: "ai-conference-notes/berkeley-agentic-ai-2026/index.html" },
 	{ url: "/ai-conference-notes/waic-2026", output: "ai-conference-notes/waic-2026/index.html" },
