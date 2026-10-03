@@ -88,6 +88,7 @@ describe("static-first route delivery", () => {
 			"/ai-conference-notes/baai-2026-rl",
 			"/ai-conference-notes/build-2026-harness",
 			"/ai-conference-notes/build-2026-agent-control",
+			"/ai-conference-notes/build-2026-windows-ml",
 			"/ai-conference-notes/google-io-2026",
 			"/ai-conference-notes/nvidia-gtc-2026",
 			"/overreacted-reading-route",

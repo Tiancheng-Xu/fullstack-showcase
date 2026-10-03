@@ -52,9 +52,13 @@
 /ai-conference-notes/build-2026-harness/ /ai-conference-notes/build-2026-harness/index.html 200
 /ai-conference-notes/build-2026-agent-control /ai-conference-notes/build-2026-agent-control/index.html 200
 /ai-conference-notes/build-2026-agent-control/ /ai-conference-notes/build-2026-agent-control/index.html 200
+/ai-conference-notes/build-2026-windows-ml /ai-conference-notes/build-2026-windows-ml/index.html 200
+/ai-conference-notes/build-2026-windows-ml/ /ai-conference-notes/build-2026-windows-ml/index.html 200
 /ai-conference-notes/google-io-2026 /ai-conference-notes/google-io-2026/index.html 200
 /ai-conference-notes/google-io-2026/ /ai-conference-notes/google-io-2026/index.html 200
 /ai-conference-notes/nvidia-gtc-2026 /ai-conference-notes/nvidia-gtc-2026/index.html 200
 /ai-conference-notes/nvidia-gtc-2026/ /ai-conference-notes/nvidia-gtc-2026/index.html 200
 /overreacted-reading-route /overreacted-reading-route/index.html 200
 /overreacted-reading-route/ /overreacted-reading-route/index.html 200
+/sharing-notes/:topic/:slug /sharing-notes/:topic/:slug/index.html 200
+/sharing-notes/:topic/:slug/ /sharing-notes/:topic/:slug/index.html 200

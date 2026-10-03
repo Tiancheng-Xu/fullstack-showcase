@@ -1,4 +1,3 @@
-import { Link } from "@tanstack/react-router";
 import type { ReactNode } from "react";
 import note from "./content/overreacted-reading-route.md?raw";
 import "./sharing-index.css";
@@ -42,7 +41,7 @@ export function OverreactedReadingRouteContent() {
   return (
     <article className="sharing-index reading-route-page">
       <div className="sharing-intro">
-        <Link to="/sharing" className="sharing-back">← 返回分享</Link>
+        <a href="/sharing#sharing-articles" className="sharing-back">← 返回文章列表</a>
         <p>阅读路线已整理，逐篇带读进行中。目录核对于 2026.10.01，公开笔记更新于 2026.10.02；这不是 59 篇文章的已读声明。</p>
         <a href="https://overreacted.io/" target="_blank" rel="noreferrer">原作者 Dan Abramov · Overreacted.io ↗</a>
       </div>
