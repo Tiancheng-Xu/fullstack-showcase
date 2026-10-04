@@ -1,0 +1,137 @@
+<html lang="zh-CN"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{width:100vw;margin:0;padding:0;height:100%;}body{overscroll-behavior:none;background-color:#fbf9f1;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}}::-webkit-scrollbar{display:none;}main{min-height:100vh;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{"colors":{"on-tertiary-fixed-variant":"#324d35","surface-container-highest":"#e4e3db","on-surface":"#1b1c17","surface-container":"#f0eee6","on-error":"#ffffff","on-primary-container":"#704700","on-secondary-container":"#43627e","inverse-primary":"#ffb95a","secondary-fixed":"#cde5ff","background":"#fbf9f1","on-secondary-fixed":"#001d32","secondary-fixed-dim":"#aacaea","on-primary":"#ffffff","tertiary-container":"#abcaab","error":"#ba1a1a","on-tertiary":"#ffffff","surface-bright":"#fbf9f1","on-tertiary-fixed":"#06210d","error-container":"#ffdad6","on-primary-fixed-variant":"#643f00","outline":"#847463","surface-container-high":"#eae8e0","surface-container-low":"#f5f4ec","on-secondary":"#ffffff","on-secondary-fixed-variant":"#294964","on-surface-variant":"#524535","tertiary-fixed":"#cbebca","primary-fixed-dim":"#ffb95a","surface-container-lowest":"#ffffff","surface-variant":"#e4e3db","on-tertiary-container":"#3a563d","surface-tint":"#845400","secondary-container":"#bddefe","on-error-container":"#93000a","primary":"#845400","tertiary-fixed-dim":"#afcfaf","outline-variant":"#d6c3b0","inverse-on-surface":"#f3f1e9","secondary":"#42617d","surface":"#fbf9f1","surface-dim":"#dcdad2","on-primary-fixed":"#2a1800","primary-fixed":"#ffddb6","on-background":"#1b1c17","tertiary":"#49654c","primary-container":"#ffb347","inverse-surface":"#30312c"},"borderRadius":{"DEFAULT":"1rem","lg":"2rem","xl":"3rem","full":"9999px"},"spacing":{"unit":"8px","stack-gap":"16px","container-padding":"24px","section-margin":"40px"},"fontFamily":{"headline-lg-mobile":["Quicksand"],"body-md":["Quicksand"],"headline-md":["Quicksand"],"label-sm":["Quicksand"],"headline-lg":["Quicksand"],"body-lg":["Quicksand"]},"fontSize":{"headline-lg-mobile":["26px",{"lineHeight":"32px","fontWeight":"700"}],"body-md":["16px",{"lineHeight":"24px","fontWeight":"400"}],"headline-md":["24px",{"lineHeight":"32px","fontWeight":"600"}],"label-sm":["13px",{"lineHeight":"18px","letterSpacing":"0.05em","fontWeight":"600"}],"headline-lg":["32px",{"lineHeight":"40px","letterSpacing":"-0.02em","fontWeight":"700"}],"body-lg":["18px",{"lineHeight":"28px","fontWeight":"500"}]}}}}</script><style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head><body class="bg-background font-body-md text-on-background"><header class="fixed top-0 inset-x-0 z-50 bg-surface/80 backdrop-blur-xl pt-safe shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="h-16 px-container-padding flex items-center justify-between"><div class="flex items-center gap-2"><img alt="Nurture &amp; Bloom Logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBIEpV38UNhUFI2q7TaJzbxwywQvkiXtA02obtHzaFv-prnGcRusLXt4MOt_hxr6F8LiE0F9LxT-iyphe54Tp1--HLEfEI2MdImtMofebgMmq4i69XTgSduD_7CYUxDP7o_PuGESabwo-A6z0QUDFh8RUYGqiQEjc8zgFb135VO9SLPY7FyacsE5XnlUBfNXy7Sh2veF2abjFB9BLohGSDmLmXzWS6wbpZEo2D655qcjuB8lYN1OAS6"/><span class="font-headline-md text-headline-md text-primary">育爱成长</span></div><div class="flex items-center gap-3"><button class="w-10 h-10 flex items-center justify-center text-on-surface-variant hover:bg-surface-container rounded-full transition-colors"><span class="material-symbols-outlined">notifications</span></button><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></header><main class="flex flex-col relative w-full pt-16 pb-24 bg-background min-h-screen"><div class="flex flex-col w-full px-container-padding">
+<!-- Search Section -->
+<div class="relative w-full mt-unit mb-6">
+<div class="absolute inset-y-0 left-4 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-outline">search</span>
+</div>
+<input class="w-full h-14 pl-12 pr-4 bg-surface-container-lowest rounded-xl text-on-surface placeholder:text-outline focus:outline-none shadow-sm transition-all focus:shadow-md border-none" placeholder="搜索育儿百科知识..." type="text"/>
+</div>
+<!-- Category Tabs -->
+<div class="flex gap-3 overflow-x-auto pb-4 -mx-container-padding px-container-padding no-scrollbar" id="category-tabs">
+<button class="flex-shrink-0 px-6 py-2 rounded-full bg-primary text-on-primary font-label-sm text-label-sm shadow-sm transition-all" data-category="all">全部</button>
+<button class="flex-shrink-0 px-6 py-2 rounded-full bg-surface-container-high text-on-surface-variant font-label-sm text-label-sm hover:bg-secondary-container transition-all" data-category="feeding">喂养</button>
+<button class="flex-shrink-0 px-6 py-2 rounded-full bg-surface-container-high text-on-surface-variant font-label-sm text-label-sm hover:bg-secondary-container transition-all" data-category="care">护理</button>
+<button class="flex-shrink-0 px-6 py-2 rounded-full bg-surface-container-high text-on-surface-variant font-label-sm text-label-sm hover:bg-secondary-container transition-all" data-category="vaccine">疫苗</button>
+<button class="flex-shrink-0 px-6 py-2 rounded-full bg-surface-container-high text-on-surface-variant font-label-sm text-label-sm hover:bg-secondary-container transition-all" data-category="edu">早教</button>
+</div>
+<!-- Featured Article Card -->
+<div class="relative w-full aspect-[16/10] rounded-xl overflow-hidden shadow-xl mb-8 group active:scale-[0.98] transition-transform">
+<div class="absolute inset-0 bg-cover bg-center" data-alt="A warm, soft-lit scene of a mother gently cradling her newborn baby in a sun-drenched nursery. The lighting is golden and ethereal, highlighting the tender connection. The room is decorated in soft cream and earthy tones, reflecting a peaceful and nurturing environment. High-quality cinematic photography, 8k resolution." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCAmpBpx2PiNKdt_hFlJwh7UfXIk0k3zRDZS39pP4uvJNCnlOM7lVshUxBYO_sArdqO8X76r1sHRrOtUWVEZGMSXr-PH2GKKvUeqaCyD4E84rififYOMrdpdBudOFTpwjRADfSqpsOS0WWkAhFQGbM31ZLG1hhMj5bvYhgy2qxUbgw--Pf5x6AxKWFHGod1I1vKC6DJ6mYlWhCezdcuGI8K9Wuni1g3lax1qYSIOfNrgfJrGMyrfnDW')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
+<div class="absolute bottom-0 left-0 right-0 p-6">
+<div class="flex items-center gap-2 mb-2">
+<span class="px-2 py-0.5 bg-primary/90 backdrop-blur-md rounded text-on-primary text-[10px] uppercase font-bold tracking-wider">今日推荐</span>
+</div>
+<h2 class="font-headline-md text-headline-md text-white mb-1 leading-tight">新手爸妈必备：建立规律的喂养节奏</h2>
+<p class="text-white/80 text-body-md line-clamp-1 font-body-md">掌握宝宝身体语言，让亲子互动更轻松...</p>
+</div>
+</div>
+<!-- Article List -->
+<div class="flex flex-col gap-stack-gap mb-10">
+<h3 class="font-headline-md text-headline-md text-on-surface px-1">深度阅读</h3>
+<!-- Article Item 1 -->
+<div class="flex gap-4 p-4 bg-surface-container-lowest rounded-lg shadow-sm active:bg-surface-container transition-colors">
+<div class="flex-1 min-w-0 flex flex-col justify-between">
+<div>
+<h4 class="font-body-lg text-body-lg text-on-surface font-bold line-clamp-2 mb-1">春季流感高发期，宝宝该如何预防？</h4>
+<p class="text-on-surface-variant text-label-sm line-clamp-1 font-body-md">专家解读流感疫苗及日常护理要点...</p>
+</div>
+<div class="flex items-center gap-3 mt-3">
+<span class="px-2 py-0.5 bg-tertiary-container text-on-tertiary-container rounded text-[11px] font-bold">护理</span>
+<span class="flex items-center gap-1 text-outline text-[12px]">
+<span class="material-symbols-outlined text-[14px]">schedule</span> 5分钟阅读
+          </span>
+</div>
+</div>
+<div class="w-24 h-24 rounded-lg bg-cover bg-center flex-shrink-0" data-alt="A macro shot of a colorful pediatric medicine kit with soft focus, featuring a small clinical thermometer and friendly, colorful packaging. The colors are muted pastel, conveying a sense of safety and medical expertise without being clinical." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCHekH4sqzswjeokPwnDjx6sn2rdAyINEiyrghqvBz9uxH5tkHp2vxac3gcMpm88aURY6b-HDSwmpBhyRIpdduAuQz563AmhfH4XBAJCmgFfD9JwYmbOzaRhPmU3UTbfrCcI0zQ2SrMsIKls8Md8hA8YaBz6VX8S8idL9AQb0YmEA9Ze24OKfws_5z7IwUdDSRoTO9DDBwD9JmuCE-rH0kYfB4LDmGOCbJTOpnHNwx4_Z-yJhduDJfG')"></div>
+</div>
+<!-- Article Item 2 -->
+<div class="flex gap-4 p-4 bg-surface-container-lowest rounded-lg shadow-sm active:bg-surface-container transition-colors">
+<div class="flex-1 min-w-0 flex flex-col justify-between">
+<div>
+<h4 class="font-body-lg text-body-lg text-on-surface font-bold line-clamp-2 mb-1">0-6个月感官开发：陪宝宝玩的正确姿势</h4>
+<p class="text-on-surface-variant text-label-sm line-clamp-1 font-body-md">利用黑白卡与触觉球促进大脑发育...</p>
+</div>
+<div class="flex items-center gap-3 mt-3">
+<span class="px-2 py-0.5 bg-secondary-container text-on-secondary-container rounded text-[11px] font-bold">早教</span>
+<span class="flex items-center gap-1 text-outline text-[12px]">
+<span class="material-symbols-outlined text-[14px]">schedule</span> 8分钟阅读
+          </span>
+</div>
+</div>
+<div class="w-24 h-24 rounded-lg bg-cover bg-center flex-shrink-0" data-alt="Close-up of a baby's tiny hand reaching for a soft, textured wooden toy. Natural light filters through a window, creating soft shadows. The aesthetic is clean, organic, and Montessori-inspired." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBYaNvso948FcehJ1ZM1YWtNGBCgMjgzbCF2lJ5XOB_rtFflSqity_j8oIxJPf02PQ1ijcvRe5hmgI2OSdYWUz-xPQpmG_cNT41htBeiiGsNkaSLlI5Dvsmkyx7emFavWnT-VYggMoO-mDEz9yom3EnXjVtTLgYIyzcPHl8Q-gGqaiPM-RY1q0nUdyN5RXJRbsRN085Zq-Vn_pHSdRPTSq5TTNUh-J9GzfGk95weC-ZaJ9nxa33NKGr')"></div>
+</div>
+<!-- Article Item 3 -->
+<div class="flex gap-4 p-4 bg-surface-container-lowest rounded-lg shadow-sm active:bg-surface-container transition-colors">
+<div class="flex-1 min-w-0 flex flex-col justify-between">
+<div>
+<h4 class="font-body-lg text-body-lg text-on-surface font-bold line-clamp-2 mb-1">添加辅食的第一口：米粉还是肉泥？</h4>
+<p class="text-on-surface-variant text-label-sm line-clamp-1 font-body-md">科学喂养指南，教你识别过敏信号...</p>
+</div>
+<div class="flex items-center gap-3 mt-3">
+<span class="px-2 py-0.5 bg-primary-container text-on-primary-container rounded text-[11px] font-bold">喂养</span>
+<span class="flex items-center gap-1 text-outline text-[12px]">
+<span class="material-symbols-outlined text-[14px]">schedule</span> 6分钟阅读
+          </span>
+</div>
+</div>
+<div class="w-24 h-24 rounded-lg bg-cover bg-center flex-shrink-0" data-alt="A small ceramic bowl with pureed baby food, served on a light wood table next to a tiny bamboo spoon. Fresh organic vegetables like carrots and squash are artfully placed in the background. Bright, high-key lighting." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAfG2kdmCtsdack4XCIGdRsfFqW58pAvFAMCjpybaqXcyALEt5ELgaBxRZxQ_NVPpoWirR2Ut8Hh6kbufIQhsfdZpGzR6nOdJpPn5vmSryQZq4l6Qv6nSqVcszjIgdh5De5fdOt_BjgYXTZM98S_I2wyn01brU-kM9zgC4wKN-y6H5QHtF8pTpeUIs1_1Bn9mEC-i6Q20dCJHLmmGFIqit_XzUJPkKZwe8nfaS_8vbKfgjwAQ2Aztw3')"></div>
+</div>
+</div>
+<!-- Decorative Footer Element -->
+<div class="flex flex-col items-center py-8 text-center opacity-40">
+<span class="material-symbols-outlined text-[48px] text-primary mb-2">auto_stories</span>
+<p class="font-label-sm text-label-sm">已经到底啦，每天学习一点点</p>
+</div>
+</div>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const tabs = document.querySelectorAll('#category-tabs button');
+    
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        // Remove active styles from all
+        tabs.forEach(t => {
+          t.classList.remove('bg-primary', 'text-on-primary', 'shadow-sm');
+          t.classList.add('bg-surface-container-high', 'text-on-surface-variant');
+        });
+        
+        // Add active styles to clicked
+        tab.classList.remove('bg-surface-container-high', 'text-on-surface-variant');
+        tab.classList.add('bg-primary', 'text-on-primary', 'shadow-sm');
+        
+        // Tactile vibration effect
+        if (window.navigator && window.navigator.vibrate) {
+          window.navigator.vibrate(5);
+        }
+      });
+    });
+
+    // Simple scroll reveal for list items
+    const observerOptions = {
+      threshold: 0.1
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.style.opacity = '1';
+          entry.target.style.transform = 'translateY(0)';
+        }
+      });
+    }, observerOptions);
+
+    document.querySelectorAll('.flex.gap-4.p-4').forEach((el, index) => {
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(20px)';
+      el.style.transition = `all 0.4s ease-out ${index * 0.1}s`;
+      observer.observe(el);
+    });
+  });
+</script></main><nav class="fixed bottom-0 inset-x-0 z-50 pb-safe bg-surface/80 backdrop-blur-xl shadow-[0_-1px_12px_rgba(0,0,0,0.04)]" data-active-classes="text-primary font-bold"><div class="flex justify-around items-center h-16 px-unit"><a class="flex flex-col items-center justify-center gap-1 w-1/4 h-full text-on-surface-variant transition-all" data-path="growth" href="#"><span class="material-symbols-outlined">monitoring</span><span class="font-label-sm text-label-sm">成长</span></a><a class="flex flex-col items-center justify-center gap-1 w-1/4 h-full text-on-surface-variant transition-all" data-path="moments" href="#"><span class="material-symbols-outlined">photo_library</span><span class="font-label-sm text-label-sm">时光</span></a><a class="flex flex-col items-center justify-center gap-1 w-1/4 h-full text-on-surface-variant transition-all" data-path="guide" href="#"><span class="material-symbols-outlined">menu_book</span><span class="font-label-sm text-label-sm">百科</span></a><a aria-current="page" class="flex flex-col items-center justify-center gap-1 w-1/4 h-full transition-all text-primary font-bold" data-path="me" href="#"><span class="material-symbols-outlined">account_circle</span><span class="font-label-sm text-label-sm">我的</span></a></div></nav></body></html>
