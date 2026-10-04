@@ -42,10 +42,13 @@
 .conference-note li { margin-bottom: .8rem; }
 .conference-note-boundary { max-width: 65rem; color: #657278; font-size: .88rem; line-height: 1.7; }
 .conference-original-note { max-width: 940px; }
-.portfolio-index-surface:has(.conference-original-note) .portfolio-index-hero h1 { max-width: 22ch; font-size: clamp(2.8rem, 5vw, 4.75rem); line-height: 1.12; letter-spacing: -.035em; overflow-wrap: normal; }
-.portfolio-index-surface:has(.conference-original-note) .portfolio-index-hero strong { max-width: 48rem; font-size: clamp(.95rem, 1.4vw, 1.15rem); line-height: 1.65; }
+.portfolio-index-surface:has(:is(.sharing-article-note, .conference-original-note)) .portfolio-index-hero { width: calc(100% - clamp(2rem, 6vw, 5rem)); max-width: calc(940px - clamp(2rem, 6vw, 5rem)); margin-inline: auto; }
+.portfolio-index-surface:has(:is(.sharing-article-note, .conference-original-note)) .portfolio-index-hero h1 { max-width: none; font-size: clamp(1.8rem, 3.5vw, 3rem); font-weight: 600; line-height: 1.25; letter-spacing: -.015em; text-wrap: balance; overflow-wrap: break-word; word-break: normal; }
+.portfolio-index-surface:has(:is(.sharing-article-note, .conference-original-note)) .portfolio-index-hero strong { font-size: 1rem; font-weight: 500; line-height: 1.65; }
+.sharing-index:is(.sharing-article-note, .conference-original-note) { padding-top: clamp(1.25rem, 2.5vw, 2rem); padding-bottom: 3.5rem; }
+.sharing-index:is(.sharing-article-note, .conference-original-note) .sharing-intro { margin-bottom: clamp(1.25rem, 2.5vw, 2rem); }
 .conference-original-note .reading-route-body { overflow-wrap: anywhere; }
-.conference-original-note .reading-route-body h1 { margin-top: 0; font-size: clamp(1.9rem, 3.2vw, 2.8rem); line-height: 1.35; letter-spacing: -.015em; }
+.conference-original-note .reading-route-body h1 { margin-top: 0; font-size: clamp(1.5rem, 2.4vw, 2rem); font-weight: 600; line-height: 1.4; letter-spacing: -.015em; text-wrap: balance; }
 .conference-original-note .reading-route-body h4 { margin-top: 1.5rem; }
 .conference-original-note .reading-route-body ul,
 .conference-original-note .reading-route-body ol { padding-left: 1.5rem; }
@@ -87,7 +90,6 @@
 .sharing-directory-item h4 { margin: .35rem 0 .55rem; font-size: clamp(1.1rem, 1.6vw, 1.35rem); line-height: 1.35; overflow-wrap: anywhere; }
 .sharing-directory-item p { max-width: 55rem; margin: 0; line-height: 1.65; font-size: .91rem; }
 .sharing-article-note { max-width: 940px; }
-.portfolio-index-surface:has(.sharing-article-note) .portfolio-index-hero h1 { max-width: 22ch; font-size: clamp(2.5rem, 4.4vw, 4.5rem); line-height: 1.15; overflow-wrap: anywhere; }
 .sharing-article-note .reading-route-body h2 { margin-top: .5rem; padding-top: 0; border: 0; }
 .sharing-note-boundary { padding-top: 1rem; border-top: 1px solid #c9c0b1; color: #657278; font-size: .85rem; }
 .sharing-directory-actions { display: flex; flex-wrap: wrap; gap: .5rem; }
