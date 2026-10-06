@@ -4,6 +4,7 @@ import buildControl from "./content/conference/build-2026-agent-control.md?raw";
 import buildHarness from "./content/conference/build-2026-harness.md?raw";
 import buildWindowsMl from "./content/conference/build-2026-windows-ml.md?raw";
 import googleIo from "./content/conference/google-io-2026.md?raw";
+import googleNextDataAgents from "./content/conference/google-cloud-next-2026-data-agents.md?raw";
 import nvidia from "./content/conference/nvidia-gtc-2026.md?raw";
 import devday from "./content/conference/openai-devday-2026.md?raw";
 import waic from "./content/conference/waic-2026.md?raw";
@@ -23,5 +24,6 @@ export const originalConferenceNotes: Record<string, string> = {
   "build-2026-agent-control": buildControl,
   "build-2026-windows-ml": buildWindowsMl,
   "google-io-2026": googleIo,
+  "google-cloud-next-2026-data-agents": googleNextDataAgents,
   "nvidia-gtc-2026": nvidia,
 };

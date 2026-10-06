@@ -35,6 +35,7 @@ export const STATIC_FIRST_ROUTES = [
 	{ url: "/ai-conference-notes/build-2026-agent-control", output: "ai-conference-notes/build-2026-agent-control/index.html" },
 	{ url: "/ai-conference-notes/build-2026-windows-ml", output: "ai-conference-notes/build-2026-windows-ml/index.html" },
 	{ url: "/ai-conference-notes/google-io-2026", output: "ai-conference-notes/google-io-2026/index.html" },
+	{ url: "/ai-conference-notes/google-cloud-next-2026-data-agents", output: "ai-conference-notes/google-cloud-next-2026-data-agents/index.html" },
 	{ url: "/ai-conference-notes/nvidia-gtc-2026", output: "ai-conference-notes/nvidia-gtc-2026/index.html" },
 	{ url: "/overreacted-reading-route", output: "overreacted-reading-route/index.html" },
   ...sharingNoteRoutes,
