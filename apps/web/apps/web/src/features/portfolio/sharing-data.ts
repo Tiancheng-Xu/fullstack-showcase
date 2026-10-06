@@ -102,6 +102,16 @@ export const conferenceEntries: ConferenceEntry[] = [
     source: "https://blogs.windows.com/windowsdeveloper/2026/06/02/build-2026-furthering-windows-as-the-trusted-platform-for-development/",
   },
   {
+    slug: "google-cloud-next-2026-data-agents",
+    title: "New data agents across the Agentic Data Cloud",
+    event: "Google Cloud Next 2026",
+    date: "2026.06.15（发布）",
+    reviewed: "2026.10.06",
+    status: "官方摘要已整理",
+    summary: "依据 Google Cloud 官方发布文章，整理 Conversational Analytics、Data Agents、Managed MCP 与受治理的数据上下文；区分 Preview、GA 和发布方效果陈述，不标作 Transcript，也不代表本机运行过云服务。",
+    source: "https://cloud.google.com/blog/products/data-analytics/new-data-agents-across-the-agentic-data-cloud",
+  },
+  {
     slug: "google-io-2026",
     title: "Google I/O 2026 Developer Keynote：Agent 工具链",
     event: "Google I/O 2026",

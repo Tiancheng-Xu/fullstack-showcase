@@ -3,6 +3,8 @@ import { resolve } from "node:path";
 import { describe, expect, it } from "vitest";
 
 import { PERFORMANCE_APPLICATIONS } from "../src/data/performance-applications";
+import { conferenceEntries } from "../src/features/portfolio/sharing-data";
+import { originalConferenceNotes } from "../src/features/portfolio/ai-conference-original-notes";
 
 import {
 	createCsrFallbackHtml,
@@ -91,6 +93,7 @@ describe("static-first route delivery", () => {
 			"/ai-conference-notes/build-2026-agent-control",
 			"/ai-conference-notes/build-2026-windows-ml",
 			"/ai-conference-notes/google-io-2026",
+			"/ai-conference-notes/google-cloud-next-2026-data-agents",
 			"/ai-conference-notes/nvidia-gtc-2026",
 			"/overreacted-reading-route",
 		]) {
@@ -99,6 +102,18 @@ describe("static-first route delivery", () => {
 			expect(redirects).toContain(`${url} /${output} 200`);
 			expect(redirects).toContain(`${url}/ /${output} 200`);
 		}
+	});
+
+	it("preserves the Google Cloud official-summary evidence boundary and public-only content", () => {
+		const slug = "google-cloud-next-2026-data-agents";
+		expect(conferenceEntries.find((entry) => entry.slug === slug)).toMatchObject({
+			status: "官方摘要已整理",
+			reviewed: "2026.10.06",
+			source: "https://cloud.google.com/blog/products/data-analytics/new-data-agents-across-the-agentic-data-cloud",
+		});
+		expect(originalConferenceNotes[slug]).toContain("不是逐字 Transcript");
+		expect(originalConferenceNotes[slug]).toContain("本机未运行 Google Cloud");
+		expect(originalConferenceNotes[slug]).not.toMatch(/\/Users\/|\/var\/folders\/|BEGIN (?:RSA |EC )?PRIVATE KEY|AKIA[0-9A-Z]{16}/);
 	});
 
 	it("keeps the Vite client entry in the CSR fallback instead of writing a dead redirect", () => {
