@@ -8,8 +8,20 @@ export function SharingIndexContent() {
     <div className="sharing-index">
       <div className="sharing-intro">
         <span className="sharing-eyebrow">PUBLIC NOTES / 公开分享</span>
-        <p>阅读路线、引擎技术与技术会议文字资料，各自保留来源、日期和整理边界。下方文章目录可按专题筛选和搜索；阅读或问答不算已交付项目。</p>
+        <p>记录我主动学习、阅读与思考的过程：课程学习手记、阅读路线、引擎技术与技术会议文字资料，各自保留来源、日期和整理边界。下方文章目录可按专题筛选和搜索；学习记录不等于已掌握，也不算已交付项目。</p>
       </div>
+      <section className="sharing-learning-journal" id="learning-journal" aria-labelledby="learning-journal-title">
+        <div>
+          <span className="sharing-eyebrow">LEARNING JOURNAL / 置顶</span>
+          <h2 id="learning-journal-title">学习手记</h2>
+          <p>我不只收集资料，也尝试把知识串成自己的理解。从章节和小节的具体内容出发，整理关键机制、例子与易错点，留下来源和时间锚，记录新的疑问与下一步想验证的事。</p>
+          <p className="learning-journal-boundary">讲师观点、我的理解与推论、尚待实践的问题会分别说明；整理过不代表已经验证或掌握。</p>
+        </div>
+        <div className="learning-journal-progress">
+          <p role="status">合集学习总结正在整理，完成核验后会在这里发布。</p>
+          <a href="#sharing-articles" className="sharing-action">查看已有阅读与分享 <span aria-hidden="true">↘</span></a>
+        </div>
+      </section>
       <div className="sharing-grid">
         <article className="sharing-feature-card">
           <div className="sharing-card-top"><span>01 / 阅读路线</span><span>长期更新</span></div>

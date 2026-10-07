@@ -240,6 +240,13 @@ export function DashboardContent() {
 									<span className="font-bold font-serif text-[#b21f35] text-lg">05</span>
 									<p>技术底盘：TypeScript / JavaScript、React / Vue、Node.js / Python，以及 API、数据库与 Cloud / Edge 实践。理解函数式编程中的纯函数、不可变数据、函数组合与高阶函数；了解 ELF 的 .text / .data / .bss、编译链接与运行边界。</p>
 								</li>
+								<li className="grid grid-cols-[2.75rem_1fr] gap-3 border border-[#d8cfbd] bg-[#f8f3e8]/70 p-4">
+									<span className="font-bold font-serif text-[#b21f35] text-lg">06</span>
+									<p>
+										主动学习与知识沉淀：我围绕计算机系统、Python、AI 与前端工程持续学习，结合课程、技术文章和会议资料梳理知识之间的联系，记录自己的理解、疑问与待实践的问题，并在 Share 分享阶段思考。
+										<a className="ml-2 inline-flex min-h-11 items-center font-semibold text-[#b21f35] underline underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-4" href="/sharing/#learning-journal">阅读学习手记 <span aria-hidden="true">↗</span></a>
+									</p>
+								</li>
 							</ol>
 						</div>
 						<div className="mt-5 grid gap-4">
