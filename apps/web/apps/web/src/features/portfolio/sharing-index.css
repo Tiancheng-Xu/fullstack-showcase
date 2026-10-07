@@ -3,6 +3,12 @@
 .sharing-eyebrow, .sharing-card-top, .conference-number { color: #a3283a; font: 700 .75rem/1.4 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .13em; text-transform: uppercase; }
 .sharing-intro p { margin: .8rem 0 0; }
 .sharing-intro a, .conference-upcoming a { color: #a3283a; text-decoration-thickness: 1px; text-underline-offset: .25em; }
+.sharing-learning-journal { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: clamp(1.5rem, 4vw, 3rem); scroll-margin-top: 2rem; margin-bottom: 2rem; padding: clamp(1.5rem, 3vw, 2.6rem); background: #e6ece8; border: 1px solid #b9c5c4; border-top: 5px solid #1b6070; box-shadow: 9px 9px 0 rgba(7, 29, 52, .08); }
+.sharing-learning-journal h2 { margin: .8rem 0 1rem; font-family: "Noto Serif SC", "Songti SC", Georgia, serif; font-size: clamp(2rem, 3.4vw, 3rem); line-height: 1.3; color: #092740; }
+.sharing-learning-journal p { margin: 0 0 1rem; line-height: 1.8; }
+.sharing-learning-journal .learning-journal-boundary { margin-bottom: 0; font-size: .85rem; color: #52666c; }
+.learning-journal-progress { align-self: center; padding: 1.4rem; border: 1px solid #b9c5c4; background: #f5f0e7; }
+@media (max-width: 700px) { .sharing-learning-journal { grid-template-columns: 1fr; } .learning-journal-progress { padding: 1.1rem; } }
 .sharing-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.25rem; }
 .sharing-feature-card { min-height: 360px; display: flex; flex-direction: column; padding: clamp(1.5rem, 3vw, 2.6rem); background: #f5f0e7; border: 1px solid #c9c0b1; border-top: 5px solid #aa3042; box-shadow: 9px 9px 0 rgba(7, 29, 52, .08); }
 .sharing-feature-card--conference { background: #e6ece8; border-top-color: #1b6070; }
