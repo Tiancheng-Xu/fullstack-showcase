@@ -1,0 +1,203 @@
+{
+  "verifiedAt": "2026-10-07T17:09:17.939Z",
+  "repositories": {
+    "BBx-Kitchen/bbj-language-server": 13,
+    "Crosstalk-Solutions/project-nomad": 39221,
+    "GoogleChromeLabs/quicklink": 11298,
+    "ID-Robots/clawbox": 30,
+    "PrefectHQ/prefect": 23984,
+    "Solvro/web-testownik": 104,
+    "The-PR-Agent/pr-agent": 13294,
+    "adamteale/paperclip": 0,
+    "alphaXiv/OpenResearch": 6709,
+    "avante-corp/avante.nvim": 18175,
+    "denoland/deno": 108690,
+    "google/googletest": 39628,
+    "google/webcrypto.dart": 115,
+    "manaflow-ai/cmux": 27761,
+    "microsoft/vscode": 193629,
+    "mksglu/context-mode": 25603,
+    "modelcontextprotocol/servers": 91058,
+    "pnpm/pnpm": 36758,
+    "pydantic/monty": 8589,
+    "pysnmp/mibs": 8,
+    "rtk-ai/rtk": 82624,
+    "tabler/tabler-icons": 22015,
+    "vercel-labs/portless": 12666,
+    "vitejs/vite": 83245,
+    "web-infra-dev/rspack": 12935,
+    "wevm/wagmi": 6760
+  },
+  "pullRequests": {
+    "https://github.com/BBx-Kitchen/bbj-language-server/pull/665": {
+      "state": "MERGED",
+      "mergedAt": "2026-09-16T08:07:45Z",
+      "draft": false
+    },
+    "https://github.com/Crosstalk-Solutions/project-nomad/pull/1358": {
+      "state": "MERGED",
+      "mergedAt": "2026-09-23T19:21:02Z",
+      "draft": false
+    },
+    "https://github.com/GoogleChromeLabs/quicklink/pull/501": {
+      "state": "OPEN",
+      "mergedAt": null,
+      "draft": false
+    },
+    "https://github.com/ID-Robots/clawbox/pull/774": {
+      "state": "MERGED",
+      "mergedAt": "2026-09-08T15:17:10Z",
+      "draft": false
+    },
+    "https://github.com/PrefectHQ/prefect/pull/23302": {
+      "state": "OPEN",
+      "mergedAt": null,
+      "draft": false
+    },
+    "https://github.com/Solvro/web-testownik/pull/323": {
+      "state": "MERGED",
+      "mergedAt": "2026-09-12T09:08:00Z",
+      "draft": false
+    },
+    "https://github.com/The-PR-Agent/pr-agent/pull/3140": {
+      "state": "MERGED",
+      "mergedAt": "2026-09-07T14:45:55Z",
+      "draft": false
+    },
+    "https://github.com/The-PR-Agent/pr-agent/pull/3141": {
+      "state": "MERGED",
+      "mergedAt": "2026-09-07T14:46:00Z",
+      "draft": false
+    },
+    "https://github.com/The-PR-Agent/pr-agent/pull/3142": {
+      "state": "MERGED",
+      "mergedAt": "2026-09-07T16:06:31Z",
+      "draft": false
+    },
+    "https://github.com/adamteale/paperclip/pull/2": {
+      "state": "OPEN",
+      "mergedAt": null,
+      "draft": false
+    },
+    "https://github.com/alphaXiv/OpenResearch/pull/477": {
+      "state": "OPEN",
+      "mergedAt": null,
+      "draft": true
+    },
+    "https://github.com/avante-corp/avante.nvim/pull/3266": {
+      "state": "MERGED",
+      "mergedAt": "2026-10-04T15:08:58Z",
+      "draft": false
+    },
+    "https://github.com/denoland/deno/pull/36849": {
+      "state": "OPEN",
+      "mergedAt": null,
+      "draft": false
+    },
+    "https://github.com/denoland/deno/pull/36851": {
+      "state": "OPEN",
+      "mergedAt": null,
+      "draft": false
+    },
+    "https://github.com/denoland/deno/pull/36855": {
+      "state": "OPEN",
+      "mergedAt": null,
+      "draft": false
+    },
+    "https://github.com/google/googletest/pull/5091": {
+      "state": "OPEN",
+      "mergedAt": null,
+      "draft": false
+    },
+    "https://github.com/google/googletest/pull/5092": {
+      "state": "OPEN",
+      "mergedAt": null,
+      "draft": false
+    },
+    "https://github.com/google/webcrypto.dart/pull/398": {
+      "state": "OPEN",
+      "mergedAt": null,
+      "draft": false
+    },
+    "https://github.com/manaflow-ai/cmux/pull/15795": {
+      "state": "OPEN",
+      "mergedAt": null,
+      "draft": false
+    },
+    "https://github.com/microsoft/vscode/pull/335428": {
+      "state": "OPEN",
+      "mergedAt": null,
+      "draft": false
+    },
+    "https://github.com/mksglu/context-mode/pull/1128": {
+      "state": "OPEN",
+      "mergedAt": null,
+      "draft": false
+    },
+    "https://github.com/modelcontextprotocol/servers/pull/4775": {
+      "state": "OPEN",
+      "mergedAt": null,
+      "draft": false
+    },
+    "https://github.com/modelcontextprotocol/servers/pull/4810": {
+      "state": "CLOSED",
+      "mergedAt": null,
+      "draft": false
+    },
+    "https://github.com/pnpm/pnpm/pull/14674": {
+      "state": "MERGED",
+      "mergedAt": "2026-09-09T11:17:36Z",
+      "draft": false
+    },
+    "https://github.com/pydantic/monty/pull/973": {
+      "state": "OPEN",
+      "mergedAt": null,
+      "draft": false
+    },
+    "https://github.com/pysnmp/mibs/pull/361": {
+      "state": "MERGED",
+      "mergedAt": "2026-09-06T23:45:31Z",
+      "draft": false
+    },
+    "https://github.com/rtk-ai/rtk/pull/3922": {
+      "state": "OPEN",
+      "mergedAt": null,
+      "draft": false
+    },
+    "https://github.com/rtk-ai/rtk/pull/3933": {
+      "state": "OPEN",
+      "mergedAt": null,
+      "draft": false
+    },
+    "https://github.com/tabler/tabler-icons/pull/1590": {
+      "state": "MERGED",
+      "mergedAt": "2026-09-18T19:36:19Z",
+      "draft": false
+    },
+    "https://github.com/vercel-labs/portless/pull/413": {
+      "state": "OPEN",
+      "mergedAt": null,
+      "draft": false
+    },
+    "https://github.com/vitejs/vite/pull/23235": {
+      "state": "MERGED",
+      "mergedAt": "2026-09-10T02:58:28Z",
+      "draft": false
+    },
+    "https://github.com/vitejs/vite/pull/23499": {
+      "state": "MERGED",
+      "mergedAt": "2026-10-01T05:51:39Z",
+      "draft": false
+    },
+    "https://github.com/web-infra-dev/rspack/pull/15969": {
+      "state": "OPEN",
+      "mergedAt": null,
+      "draft": false
+    },
+    "https://github.com/wevm/wagmi/pull/5250": {
+      "state": "OPEN",
+      "mergedAt": null,
+      "draft": false
+    }
+  }
+}

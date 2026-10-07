@@ -3,6 +3,7 @@ export type OpenSourcePullRequest = {
 	href: string;
 	contribution: string;
 	issueHref?: string;
+	draft?: boolean;
 };
 
 export type OpenSourceContribution = {
@@ -11,21 +12,78 @@ export type OpenSourceContribution = {
 	pullRequests: OpenSourcePullRequest[];
 };
 
+type VerifiedOpenSourceSnapshot = {
+	repositories: Record<string, number>;
+	pullRequests: Record<
+		string,
+		{ state: string; mergedAt: string | null; draft: boolean }
+	>;
+};
+
+// Curated text is separate from status: old array placement is never evidence.
+export function reconcileOpenSourceContributions(
+	items: OpenSourceContribution[],
+	snapshot: VerifiedOpenSourceSnapshot,
+): { merged: OpenSourceContribution[]; open: OpenSourceContribution[] } {
+	const groups = {
+		merged: new Map<string, OpenSourceContribution>(),
+		open: new Map<string, OpenSourceContribution>(),
+	};
+	const seen = new Set<string>();
+	for (const item of items) {
+		for (const pr of item.pullRequests) {
+			if (seen.has(pr.href)) continue;
+			seen.add(pr.href);
+			const key = new URL(pr.href).pathname.split("/").slice(1, 3).join("/");
+			const stars = snapshot.repositories[key];
+			const verified = snapshot.pullRequests[pr.href];
+			if (
+				!Number.isInteger(stars) ||
+				stars < 0 ||
+				!verified ||
+				!["OPEN", "CLOSED", "MERGED"].includes(verified.state) ||
+				typeof verified.draft !== "boolean" ||
+				(verified.state === "MERGED" && !verified.mergedAt)
+			) {
+				throw new Error(`Missing or invalid verified OSS metadata: ${pr.href}`);
+			}
+			if (stars < 1000 || verified.state === "CLOSED") continue;
+			const group = groups[verified.state === "MERGED" ? "merged" : "open"];
+			const contribution = group.get(item.project) ?? {
+				project: item.project,
+				stars,
+				pullRequests: [],
+			};
+			contribution.pullRequests.push({ ...pr, draft: verified.draft });
+			group.set(item.project, contribution);
+		}
+	}
+	return {
+		merged: orderOpenSourceContributions([...groups.merged.values()]),
+		open: orderOpenSourceContributions([...groups.open.values()]),
+	};
+}
+
 function pullRequestNumber(label: string) {
 	return Number.parseInt(label.replace(/^#/, ""), 10) || 0;
 }
 
-export function orderOpenSourceContributions<T extends OpenSourceContribution>(items: T[]): T[] {
+export function orderOpenSourceContributions<T extends OpenSourceContribution>(
+	items: T[],
+): T[] {
 	return [...items]
-		.sort((left, right) => right.stars - left.stars || left.project.localeCompare(right.project))
+		.sort(
+			(left, right) =>
+				right.stars - left.stars || left.project.localeCompare(right.project),
+		)
 		.map((item) => ({
 			...item,
 			pullRequests: [...item.pullRequests].sort(
-				(left, right) => pullRequestNumber(right.label) - pullRequestNumber(left.label),
+				(left, right) =>
+					pullRequestNumber(right.label) - pullRequestNumber(left.label),
 			),
 		}));
 }
-
 
 export type OpenSourceRepositoryDetail = {
 	project: string;
