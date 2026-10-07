@@ -122,6 +122,21 @@ const curatedMergedContributions = [
 const curatedOpenContributions = [
 	{
 		project: "Deno",
+		stars: 0,
+		pullRequests: [{ label: "#36875", href: "https://github.com/denoland/deno/pull/36875", issueHref: "https://github.com/denoland/deno/issues/36870", contribution: "让桌面框架 HMR 从源码工作区解析入口与传递 npm 依赖，保留非 HMR 的嵌入路径" }],
+	},
+	{
+		project: "Monty",
+		stars: 0,
+		pullRequests: [{ label: "#951", href: "https://github.com/pydantic/monty/pull/951", issueHref: "https://github.com/pydantic/monty/issues/876", contribution: "将不支持的 yield / yield from 表达式报告为 SyntaxError，并覆盖值、语句与 lambda 场景" }],
+	},
+	{
+		project: "RTK",
+		stars: 0,
+		pullRequests: [{ label: "#4319", href: "https://github.com/rtk-ai/rtk/pull/4319", issueHref: "https://github.com/rtk-ai/rtk/issues/4299", contribution: "更新原生 Windows hook 文档，保留使用 Unix shell hook 时的 WSL 路径" }],
+	},
+	{
+		project: "Deno",
 		stars: 108444,
 		pullRequests: [
 			{

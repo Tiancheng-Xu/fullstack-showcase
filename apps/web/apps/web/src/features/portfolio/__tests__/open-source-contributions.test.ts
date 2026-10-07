@@ -26,17 +26,28 @@ describe("public open-source contributions", () => {
 		expect(vite).toMatchObject({ merged: 2, open: 0 });
 	});
 
-	it("includes the published Prefect, Monty and Rspack contributions", () => {
+	it("reconciles all recently published contributions without freezing their future states", () => {
 		for (const href of [
 			"https://github.com/PrefectHQ/prefect/pull/23302",
 			"https://github.com/pydantic/monty/pull/973",
 			"https://github.com/web-infra-dev/rspack/pull/15969",
+			"https://github.com/pydantic/monty/pull/951",
+			"https://github.com/rtk-ai/rtk/pull/4319",
+			"https://github.com/denoland/deno/pull/36875",
 		]) {
+			const verified = snapshot.pullRequests[href as keyof typeof snapshot.pullRequests];
+			expect(verified).toBeDefined();
+			const repositoryKey = new URL(href).pathname.split("/").slice(1, 3).join("/");
+			const publicPRs = openSourceRepositoryDetails.flatMap(({ pullRequests }) => pullRequests);
+			if (verified.state === "CLOSED" || snapshot.repositories[repositoryKey as keyof typeof snapshot.repositories] < 1000) {
+				expect(publicPRs.map(({ href }) => href)).not.toContain(href);
+				continue;
+			}
 			expect(
 				openSourceRepositoryDetails.flatMap(({ pullRequests }) => pullRequests),
 			).toEqual(
 				expect.arrayContaining([
-					expect.objectContaining({ href, status: snapshot.pullRequests[href as keyof typeof snapshot.pullRequests].state === "MERGED" ? "merged" : "open" }),
+						expect.objectContaining({ href, status: verified.state === "MERGED" ? "merged" : "open", draft: verified.draft }),
 				]),
 			);
 		}

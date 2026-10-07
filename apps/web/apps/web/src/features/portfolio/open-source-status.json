@@ -1,28 +1,28 @@
 {
-  "verifiedAt": "2026-10-07T17:09:17.939Z",
+  "verifiedAt": "2026-10-07T17:32:53.372Z",
   "repositories": {
     "BBx-Kitchen/bbj-language-server": 13,
-    "Crosstalk-Solutions/project-nomad": 39221,
+    "Crosstalk-Solutions/project-nomad": 39225,
     "GoogleChromeLabs/quicklink": 11298,
     "ID-Robots/clawbox": 30,
     "PrefectHQ/prefect": 23984,
     "Solvro/web-testownik": 104,
-    "The-PR-Agent/pr-agent": 13294,
+    "The-PR-Agent/pr-agent": 13295,
     "adamteale/paperclip": 0,
-    "alphaXiv/OpenResearch": 6709,
+    "alphaXiv/OpenResearch": 6710,
     "avante-corp/avante.nvim": 18175,
-    "denoland/deno": 108690,
+    "denoland/deno": 108691,
     "google/googletest": 39628,
     "google/webcrypto.dart": 115,
-    "manaflow-ai/cmux": 27761,
-    "microsoft/vscode": 193629,
-    "mksglu/context-mode": 25603,
-    "modelcontextprotocol/servers": 91058,
+    "manaflow-ai/cmux": 27769,
+    "microsoft/vscode": 193630,
+    "mksglu/context-mode": 25606,
+    "modelcontextprotocol/servers": 91061,
     "pnpm/pnpm": 36758,
     "pydantic/monty": 8589,
     "pysnmp/mibs": 8,
     "rtk-ai/rtk": 82624,
-    "tabler/tabler-icons": 22015,
+    "tabler/tabler-icons": 22018,
     "vercel-labs/portless": 12666,
     "vitejs/vite": 83245,
     "web-infra-dev/rspack": 12935,
@@ -104,6 +104,11 @@
       "mergedAt": null,
       "draft": false
     },
+    "https://github.com/denoland/deno/pull/36875": {
+      "state": "OPEN",
+      "mergedAt": null,
+      "draft": true
+    },
     "https://github.com/google/googletest/pull/5091": {
       "state": "OPEN",
       "mergedAt": null,
@@ -149,6 +154,11 @@
       "mergedAt": "2026-09-09T11:17:36Z",
       "draft": false
     },
+    "https://github.com/pydantic/monty/pull/951": {
+      "state": "OPEN",
+      "mergedAt": null,
+      "draft": true
+    },
     "https://github.com/pydantic/monty/pull/973": {
       "state": "OPEN",
       "mergedAt": null,
@@ -168,6 +178,11 @@
       "state": "OPEN",
       "mergedAt": null,
       "draft": false
+    },
+    "https://github.com/rtk-ai/rtk/pull/4319": {
+      "state": "OPEN",
+      "mergedAt": null,
+      "draft": true
     },
     "https://github.com/tabler/tabler-icons/pull/1590": {
       "state": "MERGED",
