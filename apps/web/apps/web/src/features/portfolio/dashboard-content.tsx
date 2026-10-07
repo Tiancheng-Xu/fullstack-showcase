@@ -523,7 +523,7 @@ export function DashboardContent() {
 							已合并贡献优先，同组按 Star 数排序，首页展示前 6 个共建仓库；完整页面提供修复内容与 PR / Issue 入口。
 						</p>
 						<p className="mt-2 text-[#59636d] text-xs">
-							GitHub 状态核验：<time dateTime={openSourceVerifiedAt}>{openSourceVerifiedAt.replace("T", " ").replace(/\.\d+Z$/, " UTC")}</time>；快照不代表实时评审或 CI 结果.
+							GitHub 状态核验：<time dateTime={openSourceVerifiedAt}>{openSourceVerifiedAt.replace("T", " ").replace(/\.\d+Z$/, " UTC")}</time>；快照不代表实时评审或 CI 结果。
 						</p>
 						<div className="mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-3">
 							{openSourceRepositories.slice(0, 6).map((item) => (

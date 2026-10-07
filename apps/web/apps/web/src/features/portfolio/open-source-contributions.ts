@@ -12,6 +12,8 @@ export type OpenSourceContribution = {
 	pullRequests: OpenSourcePullRequest[];
 };
 
+const PUBLIC_MINIMUM_STARS = 1000;
+
 type VerifiedOpenSourceSnapshot = {
 	repositories: Record<string, number>;
 	pullRequests: Record<
@@ -49,7 +51,7 @@ export function reconcileOpenSourceContributions(
 			) {
 				throw new Error(`Missing or invalid verified OSS metadata: ${pr.href}`);
 			}
-			if (stars < 1000 || verified.state === "CLOSED") continue;
+			if (stars < PUBLIC_MINIMUM_STARS || verified.state === "CLOSED") continue;
 			const group = groups[verified.state === "MERGED" ? "merged" : "open"];
 			const contribution = group.get(item.project) ?? {
 				project: item.project,
