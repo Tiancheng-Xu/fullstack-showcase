@@ -66,3 +66,16 @@ test("rejects unexpected author, missing draft, invalid state, stars or merge ti
 	data.data.r0.stargazerCount = -1;
 	assert.throws(() => buildSnapshot(repositories(), data));
 });
+
+test("requires null merge time for every open or closed unmerged PR", () => {
+	for (const state of ["OPEN", "CLOSED"]) {
+		for (const mergedAt of [undefined, "2026-10-01T00:00:00Z"]) {
+			const data = valid();
+			Object.assign(data.data.r0.p0, { state, mergedAt });
+			assert.throws(() => buildSnapshot(repositories(), data));
+		}
+		const data = valid();
+		Object.assign(data.data.r0.p0, { state, mergedAt: null });
+		assert.equal(buildSnapshot(repositories(), data).pullRequests[href].state, state);
+	}
+});

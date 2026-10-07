@@ -235,6 +235,15 @@ describe("reconcileOpenSourceContributions", () => {
 		},
 	});
 
+	it("rejects malformed or contradictory merge times in stored metadata", () => {
+		const invalid = snapshot("MERGED");
+		invalid.pullRequests[href].mergedAt = "invalid";
+		expect(() => reconcileOpenSourceContributions(items, invalid)).toThrow();
+		const contradictory = snapshot("OPEN");
+		contradictory.pullRequests[href].mergedAt = "2026-10-01T00:00:00Z";
+		expect(() => reconcileOpenSourceContributions(items, contradictory)).toThrow();
+	});
+
 	it("uses verified state instead of old grouping, deduplicates and retains narration", () => {
 		const result = reconcileOpenSourceContributions(
 			[...items, ...items],

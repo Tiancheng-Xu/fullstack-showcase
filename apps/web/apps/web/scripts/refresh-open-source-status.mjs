@@ -42,8 +42,9 @@ export function buildSnapshot(repositories, result) {
 				!["OPEN", "CLOSED", "MERGED"].includes(pr.state) ||
 				pr.author?.login !== "Tiancheng-Xu" ||
 				typeof pr.isDraft !== "boolean" ||
-				(pr.state === "MERGED" &&
-					(!pr.mergedAt || !Number.isFinite(Date.parse(pr.mergedAt))))
+				(pr.state === "MERGED"
+					? typeof pr.mergedAt !== "string" || !Number.isFinite(Date.parse(pr.mergedAt))
+					: pr.mergedAt !== null)
 			) {
 				throw new Error(
 					`Missing or invalid PR metadata or unexpected author: ${href}`,

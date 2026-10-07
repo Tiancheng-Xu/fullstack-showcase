@@ -43,7 +43,9 @@ export function reconcileOpenSourceContributions(
 				!verified ||
 				!["OPEN", "CLOSED", "MERGED"].includes(verified.state) ||
 				typeof verified.draft !== "boolean" ||
-				(verified.state === "MERGED" && !verified.mergedAt)
+				(verified.state === "MERGED"
+					? typeof verified.mergedAt !== "string" || !Number.isFinite(Date.parse(verified.mergedAt))
+					: verified.mergedAt !== null)
 			) {
 				throw new Error(`Missing or invalid verified OSS metadata: ${pr.href}`);
 			}
