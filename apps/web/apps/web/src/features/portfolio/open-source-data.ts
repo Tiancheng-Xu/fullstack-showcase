@@ -1,13 +1,13 @@
 import {
 	buildOpenSourceRepositoryDetails,
-	orderOpenSourceContributions,
+	reconcileOpenSourceContributions,
 } from "@/features/portfolio/open-source-contributions";
+import openSourceStatus from "./open-source-status.json";
 
 // Keep lower-star historical work in this source file, but not on the public page.
-// Re-check the upstream star count before updating these snapshots.
-const PUBLIC_MINIMUM_STARS = 1000;
+// The original groups/stars are historical hints; verified metadata controls display.
 
-export const openSourceContributions = orderOpenSourceContributions([
+const curatedMergedContributions = [
 	{
 		project: "PR-Agent",
 		stars: 12907,
@@ -91,7 +91,8 @@ export const openSourceContributions = orderOpenSourceContributions([
 			{
 				label: "#1358",
 				href: "https://github.com/Crosstalk-Solutions/project-nomad/pull/1358",
-				contribution: "修复 Night Ops 暗色主题 WCAG 对比度，并补充回归测试（合并至 dev）",
+				contribution:
+					"修复 Night Ops 暗色主题 WCAG 对比度，并补充回归测试（合并至 dev）",
 			},
 		],
 	},
@@ -117,8 +118,23 @@ export const openSourceContributions = orderOpenSourceContributions([
 			},
 		],
 	},
-].filter(({ stars }) => stars >= PUBLIC_MINIMUM_STARS));
-export const openSourceContributionsInReview = orderOpenSourceContributions([
+];
+const curatedOpenContributions = [
+	{
+		project: "Deno",
+		stars: 0,
+		pullRequests: [{ label: "#36875", href: "https://github.com/denoland/deno/pull/36875", issueHref: "https://github.com/denoland/deno/issues/36870", contribution: "让桌面框架 HMR 从源码工作区解析入口与传递 npm 依赖，保留非 HMR 的嵌入路径" }],
+	},
+	{
+		project: "Monty",
+		stars: 0,
+		pullRequests: [{ label: "#951", href: "https://github.com/pydantic/monty/pull/951", issueHref: "https://github.com/pydantic/monty/issues/876", contribution: "将不支持的 yield / yield from 表达式报告为 SyntaxError，并覆盖值、语句与 lambda 场景" }],
+	},
+	{
+		project: "RTK",
+		stars: 0,
+		pullRequests: [{ label: "#4319", href: "https://github.com/rtk-ai/rtk/pull/4319", issueHref: "https://github.com/rtk-ai/rtk/issues/4299", contribution: "更新原生 Windows hook 文档，保留使用 Unix shell hook 时的 WSL 路径" }],
+	},
 	{
 		project: "Deno",
 		stars: 108444,
@@ -147,7 +163,7 @@ export const openSourceContributionsInReview = orderOpenSourceContributions([
 			{
 				label: "#23499",
 				href: "https://github.com/vitejs/vite/pull/23499",
-				contribution: "初始化失败后释放旧环境",
+				contribution: "开发服务器重启完成初始化后释放旧环境引用",
 			},
 		],
 	},
@@ -234,7 +250,8 @@ export const openSourceContributionsInReview = orderOpenSourceContributions([
 			{
 				label: "#413",
 				href: "https://github.com/vercel-labs/portless/pull/413",
-				contribution: "自守护命令退出时保留路由；原 PR 尚未合并，后续上游 #444 标注共同作者",
+				contribution:
+					"自守护命令退出时保留路由；原 PR 尚未合并，后续上游 #444 标注共同作者",
 			},
 		],
 	},
@@ -291,7 +308,8 @@ export const openSourceContributionsInReview = orderOpenSourceContributions([
 			{
 				label: "#3266",
 				href: "https://github.com/avante-corp/avante.nvim/pull/3266",
-				contribution: "草稿 PR：在 Provider 切换列表标注 ACP 类型，同时保持既有标签与 API",
+				contribution:
+					"在 Provider 切换列表标注 ACP 类型，同时保持既有标签与 API",
 			},
 		],
 	},
@@ -302,7 +320,7 @@ export const openSourceContributionsInReview = orderOpenSourceContributions([
 			{
 				label: "#477",
 				href: "https://github.com/alphaXiv/OpenResearch/pull/477",
-				contribution: "草稿 PR：展示实验最近一次运行耗时，运行中每秒刷新计时",
+				contribution: "展示实验最近一次运行耗时，运行中每秒刷新计时",
 			},
 		],
 	},
@@ -317,7 +335,54 @@ export const openSourceContributionsInReview = orderOpenSourceContributions([
 			},
 		],
 	},
-].filter(({ stars }) => stars >= PUBLIC_MINIMUM_STARS));
+	{
+		project: "Prefect",
+		stars: 0,
+		pullRequests: [
+			{
+				label: "#23302",
+				href: "https://github.com/PrefectHQ/prefect/pull/23302",
+				issueHref: "https://github.com/PrefectHQ/prefect/issues/23298",
+				contribution:
+					"保留 Docker container.wait 返回的退出状态，避免失败容器被报告为成功",
+			},
+		],
+	},
+	{
+		project: "Monty",
+		stars: 0,
+		pullRequests: [
+			{
+				label: "#973",
+				href: "https://github.com/pydantic/monty/pull/973",
+				issueHref: "https://github.com/pydantic/monty/issues/966",
+				contribution:
+					"在裸 raise 重新抛出异常时保留原始 traceback，覆盖挂起恢复与异步切换",
+			},
+		],
+	},
+	{
+		project: "Rspack",
+		stars: 0,
+		pullRequests: [
+			{
+				label: "#15969",
+				href: "https://github.com/web-infra-dev/rspack/pull/15969",
+				issueHref: "https://github.com/web-infra-dev/rspack/issues/15950",
+				contribution:
+					"忽略 JavaScript 字符串中的伪 source map 指令，并按真实注释字节范围移除指令",
+			},
+		],
+	},
+];
+
+const verifiedContributions = reconcileOpenSourceContributions(
+	[...curatedMergedContributions, ...curatedOpenContributions],
+	openSourceStatus,
+);
+export const openSourceContributions = verifiedContributions.merged;
+export const openSourceContributionsInReview = verifiedContributions.open;
+export const openSourceVerifiedAt = openSourceStatus.verifiedAt;
 
 export const openSourceRepositoryDetails = buildOpenSourceRepositoryDetails(
 	openSourceContributions,
@@ -355,6 +420,9 @@ const OPEN_SOURCE_REPOSITORY_FALLBACK_KEYS = new Set([
 	"google--googletest",
 	"manaflow-ai--cmux",
 	"microsoft--vscode",
+	"prefecthq--prefect",
+	"pydantic--monty",
+	"web-infra-dev--rspack",
 	"wevm--wagmi",
 ]);
 
@@ -366,9 +434,7 @@ export function getOpenSourceRepositoryAssetKey(repositoryUrl: string) {
 
 	if (!owner || !repository) return null;
 
-	return `${owner}--${repository}`
-		.toLowerCase()
-		.replace(/[^a-z0-9._-]+/g, "-");
+	return `${owner}--${repository}`.toLowerCase().replace(/[^a-z0-9._-]+/g, "-");
 }
 
 export function getOpenSourceRepositoryIconSrc(repositoryUrl: string) {

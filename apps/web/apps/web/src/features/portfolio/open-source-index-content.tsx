@@ -4,6 +4,7 @@ import {
 	getOpenSourceRepositoryIconSrc,
 	OPEN_SOURCE_REPOSITORY_ICON_FALLBACK,
 	openSourceRepositoryDetails,
+	openSourceVerifiedAt,
 } from "@/features/portfolio/open-source-data";
 import {
 	PortfolioIndexSection,
@@ -15,14 +16,14 @@ export function OpenSourceIndexContent() {
 	return (
 		<PortfolioIndexShell
 			current="open-source"
-			description="按上游仓库聚合公开贡献，展示每项修复内容、当前状态以及可核验的 PR 与 Issue 入口。"
+			description="按上游仓库聚合公开贡献，展示每项修复内容、核验时的状态以及 PR 与 Issue 入口。"
 			kicker="Open Source Contributions"
 			title="开源社区共建"
 		>
 			<TechnologyParticleBackdrop />
 			<PortfolioIndexSection title="全部共建仓库">
 				<p className="portfolio-index-freshness">
-					已合并贡献优先，同组按仓库 Star 数排序；贡献状态以当前公开记录为准。
+					已合并贡献优先，同组按仓库 Star 数排序。GitHub 状态核验：<time dateTime={openSourceVerifiedAt}>{openSourceVerifiedAt.replace("T", " ").replace(/\.\d+Z$/, " UTC")}</time>；快照不代表实时评审或 CI 结果。
 				</p>
 				<div className="portfolio-index-grid portfolio-open-source-grid">
 					{openSourceRepositoryDetails.map((repository) => (
@@ -62,7 +63,7 @@ export function OpenSourceIndexContent() {
 									<GitMerge aria-hidden="true" size={15} /> 已合并 {repository.merged}
 								</span>
 								<span className="inline-flex items-center gap-1 text-[#a85b19]">
-									<CircleDot aria-hidden="true" size={15} /> Review 中 {repository.open}
+									<CircleDot aria-hidden="true" size={15} /> 开放 {repository.open}
 								</span>
 							</p>
 							<div className="portfolio-open-source-pr-list">
@@ -74,7 +75,7 @@ export function OpenSourceIndexContent() {
 										<div className="portfolio-open-source-pr-heading">
 											<strong>{pullRequest.label}</strong>
 											<span className={pullRequest.status === "merged" ? "text-[#187044]" : "text-[#a85b19]"}>
-												{pullRequest.status === "merged" ? "已合并" : "Review 中"}
+												{pullRequest.status === "merged" ? "已合并" : pullRequest.draft ? "草稿" : "开放 PR"}
 											</span>
 										</div>
 										<p className="portfolio-open-source-pr-summary">

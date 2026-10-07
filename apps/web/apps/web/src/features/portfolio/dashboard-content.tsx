@@ -22,7 +22,7 @@ import {
 	getProjectRenderingModes,
 } from "@/data/portfolio-projects";
 import { DashboardScrollProgress } from "@/features/portfolio/dashboard-scroll-progress";
-import { openSourceRepositories } from "@/features/portfolio/open-source-data";
+import { openSourceRepositories, openSourceVerifiedAt } from "@/features/portfolio/open-source-data";
 import { PORTFOLIO_FRAME_CLASS } from "@/features/portfolio/portfolio-layout";
 import { PortfolioPrimaryNavigation } from "@/features/portfolio/portfolio-primary-navigation";
 import { PortfolioSiteHeader } from "@/features/portfolio/portfolio-site-header";
@@ -520,7 +520,10 @@ export function DashboardContent() {
 					/>
 					<div className="portfolio-dashboard-module-card portfolio-glass-panel mt-5 border border-[#cfd5db] bg-white/84 p-5 shadow-sm md:p-7">
 						<p className="max-w-3xl text-[#344252] text-sm leading-relaxed">
-							首页展示 Star 数最高的 6 个共建仓库；完整页面提供具体修复内容与 PR / Issue 入口。
+							已合并贡献优先，同组按 Star 数排序，首页展示前 6 个共建仓库；完整页面提供修复内容与 PR / Issue 入口。
+						</p>
+						<p className="mt-2 text-[#59636d] text-xs">
+							GitHub 状态核验：<time dateTime={openSourceVerifiedAt}>{openSourceVerifiedAt.replace("T", " ").replace(/\.\d+Z$/, " UTC")}</time>；快照不代表实时评审或 CI 结果。
 						</p>
 						<div className="mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-3">
 							{openSourceRepositories.slice(0, 6).map((item) => (
