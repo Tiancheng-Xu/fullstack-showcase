@@ -215,7 +215,7 @@ export function DashboardContent() {
 					/>
 					<div className="portfolio-dashboard-module-card portfolio-glass-panel mt-5 border border-[#cfd5db] bg-white/84 p-5 shadow-sm md:p-8">
 						<p className="text-[#344252] text-base leading-8">
-							拥有 8 年软件开发经验，长期参与宁波交警大屏与政企低零代码项目的 FDE 驻场交付，连接业务需求、应用 / API、联调与验收。关注 AI Agent 与 AI 全栈工程中的任务状态与恢复、工具授权、带来源检索和失败降级；结合 Web3 与 Cloud / Edge 实践，解释异步交互、钱包及运行边界。
+							拥有 8 年软件开发经验，长期参与宁波交警大屏与政企低零代码项目的 FDE 驻场交付，连接业务需求、应用 / API、联调与验收。关注 AI Agent 与 AI 全栈工程中的任务状态与恢复、工具授权、带来源检索和失败降级；结合 Web3 与 Cloud / Edge 实践，解释异步交互、钱包及运行边界。持续参与开源共建，围绕源码排障、兼容性修复与工程维护贡献改进，并与上游维护者协作迭代。
 						</p>
 						<div className="resume-core-capabilities mt-8">
 							<h3 className="font-semibold font-serif text-[#071d34] text-lg">核心能力</h3>
