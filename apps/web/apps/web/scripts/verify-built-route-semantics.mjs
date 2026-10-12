@@ -3,6 +3,8 @@ import { createServer } from "node:http";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
+import { PROJECT_PRD_EVIDENCE_ROUTES } from "./prerender-routes.mjs";
+
 async function readRoute(distDir, pathname) {
 	const route =
 		pathname === "/" ? "index.html" : `${pathname.slice(1)}/index.html`;
@@ -51,7 +53,30 @@ export async function verifyBuiltRouteSemantics({ distDir }) {
 		) {
 			throw new Error("built_route_semantics_failed");
 		}
-		return { knownStatus: known.status, unknownStatus: unknown.status };
+		for (const { url, sourceSha256 } of PROJECT_PRD_EVIDENCE_ROUTES) {
+			const response = await fetch(`${origin}${url}`);
+			const body = await response.text();
+			if (
+				response.status !== 200 ||
+				!body.includes('id="prd-design"') ||
+				!body.includes(sourceSha256) ||
+				body.includes("项目不存在")
+			) {
+				throw new Error(`built_prd_evidence_failed:${url}`);
+			}
+		}
+		const unknownEvidence = await fetch(`${origin}/evidence/definitely-unknown`);
+		if (
+			unknownEvidence.status !== 404 ||
+			!(await unknownEvidence.text()).includes('data-render-mode="static-404"')
+		) {
+			throw new Error("built_unknown_evidence_not_404");
+		}
+		return {
+			knownStatus: known.status,
+			unknownStatus: unknown.status,
+			evidencePages: PROJECT_PRD_EVIDENCE_ROUTES.length,
+		};
 	} finally {
 		await new Promise((resolveClose, reject) =>
 			server.close((error) => (error ? reject(error) : resolveClose())),
@@ -61,6 +86,6 @@ export async function verifyBuiltRouteSemantics({ distDir }) {
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
 	const appRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
-	await verifyBuiltRouteSemantics({ distDir: join(appRoot, "dist") });
-	console.log("Built route semantics: PASS (known=200, unknown=404)");
+	const result = await verifyBuiltRouteSemantics({ distDir: join(appRoot, "dist") });
+	console.log(`Built route semantics: PASS (known=200, unknown=404, PRD Evidence=${result.evidencePages}, unknown Evidence=404)`);
 }
