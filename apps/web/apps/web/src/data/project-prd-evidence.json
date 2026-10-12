@@ -1,0 +1,477 @@
+{
+	"reviewedAt": "2026-10-12",
+	"reviewScope": "本次复核的是文档身份、摘要与事实边界；运行和生产状态仍以各项目带日期、版本的收据为准。",
+	"authority": {
+		"name": "全部项目-主控与上线叙事总表-20261011.md",
+		"sha256": "abca64595fff50e514d0290a4441e2d17791677725b157b80106b96a5d377eca"
+	},
+	"sources": [
+		{
+			"id": "prd-01",
+			"name": "01-Agent-Market-PRD与面试.md",
+			"sha256": "13281bf657f2b4aa8965eb5040bc024ad4eaf150e2f8484ede0239662cdcd73d"
+		},
+		{
+			"id": "prd-02",
+			"name": "02-售后-Agent-工作台-PRD与面试.md",
+			"sha256": "cd5174bd8a5792d93dc1df53d98a719dcdde031d16915618fbbb8bac4fe76997"
+		},
+		{
+			"id": "prd-03",
+			"name": "03-OfficeFlow-PRD与面试.md",
+			"sha256": "ae1e7a96925fb1f7c4afa8dfd52107c7107d574fc07ba93d6b1171bf6fe53957"
+		},
+		{
+			"id": "prd-04",
+			"name": "04-BabySteps-PRD与面试.md",
+			"sha256": "fa772263435bfa388c9ecd811fa834e90decaec1c273565262efdacbb69ece40"
+		},
+		{
+			"id": "prd-05",
+			"name": "05-Showcase与Portfolio-Sync-PRD与面试.md",
+			"sha256": "f388b434a60e11c62b608072da45a3ecd0e638aac448595c74991c1a3a14814b"
+		},
+		{
+			"id": "prd-06",
+			"name": "06-GitHub-Profile-Studio-PRD与面试.md",
+			"sha256": "9ba03f351c2fae1594b8681f0f0a4c4019a51736b4b1c2773fa5f25df5f6af75"
+		},
+		{
+			"id": "prd-07",
+			"name": "07-Personal-AI-Agent-PRD与面试.md",
+			"sha256": "a492ce5758a3e7402eeaefcdb2b89b16a0324861349757397605721c30793480"
+		},
+		{
+			"id": "prd-08",
+			"name": "08-历史商业项目-PRD与面试.md",
+			"sha256": "efa5a2017e02ef4d8a2d7cd576e59c1003ac9e1865306c3f54f3b9c357a82985"
+		},
+		{
+			"id": "prd-09",
+			"name": "09-OSS-贡献案例与面试.md",
+			"sha256": "534598c29b4dcfb84c886c207062d32683fb6349af80e17548e8c77a2b4209f8"
+		},
+		{
+			"id": "prd-10",
+			"name": "10-TC-Flow与Shared-Evidence-Verifier-PRD与面试.md",
+			"sha256": "b6f1277c7f5446cbe9ef92ddaa914f61aafe1b557850701fe2111bc38de6b3c6"
+		},
+		{
+			"id": "prd-11",
+			"name": "11-性能观测与成本控制-PRD与面试.md",
+			"sha256": "0fc79991dd5b33dc342df644bf6eefaffba147fd42c3f6c17ccbe7d39876305c"
+		},
+		{
+			"id": "prd-12",
+			"name": "12-Hono-GitHub-Profile-云实验-PRD与面试.md",
+			"sha256": "a1c16a6ac7de1bae7fe3349ef988898c563b6ab0384fe7df5cca778c3547be51"
+		},
+		{
+			"id": "prd-13",
+			"name": "13-WeChat-Intent-HUD-PRD与面试.md",
+			"sha256": "9385aa5209a331057a1419c890a15b0bf7d3a51af152fd61832900ff4969f0a8"
+		},
+		{
+			"id": "prd-14",
+			"name": "14-Codex-Translate-PRD与面试.md",
+			"sha256": "d5eb3234f372b2349f66d00a22416e9b7796e939b51ac36c7b4ca74f40af27d6"
+		},
+		{
+			"id": "prd-15",
+			"name": "15-知识整理与证据管线-PRD与面试.md",
+			"sha256": "b53c28fa335d6253ac27f1d60f584e6a6a0fe74f0ee0d7ba3896c1386bfa8b38"
+		},
+		{
+			"id": "prd-16",
+			"name": "16-Codex-Mascot与Hatch-Pet-产品规格及边界.md",
+			"sha256": "eb8946d788bfdd8f561bbefe1b3f37be1db1ea1e05cc05d2cbc5f76a95686f95"
+		},
+		{
+			"id": "prd-17",
+			"name": "17-课程方案与项目去重清单.md",
+			"sha256": "7f2b62808ac91bfa600de55d6d39b43f0d26fd9cdc83e9e7c71437594f677607"
+		},
+		{
+			"id": "prd-ocr",
+			"name": "通用文档解析核心PRD.md",
+			"sha256": "4eae6b9f814a848e1e68e684e031036984ac3eb08b8110ef1fa52a3197ea8fd1"
+		}
+	],
+	"courseMaterial": "17 号课程方案与项目去重清单单列为资料覆盖说明，不新增独立投产项目；题面、参考、归档方向与子系统不重复包装成客户任职。",
+	"entries": [
+		{
+			"id": "agent-market",
+			"title": "Agent Market",
+			"sourceId": "prd-01",
+			"reviewedAt": "2026-10-12",
+			"status": "主控与上线经本人确认",
+			"positioning": "把任务需求组织成规划、匹配、审批、执行、评审与交付闭环。",
+			"mechanisms": [
+				"工具契约与版本审批",
+				"动作账本与未知结果恢复",
+				"风险、质量和交付状态分层"
+			],
+			"historicalEvidence": "资料保留历史 Web、链上及性能交付记录，各有版本和验证范围。",
+			"currentBoundary": "System-One 等新增增强与历史生产版本分开；局部审查通过不能替代整品生产验收。",
+			"projectUrl": "https://agent-market.baby2b.online/",
+			"evidenceUrl": "https://agent-market.baby2b.online/evidence/"
+		},
+		{
+			"id": "service-agent-workbench",
+			"title": "售后 Agent 工作台",
+			"sourceId": "prd-02",
+			"reviewedAt": "2026-10-12",
+			"status": "主控与上线经本人确认",
+			"positioning": "从工单与提案到权限审批、执行和结果核对，记录批准的版本及未知结果。",
+			"mechanisms": [
+				"角色与 MCP 权限边界",
+				"版本审批与幂等执行",
+				"审计和失败恢复"
+			],
+			"historicalEvidence": "本人确认项目已上线；所查迭代资料单列契约与局部接受记录。",
+			"currentBoundary": "当前查阅迭代的完整接受与整体上线确认分别记账；本页不补造其生产版本或客户指标。",
+			"projectUrl": null,
+			"evidenceUrl": "https://baby2b.online/evidence/service-agent-workbench"
+		},
+		{
+			"id": "office-workflow-agent",
+			"title": "OfficeFlow 办公流程 Agent",
+			"sourceId": "prd-03",
+			"reviewedAt": "2026-10-12",
+			"status": "主控与上线经本人确认",
+			"positioning": "把业务需求变成可信字段，经版本批准执行并独立核对。",
+			"mechanisms": [
+				"人工确认与结构化入参",
+				"API 和 Browser 执行分工",
+				"事务、未知结果与独立核对"
+			],
+			"historicalEvidence": "资料记录合成业务工作区的历史生产收据。",
+			"currentBoundary": "规则提案及模型启用按具体版本说明；合成数据验收不能证明真实采购收益，OCR 接入不能代替业务审批。",
+			"projectUrl": "https://office-workflow-agent.baby2b.online/",
+			"evidenceUrl": "https://office-workflow-agent.baby2b.online/evidence/"
+		},
+		{
+			"id": "personal-ai-agent",
+			"title": "Personal AI Agent",
+			"sourceId": "prd-07",
+			"reviewedAt": "2026-10-12",
+			"status": "主控与上线经本人确认",
+			"positioning": "让私有资料可检索、回答可追溯，把模型行为训练与事实检索分开。",
+			"mechanisms": [
+				"混合检索、RRF 与重排",
+				"引用支持与取消状态",
+				"QLoRA 训练和检索评测分层"
+			],
+			"historicalEvidence": "资料分别保存静态产品发布、本机模型和训练交付记录。",
+			"currentBoundary": "向量库正文副本须单独治理；训练 F1 不能当作 RAG 准确率，未测模型效果不宣称通过。",
+			"projectUrl": "https://personal-ai-agent.baby2b.online/",
+			"evidenceUrl": "https://personal-ai-agent.baby2b.online/evidence/"
+		},
+		{
+			"id": "babysteps",
+			"title": "BabySteps",
+			"sourceId": "prd-04",
+			"reviewedAt": "2026-10-12",
+			"status": "主控与上线经本人确认",
+			"positioning": "连接成长任务、照护者界面与链上交互，并分开页面状态与交易事实。",
+			"mechanisms": [
+				"钱包状态与业务权限",
+				"Edge SSR、水合和 CSR 回退",
+				"交易回执与验收范围"
+			],
+			"historicalEvidence": "资料保留 PR #83 的历史生产发布记录及 Sepolia 验证范围。",
+			"currentBoundary": "历史生产证据不证明本次所有增强完成；Sepolia 不等于主网资金或商业合作。",
+			"projectUrl": "https://babysteps.baby2b.online/",
+			"evidenceUrl": "https://babysteps.baby2b.online/evidence/"
+		},
+		{
+			"id": "fullstack-showcase",
+			"title": "Showcase Dashboard",
+			"sourceId": "prd-05",
+			"reviewedAt": "2026-10-12",
+			"status": "主控与上线经本人确认",
+			"positioning": "把经历、产品、公开证据与学习分享组织成可追溯的作品系统。",
+			"mechanisms": [
+				"内容审核与事实源",
+				"静态首屏、渲染与路由",
+				"公开摘要和私有原件分离"
+			],
+			"historicalEvidence": "资料保存既有作品站发布与内容交付记录。",
+			"currentBoundary": "本次新增 PRD 摘要的代码、预览和生产发布分别核验；Profile 是同一事实的展示出口。",
+			"projectUrl": "https://baby2b.online/dashboard/",
+			"evidenceUrl": "https://baby2b.online/evidence/fullstack-showcase"
+		},
+		{
+			"id": "portfolio-sync",
+			"title": "Portfolio Sync",
+			"sourceId": "prd-05",
+			"reviewedAt": "2026-10-12",
+			"status": "主控与上线经本人确认",
+			"positioning": "把仓库变化转为可核对的项目索引，同时保留人工审核内容和可信项目身份。",
+			"mechanisms": [
+				"Webhook 验签与项目白名单",
+				"去重、事件与快照一致性",
+				"定时对账和静态回退"
+			],
+			"historicalEvidence": "资料记录 Webhook 与定时刷新两条同步链路。",
+			"currentBoundary": "这是 Showcase 配套子系统，不重复算客户任职；公开索引存在不证明所有项目的新版本已部署。",
+			"projectUrl": "https://github.com/Tiancheng-Xu/fullstack-showcase/tree/main/workers/portfolio-sync-webhook",
+			"evidenceUrl": "https://baby2b.online/evidence/portfolio-sync"
+		},
+		{
+			"id": "github-profile-studio",
+			"title": "GitHub Profile Studio",
+			"sourceId": "prd-06",
+			"reviewedAt": "2026-10-12",
+			"status": "主控与上线经本人确认",
+			"positioning": "在同一前端契约下审阅资料并做白名单编辑，兼容不同后端并保存到本地数据库。",
+			"mechanisms": [
+				"服务端凭据隔离",
+				"运行时校验与编辑白名单",
+				"SQLite 与 Node/Go 后端契约"
+			],
+			"historicalEvidence": "资料记录本地优先交付和远端验证检查。",
+			"currentBoundary": "公网 API 对应版本仍需定位；公开 Evidence 托管不等于 API 托管，也不宣称修改了 GitHub 账号。",
+			"projectUrl": "https://github.com/Tiancheng-Xu/github-profile-studio",
+			"evidenceUrl": "https://baby2b.online/evidence/github-profile-studio"
+		},
+		{
+			"id": "hono-github-profile",
+			"title": "Hono GitHub资料云服务",
+			"sourceId": "prd-12",
+			"reviewedAt": "2026-10-12",
+			"status": "主控与上线经本人确认",
+			"positioning": "围绕外部资料读取、白名单映射、幂等存储与云边界组织全栈服务。",
+			"mechanisms": [
+				"Token 生命周期与 API 错误",
+				"可信映射与幂等存储",
+				"Serverless、数据库与网络边界"
+			],
+			"historicalEvidence": "资料记录 Hono API、仓储契约和历史预览验证。",
+			"currentBoundary": "真实云工作负载、数据库和生产版本须各自有回执；不能借 Studio 双后端证据填空。",
+			"projectUrl": null,
+			"evidenceUrl": "https://baby2b.online/evidence/hono-github-profile"
+		},
+		{
+			"id": "aladdin",
+			"title": "阿拉丁兼职项目群",
+			"sourceId": "prd-08",
+			"reviewedAt": "2026-10-12",
+			"status": "主控与上线经本人确认",
+			"positioning": "主控 AI Agent 与 Web3 产品的应用链路与全栈交付，连接任务输入、异步执行和结果反馈。",
+			"mechanisms": [
+				"任务编排与接口协作",
+				"异步派发和结果聚合",
+				"模块责任与交付验收"
+			],
+			"historicalEvidence": "本人确认阿拉丁兼职经历、产品主控与上线；历史职责按具体模块展开。",
+			"currentBoundary": "Agent Market 与 BabySteps 同时保留产品技术故事和工作归属，不重复计任职；不虚构客户、收益或具体事故。",
+			"projectUrl": null,
+			"evidenceUrl": "https://baby2b.online/evidence/aladdin"
+		},
+		{
+			"id": "ningbo-traffic-dashboard",
+			"title": "宁波交警可视化大屏",
+			"sourceId": "prd-08",
+			"reviewedAt": "2026-10-12",
+			"status": "主控与上线经本人确认",
+			"positioning": "把业务口径、数据接口、展示模块与现场反馈连接为可理解的可视化应用。",
+			"mechanisms": [
+				"指标定义与数据口径",
+				"展示模块和状态联动",
+				"接口、渲染排障与现场验收"
+			],
+			"historicalEvidence": "本人确认历史项目主控与上线，资料按历史商业交付整理。",
+			"currentBoundary": "具体可公开模块和量化指标须另有依据；内部接口、执法数据和客户原始资料不公开。",
+			"projectUrl": null,
+			"evidenceUrl": "https://baby2b.online/evidence/ningbo-traffic-dashboard"
+		},
+		{
+			"id": "government-low-code-fde",
+			"title": "政企低零代码 / FDE",
+			"sourceId": "prd-08",
+			"reviewedAt": "2026-10-12",
+			"status": "主控与上线经本人确认",
+			"positioning": "把业务需求转为应用、接口和验收条目，在平台复用与定制之间取舍并持续迭代。",
+			"mechanisms": [
+				"输入、规则、输出与验收",
+				"平台复用和定制取舍",
+				"系统集成与变更影响"
+			],
+			"historicalEvidence": "本人确认政企应用交付经历、项目主控与上线。",
+			"currentBoundary": "经历跨度不等于每款产品持续运营相同时长；不补造客户名称、内部接口或经营指标。",
+			"projectUrl": null,
+			"evidenceUrl": "https://baby2b.online/evidence/government-low-code-fde"
+		},
+		{
+			"id": "tc-workflow",
+			"title": "TC Flow",
+			"sourceId": "prd-10",
+			"reviewedAt": "2026-10-12",
+			"status": "主控与上线经本人确认",
+			"positioning": "用契约、任务、独立 Review、Checkpoint 与整体验收组织 AI 辅助研发。",
+			"mechanisms": [
+				"契约和任务范围冻结",
+				"独立审查与交付 Gate",
+				"检查点、恢复与分层结果"
+			],
+			"historicalEvidence": "资料保存本机工作流、工具及历史交付合同。",
+			"currentBoundary": "工作流交付不强制等同公网 SaaS；新 Adapter 或本地修改不等于远端版本，也不保证任意项目自动成功。",
+			"projectUrl": "https://github.com/Tiancheng-Xu/personal-skills/tree/main/skills/tc-flow",
+			"evidenceUrl": "https://baby2b.online/evidence/tc-workflow"
+		},
+		{
+			"id": "shared-evidence-verifier",
+			"title": "Shared Evidence Verifier",
+			"sourceId": "prd-10",
+			"reviewedAt": "2026-10-12",
+			"status": "主控与上线经本人确认",
+			"positioning": "按可信身份与固定项目清单核对提交、页面和公开证明，输出限定范围的脱敏记录。",
+			"mechanisms": [
+				"OIDC 身份与最小权限",
+				"固定项目和数据范围",
+				"Schema、审计与证据核对"
+			],
+			"historicalEvidence": "资料记录共享验证底座及限定范围的历史检查。",
+			"currentBoundary": "检查记录不证明全部业务真实性，也不表示该底座已为所有产品签署同一验收。",
+			"projectUrl": "https://github.com/Tiancheng-Xu/.github",
+			"evidenceUrl": "https://baby2b.online/evidence/shared-evidence-verifier"
+		},
+		{
+			"id": "performance-observability-control",
+			"title": "性能观测与成本控制",
+			"sourceId": "prd-11",
+			"reviewedAt": "2026-10-12",
+			"status": "主控与上线经本人确认",
+			"positioning": "把按需采样、展示来源、资源生命周期与历史快照分开，防止过期数据被当作实时指标。",
+			"mechanisms": [
+				"Trace、指标与阶段采样",
+				"CAS、启停和回调状态",
+				"历史、新鲜与未知数据分层"
+			],
+			"historicalEvidence": "资料保存控制面历史发布及版本限定的实验回执。",
+			"currentBoundary": "完整启停链、新鲜数据和账户成本逐项核验；未实测不报告成本降幅或性能提升百分比。",
+			"projectUrl": "https://baby2b.online/performance-control/babysteps",
+			"evidenceUrl": "https://baby2b.online/evidence/performance-observability-control"
+		},
+		{
+			"id": "wechat-intent-hud",
+			"title": "WeChat Intent HUD",
+			"sourceId": "prd-13",
+			"reviewedAt": "2026-10-12",
+			"status": "主控与上线经本人确认",
+			"positioning": "在用户主动触发后只读可见输入，旁路给出意图和表达候选。",
+			"mechanisms": [
+				"AX 与单帧 OCR 的可见范围",
+				"异步取消与迟到结果隔离",
+				"本机提供器与隐私边界"
+			],
+			"historicalEvidence": "本人确认产品上线；所查源码版本包含选区、OCR、浮层与异步协调。",
+			"currentBoundary": "所查分支的固定判断器与真实本机模型效果分开；不读取完整聊天记录，不替用户发送消息。",
+			"projectUrl": null,
+			"evidenceUrl": "https://baby2b.online/evidence/wechat-intent-hud"
+		},
+		{
+			"id": "codex-translate",
+			"title": "Codex Translate",
+			"sourceId": "prd-14",
+			"reviewedAt": "2026-10-12",
+			"status": "主控与上线经本人确认",
+			"positioning": "划词后结合中文含义、技术缩写与本地课程来源解释，需要深入时由用户主动调用 AI。",
+			"mechanisms": [
+				"语境检索与课程来源",
+				"本地优先和主动触发",
+				"权限、会话和取消生命周期"
+			],
+			"historicalEvidence": "资料记录已安装应用版本 0.2.2 / build 5 及固定源码版本。",
+			"currentBoundary": "安装、源码提交与实际运行验收分别定位；这是个人工具，不是 OpenAI 官方产品。",
+			"projectUrl": null,
+			"evidenceUrl": "https://baby2b.online/evidence/codex-translate"
+		},
+		{
+			"id": "knowledge-evidence-pipeline",
+			"title": "知识整理与证据管线",
+			"sourceId": "prd-15",
+			"reviewedAt": "2026-10-12",
+			"status": "主控与上线经本人确认",
+			"positioning": "把官方文字和获准媒体整理成有来源、质量层级与复习入口的知识系统。",
+			"mechanisms": [
+				"来源与派生内容治理",
+				"转录、复核和质量 Gate",
+				"脱敏交接与复习入口"
+			],
+			"historicalEvidence": "资料保存官方文字整理、媒体 Gate 和知识库交接记录。",
+			"currentBoundary": "原文、机器转录、人工复核、公开文章与本人掌握分别记账；单条资料通过不证明全部内容已掌握。",
+			"projectUrl": null,
+			"evidenceUrl": "https://baby2b.online/evidence/knowledge-evidence-pipeline"
+		},
+		{
+			"id": "codex-mascot",
+			"title": "Codex Mascot / BaoBao Puff",
+			"sourceId": "prd-16",
+			"reviewedAt": "2026-10-12",
+			"status": "主控与上线经本人确认",
+			"positioning": "围绕角色、动画状态、方向与透明图集合同交付可审阅的本机宠物资产。",
+			"mechanisms": [
+				"角色和动作一致性",
+				"图集格式与确定性校验",
+				"视觉 QA 和本机资产交付"
+			],
+			"historicalEvidence": "资料保存角色包、素材与质量审查记录；资产可作为产品交付。",
+			"currentBoundary": "当前安装和定时运行的具体记录另行定位；资产交付不等于通用生成服务，私人参考图不公开。",
+			"projectUrl": null,
+			"evidenceUrl": "https://baby2b.online/evidence/codex-mascot"
+		},
+		{
+			"id": "hatch-pet",
+			"title": "Hatch Pet",
+			"sourceId": "prd-16",
+			"reviewedAt": "2026-10-12",
+			"status": "主控与上线经本人确认",
+			"positioning": "设计从概念或参考到角色一致性、动作方向、审阅和安装包的宠物生成流程。",
+			"mechanisms": [
+				"角色基准与生成流程",
+				"动作、方向和格式合同",
+				"人工审阅与可安装产物"
+			],
+			"historicalEvidence": "本人确认项目上线；所查公开仓库保存产品规格。",
+			"currentBoundary": "公开规格与实际生成器实现分别说明；不凭旧公开树否定私有交付，也不凭总体确认补写未知生成器功能。",
+			"projectUrl": "https://github.com/Tiancheng-Xu/hatch-pet",
+			"evidenceUrl": "https://baby2b.online/evidence/hatch-pet"
+		},
+		{
+			"id": "oss-contributions",
+			"title": "OSS 贡献",
+			"sourceId": "prd-09",
+			"reviewedAt": "2026-10-12",
+			"status": "主控与上线经本人确认",
+			"positioning": "围绕真实工具缺陷完成复现、根因定位、最小修复与上游评审协作。",
+			"mechanisms": [
+				"可复现问题与根因",
+				"兼容性和回归验证",
+				"PR、上游评审与合并状态"
+			],
+			"historicalEvidence": "资料按具体 issue、PR 和其日期记录真实贡献结果。",
+			"currentBoundary": "已合并、开放 PR 与本地修改保持区别；只认领本人贡献工作，不认领上游整个产品。",
+			"projectUrl": "https://github.com/Tiancheng-Xu",
+			"evidenceUrl": "https://baby2b.online/evidence/oss-contributions"
+		},
+		{
+			"id": "enterprise-document-parser",
+			"title": "通用文档解析核心",
+			"sourceId": "prd-ocr",
+			"reviewedAt": "2026-10-12",
+			"status": "文档通过 · 实现待验证",
+			"positioning": "设计把短 PDF 与扫描图片转为可回看原文位置的提取结果和质量报告。",
+			"mechanisms": [
+				"文本层、OCR 来源与质量分层",
+				"取消、清理与显式保存",
+				"节点收据和操作人快照的 SHA-256 审计设计"
+			],
+			"historicalEvidence": "2026-10-12 完成设计文档及独立文档复审，文档链接和实际文件哈希已核对。",
+			"currentBoundary": "产品尚未实现，未运行 OCR 或模型；节点与操作人哈希仅为设计，未生成业务运行收据。哈希不替代身份认证、签名或识别准确性。",
+			"projectUrl": null,
+			"evidenceUrl": "https://baby2b.online/evidence/enterprise-document-parser"
+		}
+	]
+}

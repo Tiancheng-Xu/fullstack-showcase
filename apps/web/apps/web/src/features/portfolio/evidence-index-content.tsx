@@ -5,6 +5,11 @@ import {
 	PortfolioIndexShell,
 } from "@/features/portfolio/portfolio-index-shell";
 import { usePortfolioProjects } from "@/features/portfolio/use-portfolio-projects";
+import {
+	PROJECT_PRD_EVIDENCE,
+	PRD_EVIDENCE_COVERAGE,
+	projectPrdSummaryUrl,
+} from "@/data/project-prd-evidence";
 
 const SKILL_PROJECT_IDS = new Set(["tc-workflow"]);
 
@@ -18,6 +23,27 @@ export function EvidenceIndexContent() {
 			kicker="Evidence Directory"
 			title="工作证明索引"
 		>
+			<PortfolioIndexSection title="逐项目 PRD 摘要与版本边界">
+				<p className="mb-5 text-sm leading-relaxed">
+					覆盖 21 个项目与叙事单元及 1 个新增设计模块。复核日期：{PRD_EVIDENCE_COVERAGE.reviewedAt}。
+					子系统与历史工作归属保持关联；摘要复核不替代产品运行和生产验收。
+				</p>
+				<div aria-label="逐项目 PRD 摘要索引" className="portfolio-evidence-grid">
+					{PROJECT_PRD_EVIDENCE.map((entry) => (
+						<article className="portfolio-evidence-card" key={entry.id}>
+							<header>
+								<span><FileCheck2 aria-hidden="true" size={20} /></span>
+								<div><p>{entry.status}</p><h3>{entry.title}</h3></div>
+							</header>
+							<p>{entry.positioning}</p>
+							<footer>
+								<a href={projectPrdSummaryUrl(entry)}>查看 PRD 摘要 <ArrowUpRight aria-hidden="true" size={14} /></a>
+								<a href={entry.evidenceUrl}>项目工作证明 <ArrowUpRight aria-hidden="true" size={14} /></a>
+							</footer>
+						</article>
+					))}
+				</div>
+			</PortfolioIndexSection>
 			<PortfolioIndexSection title="项目 Evidence 与架构">
 				<div className="portfolio-evidence-grid">
 					{projects.map((project) => {
@@ -111,6 +137,24 @@ export function EvidenceIndexContent() {
 							</article>
 						);
 					})}
+				</div>
+			</PortfolioIndexSection>
+			<PortfolioIndexSection title="资料覆盖与校验说明">
+				<div className="space-y-4 text-sm leading-relaxed" id="prd-coverage">
+					<p>{PRD_EVIDENCE_COVERAGE.courseMaterial}</p>
+					<p>{PRD_EVIDENCE_COVERAGE.reviewScope} SHA-256 对应本机保留的原件字节，公开只展示名称与哈希。</p>
+					<div className="space-y-2 border border-border p-4">
+						<p>摘要口径来源：{PRD_EVIDENCE_COVERAGE.authority.name}</p>
+						<code className="block break-all font-mono text-xs">{PRD_EVIDENCE_COVERAGE.authority.sha256}</code>
+					</div>
+					<ul className="space-y-3">
+						{PRD_EVIDENCE_COVERAGE.sources.map((source) => (
+							<li className="space-y-1 border-b border-border pb-3" key={source.id}>
+								<p>{source.name}</p>
+								<code className="block break-all font-mono text-xs">{source.sha256}</code>
+							</li>
+						))}
+					</ul>
 				</div>
 			</PortfolioIndexSection>
 			<aside className="portfolio-index-note">

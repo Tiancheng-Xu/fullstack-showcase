@@ -5,6 +5,7 @@ import { describe, expect, it } from "vitest";
 import { PERFORMANCE_APPLICATIONS } from "../src/data/performance-applications";
 import { conferenceEntries } from "../src/features/portfolio/sharing-data";
 import { originalConferenceNotes } from "../src/features/portfolio/ai-conference-original-notes";
+import { PROJECT_PRD_EVIDENCE } from "../src/data/project-prd-evidence";
 
 import {
 	createCsrFallbackHtml,
@@ -13,6 +14,20 @@ import {
 } from "./prerender-routes.mjs";
 
 describe("static-first route delivery", () => {
+	it("prerenders all portfolio-owned PRD Evidence pages and preserves external owners", () => {
+		const redirects = readFileSync(resolve(process.cwd(), "public/_redirects"), "utf8");
+		const localEntries = PROJECT_PRD_EVIDENCE.filter(({ evidenceUrl }) => new URL(evidenceUrl).hostname === "baby2b.online");
+		expect(localEntries).toHaveLength(18);
+		for (const { id } of localEntries) {
+			expect(STATIC_FIRST_ROUTES).toContainEqual({ url: `/evidence/${id}`, output: `evidence/${id}/index.html` });
+		}
+		for (const id of ["agent-market", "personal-ai-agent", "babysteps"]) {
+			expect(STATIC_FIRST_ROUTES.some(({ url }) => url === `/evidence/${id}`)).toBe(false);
+			expect(redirects).toContain(`/evidence/${id} https://${id}.baby2b.online/evidence/ 301`);
+		}
+		expect(STATIC_FIRST_ROUTES.some(({ url }) => url === "/evidence/office-workflow-agent")).toBe(false);
+		expect(new Set(STATIC_FIRST_ROUTES.map(({ url }) => url)).size).toBe(STATIC_FIRST_ROUTES.length);
+	});
 	it("includes every published Dashboard deep link", () => {
 		expect(STATIC_FIRST_ROUTES).toEqual(
 			expect.arrayContaining([

@@ -21,10 +21,13 @@ export function PortfolioPageShell({
 	description: string;
 	evidenceUrl: string;
 	eyebrow: string;
-	projectHomeUrl: string;
+	projectHomeUrl: string | null;
 	title: string;
 }) {
 	const primaryCurrent = current === "evidence" ? "evidence" : current === "portfolio" ? "dashboard" : "projects";
+
+	const footerHref = current === "evidence" ? (projectHomeUrl ?? "/evidence") : evidenceUrl;
+	const footerLabel = current === "evidence" ? (projectHomeUrl ? "返回项目主页" : "返回工作证明索引") : "查看完整工作证明";
 
 	return (
 		<div className="portfolio-surface relative left-1/2 min-h-screen w-screen max-w-none -translate-x-1/2 overflow-x-hidden bg-[#f7f1e3] pb-24 text-[#071d34] md:pb-0">
@@ -59,8 +62,8 @@ export function PortfolioPageShell({
 					</div>
 					<div className="flex flex-wrap justify-center gap-2">
 						<a className="inline-flex min-h-11 items-center border border-[#c8bda9] bg-[#fbf6ea] px-4 font-bold text-xs" href="/dashboard">返回作品集</a>
-						<a className="inline-flex min-h-11 items-center bg-[#bf1737] px-4 font-bold text-white text-xs" href={current === "evidence" ? projectHomeUrl : evidenceUrl}>
-							{current === "evidence" ? "返回项目主页" : "查看完整工作证明"}
+						<a className="inline-flex min-h-11 items-center bg-[#bf1737] px-4 font-bold text-white text-xs" href={footerHref}>
+							{footerLabel}
 						</a>
 					</div>
 				</div>

@@ -1,8 +1,17 @@
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 
+const prdEvidence = JSON.parse(readFileSync(resolve(import.meta.dirname, "../src/data/project-prd-evidence.json"), "utf8"));
+export const PROJECT_PRD_EVIDENCE_ROUTES = prdEvidence.entries
+  .filter(({ evidenceUrl }) => new URL(evidenceUrl).hostname === "baby2b.online")
+  .map(({ id, sourceId }) => ({
+    url: `/evidence/${id}`,
+    output: `evidence/${id}/index.html`,
+    sourceSha256: prdEvidence.sources.find((source) => source.id === sourceId).sha256,
+  }));
+
 const v8ArticleSlugs = ["sparkplug", "maglev", "leaving-the-sea-of-nodes", "fast-properties", "elements-kinds", "json-stringify", "trash-talk", "pointer-compression", "sandbox"];
-const overreactedNotePath = resolve(process.cwd(), "src/features/portfolio/content/overreacted-reading-route.md");
+const overreactedNotePath = resolve(import.meta.dirname, "../src/features/portfolio/content/overreacted-reading-route.md");
 const overreactedSource = readFileSync(overreactedNotePath, "utf8");
 const overreactedArticleSlugs = [...overreactedSource.matchAll(/^\d+\. \[[^\]]+\]\(https:\/\/overreacted\.io\/([^/)]+)\/?\)$/gm)].map((match) => match[1]);
 const sharingNoteRoutes = [
@@ -63,30 +72,7 @@ export const STATIC_FIRST_ROUTES = [
 		url: "/performance-control/github-profile-studio",
 		output: "performance-control/github-profile-studio/index.html",
 	},
-	{
-		url: "/evidence/performance-observability-control",
-		output: "evidence/performance-observability-control/index.html",
-	},
-	{
-		url: "/evidence/github-profile-studio",
-		output: "evidence/github-profile-studio/index.html",
-	},
-	{
-		url: "/evidence/fullstack-showcase",
-		output: "evidence/fullstack-showcase/index.html",
-	},
-	{
-		url: "/evidence/portfolio-sync",
-		output: "evidence/portfolio-sync/index.html",
-	},
-	{
-		url: "/evidence/tc-workflow",
-		output: "evidence/tc-workflow/index.html",
-	},
-	{
-		url: "/evidence/shared-evidence-verifier",
-		output: "evidence/shared-evidence-verifier/index.html",
-	},
+	...PROJECT_PRD_EVIDENCE_ROUTES.map(({ url, output }) => ({ url, output })),
 ];
 
 export function createCsrFallbackHtml(template) {
