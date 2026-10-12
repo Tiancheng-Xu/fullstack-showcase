@@ -72,9 +72,29 @@ const DASHBOARD_EVIDENCE_BASE_URL = "https://baby2b.online/evidence";
 
 export const PORTFOLIO_PROJECTS: PortfolioProject[] = [
 	{
+		id: "office-workflow-agent",
+		title: "OfficeFlow 办公流程 Agent",
+		desc: "本人主控并已上线的办公流程产品，将业务需求转为可信字段，经版本批准后执行，并独立核对业务结果。",
+		summaryPoints: [
+			"业务链路：需求提案 → 字段核对 → 版本审批 → 执行 → 结果核对，不把点击成功当作业务完成。",
+			"可靠性链路：分开 API 与 Browser 的责任，约束权限、事务和重复动作；结果未知先核对，再决定重试或人工处理。",
+			"迭代范围：已有合成工作区生产交付；当前采用规则提案且模型关闭，OCR 增强仍待验，不声称真实采购经营指标。",
+		],
+		status: "已完成",
+		progress: 100,
+		architecture: "业务需求 → 结构化字段 → 人工版本审批 → API / Browser 执行 → 独立结果核对与恢复；规则提案与模型能力分层。",
+		evidenceUrl: "https://office-workflow-agent.baby2b.online/evidence/",
+		repo: "Tiancheng-Xu/office-workflow-agent",
+		skills: ["Agent Workflow", "Human Approval", "Structured Input", "API / Browser", "Idempotency", "Recovery"],
+		evidence: ["生产入口与项目自有 Evidence", "当前合成工作区、规则提案与模型关闭范围分别说明"],
+		details: ["本人主控产品需求、方案与交付，围绕可信输入、审批版本和业务核对组织流程。", "项目级上线不等于 OCR 增强已验收，也不等于已经接入真实企业采购数据。"],
+		ownerPage: "https://office-workflow-agent.baby2b.online/",
+		sourceUpdatedAt: "2026-10-08",
+	},
+	{
 		id: "aladdin",
 		title: "Aladdin Web3 Agent",
-		desc: "AI Agent 分布式任务调度 / Web3 Agent 平台。参与应用与接口协作，连接任务发布、异步状态和结果反馈。",
+		desc: "AI Agent 分布式任务调度 / Web3 Agent 平台。主控本人负责的应用与接口交付，连接任务发布、异步状态和结果反馈；平台协作按具体模块说明。",
 		summaryPoints: [
 			"任务编排：参与 Job 编辑与发布流程，覆盖分类、标签、预算、时限、技能和交付物，并支持自动拆解与人工编排。",
 			"调度链路：参与 Agent 匹配、派发与结果反馈，以请求 ID、Webhook / SSE、消息队列和并发控制串联任务状态。",
@@ -120,7 +140,7 @@ export const PORTFOLIO_PROJECTS: PortfolioProject[] = [
 		title: "Agent Market",
 		desc: "V1 历史交付已完成；卡片状态与 100% 进度只对应 V1，不代表当前开发扩展已发布。当前分支展示任务分发与可恢复执行：检查点恢复进度，未知副作用先核对，再决定是否重试。",
 		summaryPoints: [
-			"开发分支业务链路：Queen 将需求拆成 DAG，候选 Agent 经标签硬过滤、向量相关度与信誉评分排序，再支持人工确认或自动选定。",
+			"主控决策：围绕已上线任务分发产品组织规划、匹配、审批与交付；当前增强分支以 Queen / DAG、标签过滤和评分支持人工或自动选定。",
 			"执行链路：规划、审批、执行、评审与有限修复各有状态和终态；模型 Judge 不覆盖确定性 Gate 与业务授权。",
 			"可靠性链路：Checkpoint 保存流程，操作账本按身份与 payload hash 认领动作；审批绑定任务版本，结果未知不盲目重放。",
 			"证据边界：V1 保留已验证生产 Evidence；当前多模型路由、LangGraph Checkpoint 与部分外部集成开发扩展仅按代码 / 本地验证描述，与历史 AWS V2 Runtime 分开。",
@@ -531,7 +551,7 @@ export const PORTFOLIO_PROJECTS: PortfolioProject[] = [
 		title: "Personal AI Agent 模型训练与本地推理",
 		desc: "历史 Qwen3-8B 训练、量化与 Ollama 运行链已完成；卡片状态与 100% 进度只对应这条交付链。本地知识问答 RAG / Agent 工程已合并混合检索、引用编号门禁、Checkpoint 与取消语义；业务工具与人工转接仍按系统方案描述。固定合成 BM25 检索回归和静态 Evidence 已发布，不等于线上模型部署或生成质量通过。",
 		summaryPoints: [
-			"训练链路：使用 LlamaFactory 对 Qwen3-8B 做 NF4 QLoRA 领域微调，完成 Adapter 合并、GGUF Q4_K_M 量化与 Ollama 私有化运行。",
+			"主控与交付：将模型行为训练和事实检索分开；Qwen3-8B 经 LlamaFactory / NF4 QLoRA、Adapter 合并、GGUF 量化与 Ollama 完成本机交付，网站发布范围另列。",
 			"评测链路：使用同一 49 条冻结集评估版本；v2 bigram F1 为 0.2146，v3 为 0.2129，因此保留 v2、拒绝 v3 晋级。",
 			"检索分支：Markdown 来源分块 → BM25 / 向量召回 → RRF → 本地相关度重排；向量或重排故障有明确回退，用户取消则不继续降级返回。",
 			"质量边界：引用 ID 与空证据结构门禁不证明语义支持；20 题固定合成 BM25 回归暴露近义漏召回、旧政策排序和有候选无答案，不是模型准确率。",
@@ -581,7 +601,7 @@ export const PORTFOLIO_PROJECTS: PortfolioProject[] = [
 		title: "Showcase Dashboard",
 		desc: "汇总真实项目、项目自有 Evidence、自动同步状态与静态首屏交付的个人作品看板。",
 		summaryPoints: [
-			"内容链路：以人工审核索引定义项目身份、定位与链接，再合并 GitHub App 推送的发布清单，避免自动同步污染核心叙事。",
+			"主控决策：以人工审核索引定义项目身份、定位与链接；GitHub App 同步只为已有项目补充更新时间，不自动新增项目或覆盖核心叙事。",
 			"渲染链路：先输出可读 SSG 页面，水合后接管动态数据，Babylon 与 Archify 等重型交互按需在浏览器加载。",
 			"发布链路：Cloudflare Pages 承载生产与预览，兼容旧域名重定向、项目深链和真实 404，并保留静态回退。",
 		],
@@ -611,9 +631,9 @@ export const PORTFOLIO_PROJECTS: PortfolioProject[] = [
 		title: "GitHub Profile Studio",
 		desc: "本地优先的 GitHub 公开资料工作台，前后端与双运行时已完成，公网部署仍在规划。",
 		summaryPoints: [
-			"产品链路：读取 GitHub 公开资料，在本地工作台编辑显示名称、简介与项目呈现，再以幂等写入保存草稿。",
+			"主控与交付：本地优先的资料工作台已完成本机产品交付，读取 GitHub 公开资料并幂等保存显示名称和简介；不直接修改 GitHub 账号或 Profile README。",
 			"运行链路：React / TanStack 前端共享一套 API 契约，可切换 Hono / Node 或 Go 后端，SQLite / Drizzle 负责本地持久化。",
-			"安全链路：访问令牌留在服务端与 macOS 钥匙串，浏览器只接触白名单字段；公网部署仍是规划状态。",
+			"安全与版本：令牌留在服务端与 macOS 钥匙串，浏览器只接触白名单字段；本机交付和公网 API 托管分开，当前公开材料尚未定位后者的对应版本。",
 		],
 		status: "进行中",
 		progress: 85,
@@ -696,7 +716,7 @@ export const PORTFOLIO_PROJECTS: PortfolioProject[] = [
 		title: "Hatch Pet",
 		desc: "Codex v2 动态宠物生成工作流的公开产品规格。已发布脱敏 PRD；生成实现、宠物素材和可下载样例尚未在公开仓库发布。",
 		summaryPoints: [
-			"产品定义：从概念或获准参考图建立统一角色身份，再规划动画、方向姿态和质量审查。",
+			"主控与交付：围绕角色一致性、动画姿态和质量审查组织宠物产品；产品级交付按本人确认，当前公开仓库仅展示规格，具体实现与交付入口尚需对应。",
 			"格式契约：目标为九种动画状态、16 个顺时针方向和 1536 × 2288 的 Codex v2 透明图集。",
 			"公开边界：仓库仅含 README 与 PRD，私人照片、角色素材、生成产物和内部实现均未公开。",
 		],
@@ -742,7 +762,7 @@ export const PORTFOLIO_PROJECTS: PortfolioProject[] = [
 		title: "BabySteps",
 		desc: "家庭成长 DApp，围绕钱包 / 网络状态、Edge SSR 水合前提和受控 CSR 回退组织可信交互；历史发布证据与当前代码边界分别说明。",
 		summaryPoints: [
-			"产品链路：覆盖成长任务、家长中心、纪念馆、Provider 与链上交互，把家庭协作、身份和资产状态放进同一产品流程。",
+			"主控决策：将成长任务、家长中心与链上交互组织成已上线家庭产品，把家庭协作、身份和资产状态放进同一流程，分别核对钱包、业务权限与交易事实。",
 			"渲染链路：Cloudflare Edge SSR 先返回安全摘要壳，再按 marker、路径和版本门禁精确水合身份、钱包、Web3 与性能 SDK。",
 			"降级链路：缺少有效水合前提采用 CSR；未捕获错误或同步异常触发一次性受控回退，可恢复错误记录事件，不一律整页重挂载。",
 		],
