@@ -73,16 +73,24 @@ describe("portfolio interview narratives", () => {
       "utf8",
     );
 
-		expect(source).toContain("参与 AI Agent 与 Web3 平台的 Web 端和全栈协作");
+		expect(source).toContain("主控本人负责的 AI Agent / Web3 产品需求、方案与交付");
+		expect(source).toContain("担任高级前端并承担全栈交付职责");
+		expect(source).toContain("2025.06–2026.10");
+		expect(source).toContain("Agent Market 与 BabySteps 归入该兼职经历");
 		expect(source).toContain("北京阿拉丁科技（兼职）");
 		expect(source).toContain("全栈工程师（AI Agent / Web3）");
 		expect(source).toContain("任务发布与编辑、语义分类、子任务拆解");
 		expect(source).toContain("请求 ID、Webhook / SSE、消息队列和并发控制");
 		expect(source).toContain("MetaMask、合约托管 / 结算、IPFS / 链上证据");
 		expect(source).toContain("项目经历");
-		expect(source).toContain("本地知识问答 / 私有化模型实践");
-		expect(source).toContain("候选 Agent 过滤评分");
-		expect(source).toContain("同一 49 条冻结集");
+		expect(source).toContain("主控 · 私有知识产品 / 本机模型交付");
+		expect(source).toContain("明确模型判断、业务规则和工具授权的分工");
+		expect(source).toContain("开发扩展尚未发布，按代码 / 本地验证描述");
+		expect(source).toContain("引用编号校验不等于语义支持");
+		expect(source).toContain("Qwen3-8B 微调、量化与 Ollama 本机交付和静态网站分别说明");
+		expect(source).toContain("OfficeFlow 办公流程 Agent");
+		expect(source).toContain("当前版本采用规则提案且模型关闭");
+		expect(source).toContain("不把合成数据计为真实采购业绩，OCR 增强仍待验");
 		expect(source).toContain("uncertain / manual_review");
 		expect(source).toContain("SLO / Runbook");
 		expect(source).toContain(".text / .data / .bss");
