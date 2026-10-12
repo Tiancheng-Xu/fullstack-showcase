@@ -25,7 +25,7 @@ export function EvidenceIndexContent() {
 		>
 			<PortfolioIndexSection title="逐项目 PRD 摘要与版本边界">
 				<p className="mb-5 text-sm leading-relaxed">
-					覆盖 21 个项目与叙事单元及 1 个新增设计模块。复核日期：{PRD_EVIDENCE_COVERAGE.reviewedAt}。
+					覆盖 21 个项目与叙事单元及 2 个设计模块，共 23 项。复核日期：{PRD_EVIDENCE_COVERAGE.reviewedAt}。
 					子系统与历史工作归属保持关联；摘要复核不替代产品运行和生产验收。
 				</p>
 				<div aria-label="逐项目 PRD 摘要索引" className="portfolio-evidence-grid">
@@ -150,7 +150,7 @@ export function EvidenceIndexContent() {
 					<ul className="space-y-3">
 						{PRD_EVIDENCE_COVERAGE.sources.map((source) => (
 							<li className="space-y-1 border-b border-border pb-3" key={source.id}>
-								<p>{source.name}</p>
+								<p>{source.name}{source.kind === "coverage-only" ? "（仅资料索引）" : ""}</p>
 								<code className="block break-all font-mono text-xs">{source.sha256}</code>
 							</li>
 						))}

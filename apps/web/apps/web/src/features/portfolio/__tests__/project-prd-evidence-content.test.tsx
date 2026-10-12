@@ -31,10 +31,27 @@ describe("project PRD summaries and legacy Evidence", () => {
 		expect(container).toHaveTextContent(
 			"4eae6b9f814a848e1e68e684e031036984ac3eb08b8110ef1fa52a3197ea8fd1",
 		);
-		expect(container).toHaveTextContent("SHA-256 校验原件身份");
+		expect(container).toHaveTextContent("SHA-256 核对来源版本");
 		expect(container).toHaveTextContent("未实现");
 		expect(container).not.toHaveTextContent("进度 100%");
 		expect(container).not.toHaveTextContent("项目不存在");
+		expect(
+			screen.queryByRole("link", { name: "项目主页" }),
+		).not.toBeInTheDocument();
+	});
+
+	it("renders the data sandbox as a design checkpoint with the actual source version", () => {
+		const { container } = render(
+			<EvidenceContent projectId="agent-data-sandbox" />,
+		);
+		expect(container.querySelector("#prd-design")).toHaveTextContent(
+			"设计检查点 · 运行验收待核",
+		);
+		expect(container).toHaveTextContent(
+			"8068141ca61581f3b38d799325ddc229608c6897f30ce3be6c310e8acff678d5",
+		);
+		expect(container).toHaveTextContent("当前运行状态未复核");
+		expect(container).not.toHaveTextContent("进度 100%");
 		expect(
 			screen.queryByRole("link", { name: "项目主页" }),
 		).not.toBeInTheDocument();
@@ -64,7 +81,7 @@ describe("project PRD summaries and legacy Evidence", () => {
 		const directory = container.querySelector(
 			'[aria-label="逐项目 PRD 摘要索引"]',
 		);
-		expect(directory?.querySelectorAll("article")).toHaveLength(22);
+		expect(directory?.querySelectorAll("article")).toHaveLength(23);
 		expect(directory).toHaveTextContent("宁波交警可视化大屏");
 		expect(directory).toHaveTextContent("通用文档解析核心");
 		expect(

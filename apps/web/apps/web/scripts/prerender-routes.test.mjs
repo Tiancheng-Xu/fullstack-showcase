@@ -17,7 +17,7 @@ describe("static-first route delivery", () => {
 	it("prerenders all portfolio-owned PRD Evidence pages and preserves external owners", () => {
 		const redirects = readFileSync(resolve(process.cwd(), "public/_redirects"), "utf8");
 		const localEntries = PROJECT_PRD_EVIDENCE.filter(({ evidenceUrl }) => new URL(evidenceUrl).hostname === "baby2b.online");
-		expect(localEntries).toHaveLength(18);
+		expect(localEntries).toHaveLength(19);
 		for (const { id } of localEntries) {
 			expect(STATIC_FIRST_ROUTES).toContainEqual({ url: `/evidence/${id}`, output: `evidence/${id}/index.html` });
 		}

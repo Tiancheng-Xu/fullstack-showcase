@@ -89,12 +89,18 @@
 		{
 			"id": "prd-17",
 			"name": "17-课程方案与项目去重清单.md",
-			"sha256": "7f2b62808ac91bfa600de55d6d39b43f0d26fd9cdc83e9e7c71437594f677607"
+			"sha256": "7f2b62808ac91bfa600de55d6d39b43f0d26fd9cdc83e9e7c71437594f677607",
+			"kind": "coverage-only"
 		},
 		{
 			"id": "prd-ocr",
 			"name": "通用文档解析核心PRD.md",
 			"sha256": "4eae6b9f814a848e1e68e684e031036984ac3eb08b8110ef1fa52a3197ea8fd1"
+		},
+		{
+			"id": "spec-data-sandbox",
+			"name": "minimal-spec.md",
+			"sha256": "8068141ca61581f3b38d799325ddc229608c6897f30ce3be6c310e8acff678d5"
 		}
 	],
 	"courseMaterial": "17 号课程方案与项目去重清单单列为资料覆盖说明，不新增独立投产项目；题面、参考、归档方向与子系统不重复包装成客户任职。",
@@ -444,7 +450,7 @@
 			"title": "OSS 贡献",
 			"sourceId": "prd-09",
 			"reviewedAt": "2026-10-12",
-			"status": "主控与上线经本人确认",
+			"status": "贡献状态按具体 PR 记账",
 			"positioning": "围绕真实工具缺陷完成复现、根因定位、最小修复与上游评审协作。",
 			"mechanisms": [
 				"可复现问题与根因",
@@ -472,6 +478,23 @@
 			"currentBoundary": "产品尚未实现，未运行 OCR 或模型；节点与操作人哈希仅为设计，未生成业务运行收据。哈希不替代身份认证、签名或识别准确性。",
 			"projectUrl": null,
 			"evidenceUrl": "https://baby2b.online/evidence/enterprise-document-parser"
+		},
+		{
+			"id": "agent-data-sandbox",
+			"title": "受控数据分析执行器",
+			"sourceId": "spec-data-sandbox",
+			"reviewedAt": "2026-10-12",
+			"status": "设计检查点 · 运行验收待核",
+			"positioning": "设计将合成 CSV 转换为有限统计计划，在本地隔离环境执行并保存结果、失败及资源收据。",
+			"mechanisms": [
+				"有限计划白名单",
+				"精确统计与数据语义",
+				"后端身份与取消恢复"
+			],
+			"historicalEvidence": "2026-10-07 设计 R2 复审通过；同日运行场景未验。",
+			"currentBoundary": "只公开设计摘要，不恢复实现、不启动 Docker 或云；2026-10-07 后端和运行场景是历史检查点，当前运行状态未复核；规则或模型建议不能扩大执行权限。",
+			"projectUrl": null,
+			"evidenceUrl": "https://baby2b.online/evidence/agent-data-sandbox"
 		}
 	]
 }

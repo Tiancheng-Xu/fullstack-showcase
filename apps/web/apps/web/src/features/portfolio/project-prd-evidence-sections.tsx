@@ -52,7 +52,7 @@ export function ProjectPrdEvidenceSections({
 			{source ? (
 				<div className="space-y-2 border-t pt-4 text-muted-foreground text-sm">
 					<p>来源文档：{source.name}</p>
-					<p className="font-medium text-foreground">SHA-256 校验原件身份</p>
+					<p className="font-medium text-foreground">SHA-256 核对来源版本</p>
 					<code className="block break-all font-mono text-xs">
 						{source.sha256}
 					</code>

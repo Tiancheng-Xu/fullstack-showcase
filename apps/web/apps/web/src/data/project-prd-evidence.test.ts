@@ -7,7 +7,7 @@ import {
 } from "./project-prd-evidence";
 
 describe("reviewed project PRD Evidence registry", () => {
-	it("covers each of the 21 project stories and the new document parser once", () => {
+	it("covers each of the 21 project stories and both design modules once", () => {
 		expect(PROJECT_PRD_EVIDENCE.map(({ id }) => id).sort()).toEqual(
 			[
 				"agent-market",
@@ -32,12 +32,13 @@ describe("reviewed project PRD Evidence registry", () => {
 				"hatch-pet",
 				"oss-contributions",
 				"enterprise-document-parser",
+				"agent-data-sandbox",
 			].sort(),
 		);
 	});
 
 	it("carries actual document identities without publishing private originals", () => {
-		expect(PRD_EVIDENCE_COVERAGE.sources).toHaveLength(18);
+		expect(PRD_EVIDENCE_COVERAGE.sources).toHaveLength(19);
 		for (const source of PRD_EVIDENCE_COVERAGE.sources) {
 			expect(source.sha256).toMatch(/^[a-f0-9]{64}$/);
 			expect(source.name).toMatch(/\.md$/);
@@ -74,6 +75,24 @@ describe("reviewed project PRD Evidence registry", () => {
 				`https://${id}.baby2b.online/evidence/#prd-design`,
 			);
 		}
+	});
+
+	it("keeps OSS contribution status and the data sandbox design boundary explicit", () => {
+		expect(getProjectPrdEvidence("oss-contributions")?.status).toBe(
+			"贡献状态按具体 PR 记账",
+		);
+		expect(getProjectPrdEvidence("agent-data-sandbox")).toMatchObject({
+			status: "设计检查点 · 运行验收待核",
+			sourceId: "spec-data-sandbox",
+			projectUrl: null,
+		});
+		expect(
+			getProjectPrdEvidence("agent-data-sandbox")?.currentBoundary,
+		).toContain("当前运行状态未复核");
+		expect(
+			PRD_EVIDENCE_COVERAGE.sources.find(({ id }) => id === "prd-17")?.kind,
+		).toBe("coverage-only");
+		expect(getProjectPrdEvidence("prd-17")).toBeUndefined();
 	});
 
 	it("keeps unimplemented parser and coverage-only course material out of completed product claims", () => {
