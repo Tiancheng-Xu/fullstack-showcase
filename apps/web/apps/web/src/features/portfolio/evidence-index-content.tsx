@@ -142,7 +142,7 @@ export function EvidenceIndexContent() {
 			<PortfolioIndexSection title="资料覆盖与校验说明">
 				<div className="space-y-4 text-sm leading-relaxed" id="prd-coverage">
 					<p>{PRD_EVIDENCE_COVERAGE.courseMaterial}</p>
-					<p>{PRD_EVIDENCE_COVERAGE.reviewScope} SHA-256 对应本机保留的原件字节，公开只展示名称与哈希。</p>
+					<p>{PRD_EVIDENCE_COVERAGE.reviewScope} SHA-256 对应本机保留的原件字节，公开只展示规格标签与哈希。</p>
 					<div className="space-y-2 border border-border p-4">
 						<p>摘要口径来源：{PRD_EVIDENCE_COVERAGE.authority.name}</p>
 						<code className="block break-all font-mono text-xs">{PRD_EVIDENCE_COVERAGE.authority.sha256}</code>

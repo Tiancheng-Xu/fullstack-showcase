@@ -2,104 +2,104 @@
 	"reviewedAt": "2026-10-12",
 	"reviewScope": "本次复核的是文档身份、摘要与事实边界；运行和生产状态仍以各项目带日期、版本的收据为准。",
 	"authority": {
-		"name": "全部项目-主控与上线叙事总表-20261011.md",
+		"name": "项目事实与版本口径复核总表 · 2026-10-12",
 		"sha256": "abca64595fff50e514d0290a4441e2d17791677725b157b80106b96a5d377eca"
 	},
 	"sources": [
 		{
 			"id": "prd-01",
-			"name": "01-Agent-Market-PRD与面试.md",
+			"name": "Agent Market 产品规格 · PRD01",
 			"sha256": "13281bf657f2b4aa8965eb5040bc024ad4eaf150e2f8484ede0239662cdcd73d"
 		},
 		{
 			"id": "prd-02",
-			"name": "02-售后-Agent-工作台-PRD与面试.md",
+			"name": "售后 Agent 工作台产品规格 · PRD02",
 			"sha256": "cd5174bd8a5792d93dc1df53d98a719dcdde031d16915618fbbb8bac4fe76997"
 		},
 		{
 			"id": "prd-03",
-			"name": "03-OfficeFlow-PRD与面试.md",
+			"name": "OfficeFlow 产品规格 · PRD03",
 			"sha256": "ae1e7a96925fb1f7c4afa8dfd52107c7107d574fc07ba93d6b1171bf6fe53957"
 		},
 		{
 			"id": "prd-04",
-			"name": "04-BabySteps-PRD与面试.md",
+			"name": "BabySteps 产品规格 · PRD04",
 			"sha256": "fa772263435bfa388c9ecd811fa834e90decaec1c273565262efdacbb69ece40"
 		},
 		{
 			"id": "prd-05",
-			"name": "05-Showcase与Portfolio-Sync-PRD与面试.md",
+			"name": "Showcase 与 Portfolio Sync 产品规格 · PRD05",
 			"sha256": "f388b434a60e11c62b608072da45a3ecd0e638aac448595c74991c1a3a14814b"
 		},
 		{
 			"id": "prd-06",
-			"name": "06-GitHub-Profile-Studio-PRD与面试.md",
+			"name": "GitHub Profile Studio 产品规格 · PRD06",
 			"sha256": "9ba03f351c2fae1594b8681f0f0a4c4019a51736b4b1c2773fa5f25df5f6af75"
 		},
 		{
 			"id": "prd-07",
-			"name": "07-Personal-AI-Agent-PRD与面试.md",
+			"name": "Personal AI Agent 产品规格 · PRD07",
 			"sha256": "a492ce5758a3e7402eeaefcdb2b89b16a0324861349757397605721c30793480"
 		},
 		{
 			"id": "prd-08",
-			"name": "08-历史商业项目-PRD与面试.md",
+			"name": "历史商业项目与 FDE 交付规格 · PRD08",
 			"sha256": "efa5a2017e02ef4d8a2d7cd576e59c1003ac9e1865306c3f54f3b9c357a82985"
 		},
 		{
 			"id": "prd-09",
-			"name": "09-OSS-贡献案例与面试.md",
+			"name": "OSS 贡献案例规格 · PRD09",
 			"sha256": "534598c29b4dcfb84c886c207062d32683fb6349af80e17548e8c77a2b4209f8"
 		},
 		{
 			"id": "prd-10",
-			"name": "10-TC-Flow与Shared-Evidence-Verifier-PRD与面试.md",
+			"name": "TC Flow 与 Shared Evidence Verifier 产品规格 · PRD10",
 			"sha256": "b6f1277c7f5446cbe9ef92ddaa914f61aafe1b557850701fe2111bc38de6b3c6"
 		},
 		{
 			"id": "prd-11",
-			"name": "11-性能观测与成本控制-PRD与面试.md",
+			"name": "性能观测与成本控制产品规格 · PRD11",
 			"sha256": "0fc79991dd5b33dc342df644bf6eefaffba147fd42c3f6c17ccbe7d39876305c"
 		},
 		{
 			"id": "prd-12",
-			"name": "12-Hono-GitHub-Profile-云实验-PRD与面试.md",
+			"name": "Hono GitHub 资料云服务产品规格 · PRD12",
 			"sha256": "a1c16a6ac7de1bae7fe3349ef988898c563b6ab0384fe7df5cca778c3547be51"
 		},
 		{
 			"id": "prd-13",
-			"name": "13-WeChat-Intent-HUD-PRD与面试.md",
+			"name": "WeChat Intent HUD 产品规格 · PRD13",
 			"sha256": "9385aa5209a331057a1419c890a15b0bf7d3a51af152fd61832900ff4969f0a8"
 		},
 		{
 			"id": "prd-14",
-			"name": "14-Codex-Translate-PRD与面试.md",
+			"name": "Codex Translate 产品规格 · PRD14",
 			"sha256": "d5eb3234f372b2349f66d00a22416e9b7796e939b51ac36c7b4ca74f40af27d6"
 		},
 		{
 			"id": "prd-15",
-			"name": "15-知识整理与证据管线-PRD与面试.md",
+			"name": "知识整理与证据管线产品规格 · PRD15",
 			"sha256": "b53c28fa335d6253ac27f1d60f584e6a6a0fe74f0ee0d7ba3896c1386bfa8b38"
 		},
 		{
 			"id": "prd-16",
-			"name": "16-Codex-Mascot与Hatch-Pet-产品规格及边界.md",
+			"name": "Codex Mascot 与 Hatch Pet 产品规格 · PRD16",
 			"sha256": "eb8946d788bfdd8f561bbefe1b3f37be1db1ea1e05cc05d2cbc5f76a95686f95"
 		},
 		{
 			"id": "prd-17",
-			"name": "17-课程方案与项目去重清单.md",
+			"name": "课程方案与项目去重说明 · 索引17",
 			"sha256": "7f2b62808ac91bfa600de55d6d39b43f0d26fd9cdc83e9e7c71437594f677607",
 			"kind": "coverage-only"
 		},
 		{
 			"id": "prd-ocr",
-			"name": "通用文档解析核心PRD.md",
+			"name": "通用文档解析核心产品规格 · PRD-OCR",
 			"sha256": "4eae6b9f814a848e1e68e684e031036984ac3eb08b8110ef1fa52a3197ea8fd1"
 		},
 		{
 			"id": "spec-data-sandbox",
-			"name": "minimal-spec.md",
+			"name": "受控数据分析执行器最小规格 · Spec01",
 			"sha256": "8068141ca61581f3b38d799325ddc229608c6897f30ce3be6c310e8acff678d5"
 		}
 	],

@@ -41,7 +41,8 @@ describe("reviewed project PRD Evidence registry", () => {
 		expect(PRD_EVIDENCE_COVERAGE.sources).toHaveLength(19);
 		for (const source of PRD_EVIDENCE_COVERAGE.sources) {
 			expect(source.sha256).toMatch(/^[a-f0-9]{64}$/);
-			expect(source.name).toMatch(/\.md$/);
+			expect(source.name).toMatch(/(?:规格|去重说明) · /);
+			expect(source.name).not.toMatch(/\.md$/);
 		}
 		for (const entry of PROJECT_PRD_EVIDENCE) {
 			expect(entry.reviewedAt).toBe("2026-10-12");
