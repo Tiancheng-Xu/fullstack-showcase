@@ -1,3 +1,4 @@
+import { PrdCompanionNarratives } from "./prd-companion-narratives";
 import {
 	Activity,
 	ArrowUpRight,
@@ -179,7 +180,7 @@ export function DashboardContent() {
 		{
 			title: "Portfolio Sync",
 			meta: "GitHub App、Cloudflare Workers、KV、HMAC",
-			body: "以 GitHub App Webhook、HMAC 验签与 Cloudflare Worker/KV 汇总真实项目发布清单，并用定时任务补齐事件遗漏；难点是同步状态、静态首屏与项目自有 Evidence 的一致性。",
+			body: "以 GitHub App Webhook、HMAC 验签与 Cloudflare Worker/KV 汇总真实项目发布清单，并用定时任务补齐事件遗漏；难点是同步状态、静态首屏与项目自有 Evidence 的一致性。当前增强实现只读 OpenAPI 契约、摘要与按项目读取、分页及 ETag / 304 / HEAD；尚未部署，不改变已审核的项目叙事与证据链接。",
 		},
 		{
 			title: "性能观测与成本控制",
@@ -250,7 +251,7 @@ export function DashboardContent() {
 								<li className="grid grid-cols-[2.75rem_1fr] gap-3 border border-[#d8cfbd] bg-[#f8f3e8]/70 p-4">
 									<span className="font-bold font-serif text-[#b21f35] text-lg">06</span>
 									<p>
-										主动学习与知识沉淀：我围绕计算机系统、Python、AI 与前端工程持续学习，结合课程、技术文章和会议资料梳理知识之间的联系，记录自己的理解、疑问与待实践的问题，并在 Share 分享阶段思考。
+										主动学习与知识沉淀：我围绕计算机系统、Python、AI 与前端工程持续学习，结合课程、技术文章和会议资料梳理知识之间的联系，记录自己的理解、疑问与待实践的问题，并在 Share 分享阶段思考。主动跟踪 WebMCP、Agentic Web 与 MCP 等前沿技术及标准演进，关注网页工具化、Agent 互操作与权限 / 人工确认边界，将趋势研究连接到企业 AI 应用的技术选型与方案设计。在 Portfolio Sync 增强中实现只读契约、按需读取与条件请求；增强源码已交付，尚未部署。
 										<a className="ml-2 inline-flex min-h-11 items-center font-semibold text-[#b21f35] underline underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-4" href="/sharing/#learning-journal">阅读学习手记 <span aria-hidden="true">↗</span></a>
 									</p>
 								</li>
@@ -341,6 +342,7 @@ export function DashboardContent() {
 							<p className="mt-1 text-[#5a6470] text-xs leading-relaxed">
 								以下为本人主控的个人产品与工程工具，分别说明公网发布、本机交付和当前增强范围，不重复计入兼职或客户经历。
 							</p>
+								<PrdCompanionNarratives />
 							<div className="mt-4 grid gap-4 md:grid-cols-2">
 								{personalEngineeringShowcases.map((block) => (
 									<ResumeProjectCard block={block} key={block.title} />

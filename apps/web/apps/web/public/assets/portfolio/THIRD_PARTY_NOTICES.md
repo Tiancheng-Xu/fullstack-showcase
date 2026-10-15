@@ -10,3 +10,9 @@
 - Local SHA-256: `0acef1f1d323f1476cd6c33adbca97c41d854306cfc6d61c4cd11cdd664102f7`
 
 The model is used as a visual prototype asset. Attribution and source links must remain with any redistributed copy.
+
+## Mobile voyage poster
+
+`voyage-mobile-poster.webp` is a static capture of this portfolio's Babylon
+scene, including the SS Minnow III model credited above. It replaces live
+WebGL on mobile. The on-page gogiart / CC BY 4.0 credit remains visible.

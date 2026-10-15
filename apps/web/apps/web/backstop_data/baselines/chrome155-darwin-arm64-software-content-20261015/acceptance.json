@@ -1,0 +1,483 @@
+{
+  "schemaVersion": 1,
+  "version": "chrome155-darwin-arm64-software-content-20261015",
+  "parentBaseline": "chrome155-darwin-arm64-software",
+  "humanApproval": {
+    "adopted": true,
+    "date": "2026-10-15",
+    "instruction": "采用候选，继续完整门禁（推荐）",
+    "historicCausalityLimitationAccepted": true
+  },
+  "visualEnvironment": {
+    "browser": "Google Chrome 155.0.8059.40",
+    "platform": "darwin",
+    "architecture": "arm64",
+    "locale": "zh-CN",
+    "timezone": "UTC",
+    "deviceScaleFactor": 1,
+    "rasterization": "software --disable-gpu"
+  },
+  "capture": {
+    "expandedFullDocumentViewport": true,
+    "captureBeyondViewport": false,
+    "fixtureTime": "2026-10-13T12:00:00Z",
+    "physicalPhoneChecksSeparate": true
+  },
+  "thresholdPercent": 0.1,
+  "requireSameDimensions": true,
+  "source": {
+    "preAdoptionHead": "78f1c5f695ea698286dcb22e1511c0b507e51f51",
+    "contentInputManifestSha256": "f17a45af210fc672fbcfa7a45aa221a14cccaafa7bcb745aae19d7f54ebe403e",
+    "parentContractHash": "5ef2fbad28de01db73f452c41768e10291f3e52bf70d5899061b1e73856cc651"
+  },
+  "review": {
+    "summarySha256": "43d3095bb8c6d133d9184fa3d7468615c24906a67e72a68c4155000980d19179",
+    "mobileSha256": "5d6f6ac635b06d46eb1afc4313fa1fbab9f92581099dd65810ac7600b33a8cf9",
+    "desktopSha256": "bbc3d711d27775194743b6d40b6917319775cf8ac28c29a35e64c934610d560a",
+    "cases": 10,
+    "fullHeightBoards": 44,
+    "findings": 0,
+    "configuredReviewModel": "gpt-6.1-sol",
+    "configuredReasoningEffort": "high",
+    "actualApiModelIdentity": "unavailable",
+    "selfReproductionPassed": 10,
+    "selfReproductionTotal": 10
+  },
+  "historicalLimit": "Old capture lacks a complete build-input manifest; every historical one-pixel residual is not strictly causally attributable. New candidates are reproducible and independently inspected; adoption does not rewrite old evidence.",
+  "protectedOriginalReferences": [
+    {
+      "file": "backstop_data/baselines/chrome155-darwin-arm64-software/bitmaps_reference/fullstack_showcase_portfolio_ai-conference-note_0_document_0_375px.png",
+      "sha256": "00a597e0712d652595151dff0948d7dfa9ecb5c05b337b767d82c71630d2a8d4"
+    },
+    {
+      "file": "backstop_data/baselines/chrome155-darwin-arm64-software/bitmaps_reference/fullstack_showcase_portfolio_ai-conference-note_0_document_1_390px.png",
+      "sha256": "ba7e19aff311c1c29f52f2c5c00084cf0d72145e8311ec9e65a4433583ae8f95"
+    },
+    {
+      "file": "backstop_data/baselines/chrome155-darwin-arm64-software/bitmaps_reference/fullstack_showcase_portfolio_ai-conference-note_0_document_2_430px.png",
+      "sha256": "67cd1dc551fdd9730c7090968a8aa93dd48c8c30f55ae9e50475454170697a87"
+    },
+    {
+      "file": "backstop_data/baselines/chrome155-darwin-arm64-software/bitmaps_reference/fullstack_showcase_portfolio_ai-conference-note_0_document_3_1440px.png",
+      "sha256": "cb1289c4642eaa81ff3a364624e83077dc0fc61e00e2be23d9e93700cf42a168"
+    },
+    {
+      "file": "backstop_data/baselines/chrome155-darwin-arm64-software/bitmaps_reference/fullstack_showcase_portfolio_ai-conferences_0_document_0_375px.png",
+      "sha256": "99536addfe19a15a6c3368d4cf38fcff98f8154624ee9569e2ebbcf91275bbe4"
+    },
+    {
+      "file": "backstop_data/baselines/chrome155-darwin-arm64-software/bitmaps_reference/fullstack_showcase_portfolio_ai-conferences_0_document_1_390px.png",
+      "sha256": "0af1d97b295f33eb284a704889ce6399d33c2a5363460229392d3fcdfa24077d"
+    },
+    {
+      "file": "backstop_data/baselines/chrome155-darwin-arm64-software/bitmaps_reference/fullstack_showcase_portfolio_ai-conferences_0_document_2_430px.png",
+      "sha256": "4dcd3960941303242ffe31f48ac8c564c7b80e543048c0cda8de35d9deb0afde"
+    },
+    {
+      "file": "backstop_data/baselines/chrome155-darwin-arm64-software/bitmaps_reference/fullstack_showcase_portfolio_ai-conferences_0_document_3_1440px.png",
+      "sha256": "de1748c1d2874922bcd8f962cdf0731bfc9b0c98dbd7577398373ebdd311896e"
+    },
+    {
+      "file": "backstop_data/baselines/chrome155-darwin-arm64-software/bitmaps_reference/fullstack_showcase_portfolio_dashboard-resume-desktop_0_skillsportfolio-dashboard-module-card_0_1440px.png",
+      "sha256": "ea6f212688d24fc29197f7e5b088bd6796923ab15a33051b9f2a3e7ee844e0e2"
+    },
+    {
+      "file": "backstop_data/baselines/chrome155-darwin-arm64-software/bitmaps_reference/fullstack_showcase_portfolio_dashboard-resume-desktop_0_skillsportfolio-dashboard-module-card_1_1536px.png",
+      "sha256": "9d14d25b87855c8429fc978c75ed516ee72c2115998a442e1e7e1f1efcf7e33e"
+    },
+    {
+      "file": "backstop_data/baselines/chrome155-darwin-arm64-software/bitmaps_reference/fullstack_showcase_portfolio_dashboard_0_document_0_375px.png",
+      "sha256": "4054563b0f70785a9c59737c552fec5e3f4da0c5c18459db69aa517e27d44a46"
+    },
+    {
+      "file": "backstop_data/baselines/chrome155-darwin-arm64-software/bitmaps_reference/fullstack_showcase_portfolio_dashboard_0_document_1_390px.png",
+      "sha256": "1e85a6e2efd274a06712c0da2d3b234380a7335d85e95a88869ef9f8d2ceddb1"
+    },
+    {
+      "file": "backstop_data/baselines/chrome155-darwin-arm64-software/bitmaps_reference/fullstack_showcase_portfolio_dashboard_0_document_2_430px.png",
+      "sha256": "134918eede37ad2f30dd8f8c8c59863bfc848a51bfd49eef8a190c37983befce"
+    },
+    {
+      "file": "backstop_data/baselines/chrome155-darwin-arm64-software/bitmaps_reference/fullstack_showcase_portfolio_dashboard_0_document_3_1440px.png",
+      "sha256": "caa289b2910758abb0160c9555561d7583ccde1b756c27de537753169ac5f0b4"
+    },
+    {
+      "file": "backstop_data/baselines/chrome155-darwin-arm64-software/bitmaps_reference/fullstack_showcase_portfolio_evidence_0_document_0_375px.png",
+      "sha256": "f8b5e1813ed25542dc20b9759493627ba8c6ab37eff647480003ea4e007040c2"
+    },
+    {
+      "file": "backstop_data/baselines/chrome155-darwin-arm64-software/bitmaps_reference/fullstack_showcase_portfolio_evidence_0_document_1_390px.png",
+      "sha256": "700cbc83e22f186e7521e4815e5aeea57ca94534f894f28de647e880aeffe059"
+    },
+    {
+      "file": "backstop_data/baselines/chrome155-darwin-arm64-software/bitmaps_reference/fullstack_showcase_portfolio_evidence_0_document_2_430px.png",
+      "sha256": "d2a22bf4fcc49a33ee30f598898ed6324b4c7bdfeac1029ce6131c28bc191db2"
+    },
+    {
+      "file": "backstop_data/baselines/chrome155-darwin-arm64-software/bitmaps_reference/fullstack_showcase_portfolio_evidence_0_document_3_1440px.png",
+      "sha256": "2ccf3c4e02243d6fb432f48116aaf274cda5d132d8f8910e82ed89cb81be8b68"
+    },
+    {
+      "file": "backstop_data/baselines/chrome155-darwin-arm64-software/bitmaps_reference/fullstack_showcase_portfolio_open-source_0_document_0_375px.png",
+      "sha256": "fbfa862770de6c7d6e5fe29e563103b7c665bbf4b75b55c1c3b6edd07cf154b8"
+    },
+    {
+      "file": "backstop_data/baselines/chrome155-darwin-arm64-software/bitmaps_reference/fullstack_showcase_portfolio_open-source_0_document_1_390px.png",
+      "sha256": "66005fcef49a7e026293664f5b20a280ffad7f15820423969305cc7b0c716197"
+    },
+    {
+      "file": "backstop_data/baselines/chrome155-darwin-arm64-software/bitmaps_reference/fullstack_showcase_portfolio_open-source_0_document_2_430px.png",
+      "sha256": "550fb8190f48b72d667aef44eda58e49f1586f008379f5b99ef90ae0aac1f3fd"
+    },
+    {
+      "file": "backstop_data/baselines/chrome155-darwin-arm64-software/bitmaps_reference/fullstack_showcase_portfolio_open-source_0_document_3_1440px.png",
+      "sha256": "05d662f891f701b536f93634aac28e5c421864a1c130bbaf1b2b1b500f3703d5"
+    },
+    {
+      "file": "backstop_data/baselines/chrome155-darwin-arm64-software/bitmaps_reference/fullstack_showcase_portfolio_performance-control_0_document_0_375px.png",
+      "sha256": "0bc97de5419feb07917f9daf815aee8fdab0fa3519ac92d5e0ec019877027b4e"
+    },
+    {
+      "file": "backstop_data/baselines/chrome155-darwin-arm64-software/bitmaps_reference/fullstack_showcase_portfolio_performance-control_0_document_1_390px.png",
+      "sha256": "c11e2a53ee9eee793769d8f9d54e04c36715c772cdaa67ecb05244f52ff90f97"
+    },
+    {
+      "file": "backstop_data/baselines/chrome155-darwin-arm64-software/bitmaps_reference/fullstack_showcase_portfolio_performance-control_0_document_2_430px.png",
+      "sha256": "e87895f9f1e44584956195628d4c02b1ef50c1b9a838a8571da5289000fc251a"
+    },
+    {
+      "file": "backstop_data/baselines/chrome155-darwin-arm64-software/bitmaps_reference/fullstack_showcase_portfolio_performance-control_0_document_3_1440px.png",
+      "sha256": "cc5aa19dbde86e6ce71acaae498aa7981b86f22a7071c65f6b44f24718b2411e"
+    },
+    {
+      "file": "backstop_data/baselines/chrome155-darwin-arm64-software/bitmaps_reference/fullstack_showcase_portfolio_projects_0_document_0_375px.png",
+      "sha256": "ad597b28360205ff7f38544a85b13c99057093d96d8e50c581b8805c5fc6ed02"
+    },
+    {
+      "file": "backstop_data/baselines/chrome155-darwin-arm64-software/bitmaps_reference/fullstack_showcase_portfolio_projects_0_document_1_390px.png",
+      "sha256": "a6f684d7aaf82d155b43f731cae8bd4f62a19f77d36a259f2d0751c41217ab20"
+    },
+    {
+      "file": "backstop_data/baselines/chrome155-darwin-arm64-software/bitmaps_reference/fullstack_showcase_portfolio_projects_0_document_2_430px.png",
+      "sha256": "b6988fc48c78def402f8a31c72ef468722da91eba58e2ac10fd5a7ebd0b7dacc"
+    },
+    {
+      "file": "backstop_data/baselines/chrome155-darwin-arm64-software/bitmaps_reference/fullstack_showcase_portfolio_projects_0_document_3_1440px.png",
+      "sha256": "8cf864e2187572f49ff1cd66f69c67ee733678b8a1c087e8c3ff58768133cc71"
+    },
+    {
+      "file": "backstop_data/baselines/chrome155-darwin-arm64-software/bitmaps_reference/fullstack_showcase_portfolio_sharing-note_0_document_0_375px.png",
+      "sha256": "fab1592dc911831c27603243ceed7b4f4e101b0e275f194256d0a647239776b4"
+    },
+    {
+      "file": "backstop_data/baselines/chrome155-darwin-arm64-software/bitmaps_reference/fullstack_showcase_portfolio_sharing-note_0_document_1_390px.png",
+      "sha256": "e1f729ddf4f8332c09c28871829f4fafb1c06746e97f28a3a387e7aa9135928a"
+    },
+    {
+      "file": "backstop_data/baselines/chrome155-darwin-arm64-software/bitmaps_reference/fullstack_showcase_portfolio_sharing-note_0_document_2_430px.png",
+      "sha256": "88f7b5528fc2123353477cf5bd7268d22c13883c287fea6e8981e29586ef764f"
+    },
+    {
+      "file": "backstop_data/baselines/chrome155-darwin-arm64-software/bitmaps_reference/fullstack_showcase_portfolio_sharing-note_0_document_3_1440px.png",
+      "sha256": "d29bcf31d401d56b4e5f2b7c725f638a1454a77b7c17916acb8cbda4470aef99"
+    },
+    {
+      "file": "backstop_data/baselines/chrome155-darwin-arm64-software/bitmaps_reference/fullstack_showcase_portfolio_sharing_0_document_0_375px.png",
+      "sha256": "ef10ff678293f0d266ab7ab4536868f1301f9bf8833b7239e3964199a44c888c"
+    },
+    {
+      "file": "backstop_data/baselines/chrome155-darwin-arm64-software/bitmaps_reference/fullstack_showcase_portfolio_sharing_0_document_1_390px.png",
+      "sha256": "1312f039f316212be44aa12d63e6de3634aa6aaa9dec3d226b255bd2c11706c1"
+    },
+    {
+      "file": "backstop_data/baselines/chrome155-darwin-arm64-software/bitmaps_reference/fullstack_showcase_portfolio_sharing_0_document_2_430px.png",
+      "sha256": "12f49684d7f37f1157b442a421101113f037f3f2ee539ee5a841fdef87b3fefc"
+    },
+    {
+      "file": "backstop_data/baselines/chrome155-darwin-arm64-software/bitmaps_reference/fullstack_showcase_portfolio_sharing_0_document_3_1440px.png",
+      "sha256": "17a90e8321e259bd94ab91221b80ed9fee749c2dc75df3bfbc4130fccf46cf90"
+    },
+    {
+      "file": "backstop_data/bitmaps_reference/fullstack_showcase_portfolio_dashboard-resume-desktop_0_skillsportfolio-dashboard-module-card_0_1440px.png",
+      "sha256": "118c2cf979fb446d9cf1e661ed3d38cf616ffbc1d5628923f99f5128e9466d11"
+    },
+    {
+      "file": "backstop_data/bitmaps_reference/fullstack_showcase_portfolio_dashboard-resume-desktop_0_skillsportfolio-dashboard-module-card_1_1536px.png",
+      "sha256": "518a6b82ea3657df2514707e608ae08025d714ea27d9c0195b62a2b1e4827afa"
+    },
+    {
+      "file": "backstop_data/bitmaps_reference/fullstack_showcase_portfolio_dashboard_0_document_0_375px.png",
+      "sha256": "68aaa975a1d19eb516baf256564451532dbed5dbb07f117dddbb284be7bc95f0"
+    },
+    {
+      "file": "backstop_data/bitmaps_reference/fullstack_showcase_portfolio_dashboard_0_document_1_390px.png",
+      "sha256": "b3e03933f1670008c8daf09d45f27d7817e1940258c58cf51a6c32eb5c856e1b"
+    },
+    {
+      "file": "backstop_data/bitmaps_reference/fullstack_showcase_portfolio_dashboard_0_document_2_430px.png",
+      "sha256": "ce06743395af858be05003f26f112ea7dbfe312fdf7f4335addc7d1392b7cf9f"
+    },
+    {
+      "file": "backstop_data/bitmaps_reference/fullstack_showcase_portfolio_dashboard_0_document_3_1440px.png",
+      "sha256": "31a434b74ee7c5e1e8fa4a8dab017196a3b80670789032fe6753cae469e297c7"
+    },
+    {
+      "file": "backstop_data/bitmaps_reference/fullstack_showcase_portfolio_evidence_0_document_0_375px.png",
+      "sha256": "10139f92e7d845c78ecc42eb36acb3fc65532d237d174f05f94367380b0fe960"
+    },
+    {
+      "file": "backstop_data/bitmaps_reference/fullstack_showcase_portfolio_evidence_0_document_1_390px.png",
+      "sha256": "0211e061d84ed96adf20372d4c9749d315758cea558007f4d6055b4b127bca2c"
+    },
+    {
+      "file": "backstop_data/bitmaps_reference/fullstack_showcase_portfolio_evidence_0_document_2_430px.png",
+      "sha256": "ae8614ef1b32f2f6342834cf029c7e2aa0cde674d7548cbb345570f29de2aaee"
+    },
+    {
+      "file": "backstop_data/bitmaps_reference/fullstack_showcase_portfolio_evidence_0_document_3_1440px.png",
+      "sha256": "19ffeb3cade6208d7da9afefd66bd82d80f3e2f3b087f6e2894776e07ed4dd71"
+    },
+    {
+      "file": "backstop_data/bitmaps_reference/fullstack_showcase_portfolio_open-source_0_document_0_375px.png",
+      "sha256": "1d59efaa89d8e4385687c8f9b2fff0cc38e59ee34ec1ffdcd1303bfc118b47a3"
+    },
+    {
+      "file": "backstop_data/bitmaps_reference/fullstack_showcase_portfolio_open-source_0_document_1_390px.png",
+      "sha256": "e2ef6f1a2ccb8d5f2cf24a391f1e78400ffdc32a6d7765f4c551dca41af5bfed"
+    },
+    {
+      "file": "backstop_data/bitmaps_reference/fullstack_showcase_portfolio_open-source_0_document_2_430px.png",
+      "sha256": "ef237be8ef73f6a84e3b2b0bab7474dbe532a00a02787b80fe34ac1268e558bb"
+    },
+    {
+      "file": "backstop_data/bitmaps_reference/fullstack_showcase_portfolio_open-source_0_document_3_1440px.png",
+      "sha256": "5ca06109aa9426bb49bc32f35c24a5b90b0c2437199ffaa167939ccb4f3f6605"
+    },
+    {
+      "file": "backstop_data/bitmaps_reference/fullstack_showcase_portfolio_performance-control_0_document_0_375px.png",
+      "sha256": "a915a8fe264b95b37df64887472dae2df844b4f9640b65510355b83ad4f490e7"
+    },
+    {
+      "file": "backstop_data/bitmaps_reference/fullstack_showcase_portfolio_performance-control_0_document_1_390px.png",
+      "sha256": "c1e62a98c6c621523eb2104b07ac726eecb2c3eb06ee0fa9c692446df9f33417"
+    },
+    {
+      "file": "backstop_data/bitmaps_reference/fullstack_showcase_portfolio_performance-control_0_document_2_430px.png",
+      "sha256": "5fbd97183873ef628639ec11ea5241aede17fc1be7fe1d16f1626158f894d706"
+    },
+    {
+      "file": "backstop_data/bitmaps_reference/fullstack_showcase_portfolio_performance-control_0_document_3_1440px.png",
+      "sha256": "c5c4916ef5ef0c4e32b26138f442c209ddad8abff2602597b367ba70dfeefb54"
+    },
+    {
+      "file": "backstop_data/bitmaps_reference/fullstack_showcase_portfolio_projects_0_document_0_375px.png",
+      "sha256": "1ee3c068b2f0bac26eaf61ce18c87db9765c45ddb65dc7e88b509278ca66f723"
+    },
+    {
+      "file": "backstop_data/bitmaps_reference/fullstack_showcase_portfolio_projects_0_document_1_390px.png",
+      "sha256": "6c76bec2c1fcd4e44c39fddd573e2147aa726b32e1f3d24ee0ec5b33adc18923"
+    },
+    {
+      "file": "backstop_data/bitmaps_reference/fullstack_showcase_portfolio_projects_0_document_2_430px.png",
+      "sha256": "f6d1275271616bc0fbf685a49d0bb3020edb0fde78b089e16022c02078c1d688"
+    },
+    {
+      "file": "backstop_data/bitmaps_reference/fullstack_showcase_portfolio_projects_0_document_3_1440px.png",
+      "sha256": "e2a3d45ed09af6539b94908c9db6c7af916ce89824e196cc4d354cc559038434"
+    }
+  ],
+  "references": [
+    {
+      "file": "fullstack_showcase_portfolio_ai-conference-note_0_document_0_375px.png",
+      "sha256": "00a597e0712d652595151dff0948d7dfa9ecb5c05b337b767d82c71630d2a8d4",
+      "origin": "carried-forward"
+    },
+    {
+      "file": "fullstack_showcase_portfolio_ai-conference-note_0_document_1_390px.png",
+      "sha256": "ba7e19aff311c1c29f52f2c5c00084cf0d72145e8311ec9e65a4433583ae8f95",
+      "origin": "carried-forward"
+    },
+    {
+      "file": "fullstack_showcase_portfolio_ai-conference-note_0_document_2_430px.png",
+      "sha256": "67cd1dc551fdd9730c7090968a8aa93dd48c8c30f55ae9e50475454170697a87",
+      "origin": "carried-forward"
+    },
+    {
+      "file": "fullstack_showcase_portfolio_ai-conference-note_0_document_3_1440px.png",
+      "sha256": "cb1289c4642eaa81ff3a364624e83077dc0fc61e00e2be23d9e93700cf42a168",
+      "origin": "carried-forward"
+    },
+    {
+      "file": "fullstack_showcase_portfolio_ai-conferences_0_document_0_375px.png",
+      "sha256": "99536addfe19a15a6c3368d4cf38fcff98f8154624ee9569e2ebbcf91275bbe4",
+      "origin": "carried-forward"
+    },
+    {
+      "file": "fullstack_showcase_portfolio_ai-conferences_0_document_1_390px.png",
+      "sha256": "0af1d97b295f33eb284a704889ce6399d33c2a5363460229392d3fcdfa24077d",
+      "origin": "carried-forward"
+    },
+    {
+      "file": "fullstack_showcase_portfolio_ai-conferences_0_document_2_430px.png",
+      "sha256": "4dcd3960941303242ffe31f48ac8c564c7b80e543048c0cda8de35d9deb0afde",
+      "origin": "carried-forward"
+    },
+    {
+      "file": "fullstack_showcase_portfolio_ai-conferences_0_document_3_1440px.png",
+      "sha256": "de1748c1d2874922bcd8f962cdf0731bfc9b0c98dbd7577398373ebdd311896e",
+      "origin": "carried-forward"
+    },
+    {
+      "file": "fullstack_showcase_portfolio_dashboard-resume-desktop_0_skillsportfolio-dashboard-module-card_0_1440px.png",
+      "sha256": "8d8c07a45ab7ffa3bb1dc8b0490aef1cbb80d0f3fddcfc964943aded8de0166e",
+      "origin": "reviewed-candidate"
+    },
+    {
+      "file": "fullstack_showcase_portfolio_dashboard-resume-desktop_0_skillsportfolio-dashboard-module-card_1_1536px.png",
+      "sha256": "bdd7d21fe3a0594304c58fe1827bd7e804d4a6d5e53422e52793e1875427b37c",
+      "origin": "reviewed-candidate"
+    },
+    {
+      "file": "fullstack_showcase_portfolio_dashboard_0_document_0_375px.png",
+      "sha256": "eb515c61664172ab1ee0116b8c46ab2140d4397a81760234163e6ffca9fe2cf2",
+      "origin": "reviewed-candidate"
+    },
+    {
+      "file": "fullstack_showcase_portfolio_dashboard_0_document_1_390px.png",
+      "sha256": "d222ed3c2e7f7da2e9cb1354f40bcf67a530b2362a2591bd2e259f63818765c0",
+      "origin": "reviewed-candidate"
+    },
+    {
+      "file": "fullstack_showcase_portfolio_dashboard_0_document_2_430px.png",
+      "sha256": "738558da3d4687fd9c44b1b0277bd461fbc94c2928cec877d72d844574dc714b",
+      "origin": "reviewed-candidate"
+    },
+    {
+      "file": "fullstack_showcase_portfolio_dashboard_0_document_3_1440px.png",
+      "sha256": "cc4b3f873f9b3ef0ccb4858e1f447ee25afd760bb3629e91716f0511892cfd9f",
+      "origin": "reviewed-candidate"
+    },
+    {
+      "file": "fullstack_showcase_portfolio_evidence_0_document_0_375px.png",
+      "sha256": "f8b5e1813ed25542dc20b9759493627ba8c6ab37eff647480003ea4e007040c2",
+      "origin": "carried-forward"
+    },
+    {
+      "file": "fullstack_showcase_portfolio_evidence_0_document_1_390px.png",
+      "sha256": "700cbc83e22f186e7521e4815e5aeea57ca94534f894f28de647e880aeffe059",
+      "origin": "carried-forward"
+    },
+    {
+      "file": "fullstack_showcase_portfolio_evidence_0_document_2_430px.png",
+      "sha256": "d2a22bf4fcc49a33ee30f598898ed6324b4c7bdfeac1029ce6131c28bc191db2",
+      "origin": "carried-forward"
+    },
+    {
+      "file": "fullstack_showcase_portfolio_evidence_0_document_3_1440px.png",
+      "sha256": "2ccf3c4e02243d6fb432f48116aaf274cda5d132d8f8910e82ed89cb81be8b68",
+      "origin": "carried-forward"
+    },
+    {
+      "file": "fullstack_showcase_portfolio_open-source_0_document_0_375px.png",
+      "sha256": "fbfa862770de6c7d6e5fe29e563103b7c665bbf4b75b55c1c3b6edd07cf154b8",
+      "origin": "carried-forward"
+    },
+    {
+      "file": "fullstack_showcase_portfolio_open-source_0_document_1_390px.png",
+      "sha256": "66005fcef49a7e026293664f5b20a280ffad7f15820423969305cc7b0c716197",
+      "origin": "carried-forward"
+    },
+    {
+      "file": "fullstack_showcase_portfolio_open-source_0_document_2_430px.png",
+      "sha256": "550fb8190f48b72d667aef44eda58e49f1586f008379f5b99ef90ae0aac1f3fd",
+      "origin": "carried-forward"
+    },
+    {
+      "file": "fullstack_showcase_portfolio_open-source_0_document_3_1440px.png",
+      "sha256": "05d662f891f701b536f93634aac28e5c421864a1c130bbaf1b2b1b500f3703d5",
+      "origin": "carried-forward"
+    },
+    {
+      "file": "fullstack_showcase_portfolio_performance-control_0_document_0_375px.png",
+      "sha256": "0bc97de5419feb07917f9daf815aee8fdab0fa3519ac92d5e0ec019877027b4e",
+      "origin": "carried-forward"
+    },
+    {
+      "file": "fullstack_showcase_portfolio_performance-control_0_document_1_390px.png",
+      "sha256": "c11e2a53ee9eee793769d8f9d54e04c36715c772cdaa67ecb05244f52ff90f97",
+      "origin": "carried-forward"
+    },
+    {
+      "file": "fullstack_showcase_portfolio_performance-control_0_document_2_430px.png",
+      "sha256": "e87895f9f1e44584956195628d4c02b1ef50c1b9a838a8571da5289000fc251a",
+      "origin": "carried-forward"
+    },
+    {
+      "file": "fullstack_showcase_portfolio_performance-control_0_document_3_1440px.png",
+      "sha256": "cc5aa19dbde86e6ce71acaae498aa7981b86f22a7071c65f6b44f24718b2411e",
+      "origin": "carried-forward"
+    },
+    {
+      "file": "fullstack_showcase_portfolio_projects_0_document_0_375px.png",
+      "sha256": "fe344a4913a0aaeac3b3ce2db62fd80bafe84a8601ca2fbbe3c4f7e06ce44e72",
+      "origin": "reviewed-candidate"
+    },
+    {
+      "file": "fullstack_showcase_portfolio_projects_0_document_1_390px.png",
+      "sha256": "28838eeb8b2116cb752beb36db179269995cafaff16a3a4bad19d88aa5e978e6",
+      "origin": "reviewed-candidate"
+    },
+    {
+      "file": "fullstack_showcase_portfolio_projects_0_document_2_430px.png",
+      "sha256": "9b36451d27086e975192a55f182785f7c8f17821e5ea888f18fdc9bd0a4782d6",
+      "origin": "reviewed-candidate"
+    },
+    {
+      "file": "fullstack_showcase_portfolio_projects_0_document_3_1440px.png",
+      "sha256": "67ba7abb991d41c2e40ec10b0c41490b14ca92154def3efcd676fc70aa47a0ba",
+      "origin": "reviewed-candidate"
+    },
+    {
+      "file": "fullstack_showcase_portfolio_sharing-note_0_document_0_375px.png",
+      "sha256": "fab1592dc911831c27603243ceed7b4f4e101b0e275f194256d0a647239776b4",
+      "origin": "carried-forward"
+    },
+    {
+      "file": "fullstack_showcase_portfolio_sharing-note_0_document_1_390px.png",
+      "sha256": "e1f729ddf4f8332c09c28871829f4fafb1c06746e97f28a3a387e7aa9135928a",
+      "origin": "carried-forward"
+    },
+    {
+      "file": "fullstack_showcase_portfolio_sharing-note_0_document_2_430px.png",
+      "sha256": "88f7b5528fc2123353477cf5bd7268d22c13883c287fea6e8981e29586ef764f",
+      "origin": "carried-forward"
+    },
+    {
+      "file": "fullstack_showcase_portfolio_sharing-note_0_document_3_1440px.png",
+      "sha256": "d29bcf31d401d56b4e5f2b7c725f638a1454a77b7c17916acb8cbda4470aef99",
+      "origin": "carried-forward"
+    },
+    {
+      "file": "fullstack_showcase_portfolio_sharing_0_document_0_375px.png",
+      "sha256": "ef10ff678293f0d266ab7ab4536868f1301f9bf8833b7239e3964199a44c888c",
+      "origin": "carried-forward"
+    },
+    {
+      "file": "fullstack_showcase_portfolio_sharing_0_document_1_390px.png",
+      "sha256": "1312f039f316212be44aa12d63e6de3634aa6aaa9dec3d226b255bd2c11706c1",
+      "origin": "carried-forward"
+    },
+    {
+      "file": "fullstack_showcase_portfolio_sharing_0_document_2_430px.png",
+      "sha256": "12f49684d7f37f1157b442a421101113f037f3f2ee539ee5a841fdef87b3fefc",
+      "origin": "carried-forward"
+    },
+    {
+      "file": "fullstack_showcase_portfolio_sharing_0_document_3_1440px.png",
+      "sha256": "17a90e8321e259bd94ab91221b80ed9fee749c2dc75df3bfbc4130fccf46cf90",
+      "origin": "carried-forward"
+    }
+  ],
+  "fullSuiteVerification": "pending",
+  "productionPublication": "pending"
+}

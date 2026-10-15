@@ -16,6 +16,10 @@ import {
 } from "@/data/migrated-evidence";
 import { PROJECTS_INDEX } from "@/data/portfolio-projects";
 import {
+	getProjectPrdEvidence,
+	type ProjectPrdEvidence,
+} from "@/data/project-prd-evidence";
+import {
 	performanceApplicationIdForControlProject,
 	performanceControlPath,
 } from "@/data/performance-applications";
@@ -24,6 +28,7 @@ import { PerformanceEvidenceDiagrams } from "@/features/performance/performance-
 import { resolvePerformanceView } from "@/features/performance/performance-state";
 import { PerformanceStatusCard } from "@/features/performance/performance-status-card";
 import { SharedEvidenceVerifierDiagrams } from "./shared-evidence-verifier-diagrams";
+import { ProjectPrdEvidenceSections } from "./project-prd-evidence-sections";
 import {
 	Card,
 	CardContent,
@@ -33,9 +38,13 @@ import {
 } from "@web/ui/components/card";
 
 export function EvidenceContent({ projectId }: { projectId: string }) {
-	const project = PROJECTS_INDEX[projectId];
+	const project = Object.hasOwn(PROJECTS_INDEX, projectId)
+		? PROJECTS_INDEX[projectId]
+		: undefined;
+	const prdEvidence = getProjectPrdEvidence(projectId);
 
 	if (!project) {
+		if (prdEvidence) return <RegisteredEvidencePage entry={prdEvidence} />;
 		return (
 			<div className="space-y-4">
 				<header>
@@ -74,6 +83,12 @@ export function EvidenceContent({ projectId }: { projectId: string }) {
 			projectHomeUrl={projectHomeUrl}
 			title={project.title}
 		>
+			{prdEvidence ? <ProjectPrdEvidenceSections entry={prdEvidence} /> : null}
+			{prdEvidence ? (
+				<p className="text-muted-foreground text-sm leading-relaxed">
+					以下保留既有公开工作证明及其原始口径。条目进度不表示整份新 PRD 或新增增强已完成验收；本次文档与版本边界见上文。
+				</p>
+			) : null}
 			<Card className="portfolio-glass-panel rounded-none border-[#c7ced8] bg-white/90 shadow-sm">
 				<CardHeader>
 					<CardTitle className="text-xl">{project.title}</CardTitle>
@@ -219,6 +234,31 @@ export function EvidenceContent({ projectId }: { projectId: string }) {
 					</footer>
 				</CardContent>
 			</Card>
+		</PortfolioPageShell>
+	);
+}
+
+function RegisteredEvidencePage({ entry }: { entry: ProjectPrdEvidence }) {
+	return (
+		<PortfolioPageShell
+			current="evidence"
+			description={entry.positioning}
+			evidenceUrl={entry.evidenceUrl}
+			eyebrow="Project Evidence"
+			projectHomeUrl={entry.projectUrl}
+			title={entry.title}
+		>
+			<nav aria-label="项目证据导航" className="flex flex-wrap items-center gap-4 text-sm">
+				<a className="inline-flex min-h-11 items-center text-primary underline" href="/dashboard">作品集首页</a>
+				{entry.projectUrl ? (
+					<a className="inline-flex min-h-11 items-center text-primary underline" href={entry.projectUrl}>项目主页</a>
+				) : <span className="text-muted-foreground">项目主页：未公开</span>}
+				<a aria-current="page" className="inline-flex min-h-11 items-center text-primary underline" href={entry.evidenceUrl}>工作证明</a>
+			</nav>
+			<ProjectPrdEvidenceSections entry={entry} />
+			<p className="text-muted-foreground text-sm leading-relaxed">
+				本页在作品集中托管公开摘要；它不表示该产品的 API、模型或业务服务托管于此。来源原件与复习问答保留在本机。
+			</p>
 		</PortfolioPageShell>
 	);
 }

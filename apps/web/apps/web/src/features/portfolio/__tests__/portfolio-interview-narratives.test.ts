@@ -17,8 +17,10 @@ describe("portfolio interview narratives", () => {
 		expect(project?.summaryPoints).toEqual(
 			expect.arrayContaining([
 				expect.stringContaining("确定性 Gate"),
-				expect.stringContaining("V1 保留已验证生产 Evidence"),
-				expect.stringContaining("代码 / 本地验证"),
+				expect.stringContaining("已完成 Queen / DAG"),
+				expect.stringContaining("已完成 Checkpoint 与动作账本"),
+				expect.stringContaining("公开 Evidence 按对应发布版本核对"),
+				expect.stringContaining("未交付设计不计入已完成能力"),
 			]),
 		);
     expect(project?.skills).toEqual(
@@ -101,4 +103,37 @@ describe("portfolio interview narratives", () => {
 		expect(source).toContain("17855813990");
 		expect(source).not.toMatch(/ANETU|TUG|67%|UZFI|Claw|Acons/);
 	});
+});
+
+describe("PRD public narrative boundaries", () => {
+  it("keeps curated projects and evidence while separating design from delivery", () => {
+    expect(PORTFOLIO_PROJECTS).toHaveLength(13);
+    for (const project of PORTFOLIO_PROJECTS) {
+      expect(project.summaryPoints).toHaveLength(3);
+      expect(JSON.stringify([project.desc, project.summaryPoints])).not.toMatch(
+        /\/Users\/|codex:\/\/threads|作业|一灯|yideng/,
+      );
+    }
+    const office = PORTFOLIO_PROJECTS.find((project) => project.id === "office-workflow-agent");
+    expect(office?.evidenceUrl).toBe("https://office-workflow-agent.baby2b.online/evidence/");
+    expect(office?.summaryPoints?.join(" ")).toContain("扩展设计");
+    expect(office?.summaryPoints?.join(" ")).toContain("合成工作区");
+    expect(PORTFOLIO_PROJECTS.find((project) => project.id === "hatch-pet")?.summaryPoints?.join(" ")).toContain("公开仓库未展示生成器");
+  });
+  it("places companion products inside the existing personal engineering section", () => {
+    const source = readFileSync(
+      resolve(process.cwd(), "src/features/portfolio/dashboard-content.tsx"),
+      "utf8",
+    );
+    expect(source).toContain("<PrdCompanionNarratives />");
+    expect(source).toContain("个人工程能力与作品系统");
+    const companionSource = readFileSync(
+      resolve(process.cwd(), "src/features/portfolio/prd-companion-narratives.tsx"),
+      "utf8",
+    );
+    for (const title of ["售后 Agent 工作台", "Hono GitHub 资料云服务", "WeChat Intent HUD", "Codex Translate", "知识整理与证据管线", "Codex Mascot / BaoBao Puff"]) {
+      expect(companionSource).toContain(title);
+    }
+    expect(companionSource).not.toMatch(/https:\/\/[^" ]+|\/Users\/|作业|一灯|yideng/);
+  });
 });

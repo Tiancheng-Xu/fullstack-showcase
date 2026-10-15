@@ -10,7 +10,7 @@ describe("visual regression environment", () => {
 		const config = require("../backstop.config.cjs");
 		const packageJson = require("../package.json");
 		expect(config.visualEnvironment).toEqual({
-			browser: "Google Chrome 153.0.8010.50",
+			browser: "Google Chrome 155.0.8059.40",
 			platform: "darwin",
 			architecture: "arm64",
 			locale: "zh-CN",
@@ -35,6 +35,9 @@ describe("visual regression environment", () => {
 		);
 		expect(runner).toContain('"4184"');
 		expect(runner).toContain("BACKSTOP_VALIDATE_REVIEWED_ENVIRONMENT");
+		expect(runner.indexOf("scripts/check-visual-route-gates.cjs")).toBeLessThan(
+		 runner.indexOf('"--config=backstop.config.cjs"'),
+	);
 		const stylesheet = readFileSync(
 			`${process.cwd()}/src/index.css`,
 			"utf8",

@@ -1,9 +1,24 @@
 import { render, screen } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 
 import { PortfolioVoyageHero, VoyageLoadingOverlay } from "../portfolio-voyage-hero";
 
 describe("PortfolioVoyageHero", () => {
+	it("does not probe WebGL on mobile while keeping the static reading surface", () => {
+		const previousWidth = window.innerWidth;
+		const getContext = vi.spyOn(HTMLCanvasElement.prototype, "getContext");
+		Object.defineProperty(window, "innerWidth", { configurable: true, value: 400 });
+		try {
+			const { container, unmount } = render(<PortfolioVoyageHero />);
+			expect(getContext).not.toHaveBeenCalled();
+			expect(container.querySelector(".portfolio-voyage")).toHaveAttribute("data-scene-state", "static");
+			expect(screen.getByRole("heading", { name: "向复杂系统深处航行" })).toBeInTheDocument();
+			unmount();
+		} finally {
+			Object.defineProperty(window, "innerWidth", { configurable: true, value: previousWidth });
+			getContext.mockRestore();
+		}
+	});
   it("keeps the voyage statement and destination available without WebGL", () => {
     render(<PortfolioVoyageHero forceStatic />);
 

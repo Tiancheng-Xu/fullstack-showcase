@@ -29,11 +29,12 @@ export function TechnologyParticleBackdrop() {
   useEffect(() => {
     const root = rootRef.current;
     const canvas = canvasRef.current;
-    if (!root || !canvas) return undefined;
+    if (!root || !canvas || window.innerWidth < 768) return undefined;
 
     const reducedMotion =
       typeof window.matchMedia === "function" &&
       window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reducedMotion) return undefined;
     if (
       !shouldEnableVoyageScene({
         reducedMotion,

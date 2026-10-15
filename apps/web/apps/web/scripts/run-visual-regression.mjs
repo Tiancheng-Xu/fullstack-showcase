@@ -12,14 +12,16 @@ const run = (executable, args, options = {}) => {
 		stdio: "inherit",
 		...options,
 	});
-	if (result.status !== 0) process.exit(result.status ?? 1);
+	if (result.status !== 0) {
+		throw new Error(`${executable} ${args.join(" ")} failed with status ${result.status ?? 1}`);
+	}
 };
 
 run("pnpm", ["build"]);
 
 const preview = spawn(
-	"pnpm",
-	["serve", "--host", "127.0.0.1", "--port", "4184", "--strictPort"],
+	process.execPath,
+	["scripts/serve-visual-built.cjs", "4184"],
 	{ cwd: process.cwd(), stdio: "inherit" },
 );
 
@@ -36,6 +38,9 @@ const waitForPreview = async () => {
 
 try {
 	await waitForPreview();
+	run("node", ["scripts/check-visual-route-gates.cjs"], {
+		env: { ...process.env, BACKSTOP_VALIDATE_REVIEWED_ENVIRONMENT: "1" },
+	});
 	run(
 		"pnpm",
 		["exec", "backstop", command, "--config=backstop.config.cjs"],

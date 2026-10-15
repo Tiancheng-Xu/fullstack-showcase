@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "fixtureKind": "local-public-build-artifact",
+  "fixtureSha256": "165a21b793ef7065d8c5c92140207afdfb814736377c103db498eb209dd6647d",
+  "projectCount": 13,
+  "measurement": "UTF-8 uncompressed response-body bytes; same fixture for every request",
+  "full": {
+    "status": 200,
+    "bodyBytes": 41256
+  },
+  "summary": {
+    "firstPageBytes": 3404,
+    "pages": 1,
+    "completeBodyBytes": 3404,
+    "projectIdentitiesPreserved": true,
+    "reductionPercent": 91.75
+  },
+  "exactProject": {
+    "id": "office-workflow-agent",
+    "bodyBytes": 1853
+  },
+  "conditional": {
+    "status": 304,
+    "bodyBytes": 0
+  },
+  "head": {
+    "status": 200,
+    "bodyBytes": 0
+  },
+  "tokenSavings": "not measured",
+  "workerCpuSavings": "not measured; KV reads, serialization and hashing still execute",
+  "productionDeployment": "not performed"
+}
