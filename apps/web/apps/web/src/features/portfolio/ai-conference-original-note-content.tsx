@@ -35,10 +35,10 @@ function renderMarkdown(markdown: string): ReactNode[] {
     const heading = line.match(/^(#{1,4})\s+(.+)$/);
     if (heading) {
       const content = inline(heading[2]);
-      nodes.push(heading[1].length === 1 ? <h1 key={key}>{content}</h1>
-        : heading[1].length === 2 ? <h2 key={key}>{content}</h2>
-        : heading[1].length === 3 ? <h3 key={key}>{content}</h3>
-        : <h4 key={key}>{content}</h4>);
+      nodes.push(heading[1].length === 1 ? <h2 key={key}>{content}</h2>
+        : heading[1].length === 2 ? <h3 key={key}>{content}</h3>
+        : heading[1].length === 3 ? <h4 key={key}>{content}</h4>
+        : <h5 key={key}>{content}</h5>);
       i++; continue;
     }
     if (/^```/.test(line)) {

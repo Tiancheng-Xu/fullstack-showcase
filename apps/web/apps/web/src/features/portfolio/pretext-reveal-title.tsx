@@ -86,7 +86,7 @@ export function PretextRevealTitle({ text }: { text: string }) {
 					<m.span
 						aria-hidden="true"
 						className="pretext-reveal-title__animated"
-						initial="hidden"
+						initial={false}
 						transition={{ staggerChildren: 0.035 }}
 						viewport={{ amount: 0.8, once: true }}
 						whileInView="visible"

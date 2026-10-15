@@ -10,6 +10,7 @@ const scene = vi.hoisted(() => ({
 
 const policy = vi.hoisted(() => ({
   webglAvailable: true,
+  forbidProbe: false,
   shouldEnable: vi.fn(
     ({ reducedMotion, viewportWidth, webglAvailable }) =>
       !reducedMotion && viewportWidth >= 760 && webglAvailable,
@@ -17,7 +18,10 @@ const policy = vi.hoisted(() => ({
 }));
 
 vi.mock("../voyage-scene-policy", () => ({
-  hasWebGLSupport: () => policy.webglAvailable,
+  hasWebGLSupport: () => {
+    if (policy.forbidProbe) throw new Error("Disabled scenes must not probe GPU support");
+    return policy.webglAvailable;
+  },
   shouldEnableVoyageScene: policy.shouldEnable,
 }));
 
@@ -34,6 +38,7 @@ describe("TechnologyCapabilityMap", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     policy.webglAvailable = true;
+    policy.forbidProbe = false;
     innerWidthSpy = vi.spyOn(window, "innerWidth", "get").mockReturnValue(1280);
     vi.stubGlobal("matchMedia", () => ({
       matches: false,
@@ -103,6 +108,7 @@ describe("TechnologyCapabilityMap", () => {
   });
 
   it("keeps the Babylon scene static when reduced motion is requested", () => {
+    policy.forbidProbe = true;
     vi.stubGlobal("matchMedia", () => ({
       matches: true,
       addEventListener: vi.fn(),
@@ -111,9 +117,7 @@ describe("TechnologyCapabilityMap", () => {
 
     render(<TechnologyCapabilityMap />);
 
-    expect(policy.shouldEnable).toHaveBeenCalledWith(
-      expect.objectContaining({ reducedMotion: true }),
-    );
+    expect(screen.getAllByTestId("capability-node")).toHaveLength(24);
     expect(scene.mount).not.toHaveBeenCalled();
   });
 
@@ -130,23 +134,21 @@ describe("TechnologyCapabilityMap", () => {
 
   it("keeps the Babylon scene static on a narrow viewport", () => {
     innerWidthSpy.mockReturnValue(480);
+    policy.forbidProbe = true;
 
     render(<TechnologyCapabilityMap />);
 
-    expect(policy.shouldEnable).toHaveBeenCalledWith(
-      expect.objectContaining({ viewportWidth: 480 }),
-    );
+    expect(screen.getAllByTestId("capability-node")).toHaveLength(24);
     expect(scene.mount).not.toHaveBeenCalled();
   });
 
   it("keeps the Babylon scene static while the tablet layout hides its canvas", () => {
     innerWidthSpy.mockReturnValue(800);
+    policy.forbidProbe = true;
 
     render(<TechnologyCapabilityMap />);
 
-    expect(policy.shouldEnable).toHaveBeenCalledWith(
-      expect.objectContaining({ viewportWidth: 800 }),
-    );
+    expect(screen.getAllByTestId("capability-node")).toHaveLength(24);
     expect(scene.mount).not.toHaveBeenCalled();
   });
 

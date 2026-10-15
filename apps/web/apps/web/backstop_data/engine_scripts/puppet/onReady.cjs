@@ -1,3 +1,5 @@
+const { inspectMobileNavigation, inspectNoteBody, inspectHeroTitle } = require("../../../scripts/visual-dom-contract.cjs");
+
 module.exports = async (page) => {
 	await page.evaluate(async () => {
 		await document.fonts.ready;
@@ -37,13 +39,22 @@ module.exports = async (page) => {
 	await page.evaluate(() => window.scrollTo(0, 0));
 	await new Promise((resolve) => setTimeout(resolve, 300));
 
-	const gate = await page.evaluate(async () => {
+	const contracts = {
+		navigation: await page.evaluate(inspectMobileNavigation),
+		note: await page.evaluate(inspectNoteBody),
+		hero: await page.evaluate(inspectHeroTitle),
+	};
+	const gate = await page.evaluate(async (contracts) => {
 		const routeMarkers = {
 			"/dashboard": "展示看板",
 			"/projects": "项目索引",
 			"/evidence": "工作证明索引",
 			"/open-source": "开源社区共建",
 			"/performance-control/babysteps": "性能观测成本控制",
+			"/sharing": "分享",
+			"/ai-conferences": "AI 前瞻会议",
+			"/ai-conference-notes/yunqi-2026": "吴泳铭：机器智能时代与阿里巴巴全栈 AI 战略路线图",
+			"/sharing-notes/overreacted/what-is-javascript-made-of": "What Is JavaScript Made Of?",
 		};
 		const response = await fetch(window.location.pathname, {
 			headers: { accept: "text/html" },
@@ -116,7 +127,20 @@ module.exports = async (page) => {
 					linksRect.top >= summaryRect.bottom - 1;
 			}
 		}
+		let sharingDirectoryHealthy = true;
+		if (window.location.pathname === "/sharing") {
+			const directory = document.getElementById("sharing-articles");
+			sharingDirectoryHealthy = Boolean(
+				directory?.innerText.includes("文章目录") &&
+				[...directory.querySelectorAll('a[href^="/sharing-notes/"], a[href^="/ai-conference-notes/"]')]
+					.some((link) => link.getAttribute("aria-label")?.trim() || link.innerText.trim()),
+			);
+		}
+		const runtimeEnvironment = Intl.DateTimeFormat().resolvedOptions();
 		return {
+			locale: runtimeEnvironment.locale,
+			timezone: runtimeEnvironment.timeZone,
+			deviceScaleFactor: window.devicePixelRatio,
 			httpStatus: response.status,
 			marker: document.body.innerText.includes(
 				routeMarkers[window.location.pathname],
@@ -127,16 +151,27 @@ module.exports = async (page) => {
 			mobileArchitectureReadable: mobileArchitectureInteractable,
 			resumeWidthHealthy,
 			openSourcePrLayoutHealthy,
+			mobileNavigationHealthy: contracts.navigation.healthy,
+			summaryBodyHealthy: contracts.note.healthy,
+			heroTitleHealthy: contracts.hero.healthy,
+			sharingDirectoryHealthy,
 			architectureGeometry,
 		};
-	});
+	}, contracts);
 	if (
+		gate.locale !== "zh-CN" ||
+		gate.timezone !== "UTC" ||
+		gate.deviceScaleFactor !== 1 ||
 		gate.httpStatus !== 200 ||
 		!gate.marker ||
 		gate.overflow > 1 ||
 		!gate.mobileArchitectureReadable ||
 		!gate.resumeWidthHealthy ||
-		!gate.openSourcePrLayoutHealthy
+		!gate.openSourcePrLayoutHealthy ||
+		!gate.mobileNavigationHealthy ||
+		!gate.summaryBodyHealthy ||
+		!gate.heroTitleHealthy ||
+		!gate.sharingDirectoryHealthy
 	) {
 		throw new Error(`visual route gate failed: ${JSON.stringify(gate)}`);
 	}

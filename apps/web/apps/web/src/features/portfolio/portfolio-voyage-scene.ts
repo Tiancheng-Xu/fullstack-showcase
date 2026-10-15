@@ -25,6 +25,7 @@ import {
 	getVoyageDevicePixelRatio,
 } from "./voyage-scene-policy";
 import { sampleVoyagePose } from "./voyage-wave";
+import { createVoyageSceneLifetime, type VoyageSceneLifetime } from "./voyage-scene-lifetime";
 
 const SHADER_NAME = "portfolioVoyageOcean";
 const SKY_SHADER_NAME = "portfolioVoyageSky";
@@ -173,6 +174,7 @@ export type VoyageScreenPosition = {
 };
 
 type PortfolioVoyageSceneOptions = {
+	signal?: AbortSignal;
 	onBoatScreenPosition?: (position: VoyageScreenPosition) => void;
 	onTwosComplementScreenPosition?: (position: VoyageScreenPosition) => void;
 };
@@ -194,9 +196,31 @@ function createBoatFallback(scene: Scene, root: TransformNode) {
   cabin.material = cabinMaterial;
 }
 
-async function loadBoat(scene: Scene, root: TransformNode) {
+type ImportedBoat = Awaited<ReturnType<typeof SceneLoader.ImportMeshAsync>>;
+
+function disposeImportedBoat(result: ImportedBoat) {
+	const disposed = new Set<unknown>();
+	const errors: unknown[] = [];
+	for (const mesh of result.meshes) {
+		try { mesh.dispose(false, true); } catch (error) { errors.push(error); }
+		disposed.add(mesh);
+	}
+	for (const values of Object.values(result)) {
+		if (!Array.isArray(values)) continue;
+		for (const asset of values) {
+			if (!asset || disposed.has(asset) || typeof asset.dispose !== "function") continue;
+			disposed.add(asset);
+			try { asset.dispose(); } catch (error) { errors.push(error); }
+		}
+	}
+	if (errors.length) throw new AggregateError(errors, "Cancelled boat asset cleanup failed");
+}
+
+async function loadBoat(scene: Scene, root: TransformNode, lifetime: VoyageSceneLifetime) {
   try {
-    const result = await SceneLoader.ImportMeshAsync("", "/assets/portfolio/", "ss_minnow_iii.glb", scene);
+    const result = await lifetime.wait(SceneLoader.ImportMeshAsync("", "/assets/portfolio/", "ss_minnow_iii.glb", scene), disposeImportedBoat);
+    if (lifetime.disposed) disposeImportedBoat(result);
+    lifetime.assertActive();
     for (const mesh of result.meshes) {
       if (!mesh.parent) mesh.parent = root;
     }
@@ -209,7 +233,8 @@ async function loadBoat(scene: Scene, root: TransformNode) {
       root.position.y -= bounds.min.y * scale;
     }
     root.rotation.y = Math.PI;
-  } catch {
+  } catch (error) {
+    if (lifetime.disposed) throw error;
     createBoatFallback(scene, root);
   }
 }
@@ -218,6 +243,7 @@ async function createTwosComplementSun(
 	scene: Scene,
 	camera: ArcRotateCamera,
 	sunDirection: Vector3,
+	lifetime: VoyageSceneLifetime,
 ) {
 	const textureSize = 512;
 	const texture = new DynamicTexture(
@@ -229,6 +255,11 @@ async function createTwosComplementSun(
 	texture.hasAlpha = true;
 	const image = new Image();
 	image.decoding = "async";
+	lifetime.register(() => {
+		image.onload = null;
+		image.onerror = null;
+		image.removeAttribute("src");
+	});
 	const plane = CreatePlane("twos-complement-sun", { size: 27 }, scene);
 	const material = new StandardMaterial("twos-complement-sun-material", scene);
 	material.diffuseTexture = texture;
@@ -243,8 +274,13 @@ async function createTwosComplementSun(
 	plane.position.copyFrom(camera.position.add(sunDirection.scale(92)));
 	plane.setEnabled(false);
 
-	await new Promise<void>((resolve) => {
-		image.onload = () => {
+	const loaded = await lifetime.wait(new Promise<boolean>((resolve) => {
+		image.onload = () => resolve(true);
+		image.onerror = () => resolve(false);
+		image.src = "/assets/portfolio/twos-complement-ring.png";
+	}));
+	lifetime.assertActive();
+	if (loaded) {
 			const context = texture.getContext() as CanvasRenderingContext2D;
 			context.clearRect(0, 0, textureSize, textureSize);
 			context.save();
@@ -256,11 +292,7 @@ async function createTwosComplementSun(
 			context.restore();
 			texture.update(true);
 			plane.setEnabled(true);
-			resolve();
-		};
-		image.onerror = () => resolve();
-		image.src = "/assets/portfolio/twos-complement-ring.png";
-	});
+	}
 
 	return {
 		plane,
@@ -289,11 +321,29 @@ export async function mountPortfolioVoyageScene(
 	canvas: HTMLCanvasElement,
 	options: PortfolioVoyageSceneOptions = {},
 ): Promise<PortfolioVoyageSceneController> {
+	const lifetime = createVoyageSceneLifetime(options.signal);
+	try {
+		const controller = await createPortfolioVoyageScene(canvas, options, lifetime);
+		lifetime.assertActive();
+		return controller;
+	} catch (error) {
+		return lifetime.fail(error);
+	}
+}
+
+async function createPortfolioVoyageScene(
+	canvas: HTMLCanvasElement,
+	options: PortfolioVoyageSceneOptions,
+	lifetime: VoyageSceneLifetime,
+): Promise<PortfolioVoyageSceneController> {
+	lifetime.assertActive();
   const dpr = getVoyageDevicePixelRatio(window.innerWidth, window.devicePixelRatio || 1);
   const engine = new Engine(canvas, true, { preserveDrawingBuffer: false, stencil: false });
+  lifetime.register(() => engine.dispose());
   engine.setHardwareScalingLevel(1 / dpr);
 
   const scene = new Scene(engine);
+  lifetime.register(() => scene.dispose());
 	  scene.clearColor = new Color4(0.66, 0.79, 0.84, 1);
   scene.fogMode = Scene.FOGMODE_EXP2;
 	  scene.fogDensity = 0.0031;
@@ -342,7 +392,9 @@ export async function mountPortfolioVoyageScene(
 			scene,
 			camera,
 			skySunDirection,
+			lifetime,
 		);
+		lifetime.assertActive();
 
 		const ocean = CreateGround("voyage-ocean", { width: 1200, height: 1200, subdivisions: 160 }, scene);
 	  ocean.position.z = -180;
@@ -360,7 +412,8 @@ export async function mountPortfolioVoyageScene(
   ocean.material = oceanMaterial;
 
 	  const boatRoot = new TransformNode("voyage-boat-root", scene);
-	  await loadBoat(scene, boatRoot);
+	  await loadBoat(scene, boatRoot, lifetime);
+	  lifetime.assertActive();
 	  createWake(scene, boatRoot);
 
 	const cameraPresets: Record<Exclude<VoyageCameraPreset, "follow">, {
@@ -474,7 +527,7 @@ export async function mountPortfolioVoyageScene(
   const render = () => scene.render();
   let rendering = false;
   const start = () => {
-    if (rendering) return;
+    if (rendering || lifetime.disposed) return;
     rendering = true;
     engine.runRenderLoop(render);
   };
@@ -487,18 +540,15 @@ export async function mountPortfolioVoyageScene(
     ([entry]) => (entry?.isIntersecting ? start() : stop()),
     { rootMargin: "120px" },
   );
+  lifetime.register(() => observer.disconnect());
   observer.observe(canvas);
   const resize = () => engine.resize();
 	window.addEventListener("resize", resize, { passive: true });
+	lifetime.register(() => window.removeEventListener("resize", resize));
+	lifetime.register(stop);
 	start();
 
-	const dispose = () => {
-		observer.disconnect();
-		window.removeEventListener("resize", resize);
-		stop();
-		scene.dispose();
-		engine.dispose();
-	};
+	const dispose = lifetime.dispose;
 
 	try {
 		await new Promise<void>((resolve, reject) => {
@@ -553,12 +603,19 @@ export async function mountPortfolioVoyageScene(
 				}
 				armVisibleTimeout();
 			};
+			lifetime.register(() => {
+				cleanupReadinessWait();
+				if (!settled) {
+					settled = true;
+					reject(new DOMException("Voyage scene initialization was cancelled", "AbortError"));
+				}
+			});
+			lifetime.assertActive();
 			document.addEventListener("visibilitychange", handleVisibilityChange);
 			armVisibleTimeout();
 		});
 	} catch (error) {
-		dispose();
-		throw error;
+		return lifetime.fail(error);
 	}
 
 	return { dispose, setCameraPreset };

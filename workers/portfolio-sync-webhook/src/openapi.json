@@ -1,0 +1,128 @@
+{
+	"openapi": "3.1.1",
+	"info": {
+		"title": "Portfolio Sync public readback",
+		"version": "1.1.0",
+		"description": "Read-only public portfolio metadata. Start with summary and fetch one project for detail. Validators reduce repeated body transfer. This document does not grant write permissions."
+	},
+	"servers": [{ "url": "https://portfolio-sync.baby2b.online" }],
+	"paths": {
+		"/projects.json": {
+			"parameters": [
+				{ "$ref": "#/components/parameters/View" },
+				{ "$ref": "#/components/parameters/Id" },
+				{ "$ref": "#/components/parameters/Limit" },
+				{ "$ref": "#/components/parameters/Cursor" },
+				{ "$ref": "#/components/parameters/IfNoneMatch" }
+			],
+			"get": {
+				"operationId": "readPortfolioProjects",
+				"summary": "Read public project identities, status and evidence links",
+				"description": "No query parameters preserves the legacy complete envelope. Any view/id/limit/cursor parameter opts into bounded pagination. projectCount is the whole index; matchedCount is the filtered total. Follow nextCursor with the same view/id/limit. On 409 restart without cursor. Unknown IDs return an empty list. Duplicate supported query parameters are rejected.",
+				"responses": {
+					"200": {
+						"description": "Public complete or bounded project envelope",
+						"headers": { "ETag": { "$ref": "#/components/headers/ETag" } },
+						"content": { "application/json": { "schema": { "oneOf": [
+							{ "$ref": "#/components/schemas/Envelope" },
+							{ "$ref": "#/components/schemas/Page" }
+						] } } }
+					},
+					"304": { "$ref": "#/components/responses/Unchanged" },
+					"400": { "$ref": "#/components/responses/Invalid" },
+					"409": { "$ref": "#/components/responses/Changed" }
+				}
+			},
+			"head": {
+				"operationId": "inspectPortfolioProjects",
+				"summary": "Read the representation validator and byte length without its body",
+				"responses": {
+					"200": {
+						"description": "Same representation headers as GET, without a response body",
+						"headers": {
+							"ETag": { "$ref": "#/components/headers/ETag" },
+							"Content-Length": { "schema": { "type": "integer", "minimum": 0 } }
+						}
+					},
+					"304": { "$ref": "#/components/responses/Unchanged" },
+					"400": { "description": "Invalid query or cursor; no response body" },
+					"409": { "description": "Snapshot changed; no response body" }
+				}
+			}
+		}
+	},
+	"components": {
+		"parameters": {
+			"View": {
+				"name": "view", "in": "query",
+				"description": "summary omits narratives and returns only identity, status, progress and links. Explicit full still opts into pagination.",
+				"schema": { "type": "string", "enum": ["full", "summary"], "default": "full" }
+			},
+			"Id": {
+				"name": "id", "in": "query", "description": "Exact public project ID, not a URL or search expression.",
+				"schema": { "type": "string", "pattern": "^[a-z0-9][a-z0-9_-]{0,127}$" }
+			},
+			"Limit": {
+				"name": "limit", "in": "query", "description": "Page size for opt-in reads; decimal digits only.",
+				"schema": { "type": "integer", "minimum": 1, "maximum": 50, "default": 20 }
+			},
+			"Cursor": {
+				"name": "cursor", "in": "query", "description": "Opaque nextCursor returned by the previous page. Bind to the same view, ID filter and limit. Not a credential.",
+				"schema": { "type": "string", "minLength": 1, "maxLength": 1024 }
+			},
+			"IfNoneMatch": {
+				"name": "If-None-Match", "in": "header", "description": "An ETag from the same query URL; an unchanged response returns 304.",
+				"schema": { "type": "string" }
+			}
+		},
+		"headers": {
+			"ETag": { "description": "Weak SHA-256 validator for this representation.", "schema": { "type": "string" } }
+		},
+		"responses": {
+			"Unchanged": { "description": "Selected public representation has not changed; no body.", "headers": { "ETag": { "$ref": "#/components/headers/ETag" } } },
+			"Invalid": { "description": "Invalid query or cursor. Error responses are not cached.", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Error" } } } },
+			"Changed": { "description": "Cursor belongs to an older snapshot. Restart without cursor.", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Error" } } } }
+		},
+		"schemas": {
+			"Project": {
+				"type": "object", "required": ["id", "title", "status", "progress"],
+				"properties": {
+					"id": { "type": "string" }, "title": { "type": "string" },
+					"status": { "type": "string", "enum": ["已完成", "进行中"] }, "progress": { "type": "number" },
+					"repo": { "type": "string" }, "evidenceUrl": { "type": "string", "format": "uri" },
+					"ownerPage": { "type": "string", "format": "uri" }, "sourceUpdatedAt": { "type": "string" }
+				},
+				"additionalProperties": true
+			},
+			"Envelope": {
+				"type": "object", "required": ["schemaVersion", "generatedAt", "projectCount", "projects", "status"],
+				"properties": {
+					"schemaVersion": { "const": 1 }, "generatedAt": { "type": "string", "format": "date-time" },
+					"projectCount": { "type": "integer", "minimum": 0 }, "warningCount": { "type": "integer", "minimum": 0 },
+					"status": { "type": "string", "enum": ["ready", "warming"] },
+					"projects": { "type": "array", "items": { "$ref": "#/components/schemas/Project" } }
+				},
+				"not": { "required": ["view"] },
+				"additionalProperties": true
+			},
+			"Page": {
+				"type": "object", "required": ["schemaVersion", "generatedAt", "projectCount", "projects", "status", "view", "matchedCount", "returnedCount", "nextCursor"],
+				"properties": {
+					"schemaVersion": { "const": 1 }, "generatedAt": { "type": "string", "format": "date-time" },
+					"projectCount": { "type": "integer", "minimum": 0 }, "warningCount": { "type": "integer", "minimum": 0 },
+					"status": { "type": "string", "enum": ["ready", "warming"] },
+					"view": { "type": "string", "enum": ["full", "summary"] },
+					"matchedCount": { "type": "integer", "minimum": 0 }, "returnedCount": { "type": "integer", "minimum": 0, "maximum": 50 },
+					"projects": { "type": "array", "maxItems": 50, "items": { "$ref": "#/components/schemas/Project" } },
+					"nextCursor": { "type": ["string", "null"] }
+				},
+				"additionalProperties": false
+			},
+			"Error": {
+				"type": "object", "required": ["error"],
+				"properties": { "error": { "type": "string", "enum": ["INVALID_QUERY", "INVALID_CURSOR", "CURSOR_QUERY_MISMATCH", "SNAPSHOT_CHANGED"] } },
+				"additionalProperties": false
+			}
+		}
+	}
+}

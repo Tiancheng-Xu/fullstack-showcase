@@ -35,17 +35,18 @@ export function TechnologyCapabilityMap() {
   useEffect(() => {
     const canvas = canvasRef.current;
     const section = sectionRef.current;
-    if (!canvas || !section) return undefined;
+    if (!canvas || !section || window.innerWidth <= 900) return undefined;
 
     const reducedMotion =
       typeof window.matchMedia === "function" &&
       window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reducedMotion) return undefined;
     const sceneEligible = shouldEnableVoyageScene({
         reducedMotion,
         viewportWidth: window.innerWidth,
         webglAvailable: hasWebGLSupport(),
       });
-    if (window.innerWidth <= 900 || !sceneEligible) {
+    if (!sceneEligible) {
       return undefined;
     }
 

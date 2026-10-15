@@ -60,6 +60,14 @@ export function PortfolioVoyageHero({ forceStatic = false }: PortfolioVoyageHero
 		>("static");
 	const [loadingProgress, setLoadingProgress] = useState(0);
 	const [cameraPreset, setCameraPreset] = useState<VoyageCameraPreset>("overview");
+	const [mobileViewport, setMobileViewport] = useState(false);
+
+	useEffect(() => {
+		const updateViewport = () => setMobileViewport(window.innerWidth < 768);
+		updateViewport();
+		window.addEventListener("resize", updateViewport);
+		return () => window.removeEventListener("resize", updateViewport);
+	}, []);
 
 	useEffect(() => {
 		if (forceStatic || typeof window.IntersectionObserver !== "function") return;
@@ -84,7 +92,9 @@ export function PortfolioVoyageHero({ forceStatic = false }: PortfolioVoyageHero
 					observer.unobserve(entry.target);
 				}
 			},
-			{ threshold: 0.08, rootMargin: "0px 0px -6% 0px" },
+			// A long resume can exceed the viewport by more than 12.5x. Waiting
+			// for 8% of its area would leave it unrevealed on short mobile screens.
+			{ threshold: 0, rootMargin: "0px 0px -6% 0px" },
 		);
 		targets.forEach((target) => observer.observe(target));
 		return () => {
@@ -98,7 +108,10 @@ export function PortfolioVoyageHero({ forceStatic = false }: PortfolioVoyageHero
 	}, [forceStatic]);
 
   useEffect(() => {
-    if (forceStatic || !canvasRef.current) return;
+    if (forceStatic || !canvasRef.current || window.innerWidth < 768) {
+			setSceneState("static");
+			return;
+		}
 		const reducedMotion =
 			typeof window.matchMedia === "function" &&
 			window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -110,6 +123,11 @@ export function PortfolioVoyageHero({ forceStatic = false }: PortfolioVoyageHero
     if (!enabled) return;
 
 		let disposed = false;
+		const cancellation = new AbortController();
+		const abortOnMobile = () => {
+			if (window.innerWidth < 768) cancellation.abort();
+		};
+		window.addEventListener("resize", abortOnMobile);
 		let dispose: (() => void) | undefined;
 		let idleHandle: number | undefined;
 		let firstPaintFrame: number | undefined;
@@ -123,7 +141,7 @@ export function PortfolioVoyageHero({ forceStatic = false }: PortfolioVoyageHero
 			cancelIdleCallback?: (handle: number) => void;
 		};
 		const loadScene = () => {
-				if (disposed) return;
+				if (disposed || cancellation.signal.aborted) return;
 				setLoadingProgress(12);
 				setSceneState("loading");
 				progressTimer = window.setInterval(() => {
@@ -133,8 +151,9 @@ export function PortfolioVoyageHero({ forceStatic = false }: PortfolioVoyageHero
 				}, 140);
 				void import("./portfolio-voyage-scene")
 				.then(async ({ mountPortfolioVoyageScene }) => {
-					if (disposed || !canvasRef.current) return;
+					if (disposed || cancellation.signal.aborted || !canvasRef.current) return;
 					const controller = await mountPortfolioVoyageScene(canvasRef.current, {
+						signal: cancellation.signal,
 						onTwosComplementScreenPosition: ({ x, y, visible }) => {
 							const label = twosComplementRef.current;
 							if (!label || window.innerWidth < 768) return;
@@ -174,19 +193,25 @@ export function PortfolioVoyageHero({ forceStatic = false }: PortfolioVoyageHero
 							title.dataset.boatNear = titleInfluence > .08 ? "true" : "false";
 						},
 					});
+					if (disposed || cancellation.signal.aborted) {
+						controller.dispose();
+						return;
+					}
 					sceneControllerRef.current = controller;
 					dispose = controller.dispose;
 						if (progressTimer !== undefined) window.clearInterval(progressTimer);
 						if (!disposed) {
 							setLoadingProgress(100);
 							window.setTimeout(() => {
-								if (!disposed) setSceneState("active");
+								if (!disposed && !cancellation.signal.aborted) setSceneState("active");
 							}, 180);
 						}
 					})
-					.catch(() => {
+					.catch((error) => {
 						if (progressTimer !== undefined) window.clearInterval(progressTimer);
-						if (!disposed) setSceneState("failed");
+						if (error?.name === "AbortError") return;
+						if (disposed || cancellation.signal.aborted) console.error("Voyage scene initialization or cleanup failed", error);
+						else setSceneState("failed");
 				});
 		};
 
@@ -206,6 +231,8 @@ export function PortfolioVoyageHero({ forceStatic = false }: PortfolioVoyageHero
 
 		return () => {
 			disposed = true;
+			cancellation.abort();
+			window.removeEventListener("resize", abortOnMobile);
 			window.removeEventListener("load", scheduleAfterFirstPaint);
 			if (firstPaintFrame !== undefined) window.cancelAnimationFrame(firstPaintFrame);
 			if (settledPaintFrame !== undefined) window.cancelAnimationFrame(settledPaintFrame);
@@ -231,7 +258,7 @@ export function PortfolioVoyageHero({ forceStatic = false }: PortfolioVoyageHero
 				}
 			}
 		};
-  }, [forceStatic]);
+  }, [forceStatic, mobileViewport]);
 
 	const chooseCamera = (preset: VoyageCameraPreset) => {
 		setCameraPreset(preset);

@@ -1,8 +1,33 @@
 module.exports = async (page) => {
 	page.__visualPageErrors = [];
+	// Full-document captures must rasterize offscreen backdrop-filter layers.
+	// Responsive geometry/hit gates still run at the configured real viewport.
+	const screenshot = page.screenshot.bind(page);
+	page.screenshot = (options) => screenshot(
+		options?.fullPage ? { ...options, captureBeyondViewport: false } : options,
+	);
 	page.on("pageerror", (error) => {
 		page.__visualPageErrors.push(error.message);
 	});
+	await page.emulateTimezone("UTC");
+	page.__visualLocaleSession = await page.target().createCDPSession();
+	await page.__visualLocaleSession.send("Emulation.setLocaleOverride", {
+		locale: "zh-CN",
+	});
+	await page.setExtraHTTPHeaders({ "Accept-Language": "zh-CN,zh;q=0.9" });
+	// Fixed fixture time prevents freshness labels from becoming moving pixel targets.
+	const fixtureTime = Date.parse("2026-10-13T12:00:00Z");
+	await page.evaluateOnNewDocument((epoch) => {
+		const RealDate = Date;
+		function FixtureDate(...args) {
+			if (!new.target) return new RealDate(epoch).toString();
+			return Reflect.construct(RealDate, args.length ? args : [epoch], new.target);
+		}
+		Object.setPrototypeOf(FixtureDate, RealDate);
+		FixtureDate.prototype = RealDate.prototype;
+		FixtureDate.now = () => epoch;
+		window.Date = FixtureDate;
+	}, fixtureTime);
 	await page.setRequestInterception(true);
 	page.on("request", async (request) => {
 		const url = request.url();
@@ -12,7 +37,7 @@ module.exports = async (page) => {
 			return;
 		}
 		if (pathname === "/api/performance/status") {
-			const now = new Date(Date.now() - 60_000);
+			const now = new Date(fixtureTime - 60_000);
 			await request.respond({
 				status: 200,
 				contentType: "application/json",

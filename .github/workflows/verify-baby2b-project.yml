@@ -21,7 +21,7 @@ jobs:
       node-version: "22"
       pnpm-version: "11.17.0"
       install-command: pnpm --dir apps/web install --frozen-lockfile
-      test-command: pnpm test
+      test-command: node --test apps/web/apps/web/scripts/backstop-environment.checks.cjs apps/web/apps/web/scripts/visual-route.checks.cjs apps/web/apps/web/scripts/visual-dom-contract.checks.cjs && pnpm test
       typecheck-command: pnpm typecheck
       build-command: pnpm build
       publish-config-path: .github/baby2b-publish.yml

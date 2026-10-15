@@ -5,7 +5,7 @@ const { arch, platform } = require("node:os");
 const macChrome =
 	"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
 const visualEnvironment = {
-	browser: "Google Chrome 153.0.8010.50",
+	browser: "Google Chrome 155.0.8059.40",
 	platform: "darwin",
 	architecture: "arm64",
 	locale: "zh-CN",
@@ -51,6 +51,10 @@ const routes = [
 	["evidence", "/evidence"],
 	["open-source", "/open-source"],
 	["performance-control", "/performance-control/babysteps"],
+	["sharing", "/sharing"],
+	["ai-conferences", "/ai-conferences"],
+	["ai-conference-note", "/ai-conference-notes/yunqi-2026"],
+	["sharing-note", "/sharing-notes/overreacted/what-is-javascript-made-of"],
 ];
 
 module.exports = {
@@ -82,16 +86,16 @@ module.exports = {
 		onReadyScript: "puppet/onReady.cjs",
 	}),
 	paths: {
-		bitmaps_reference: "backstop_data/bitmaps_reference",
-		bitmaps_test: "backstop_data/bitmaps_test",
+		bitmaps_reference: "backstop_data/baselines/chrome155-darwin-arm64-software-content-20261015/bitmaps_reference",
+		bitmaps_test: "backstop_data/baselines/chrome155-darwin-arm64-software-content-20261015/bitmaps_test",
 		engine_scripts: "backstop_data/engine_scripts",
-		html_report: "backstop_data/html_report",
-		ci_report: "backstop_data/ci_report",
+		html_report: "backstop_data/baselines/chrome155-darwin-arm64-software-content-20261015/html_report",
+		ci_report: "backstop_data/baselines/chrome155-darwin-arm64-software-content-20261015/ci_report",
 	},
-	report: ["browser"],
+	report: ["CI"],
 	engine: "puppeteer",
 	engineOptions: {
-		args: ["--disable-dev-shm-usage", "--lang=zh-CN", "--no-sandbox"],
+		args: ["--disable-dev-shm-usage", "--lang=zh-CN", "--no-sandbox", "--disable-gpu"],
 		executablePath: chromeExecutable,
 	},
 	asyncCaptureLimit: 1,

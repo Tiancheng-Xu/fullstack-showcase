@@ -1,0 +1,5 @@
+**/bitmaps_test/
+**/html_report/
+**/ci_report/
+**/bitmaps_reference/*
+!**/bitmaps_reference/*.png

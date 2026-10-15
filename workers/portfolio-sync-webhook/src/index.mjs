@@ -1,3 +1,6 @@
+import openapi from "./openapi.json" with { type: "json" };
+import { jsonReadback, projectReadback } from "./project-readback.mjs";
+
 const INDEX_KEY = "portfolio:index";
 const INSTALLATION_KEY = "github:installation-id";
 const MAX_WEBHOOK_BYTES = 2_000_000;
@@ -9,20 +12,12 @@ export default {
 		if (request.method === "OPTIONS") {
 			return cors(new Response(null, { status: 204 }));
 		}
-		if (request.method === "GET" && url.pathname === "/projects.json") {
+		if (["GET", "HEAD"].includes(request.method) && url.pathname === "/openapi.json") {
+			return cors(await jsonReadback(request, JSON.stringify(openapi)));
+		}
+		if (["GET", "HEAD"].includes(request.method) && url.pathname === "/projects.json") {
 			const envelope = await env.PORTFOLIO.get(INDEX_KEY, "json");
-			return cors(
-				Response.json(
-					envelope ?? {
-						schemaVersion: 1,
-						generatedAt: new Date(0).toISOString(),
-						projectCount: 0,
-						projects: [],
-						status: "warming",
-					},
-					{ headers: { "Cache-Control": "public, max-age=30, s-maxage=30" } },
-				),
-			);
+			return cors(await projectReadback(request, envelope));
 		}
 		if (request.method === "GET" && url.pathname === "/health") {
 			const envelope = await env.PORTFOLIO.get(INDEX_KEY, "json");
@@ -448,8 +443,9 @@ function hexBytes(value) {
 function cors(response) {
 	const headers = new Headers(response.headers);
 	headers.set("Access-Control-Allow-Origin", "*");
-	headers.set("Access-Control-Allow-Methods", "GET, OPTIONS");
-	headers.set("Access-Control-Allow-Headers", "Accept, Content-Type");
+	headers.set("Access-Control-Allow-Methods", "GET, HEAD, OPTIONS");
+	headers.set("Access-Control-Allow-Headers", "Accept, Content-Type, If-None-Match");
+	headers.set("Access-Control-Expose-Headers", "ETag, Content-Length");
 	return new Response(response.body, {
 		status: response.status,
 		statusText: response.statusText,

@@ -1,3 +1,4 @@
+import { PrdCompanionNarratives } from "./prd-companion-narratives";
 import {
 	Activity,
 	ArrowUpRight,
@@ -41,6 +42,7 @@ export function DashboardContent() {
 		"shared-evidence-verifier",
 		"portfolio-sync",
 		"personal-ai-agent",
+		"office-workflow-agent",
 		"github-profile-studio",
 		"fullstack-showcase",
 		"tc-workflow",
@@ -79,6 +81,7 @@ export function DashboardContent() {
 				"用于集中证明全栈、多运行时、安全边界和作品组织能力，不计入兼职或客户项目经历。",
 			projectIds: [
 				"personal-ai-agent",
+				"office-workflow-agent",
 				"github-profile-studio",
 				"fullstack-showcase",
 				"tc-workflow",
@@ -88,10 +91,10 @@ export function DashboardContent() {
 	];
 	const professionalExperiences = [
 		{
-			period: "2026",
+			period: "2025.06–2026.10",
 			title: "北京阿拉丁科技（兼职）",
 			location: "全栈工程师（AI Agent / Web3）",
-			body: "参与 AI Agent 与 Web3 平台的 Web 端和全栈协作，连接任务发布、异步状态与结果反馈。",
+			body: "担任高级前端并承担全栈交付职责，主控本人负责的 AI Agent / Web3 产品需求、方案与交付，连接任务发布、异步状态与结果反馈；Agent Market 与 BabySteps 归入该兼职经历，具体模块与协作边界分别说明。",
 			bullets: [
 				"参与任务发布与编辑、语义分类、子任务拆解、Agent 匹配派发、执行状态和结果聚合等端到端流程。",
 				"使用 React、Vite、Next.js、TypeScript 开发前端，协同 PostgreSQL / pgvector、GraphQL、Webhook / SSE、消息队列及 AWS 完成异步任务、并发控制和状态联调。",
@@ -102,13 +105,13 @@ export function DashboardContent() {
 			period: "2023–2026",
 			title: "政企低零代码 / FDE 工程师",
 			location: "宁波市公安局 · 驻场交付",
-			body: "驻场服务宁波市公安局科信、特警等相关业务部门，参与政企低零代码与 FDE 应用交付；将业务需求转为应用、接口和验收条目，围绕模块复用、系统集成与状态联动推进开发。与市局、分局科信部门及派出所保持业务沟通，协调需求变更、联调验收和持续迭代；连续交付使工程能力由前台实现拓展至前中台协作、模块边界设计和问题闭环。",
+			body: "驻场服务宁波市公安局科信、特警等相关业务部门，主控本人负责的政企低零代码与 FDE 应用交付；将业务需求转为输入、规则、输出和验收条目，权衡平台复用与定制开发，推进模块划分、系统集成和状态联动。与市局、分局科信部门及派出所保持业务沟通，协调需求变更、联调验收和上线迭代；连续交付使工程能力由前台实现拓展至前中台协作、方案取舍和问题闭环。",
 		},
 		{
 			period: "2020–2023",
 			title: "中兴软创 · 交警大屏 FDE 工程师",
 			location: "宁波市交警局 · 驻场交付",
-			body: "就职于中兴软创，驻场宁波市交警局，参与交警大屏 FDE 项目建设；负责可视化展示应用与中台能力的工程实现，围绕模块复用、数据呈现、交互状态联动和页面性能开展开发与联调。结合现场业务反馈定位问题、推进需求落地与验收交付，并持续改进大屏运行的稳定性和可维护性。",
+			body: "就职于中兴软创，驻场宁波市交警局，主控本人负责的交警大屏应用与中台模块交付；从业务口径和数据接口出发，组织可视化模块、交互状态联动与现场联调验收。结合业务反馈定位页面性能和运行问题，推进上线迭代，持续改进模块复用、稳定性和可维护性。",
 		},
 	];
 	const personalProfile = {
@@ -126,9 +129,9 @@ export function DashboardContent() {
 	const partTimeProjects = [
 		{
 			title: "Agent Market",
-			meta: "任务分发与可恢复执行 · V1 历史交付 / 当前开发扩展",
+			meta: "主控 · 已上线任务分发产品 / 当前增强版本分列",
 			bullets: [
-				"现有开发分支围绕任务派发、审批、执行和结果验收，以 LangGraph 任务图串联候选 Agent 过滤评分、评审与有限修复，用确定性 Gate 控制交付。",
+				"主控任务发布、匹配、审批与交付的产品闭环，明确模型判断、业务规则和工具授权的分工；当前增强分支以 LangGraph 任务图组织评审与有限修复。",
 				"用 Checkpoint 恢复流程进度、操作账本记录动作身份与结果状态，避免把恢复当作重放；审批绑定任务版本与方案指纹，结果未知时先核对再决定是否重试。",
 				"V1 保留已验证生产 Evidence；当前多模型路由与 Checkpoint 开发扩展尚未发布，按代码 / 本地验证描述。",
 			],
@@ -137,7 +140,7 @@ export function DashboardContent() {
 			title: "BabySteps",
 			meta: "全栈 / Edge Web3",
 			bullets: [
-				"参与成长任务、家长中心与链上交互的全栈协作；分别校验钱包连接、网络就绪、业务授权和交易确认。",
+				"主控家庭成长产品的方案与上线交付，连接成长任务、家长中心与链上交互；分别校验钱包连接、网络就绪、业务授权和交易确认，保留 Sepolia 与实际业务范围。",
 				"以 Edge SSR 提供受控初始化，按路径、版本和 DOM 前提接管水合；未捕获错误或同步异常触发受控 CSR 回退，可恢复错误仅记录。",
 				"隔离服务端、身份和钱包边界，通过性能观测检查页面表现；区分真实样本、无样本与不可采集，历史快照仅作为历史参考。",
 			],
@@ -146,7 +149,7 @@ export function DashboardContent() {
 			title: "Aladdin Web3 Agent",
 			meta: "AI Agent 分布式任务调度 / Web3 Agent 平台",
 			bullets: [
-				"参与 Job 编辑与发布流程，覆盖分类、标签、预算、时限、技能和交付物，并支持自动拆解与人工编排。",
+				"主控本人负责的 Job 编辑与发布交付，覆盖分类、标签、预算、时限、技能和交付物，权衡自动拆解与人工编排；相关接口与平台能力按实际协作范围说明。",
 				"参与 Agent 匹配、派发、生命周期、异步反馈和结果聚合；以请求 ID、Webhook / SSE、消息队列和并发控制串联任务状态。",
 				"参与联调 MetaMask、合约托管 / 结算、IPFS / 链上证据与 AI 内容生产接口。",
 			],
@@ -156,13 +159,18 @@ export function DashboardContent() {
 	const personalEngineeringShowcases = [
 		{
 			title: "Personal AI Agent",
-			meta: "本地知识问答 / 私有化模型实践",
-			body: "本地检索编排分支以 Markdown 分块、BM25 / 向量混合召回、RRF 与相关度重排组织带来源回答，并为向量或重排服务异常设置回退。引用规则覆盖 ID 校验与空证据拒答，语义质量评测待补。历史 Qwen3-8B 微调、量化与 Ollama 本地运行使用同一 49 条冻结集比较版本；业务工具与转人工仍按系统方案描述。",
+			meta: "主控 · 私有知识产品 / 本机模型交付",
+			body: "主控私有知识产品与模型交付，分开处理事实检索和模型行为训练。当前检索分支以 Markdown 分块、BM25 / 向量混合召回、RRF 与重排组织带来源回答，并处理故障回退和用户取消；引用编号校验不等于语义支持，后者仍待评测。Qwen3-8B 微调、量化与 Ollama 本机交付和静态网站分别说明，业务工具与转人工保留方案边界。",
+		},
+		{
+			title: "OfficeFlow 办公流程 Agent",
+			meta: "主控 · 已上线办公流程产品",
+			body: "将业务需求转为可信字段，经版本批准后执行并独立核对结果；重点设计人工审批、API / Browser 分工与结果未知时的恢复。已有合成工作区生产交付，当前版本采用规则提案且模型关闭；不把点击成功当业务完成，不把合成数据计为真实采购业绩，OCR 增强仍待验。",
 		},
 		{
 			title: "GitHub Profile Studio",
 			meta: "React、TanStack Router、Hono / Go、SQLite",
-			body: "构建本地优先的 GitHub 公开资料工作台，以统一 API 契约验证 Hono / Node 与 Go 双后端，并通过服务端白名单和 macOS 钥匙串隔离浏览器凭据。",
+			body: "主控本地优先的 GitHub 公开资料工作台，以统一 API 契约适配 Hono / Node 与 Go 双后端，使用 SQLite 保存白名单字段，通过服务端与 macOS 钥匙串隔离凭据。本机产品交付与公网 API 托管是不同范围；本地保存不等于修改 GitHub 账号或 Profile README。",
 		},
 		{
 			title: "Showcase Dashboard",
@@ -172,7 +180,7 @@ export function DashboardContent() {
 		{
 			title: "Portfolio Sync",
 			meta: "GitHub App、Cloudflare Workers、KV、HMAC",
-			body: "以 GitHub App Webhook、HMAC 验签与 Cloudflare Worker/KV 汇总真实项目发布清单，并用定时任务补齐事件遗漏；难点是同步状态、静态首屏与项目自有 Evidence 的一致性。",
+			body: "以 GitHub App Webhook、HMAC 验签与 Cloudflare Worker/KV 汇总真实项目发布清单，并用定时任务补齐事件遗漏；难点是同步状态、静态首屏与项目自有 Evidence 的一致性。当前增强实现只读 OpenAPI 契约、摘要与按项目读取、分页及 ETag / 304 / HEAD；尚未部署，不改变已审核的项目叙事与证据链接。",
 		},
 		{
 			title: "性能观测与成本控制",
@@ -215,14 +223,14 @@ export function DashboardContent() {
 					/>
 					<div className="portfolio-dashboard-module-card portfolio-glass-panel mt-5 border border-[#cfd5db] bg-white/84 p-5 shadow-sm md:p-8">
 						<p className="text-[#344252] text-base leading-8">
-							拥有 8 年软件开发经验，长期参与宁波交警大屏与政企低零代码项目的 FDE 驻场交付，连接业务需求、应用 / API、联调与验收。关注 AI Agent 与 AI 全栈工程中的任务状态与恢复、工具授权、带来源检索和失败降级；结合 Web3 与 Cloud / Edge 实践，解释异步交互、钱包及运行边界。持续参与开源共建，围绕源码排障、兼容性修复与工程维护贡献改进，并与上游维护者协作迭代。
+							拥有 8 年软件开发经验，具备宁波交警大屏与政企低零代码项目的 FDE 驻场交付经验，主控本人负责的需求澄清、方案取舍、应用 / API、联调验收与上线迭代。主控 AI Agent、全栈与工程工具产品，连接业务价值、任务状态、工具授权、带来源检索和失败恢复；项目已上线或完成本机交付，当前增强版本与对应证据分开说明。持续参与开源共建，围绕源码排障、兼容性修复与工程维护贡献改进，并与上游维护者协作迭代。
 						</p>
 						<div className="resume-core-capabilities mt-8">
 							<h3 className="font-semibold font-serif text-[#071d34] text-lg">核心能力</h3>
 							<ol className="mt-4 grid gap-3 text-[#344252] text-sm leading-7 md:text-base">
 								<li className="grid grid-cols-[2.75rem_1fr] gap-3 border border-[#d8cfbd] bg-[#f8f3e8]/70 p-4">
 									<span className="font-bold font-serif text-[#b21f35] text-lg">01</span>
-									<p>全栈交付：参与宁波政企应用开发、接口联调与验收迭代，将业务需求转为应用功能、接口契约与可验收结果。</p>
+									<p>全栈与 FDE：主控本人负责的需求、方案和交付，将业务问题转为应用功能、接口契约与验收结果，权衡复用与定制，并推动上线迭代。</p>
 								</li>
 								<li className="grid grid-cols-[2.75rem_1fr] gap-3 border border-[#d8cfbd] bg-[#f8f3e8]/70 p-4">
 									<span className="font-bold font-serif text-[#b21f35] text-lg">02</span>
@@ -243,7 +251,7 @@ export function DashboardContent() {
 								<li className="grid grid-cols-[2.75rem_1fr] gap-3 border border-[#d8cfbd] bg-[#f8f3e8]/70 p-4">
 									<span className="font-bold font-serif text-[#b21f35] text-lg">06</span>
 									<p>
-										主动学习与知识沉淀：我围绕计算机系统、Python、AI 与前端工程持续学习，结合课程、技术文章和会议资料梳理知识之间的联系，记录自己的理解、疑问与待实践的问题，并在 Share 分享阶段思考。
+										主动学习与知识沉淀：我围绕计算机系统、Python、AI 与前端工程持续学习，结合课程、技术文章和会议资料梳理知识之间的联系，记录自己的理解、疑问与待实践的问题，并在 Share 分享阶段思考。主动跟踪 WebMCP、Agentic Web 与 MCP 等前沿技术及标准演进，关注网页工具化、Agent 互操作与权限 / 人工确认边界，将趋势研究连接到企业 AI 应用的技术选型与方案设计。在 Portfolio Sync 增强中实现只读契约、按需读取与条件请求；增强源码已交付，尚未部署。
 										<a className="ml-2 inline-flex min-h-11 items-center font-semibold text-[#b21f35] underline underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-4" href="/sharing/#learning-journal">阅读学习手记 <span aria-hidden="true">↗</span></a>
 									</p>
 								</li>
@@ -318,7 +326,7 @@ export function DashboardContent() {
 								项目经历
 							</h3>
 							<p className="mt-1 text-[#5a6470] text-xs leading-relaxed">
-								按实际参与职责整理；公开作品与客户项目分别说明，不把规划或模板包装成项目经历。
+								按本人主控的产品交付整理，区分工作归属、具体模块与协作；已上线产品和当前增强版本分别说明。
 							</p>
 							<div className="mt-4 grid gap-4 md:grid-cols-2">
 								{partTimeProjects.map((block) => (
@@ -332,8 +340,9 @@ export function DashboardContent() {
 								个人工程能力与作品系统
 							</h3>
 							<p className="mt-1 text-[#5a6470] text-xs leading-relaxed">
-								以下项目用于展示个人工程能力，不作为兼职或客户项目经历。
+								以下为本人主控的个人产品与工程工具，分别说明公网发布、本机交付和当前增强范围，不重复计入兼职或客户经历。
 							</p>
+								<PrdCompanionNarratives />
 							<div className="mt-4 grid gap-4 md:grid-cols-2">
 								{personalEngineeringShowcases.map((block) => (
 									<ResumeProjectCard block={block} key={block.title} />

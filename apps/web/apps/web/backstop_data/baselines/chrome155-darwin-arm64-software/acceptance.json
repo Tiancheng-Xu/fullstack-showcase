@@ -1,0 +1,49 @@
+{
+  "schema": "VisualBaselineAcceptance v1",
+  "environment": {
+    "browser": "Google Chrome 155.0.8059.40",
+    "platform": "darwin",
+    "architecture": "arm64",
+    "locale": "zh-CN",
+    "timezone": "UTC",
+    "deviceScaleFactor": 1
+  },
+  "renderer": "software; --disable-gpu",
+  "documentCapture": "captureBeyondViewport=false, expanded full-document viewport for complete offscreen rasterization",
+  "physicalViewportChecks": "separate Playwright/preflight at original dimensions",
+  "fixtureTime": "2026-10-13T12:00:00Z",
+  "referenceCount": 38,
+  "referenceSetSha256": "237fe9a89e11350114d59bc698a5c1e8841961bc81d37bb26ca4d9ff1b7b0aae",
+  "mismatchThresholdPercent": 0.1,
+  "requireSameDimensions": true,
+  "original153ReferencesPreserved": true,
+  "userApprovedMigration": true,
+  "sourceReview": {
+    "provider": "codex",
+    "model": "gpt-6.1-sol",
+    "verdict": "pass"
+  },
+  "freshPixelRegression": {
+    "passed": 38,
+    "total": 38
+  },
+  "physicalDomPreflight": {
+    "passed": 38,
+    "total": 38
+  },
+  "playwright": {
+    "passed": 81,
+    "total": 81
+  },
+  "native": {
+    "passed": 25,
+    "total": 25
+  },
+  "finalImageReview": {
+    "provider": "codex",
+    "model": "gpt-6.1-sol",
+    "verdict": "pass",
+    "coverage": "13 upper/lower paired regions; original physical geometry, scrolling and footer hit targets separately tested"
+  },
+  "production": "not-published"
+}

@@ -17,8 +17,10 @@ describe("portfolio interview narratives", () => {
 		expect(project?.summaryPoints).toEqual(
 			expect.arrayContaining([
 				expect.stringContaining("确定性 Gate"),
-				expect.stringContaining("V1 保留已验证生产 Evidence"),
-				expect.stringContaining("代码 / 本地验证"),
+				expect.stringContaining("已完成 Queen / DAG"),
+				expect.stringContaining("已完成 Checkpoint 与动作账本"),
+				expect.stringContaining("公开 Evidence 按对应发布版本核对"),
+				expect.stringContaining("未交付设计不计入已完成能力"),
 			]),
 		);
     expect(project?.skills).toEqual(
@@ -73,16 +75,24 @@ describe("portfolio interview narratives", () => {
       "utf8",
     );
 
-		expect(source).toContain("参与 AI Agent 与 Web3 平台的 Web 端和全栈协作");
+		expect(source).toContain("主控本人负责的 AI Agent / Web3 产品需求、方案与交付");
+		expect(source).toContain("担任高级前端并承担全栈交付职责");
+		expect(source).toContain("2025.06–2026.10");
+		expect(source).toContain("Agent Market 与 BabySteps 归入该兼职经历");
 		expect(source).toContain("北京阿拉丁科技（兼职）");
 		expect(source).toContain("全栈工程师（AI Agent / Web3）");
 		expect(source).toContain("任务发布与编辑、语义分类、子任务拆解");
 		expect(source).toContain("请求 ID、Webhook / SSE、消息队列和并发控制");
 		expect(source).toContain("MetaMask、合约托管 / 结算、IPFS / 链上证据");
 		expect(source).toContain("项目经历");
-		expect(source).toContain("本地知识问答 / 私有化模型实践");
-		expect(source).toContain("候选 Agent 过滤评分");
-		expect(source).toContain("同一 49 条冻结集");
+		expect(source).toContain("主控 · 私有知识产品 / 本机模型交付");
+		expect(source).toContain("明确模型判断、业务规则和工具授权的分工");
+		expect(source).toContain("开发扩展尚未发布，按代码 / 本地验证描述");
+		expect(source).toContain("引用编号校验不等于语义支持");
+		expect(source).toContain("Qwen3-8B 微调、量化与 Ollama 本机交付和静态网站分别说明");
+		expect(source).toContain("OfficeFlow 办公流程 Agent");
+		expect(source).toContain("当前版本采用规则提案且模型关闭");
+		expect(source).toContain("不把合成数据计为真实采购业绩，OCR 增强仍待验");
 		expect(source).toContain("uncertain / manual_review");
 		expect(source).toContain("SLO / Runbook");
 		expect(source).toContain(".text / .data / .bss");
@@ -93,4 +103,37 @@ describe("portfolio interview narratives", () => {
 		expect(source).toContain("17855813990");
 		expect(source).not.toMatch(/ANETU|TUG|67%|UZFI|Claw|Acons/);
 	});
+});
+
+describe("PRD public narrative boundaries", () => {
+  it("keeps curated projects and evidence while separating design from delivery", () => {
+    expect(PORTFOLIO_PROJECTS).toHaveLength(13);
+    for (const project of PORTFOLIO_PROJECTS) {
+      expect(project.summaryPoints).toHaveLength(3);
+      expect(JSON.stringify([project.desc, project.summaryPoints])).not.toMatch(
+        /\/Users\/|codex:\/\/threads|作业|一灯|yideng/,
+      );
+    }
+    const office = PORTFOLIO_PROJECTS.find((project) => project.id === "office-workflow-agent");
+    expect(office?.evidenceUrl).toBe("https://office-workflow-agent.baby2b.online/evidence/");
+    expect(office?.summaryPoints?.join(" ")).toContain("扩展设计");
+    expect(office?.summaryPoints?.join(" ")).toContain("合成工作区");
+    expect(PORTFOLIO_PROJECTS.find((project) => project.id === "hatch-pet")?.summaryPoints?.join(" ")).toContain("公开仓库未展示生成器");
+  });
+  it("places companion products inside the existing personal engineering section", () => {
+    const source = readFileSync(
+      resolve(process.cwd(), "src/features/portfolio/dashboard-content.tsx"),
+      "utf8",
+    );
+    expect(source).toContain("<PrdCompanionNarratives />");
+    expect(source).toContain("个人工程能力与作品系统");
+    const companionSource = readFileSync(
+      resolve(process.cwd(), "src/features/portfolio/prd-companion-narratives.tsx"),
+      "utf8",
+    );
+    for (const title of ["售后 Agent 工作台", "Hono GitHub 资料云服务", "WeChat Intent HUD", "Codex Translate", "知识整理与证据管线", "Codex Mascot / BaoBao Puff"]) {
+      expect(companionSource).toContain(title);
+    }
+    expect(companionSource).not.toMatch(/https:\/\/[^" ]+|\/Users\/|作业|一灯|yideng/);
+  });
 });
