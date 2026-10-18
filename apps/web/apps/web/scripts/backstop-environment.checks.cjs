@@ -15,7 +15,7 @@ const source = readFileSync(resolve(__dirname, "../backstop.config.cjs"), "utf8"
 
 function loadConfig(overrides = {}) {
 	const values = {
-		browser: "Google Chrome 155.0.8059.40",
+		browser: "Google Chrome 155.0.8059.80",
 		platform: "darwin",
 		architecture: "arm64",
 		exists: true,
@@ -48,7 +48,7 @@ function loadConfig(overrides = {}) {
 
 test("accepts only the pinned reviewed Chrome build", () => {
 	assert.equal(loadConfig().engineOptions.executablePath, "/isolated/chrome");
-	for (const browser of ["Google Chrome 153.0.8010.50", "Google Chrome 155.0.8059.41", "Chromium 155.0.8059.40"]) {
+	for (const browser of ["Google Chrome 153.0.8010.50", "Google Chrome 155.0.8059.40", "Google Chrome 155.0.8059.81", "Chromium 155.0.8059.80"]) {
 		assert.throws(() => loadConfig({ browser }), /Visual environment mismatch/);
 	}
 });
@@ -71,7 +71,7 @@ test("preserves the rendering contract and mismatch threshold", () => {
 });
 
 test("uses the explicitly adopted content revision separately from both old baselines", () => {
-	assert.equal(loadConfig().paths.bitmaps_reference, "backstop_data/baselines/chrome155-darwin-arm64-software-actions-20261018/bitmaps_reference");
+	assert.equal(loadConfig().paths.bitmaps_reference, "backstop_data/baselines/chrome155-darwin-arm64-software-commercial-20261018-8059-80/bitmaps_reference");
 });
 
 test("preserves all sixty original reference PNG hashes", () => {
@@ -107,7 +107,6 @@ test("preserves all ninety-eight prior reference PNG hashes after the action rev
 });
 
 test("adopts only nine attributed action references and carries forward twenty-nine", () => {
-	const config = loadConfig();
 	const receipt = JSON.parse(readFileSync(resolve(__dirname, "../backstop_data/baselines/chrome155-darwin-arm64-software-actions-20261018/acceptance.json"), "utf8"));
 	assert.equal(receipt.parentBaseline, "chrome155-darwin-arm64-software-content-20261015");
 	assert.equal(receipt.humanApproval.adopted, true);
@@ -121,8 +120,45 @@ test("adopts only nine attributed action references and carries forward twenty-n
 	assert.equal(receipt.review.fullStagedCases, 38);
 	for (const control of receipt.review.controlMetrics) assert.equal(control.oldControlExactDifferentPixels, 0);
 	for (const reference of receipt.references) {
-		const bytes = readFileSync(resolve(__dirname, "..", config.paths.bitmaps_reference, reference.file));
+		const bytes = readFileSync(resolve(__dirname, "../backstop_data/baselines/chrome155-darwin-arm64-software-actions-20261018/bitmaps_reference", reference.file));
 		assert.equal(createHash("sha256").update(bytes).digest("hex"), reference.sha256, reference.file);
+	}
+});
+
+test("preserves prior images and adopts only independently reviewed commercial and narrative changes", () => {
+	const baseline = "backstop_data/baselines/chrome155-darwin-arm64-software-commercial-20261018-8059-80";
+	const receipt = JSON.parse(readFileSync(resolve(__dirname, "..", baseline, "acceptance.json"), "utf8"));
+	assert.equal(receipt.parentBaseline, "chrome155-darwin-arm64-software-actions-20261018");
+	assert.equal(receipt.browser, "Google Chrome 155.0.8059.80");
+	assert.equal(receipt.thresholdPercent, 0.1);
+	assert.equal(receipt.requireSameDimensions, true);
+	assert.equal(receipt.protectedPriorReferences.length, 136);
+	assert.equal(receipt.references.length, 38);
+	assert.equal(receipt.references.filter((entry) => entry.origin === "reviewed-candidate").length, 10);
+	assert.equal(receipt.references.filter((entry) => entry.origin === "carried-forward").length, 28);
+	assert.equal(receipt.review.verdict, "pass");
+	assert.equal(receipt.review.stableCandidateCases, 10);
+	assert.equal(receipt.review.fullStagedCases, 38);
+	assert.equal(receipt.review.unexplainedCases, 0);
+	const parent = JSON.parse(readFileSync(resolve(__dirname, "../backstop_data/baselines/chrome155-darwin-arm64-software-actions-20261018/acceptance.json"), "utf8"));
+	const parentHashes = new Map(parent.references.map((entry) => [entry.file, entry.sha256]));
+	assert.equal(parentHashes.size, 38);
+	assert.equal(new Set(receipt.references.map((entry) => entry.file)).size, 38);
+	for (const reference of receipt.references) assert.ok(parentHashes.has(reference.file), reference.file);
+	const assertCarriedForward = (references) => {
+		for (const reference of references.filter((entry) => entry.origin === "carried-forward")) {
+			assert.equal(reference.sha256, parentHashes.get(reference.file), `Carried reference must match parent: ${reference.file}`);
+		}
+	};
+	assertCarriedForward(receipt.references);
+	const carried = receipt.references.find((entry) => entry.origin === "carried-forward");
+	assert.throws(() => assertCarriedForward([{ ...carried, sha256: "0".repeat(64) }]), /must match parent/);
+	assert.throws(() => assertCarriedForward([{ ...carried, file: "unknown-reference.png" }]), /must match parent/);
+	for (const reference of receipt.protectedPriorReferences) {
+		assert.equal(createHash("sha256").update(readFileSync(resolve(__dirname, "..", reference.file))).digest("hex"), reference.sha256, reference.file);
+	}
+	for (const reference of receipt.references) {
+		assert.equal(createHash("sha256").update(readFileSync(resolve(__dirname, "..", baseline, "bitmaps_reference", reference.file))).digest("hex"), reference.sha256, reference.file);
 	}
 });
 
