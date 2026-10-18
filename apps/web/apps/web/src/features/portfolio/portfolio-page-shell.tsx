@@ -4,6 +4,7 @@ import type { ReactNode } from "react";
 import { PORTFOLIO_FRAME_CLASS } from "@/features/portfolio/portfolio-layout";
 import { PortfolioPrimaryNavigation } from "@/features/portfolio/portfolio-primary-navigation";
 import { PortfolioSiteHeader } from "@/features/portfolio/portfolio-site-header";
+import { isSamePortfolioDocument } from "@/features/portfolio/portfolio-action-links";
 
 type PortfolioPage = "portfolio" | "project" | "evidence";
 
@@ -26,8 +27,10 @@ export function PortfolioPageShell({
 }) {
 	const primaryCurrent = current === "evidence" ? "evidence" : current === "portfolio" ? "dashboard" : "projects";
 
-	const footerHref = current === "evidence" ? (projectHomeUrl ?? "/evidence") : evidenceUrl;
-	const footerLabel = current === "evidence" ? (projectHomeUrl ? "返回项目主页" : "返回工作证明索引") : "查看完整工作证明";
+	const distinctProjectHome = projectHomeUrl && !isSamePortfolioDocument(projectHomeUrl, evidenceUrl)
+		? projectHomeUrl : null;
+	const footerHref = current === "evidence" ? (distinctProjectHome ?? "/evidence") : evidenceUrl;
+	const footerLabel = current === "evidence" ? (distinctProjectHome ? "返回项目主页" : "返回工作证明索引") : "查看完整工作证明";
 
 	return (
 		<div className="portfolio-surface relative left-1/2 min-h-screen w-screen max-w-none -translate-x-1/2 overflow-x-hidden bg-[#f7f1e3] pb-24 text-[#071d34] md:pb-0">

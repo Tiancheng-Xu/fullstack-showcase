@@ -71,7 +71,7 @@ test("preserves the rendering contract and mismatch threshold", () => {
 });
 
 test("uses the explicitly adopted content revision separately from both old baselines", () => {
-	assert.equal(loadConfig().paths.bitmaps_reference, "backstop_data/baselines/chrome155-darwin-arm64-software-content-20261015/bitmaps_reference");
+	assert.equal(loadConfig().paths.bitmaps_reference, "backstop_data/baselines/chrome155-darwin-arm64-software-actions-20261018/bitmaps_reference");
 });
 
 test("preserves all sixty original reference PNG hashes", () => {
@@ -92,7 +92,36 @@ test("adopts exactly ten reviewed candidates and carries forward twenty-eight re
 	assert.equal(receipt.thresholdPercent, 0.1);
 	assert.equal(receipt.requireSameDimensions, true);
 	for (const reference of receipt.references) {
-		const bytes = readFileSync(resolve(__dirname, "..", loadConfig().paths.bitmaps_reference, reference.file));
+		const bytes = readFileSync(resolve(__dirname, "../backstop_data/baselines/chrome155-darwin-arm64-software-content-20261015/bitmaps_reference", reference.file));
+		assert.equal(createHash("sha256").update(bytes).digest("hex"), reference.sha256, reference.file);
+	}
+});
+
+test("preserves all ninety-eight prior reference PNG hashes after the action revision", () => {
+	const receipt = JSON.parse(readFileSync(resolve(__dirname, "../backstop_data/baselines/chrome155-darwin-arm64-software-actions-20261018/acceptance.json"), "utf8"));
+	assert.equal(receipt.protectedPriorReferences.length, 98);
+	for (const reference of receipt.protectedPriorReferences) {
+		const bytes = readFileSync(resolve(__dirname, "..", reference.file));
+		assert.equal(createHash("sha256").update(bytes).digest("hex"), reference.sha256, reference.file);
+	}
+});
+
+test("adopts only nine attributed action references and carries forward twenty-nine", () => {
+	const config = loadConfig();
+	const receipt = JSON.parse(readFileSync(resolve(__dirname, "../backstop_data/baselines/chrome155-darwin-arm64-software-actions-20261018/acceptance.json"), "utf8"));
+	assert.equal(receipt.parentBaseline, "chrome155-darwin-arm64-software-content-20261015");
+	assert.equal(receipt.humanApproval.adopted, true);
+	assert.equal(receipt.thresholdPercent, 0.1);
+	assert.equal(receipt.requireSameDimensions, true);
+	assert.equal(receipt.references.length, 38);
+	assert.equal(receipt.references.filter((entry) => entry.origin === "reviewed-candidate").length, 9);
+	assert.equal(receipt.references.filter((entry) => entry.origin === "carried-forward").length, 29);
+	assert.equal(receipt.review.unexplainedCases, 0);
+	assert.equal(receipt.review.stableCandidateCases, 12);
+	assert.equal(receipt.review.fullStagedCases, 38);
+	for (const control of receipt.review.controlMetrics) assert.equal(control.oldControlExactDifferentPixels, 0);
+	for (const reference of receipt.references) {
+		const bytes = readFileSync(resolve(__dirname, "..", config.paths.bitmaps_reference, reference.file));
 		assert.equal(createHash("sha256").update(bytes).digest("hex"), reference.sha256, reference.file);
 	}
 });
