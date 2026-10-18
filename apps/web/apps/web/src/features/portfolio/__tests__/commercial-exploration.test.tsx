@@ -12,6 +12,7 @@ describe("commercial exploration publication", () => {
 	it("renders exactly four business products once in their own Dashboard module", () => {
 		const { container } = render(<DashboardContent />);
 		const module = screen.getByRole("region", { name: "商业探索" });
+		expect(module).toHaveStyle({ order: "4" });
 		expect(module.querySelectorAll("[data-commercial-project]")).toHaveLength(4);
 		for (const project of COMMERCIAL_PROJECTS) {
 			expect(within(module).getAllByRole("heading", { name: project.title })).toHaveLength(1);

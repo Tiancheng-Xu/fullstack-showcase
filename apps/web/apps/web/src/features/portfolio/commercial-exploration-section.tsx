@@ -6,7 +6,7 @@ const LINK_CLASS = "inline-flex min-h-11 items-center gap-2 border border-[#9f10
 
 export function CommercialExplorationSection() {
 	return (
-		<section aria-labelledby="commercial-exploration-title" className="mt-10 scroll-mt-24 md:mt-14" id="commercial-exploration">
+		<section aria-labelledby="commercial-exploration-title" className="mt-10 scroll-mt-24 md:mt-14" id="commercial-exploration" style={{ order: 4 }}>
 			<header className="portfolio-section-title border-[#d8cfbd] border-b pb-3">
 				<h2 className="flex items-center gap-3 font-bold font-serif text-2xl" id="commercial-exploration-title"><BriefcaseBusiness aria-hidden="true" size={20} />商业探索</h2>
 				<p className="mt-2 max-w-3xl text-[#4d5863] text-sm leading-relaxed">围绕询价、核价、交期与产品资料交接的四项产品，分别说明业务价值、本人实现、上游复用和当前交付范围。</p>
