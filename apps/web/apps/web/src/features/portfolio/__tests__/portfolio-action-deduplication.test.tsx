@@ -30,9 +30,30 @@ describe("project action deduplication", () => {
 			expect(new Set(links.map((link) => normalizePortfolioHref(link.href)))).toEqual(new Set(originalTargets.map(normalizePortfolioHref)));
 			expect(new Set(links.map((link) => normalizePortfolioHref(link.href))).size).toBe(links.length);
 			if (project.ownerPage?.startsWith("https://github.com/")) {
-				expect(links.find((link) => link.id === "project")?.label).toBe("GitHub");
+				const expectedLabel = project.repo &&
+					normalizePortfolioHref(project.ownerPage) !== normalizePortfolioHref(`https://github.com/${project.repo}`)
+						? "GitHub 主页" : "GitHub";
+				expect(links.find((link) => link.id === "project")?.label).toBe(expectedLabel);
 			}
 		}
+	});
+	it("distinguishes the OSS GitHub homepage from its repository without changing destinations or targets", () => {
+		const project = PORTFOLIO_PROJECTS.find((item) => item.id === "oss-contributions");
+		if (!project) throw new Error("Missing curated OSS project");
+		expect(getProjectActionLinks(project).find((link) => link.id === "project")?.label).toBe("GitHub");
+		const links = getProjectActionLinks(project, true);
+		expect(links.find((link) => link.id === "project")).toMatchObject({ label: "GitHub 主页", href: "https://github.com/Tiancheng-Xu" });
+		expect(links.find((link) => link.id === "repository")).toMatchObject({ label: "GitHub", href: "https://github.com/Tiancheng-Xu/Tiancheng-Xu" });
+		const { container } = render(<ProjectIndexContent />);
+		const card = Array.from(container.querySelectorAll<HTMLElement>(".portfolio-index-card")).find((item) => item.querySelector("h3")?.textContent === project.title);
+		if (!card) throw new Error("Missing rendered OSS card");
+		const homepage = within(card).getByRole("link", { name: "GitHub 主页" });
+		const repository = within(card).getByRole("link", { name: "GitHub" });
+		expect(homepage).toHaveAttribute("href", "https://github.com/Tiancheng-Xu");
+		expect(homepage).not.toHaveAttribute("target");
+		expect(repository).toHaveAttribute("href", "https://github.com/Tiancheng-Xu/Tiancheng-Xu");
+		expect(repository).toHaveAttribute("target", "_blank");
+		expect(repository).toHaveAttribute("rel", "noreferrer");
 	});
 	it("renders one destination per Dashboard project card and labels the primary action honestly", () => {
 		const { container } = render(<DashboardContent />);

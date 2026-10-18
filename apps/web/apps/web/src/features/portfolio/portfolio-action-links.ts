@@ -33,7 +33,10 @@ export function getProjectActionLinks(
 	const links: ProjectActionLink[] = getProjectPageLinks(project).map((link) => ({
 		...link,
 		label: link.id === "project" && /^https:\/\/github\.com\//i.test(link.href)
-			? "GitHub"
+			? includeRepository && project.repo &&
+				normalizePortfolioHref(link.href) !== normalizePortfolioHref(`https://github.com/${project.repo}`)
+				? "GitHub 主页"
+				: "GitHub"
 			: link.label,
 	}));
 	if (includeRepository && project.repo) {
