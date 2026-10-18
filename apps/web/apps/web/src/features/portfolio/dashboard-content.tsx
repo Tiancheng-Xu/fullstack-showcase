@@ -1,4 +1,6 @@
 import { PrdCompanionNarratives } from "./prd-companion-narratives";
+import { CommercialExplorationSection } from "./commercial-exploration-section";
+import { excludeCommercialProjects } from "@/data/commercial-exploration";
 import {
 	Activity,
 	ArrowUpRight,
@@ -47,7 +49,7 @@ export function DashboardContent() {
 		"fullstack-showcase",
 		"tc-workflow",
 	];
-	const displayProjects = [...visibleProjects].sort((left, right) => {
+	const displayProjects = excludeCommercialProjects(visibleProjects).sort((left, right) => {
 		const leftIndex = preferredProjectOrder.indexOf(left.id);
 		const rightIndex = preferredProjectOrder.indexOf(right.id);
 		if (leftIndex === -1 && rightIndex === -1) return 0;
@@ -133,7 +135,7 @@ export function DashboardContent() {
 			bullets: [
 				"主控任务发布、匹配、审批与交付的产品闭环，明确模型判断、业务规则和工具授权的分工；当前增强分支以 LangGraph 任务图组织评审与有限修复。",
 				"用 Checkpoint 恢复流程进度、操作账本记录动作身份与结果状态，避免把恢复当作重放；审批绑定任务版本与方案指纹，结果未知时先核对再决定是否重试。",
-				"V1 保留已验证生产 Evidence；当前多模型路由与 Checkpoint 开发扩展尚未发布，按代码 / 本地验证描述。",
+				"V1 保留已验证生产 Evidence；当前多模型路由与 Checkpoint 增强已实现，尚未发布，与生产版本分别说明。",
 			],
 		},
 		{
@@ -251,8 +253,8 @@ export function DashboardContent() {
 								<li className="grid grid-cols-[2.75rem_1fr] gap-3 border border-[#d8cfbd] bg-[#f8f3e8]/70 p-4">
 									<span className="font-bold font-serif text-[#b21f35] text-lg">06</span>
 									<p>
-										主动学习与知识沉淀：我围绕计算机系统、Python、AI 与前端工程持续学习，结合课程、技术文章和会议资料梳理知识之间的联系，记录自己的理解、疑问与待实践的问题，并在 Share 分享阶段思考。主动跟踪 WebMCP、Agentic Web 与 MCP 等前沿技术及标准演进，关注网页工具化、Agent 互操作与权限 / 人工确认边界，将趋势研究连接到企业 AI 应用的技术选型与方案设计。在 Portfolio Sync 增强中实现只读契约、按需读取与条件请求；增强源码已交付，尚未部署。
-										<a className="ml-2 inline-flex min-h-11 items-center font-semibold text-[#b21f35] underline underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-4" href="/sharing/#learning-journal">阅读学习手记 <span aria-hidden="true">↗</span></a>
+										技术研究与生产级工程实践：围绕计算机系统、AI 与前端工程梳理技术选型、架构取舍和运行边界，以可追溯的实现与交付记录支撑方案判断。跟踪 WebMCP、Agentic Web 与 MCP 等技术及标准演进，关注网页工具化、Agent 互操作与权限 / 人工确认边界。在 Portfolio Sync 增强中实现只读契约、按需读取与条件请求；该增强版本尚未部署，具体实现与对应证据分别说明。
+										<a className="ml-2 inline-flex min-h-11 items-center font-semibold text-[#b21f35] underline underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-4" href="/sharing/">查看技术分享 <span aria-hidden="true">↗</span></a>
 									</p>
 								</li>
 							</ol>
@@ -526,6 +528,8 @@ export function DashboardContent() {
 						})}
 					</div>
 				</div>
+
+				<CommercialExplorationSection />
 
 				<section className="mt-10 scroll-mt-24 md:mt-14" id="open-source">
 					<SectionTitle

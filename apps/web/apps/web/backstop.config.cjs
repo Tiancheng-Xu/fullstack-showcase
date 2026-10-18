@@ -5,7 +5,7 @@ const { arch, platform } = require("node:os");
 const macChrome =
 	"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
 const visualEnvironment = {
-	browser: "Google Chrome 155.0.8059.40",
+	browser: "Google Chrome 155.0.8059.80",
 	platform: "darwin",
 	architecture: "arm64",
 	locale: "zh-CN",
@@ -86,7 +86,7 @@ module.exports = {
 		onReadyScript: "puppet/onReady.cjs",
 	}),
 	paths: {
-		bitmaps_reference: "backstop_data/baselines/chrome155-darwin-arm64-software-actions-20261018/bitmaps_reference",
+		bitmaps_reference: "backstop_data/baselines/chrome155-darwin-arm64-software-commercial-20261018-8059-80/bitmaps_reference",
 		bitmaps_test: "backstop_data/baselines/chrome155-darwin-arm64-software-content-20261015/bitmaps_test",
 		engine_scripts: "backstop_data/engine_scripts",
 		html_report: "backstop_data/baselines/chrome155-darwin-arm64-software-content-20261015/html_report",

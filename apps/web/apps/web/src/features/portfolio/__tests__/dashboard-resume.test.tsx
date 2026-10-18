@@ -34,6 +34,9 @@ describe("Dashboard resume", () => {
 		expect(introduction).toHaveTextContent("拥有 8 年软件开发经验");
 		expect(resume.getByText("全栈工程师（AI Agent / Web3）")).toBeVisible();
 		expect(resume.queryByText("前端 / 全栈工程师（AI Agent / Web3）")).not.toBeInTheDocument();
-		expect(resume.getByText(/开发扩展尚未发布，按代码 \/ 本地验证描述/)).toBeVisible();
+		expect(resume.getByText(/Checkpoint 增强已实现，尚未发布，与生产版本分别说明/)).toBeVisible();
+		expect(resumeSection?.textContent).not.toMatch(/课堂|课程|学习|练习|\bdemo\b/i);
+		expect(resume.getByText(/技术研究与生产级工程实践/)).toBeVisible();
+		expect(resume.getByRole("link", { name: /查看技术分享/ })).toHaveAttribute("href", "/sharing/");
 	});
 });

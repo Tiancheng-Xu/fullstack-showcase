@@ -1,4 +1,6 @@
 import { Link } from "@tanstack/react-router";
+import { getCommercialProject } from "@/data/commercial-exploration";
+import { CommercialProjectEvidence } from "./commercial-exploration-section";
 import {
 	ArrowLeft,
 	CheckCircle2,
@@ -38,6 +40,8 @@ import {
 } from "@web/ui/components/card";
 
 export function EvidenceContent({ projectId }: { projectId: string }) {
+	const commercialProject = getCommercialProject(projectId);
+	if (commercialProject) return <CommercialProjectEvidence project={commercialProject} />;
 	const project = Object.hasOwn(PROJECTS_INDEX, projectId)
 		? PROJECTS_INDEX[projectId]
 		: undefined;

@@ -1,0 +1,57 @@
+{
+  "reviewedAt": "2026-10-18",
+  "projects": [
+    {
+      "id": "commercial-rfq-review",
+      "title": "外贸询价复核",
+      "problem": "针对目录型紧固件的改版询价，读取旧询价、最新要求与待发报价，定位料号、规格和数量的旧值残留，人工终审后导出 Excel / JSON。",
+      "contributions": ["紧固件目录、料号与三方差异承接", "中文 CSV / XLSX 模板、版本失效、人审及来源导出", "停服一致性备份、完整性校验与安全恢复"],
+      "reuse": "BidLint（固定 c798f19，MIT）及 pypdf / openpyxl；业务规则、三方承接与恢复流程单独实现。",
+      "stage": "单企业账号与备份恢复已完成本机验收；云承载待验",
+      "verification": "恢复验收 64 项（28 新增、36 受影响），包含新包 CLI / HTTP 恢复、原附件、修订、批准、导出及撤权；262 个源码摘要已核对。历史 54 项账号检查不与本批相加。",
+      "flow": "旧询价 / 最新要求 / 待发报价 → 目录与料号映射 → 三方差异 → 版本人审 → 来源导出；停服备份经完整性检查后恢复。",
+      "failureBoundary": "版本变化、撤权与恢复后的附件和批准关系均需核对；本机停服恢复记录不等于云容灾或跨企业隔离已验收。",
+      "productUrl": null,
+      "runtimeEvidenceUrl": null
+    },
+    {
+      "id": "commercial-gift-review",
+      "title": "礼盒变更复核",
+      "problem": "展示改量后 MOQ、阶梯价、版费与余量对成本的影响，保留报价版本、采购复核和独立审批。",
+      "contributions": ["确定性 MOQ、余量与核价规则", "报价版本、审批失效和过期阻断", "固定 CSV 规范化、原子入库及打印页"],
+      "reuse": "rndaorg/open-configurator RuleEngine（固定 8d3e7caf，MIT）；成本、版本和采购审批规则单独实现。",
+      "stage": "固定 CSV 持久化导入已验收；Web 上传与真实身份待验",
+      "verification": "导入检查共 51 项（26 新增、25 相关，分批完成），另有隔离 SQLite 导入与失败原子性复现；不据此宣称 Web 上传或真实身份已验收。",
+      "flow": "数量与配置变更 → MOQ / 阶梯价 / 版费 / 余量核价 → 报价版本 → 采购复核与独立审批 → 打印与持久化记录。",
+      "failureBoundary": "报价过期或版本变化后旧批准失效；CSV 导入失败须保持原子性。当前验证范围不覆盖真实企业身份与生产持久化。",
+      "productUrl": null,
+      "runtimeEvidenceUrl": null
+    },
+    {
+      "id": "commercial-orderguard",
+      "title": "订单交期变更核对",
+      "problem": "将客户交期清单映射为订单行差异，连接版本冲突、人工审批、幂等对账及补偿回执；当前公开入口提供固定合成资料的只读核对。",
+      "contributions": ["订单行映射、日期规则与差异解释", "旧版本冲突、幂等凭证及部分成功恢复", "只读核对页面、JSON 下载与 HTML 回执"],
+      "reuse": "LangGraph StateGraph / interrupt / SQLite 检查点，以及 openpyxl 与 Python CSV；订单行和日期业务规则单独实现。",
+      "stage": "已上线：固定合成资料只读交期核对；客户上传关闭",
+      "verification": "上线验收记录包含 12 次云端 HTTP、三个场景及 1440 / 390 双宽度的交互、下载和键盘检查，Python 规则实际运行；域名已核对直连 orderguard。34 项适配回归与历史 90 项检查分别记账，不相加。",
+      "flow": "固定合成交期清单 → 订单行映射 → 日期与版本规则 → 差异核对 → JSON 下载；公开服务不执行客户订单写入。",
+      "failureBoundary": "旧版本、重复操作及部分成功恢复属于对应流程的验收范围；公开只读入口不代表真实客户身份、ERP 写入或跨企业隔离已经验收。",
+      "productUrl": "https://orderguard.baby2b.online/",
+      "runtimeEvidenceUrl": "https://orderguard.baby2b.online/evidence/"
+    },
+    {
+      "id": "commercial-ai-export",
+      "title": "制造企业产品资料与素材交接",
+      "problem": "连接产品事实冻结、SKU 媒体绑定、英文候选与素材制作、版本审核失效和离线哈希交接。",
+      "contributions": ["事实与 SKU 版本约束", "自审阻断、预算预留和幂等处理", "审核依赖、私有文件策略与交接 manifest"],
+      "reuse": "MoneyPrinterTurbo 的狭窄 MIT 成片函数、MoviePy / FFmpeg 及既有 Ollama 模型；事实、SKU 与审核交接规则单独实现。",
+      "stage": "A1 权限与私有文件代码已交付；真实 Frappe 运行待验",
+      "verification": "76 项离线策略、适配替身及操作系统合成文件检查；这些结果不代表真实 Frappe、双数据库或网关运行已验收。",
+      "flow": "产品事实冻结 → SKU / 媒体绑定 → 英文候选与素材 → 版本审核、预算及权限约束 → 哈希交接清单。",
+      "failureBoundary": "版本变化、自审与预算重复请求受策略约束；适配替身与合成文件结果不替代真实 Frappe 权限、模型效果或完整 SaaS 生产验收。",
+      "productUrl": null,
+      "runtimeEvidenceUrl": null
+    }
+  ]
+}
