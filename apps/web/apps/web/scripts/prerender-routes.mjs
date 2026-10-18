@@ -2,6 +2,8 @@ import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 
 const prdEvidence = JSON.parse(readFileSync(resolve(import.meta.dirname, "../src/data/project-prd-evidence.json"), "utf8"));
+const commercialEvidence = JSON.parse(readFileSync(resolve(import.meta.dirname, "../src/data/commercial-exploration.json"), "utf8"));
+export const COMMERCIAL_EVIDENCE_ROUTES = commercialEvidence.projects.map(({ id }) => ({ url: `/evidence/${id}`, output: `evidence/${id}/index.html` }));
 export const PROJECT_PRD_EVIDENCE_ROUTES = prdEvidence.entries
   .filter(({ evidenceUrl }) => new URL(evidenceUrl).hostname === "baby2b.online")
   .map(({ id, sourceId }) => ({
@@ -73,6 +75,7 @@ export const STATIC_FIRST_ROUTES = [
 		output: "performance-control/github-profile-studio/index.html",
 	},
 	...PROJECT_PRD_EVIDENCE_ROUTES.map(({ url, output }) => ({ url, output })),
+	...COMMERCIAL_EVIDENCE_ROUTES,
 ];
 
 export function createCsrFallbackHtml(template) {

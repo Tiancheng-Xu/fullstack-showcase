@@ -1,4 +1,5 @@
 import { ArrowUpRight, BadgeCheck, FileCheck2, Workflow } from "lucide-react";
+import { COMMERCIAL_PROJECTS, commercialEvidencePath } from "@/data/commercial-exploration";
 
 import {
 	PortfolioIndexSection,
@@ -40,6 +41,17 @@ export function EvidenceIndexContent() {
 								<a href={projectPrdSummaryUrl(entry)}>查看 PRD 摘要 <ArrowUpRight aria-hidden="true" size={14} /></a>
 								<a href={entry.evidenceUrl}>项目工作证明 <ArrowUpRight aria-hidden="true" size={14} /></a>
 							</footer>
+						</article>
+					))}
+				</div>
+			</PortfolioIndexSection>
+			<PortfolioIndexSection title="商业探索">
+				<div className="portfolio-evidence-grid">
+					{COMMERCIAL_PROJECTS.map((project) => (
+						<article className="portfolio-evidence-card" key={project.id}>
+							<header><span><FileCheck2 aria-hidden="true" size={20} /></span><div><h3>{project.title}</h3></div></header>
+							<p>{project.stage}</p>
+							<footer><a href={commercialEvidencePath(project)}>工作证明<ArrowUpRight aria-hidden="true" size={14} /></a></footer>
 						</article>
 					))}
 				</div>

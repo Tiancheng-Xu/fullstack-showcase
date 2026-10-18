@@ -1,4 +1,6 @@
 import { PrdCompanionNarratives } from "./prd-companion-narratives";
+import { CommercialExplorationSection } from "./commercial-exploration-section";
+import { excludeCommercialProjects } from "@/data/commercial-exploration";
 import {
 	Activity,
 	ArrowUpRight,
@@ -47,7 +49,7 @@ export function DashboardContent() {
 		"fullstack-showcase",
 		"tc-workflow",
 	];
-	const displayProjects = [...visibleProjects].sort((left, right) => {
+	const displayProjects = excludeCommercialProjects(visibleProjects).sort((left, right) => {
 		const leftIndex = preferredProjectOrder.indexOf(left.id);
 		const rightIndex = preferredProjectOrder.indexOf(right.id);
 		if (leftIndex === -1 && rightIndex === -1) return 0;
@@ -526,6 +528,8 @@ export function DashboardContent() {
 						})}
 					</div>
 				</div>
+
+				<CommercialExplorationSection />
 
 				<section className="mt-10 scroll-mt-24 md:mt-14" id="open-source">
 					<SectionTitle
