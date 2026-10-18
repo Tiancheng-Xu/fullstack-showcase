@@ -595,7 +595,7 @@ export const PORTFOLIO_PROJECTS: PortfolioProject[] = [
 		architectureAsset:
 			"architecture/fullstack-showcase.visual-check.1440x900.light.png",
 		title: "Showcase Dashboard",
-		desc: "静态优先的作品系统，将经历、产品、公开 Evidence、开源贡献与学习分享组织成可追溯入口。",
+		desc: "静态优先的作品系统，将经历、产品、公开 Evidence、开源贡献与技术分享组织成可追溯入口。",
 		summaryPoints: [
 			"内容与身份：人工审核决定项目定位、职责与证据链接；公开短摘要与私有事实源分开，设计能力不伪装成已验证交付。",
 			"渲染与交互：SSG 先返回可读页面，水合后按需加载 Babylon 等交互；统一列表与详情返回路径，未知路由保持真实 404。",
@@ -675,7 +675,7 @@ export const PORTFOLIO_PROJECTS: PortfolioProject[] = [
 			"增强测量：同一冻结的 13 项目样本，完整 / 摘要未压缩 UTF-8 响应体为 41,256 / 3,404 字节；304 与 HEAD 响应体为 0。这是固定样本回执，不是现网或 token / CPU 指标；增强尚未部署。",
 		],
 		details: [
-			"仓库存在 Baby2B 发布清单且声明 Evidence URL 时才进入作品集，避免把学习仓库和普通实验误收录。",
+			"仓库存在 Baby2B 发布清单且声明 Evidence URL 时才进入作品集，仅收录经审核的正式项目。",
 			"主要难点是同时处理 webhook 验签、短期安装令牌、KV 最终一致性与主站静态回退。增强保留默认完整响应，将分页绑定快照与查询，避免混用不同版本。",
 		],
 		ownerPage:

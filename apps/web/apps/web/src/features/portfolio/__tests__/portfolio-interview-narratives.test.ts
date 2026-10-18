@@ -87,7 +87,8 @@ describe("portfolio interview narratives", () => {
 		expect(source).toContain("项目经历");
 		expect(source).toContain("主控 · 私有知识产品 / 本机模型交付");
 		expect(source).toContain("明确模型判断、业务规则和工具授权的分工");
-		expect(source).toContain("开发扩展尚未发布，按代码 / 本地验证描述");
+		expect(source).toContain("Checkpoint 增强已实现，尚未发布，与生产版本分别说明");
+		expect(source).not.toMatch(/课堂|课程|主动学习|学习手记|\bdemo\b/i);
 		expect(source).toContain("引用编号校验不等于语义支持");
 		expect(source).toContain("Qwen3-8B 微调、量化与 Ollama 本机交付和静态网站分别说明");
 		expect(source).toContain("OfficeFlow 办公流程 Agent");
