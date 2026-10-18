@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import overreactedNote from "./content/overreacted-reading-route.md?raw";
 import { conferenceEntries } from "./sharing-data";
 import { overreactedArticleSummaries } from "./overreacted-article-summaries";
@@ -76,6 +76,22 @@ function articleNotePath(article: Article, topic: Exclude<Topic, "all">): string
 export function SharingArticleDirectory() {
   const [topic, setTopic] = useState<Topic>("all");
   const [query, setQuery] = useState("");
+  useEffect(() => {
+    const readTopic = () => {
+      const requested = new URLSearchParams(window.location.search).get("topic");
+      setTopic(filters.find((filter) => filter.id === requested)?.id ?? "all");
+    };
+    readTopic();
+    window.addEventListener("popstate", readTopic);
+    return () => window.removeEventListener("popstate", readTopic);
+  }, []);
+  const selectTopic = (next: Topic) => {
+    setTopic(next);
+    const url = new URL(window.location.href);
+    if (next === "all") url.searchParams.delete("topic");
+    else url.searchParams.set("topic", next);
+    window.history.replaceState(window.history.state, "", url.href);
+  };
   const search = query.trim().toLocaleLowerCase();
   const visibleGroups = groups
     .filter((group) => topic === "all" || topic === group.id)
@@ -96,7 +112,7 @@ export function SharingArticleDirectory() {
       <div className="sharing-directory-controls">
         <div className="sharing-directory-filters" role="group" aria-label="按专题筛选">
           {filters.map((filter) => (
-            <button type="button" key={filter.id} className="sharing-directory-filter" aria-pressed={topic === filter.id} onClick={() => setTopic(filter.id)}>
+            <button type="button" key={filter.id} className="sharing-directory-filter" aria-pressed={topic === filter.id} onClick={() => selectTopic(filter.id)}>
               {filter.label} · {filter.count}
             </button>
           ))}

@@ -1,6 +1,6 @@
 import { ArrowUpRight, BadgeCheck, GitBranch, Layers3 } from "lucide-react";
 
-import { getProjectPageLinks } from "@/data/portfolio-projects";
+import { getProjectActionLinks } from "@/features/portfolio/portfolio-action-links";
 import {
 	PortfolioIndexSection,
 	PortfolioIndexShell,
@@ -26,7 +26,7 @@ export function ProjectIndexContent() {
 				</p>
 				<div className="portfolio-index-grid">
 					{projects.map((project, index) => {
-						const links = getProjectPageLinks(project);
+						const links = getProjectActionLinks(project, true);
 						return (
 							<article className="portfolio-index-card" key={project.id}>
 								<div className="portfolio-index-card-heading">
@@ -81,6 +81,7 @@ export function ProjectIndexContent() {
 									{links.map((link) => (
 										<a
 											href={link.href}
+											target={link.id === "repository" ? "_blank" : undefined}
 											key={link.id}
 											rel={
 												link.href.startsWith("http") ? "noreferrer" : undefined
@@ -90,16 +91,6 @@ export function ProjectIndexContent() {
 											<ArrowUpRight size={14} />
 										</a>
 									))}
-									{project.repo ? (
-										<a
-											href={`https://github.com/${project.repo}`}
-											rel="noreferrer"
-											target="_blank"
-										>
-											GitHub
-											<ArrowUpRight size={14} />
-										</a>
-									) : null}
 								</nav>
 							</article>
 						);

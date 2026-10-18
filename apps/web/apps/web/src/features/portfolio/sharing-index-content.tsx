@@ -29,7 +29,7 @@ export function SharingIndexContent() {
           <p>从 JavaScript 和 React 出发，走向工程设计、Server Components、开放社交协议，以及编程语言与表达。七阶段、一篇完整笔记。</p>
           <div className="sharing-card-meta">Dan Abramov · 路线已整理，逐篇带读进行中</div>
           <div className="sharing-card-actions">
-            <a href="#sharing-articles" className="sharing-action">查看文章目录 <span aria-hidden="true">↘</span></a>
+            <a href="/sharing?topic=overreacted#sharing-articles" className="sharing-action">查看 Overreacted 文章 <span aria-hidden="true">↘</span></a>
             <Link to="/overreacted-reading-route" className="sharing-secondary-action">完整阅读路线 ↗</Link>
           </div>
         </article>
@@ -39,7 +39,7 @@ export function SharingIndexContent() {
           <p>按会议和议题整理已有正文的演讲总结、官方文字资料与公开回顾。每条都标出已核对的来源和整理状态。</p>
           <div className="sharing-card-meta">{conferenceEntries.length} 篇会议总结 · 仅收录已有内容</div>
           <div className="sharing-card-actions">
-            <a href="#sharing-articles" className="sharing-action">查看文章目录 <span aria-hidden="true">↘</span></a>
+            <a href="/sharing?topic=conference#sharing-articles" className="sharing-action">查看 AI 会议文章 <span aria-hidden="true">↘</span></a>
             <Link to="/ai-conferences" className="sharing-secondary-action">会议总结归档 ↗</Link>
           </div>
         </article>
@@ -48,7 +48,7 @@ export function SharingIndexContent() {
           <h2>V8：从 JavaScript 到机器码</h2>
           <p>沿着执行分层、对象与数组表示、内存和安全边界三条线索，提炼九篇 V8 官方技术文章，理解性能取舍背后的机制。</p>
           <div className="sharing-card-meta">9 篇精选 · 原文与发布时间可追溯</div>
-          <a href="#sharing-articles" className="sharing-action">查看文章目录 <span aria-hidden="true">↘</span></a>
+          <a href="/sharing?topic=v8#sharing-articles" className="sharing-action">查看 V8 文章 <span aria-hidden="true">↘</span></a>
         </article>
       </div>
       <SharingArticleDirectory />

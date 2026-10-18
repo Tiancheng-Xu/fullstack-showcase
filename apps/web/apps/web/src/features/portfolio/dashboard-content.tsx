@@ -19,7 +19,6 @@ import {
 import type { ReactNode } from "react";
 
 import {
-	getProjectPageLinks,
 	getProjectRenderingModes,
 } from "@/data/portfolio-projects";
 import { DashboardScrollProgress } from "@/features/portfolio/dashboard-scroll-progress";
@@ -27,6 +26,7 @@ import { openSourceRepositories, openSourceVerifiedAt } from "@/features/portfol
 import { PORTFOLIO_FRAME_CLASS } from "@/features/portfolio/portfolio-layout";
 import { PortfolioPrimaryNavigation } from "@/features/portfolio/portfolio-primary-navigation";
 import { PortfolioSiteHeader } from "@/features/portfolio/portfolio-site-header";
+import { getProjectActionLinks } from "@/features/portfolio/portfolio-action-links";
 import { PortfolioVoyageHero } from "@/features/portfolio/portfolio-voyage-hero";
 import { TechnologyCapabilityMap } from "@/features/portfolio/technology-capability-map";
 import { usePortfolioProjects } from "@/features/portfolio/use-portfolio-projects";
@@ -406,10 +406,8 @@ export function DashboardContent() {
 											const index = displayProjects.findIndex(
 												(candidate) => candidate.id === project.id,
 											);
-							const pageLinks = getProjectPageLinks(project);
-							const defaultPage =
-								pageLinks.find((link) => link.id === "evidence") ??
-								pageLinks[0];
+							const pageLinks = getProjectActionLinks(project);
+							const defaultPage = pageLinks[0];
 
 											return (
 								<article
@@ -493,10 +491,11 @@ export function DashboardContent() {
 											</div>
 											{defaultPage ? (
 												<a
+													aria-label={`${project.title}：${defaultPage.label}`}
 													className="portfolio-project-action relative z-20 font-bold text-xs"
 													href={defaultPage.href}
 												>
-													查看工作证明 →
+													{defaultPage.label} →
 												</a>
 											) : null}
 										</div>
@@ -505,7 +504,7 @@ export function DashboardContent() {
 												aria-label={`${project.title} 项目页面`}
 												className="portfolio-project-secondary-links relative z-20 flex flex-wrap gap-1.5"
 											>
-												{pageLinks.map((link) => (
+												{pageLinks.slice(1).map((link) => (
 													<a
 														aria-label={`${project.title}：${link.label}`}
 														className="inline-flex min-h-11 items-center border border-[#9f102a]/45 bg-white/48 px-3 py-2 font-bold text-[#8c1428] text-[11px] backdrop-blur-md"
