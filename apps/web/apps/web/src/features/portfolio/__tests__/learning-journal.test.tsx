@@ -41,8 +41,9 @@ describe("Learning Journal placement and navigation", () => {
 		expect(capabilities).not.toBeNull();
 		if (!capabilities) throw new Error("Home capabilities section is missing");
 		expect(
-			within(capabilities).getByRole("link", { name: /学习手记/ }),
-		).toHaveAttribute("href", "/sharing/#learning-journal");
+			within(capabilities).getByRole("link", { name: /查看技术分享/ }),
+		).toHaveAttribute("href", "/sharing/");
+		expect(capabilities.textContent).not.toMatch(/课堂|课程|主动学习|学习手记/);
 		expect(
 			screen.queryByRole("region", { name: "学习手记" }),
 		).not.toBeInTheDocument();
