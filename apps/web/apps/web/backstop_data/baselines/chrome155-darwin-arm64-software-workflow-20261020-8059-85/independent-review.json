@@ -1,0 +1,207 @@
+{
+  "schemaVersion": 1,
+  "verdict": "pass",
+  "reviewers": [
+    {
+      "agentId": "01a158a9-7fb7-7ea1-a1a6-39e113fa8cc5",
+      "role": "standards-and-gate",
+      "verdict": "ALLOW",
+      "transport": "workflow-host-agent",
+      "requestedModel": "gpt-6.1-sol",
+      "actualServiceModel": "not-exposed"
+    },
+    {
+      "agentId": "01a158a9-805e-7fe2-b7da-30317bf3bde1",
+      "role": "spec-and-visual",
+      "verdict": "ALLOW",
+      "transport": "workflow-host-agent",
+      "requestedModel": "gpt-6.1-sol",
+      "actualServiceModel": "not-exposed"
+    }
+  ],
+  "sourceFiles": [
+    {
+      "file": "src/features/portfolio/dashboard-content.tsx",
+      "sha256": "5865a9d4e2c61d45bd4133c0e460322c7ab121406e451d8d50d7a80bbc370432"
+    },
+    {
+      "file": "src/features/portfolio/learning-workflow-figure.tsx",
+      "sha256": "d877db076ea570a2ee9f65cdbbe78861b0c052bc9ab6a1b923dadf2c48435706"
+    },
+    {
+      "file": "src/features/portfolio/__tests__/learning-workflow-figure.test.tsx",
+      "sha256": "e257f1124cfdd72b0b5b360d988a16ba2b1213f5ca87bc9c76fe4dfe49322b9f"
+    },
+    {
+      "file": "public/portfolio/learning/customer-support-workflow-20261018.png",
+      "sha256": "6a8b76da16e05233ce844481f6154ba3c30ce114ac6b82e04869b26e85bf2954"
+    },
+    {
+      "file": "backstop.config.cjs",
+      "sha256": "26197766093d19c291c18251b8e43c70d4fd6f61812f2d2362f46eff85f6b35e"
+    },
+    {
+      "file": "scripts/visual-environment.test.mjs",
+      "sha256": "0005c82cb58489e9a7377d1466560a9a8c4b95fa583e7f150ee1b2b95f9e772b"
+    }
+  ],
+  "visualCandidates": [
+    {
+      "file": "fullstack_showcase_portfolio_dashboard_0_document_0_375px.png",
+      "sha256": "5f8eac24432ca32ae9a2892f24e1a01d856f8881c48a4237307758a2619ec3b9"
+    },
+    {
+      "file": "fullstack_showcase_portfolio_dashboard_0_document_1_390px.png",
+      "sha256": "228c04478a11b73a1c9907cfd2f8d64fee1acd35779bf5f99afa8736a09ef00d"
+    },
+    {
+      "file": "fullstack_showcase_portfolio_dashboard_0_document_2_430px.png",
+      "sha256": "19dad55af440a843906cffa2fc58054c246e6242479ca01645737b1e4c7cd702"
+    },
+    {
+      "file": "fullstack_showcase_portfolio_dashboard_0_document_3_1440px.png",
+      "sha256": "b85b928d4859da73e10065db6b1a36c48f6c86ec45877450c036dff24a642707"
+    },
+    {
+      "file": "fullstack_showcase_portfolio_dashboard-resume-desktop_0_skillsportfolio-dashboard-module-card_0_1440px.png",
+      "sha256": "3c94cb44c1f30814bd21341dada5acd1be8cbdd87d16c96ab269469d4a3751b4"
+    },
+    {
+      "file": "fullstack_showcase_portfolio_dashboard-resume-desktop_0_skillsportfolio-dashboard-module-card_1_1536px.png",
+      "sha256": "e593253a7c69b094a0e000e0d81acca803e4aeaf67542d588c8b2a3b539bf6fc"
+    }
+  ],
+  "visualScope": "Independent actual inspection of 12 context/modal/zoom images and six complete candidates, including full-page segments; no new visible defects; not a claim of exact old/new pixel identity.",
+  "unchangedMainControls": {
+    "baseCommit": "5f686306cd7a2bf8bace6e377c54ad4683ba0f8c",
+    "verdict": "pass",
+    "explanation": "Existing button-label residuals are already present in main and pass the original Backstop threshold. Current feature produces identical decoded PNG pixels on all eight non-figure control cases. Keep parent references unchanged.",
+    "rows": [
+      {
+        "file": "fullstack_showcase_portfolio_projects_0_document_0_375px.png",
+        "status": "pass",
+        "againstOldReference": {
+          "isSameDimensions": true,
+          "dimensionDifference": {
+            "width": 0,
+            "height": 0
+          },
+          "rawMisMatchPercentage": 0.02270079913314371,
+          "misMatchPercentage": "0.02",
+          "analysisTime": 186
+        },
+        "candidateVsUnchangedMainDifferentChannelBytes": 0,
+        "controlSha256": "5034ae5267380c383ae9cb61b491fc6f51acdd10014a904371933b2b0c3df000"
+      },
+      {
+        "file": "fullstack_showcase_portfolio_projects_0_document_1_390px.png",
+        "status": "pass",
+        "againstOldReference": {
+          "isSameDimensions": true,
+          "dimensionDifference": {
+            "width": 0,
+            "height": 0
+          },
+          "rawMisMatchPercentage": 0.0224292061452813,
+          "misMatchPercentage": "0.02",
+          "analysisTime": 191
+        },
+        "candidateVsUnchangedMainDifferentChannelBytes": 0,
+        "controlSha256": "f010b6c739f7dfcd68e4d4eaf0b3c7b0d78946b674d41b8dbae585b18aaaff8d"
+      },
+      {
+        "file": "fullstack_showcase_portfolio_projects_0_document_2_430px.png",
+        "status": "pass",
+        "againstOldReference": {
+          "isSameDimensions": true,
+          "dimensionDifference": {
+            "width": 0,
+            "height": 0
+          },
+          "rawMisMatchPercentage": 0.021056369761243882,
+          "misMatchPercentage": "0.02",
+          "analysisTime": 202
+        },
+        "candidateVsUnchangedMainDifferentChannelBytes": 0,
+        "controlSha256": "d6f1eb836392f27ca6a073f3ae2783d75dc4fe0c0db66379a9052f1180fbd52e"
+      },
+      {
+        "file": "fullstack_showcase_portfolio_projects_0_document_3_1440px.png",
+        "status": "pass",
+        "againstOldReference": {
+          "isSameDimensions": true,
+          "dimensionDifference": {
+            "width": 0,
+            "height": 0
+          },
+          "rawMisMatchPercentage": 0.09233405723234203,
+          "misMatchPercentage": "0.09",
+          "analysisTime": 369
+        },
+        "candidateVsUnchangedMainDifferentChannelBytes": 0,
+        "controlSha256": "e12f1bd08a64f66cc8a34f0a8f8a07b76f79c31cad224ba0444ada1627c4be24"
+      },
+      {
+        "file": "fullstack_showcase_portfolio_sharing_0_document_0_375px.png",
+        "status": "pass",
+        "againstOldReference": {
+          "isSameDimensions": true,
+          "dimensionDifference": {
+            "width": 0,
+            "height": 0
+          },
+          "rawMisMatchPercentage": 0.02847377024817952,
+          "misMatchPercentage": "0.03",
+          "analysisTime": 365
+        },
+        "candidateVsUnchangedMainDifferentChannelBytes": 0,
+        "controlSha256": "534b1c95b3f316841019f56b20870123fe1fad16d1519b16bb4b948a4ec9d780"
+      },
+      {
+        "file": "fullstack_showcase_portfolio_sharing_0_document_1_390px.png",
+        "status": "pass",
+        "againstOldReference": {
+          "isSameDimensions": true,
+          "dimensionDifference": {
+            "width": 0,
+            "height": 0
+          },
+          "misMatchPercentage": "0.00"
+        },
+        "candidateVsUnchangedMainDifferentChannelBytes": 0,
+        "controlSha256": "d8ead2444484052b7eb05d7df44b009aaa255fdfcc95dab0f9a77dbb2b8f2d8c"
+      },
+      {
+        "file": "fullstack_showcase_portfolio_sharing_0_document_2_430px.png",
+        "status": "pass",
+        "againstOldReference": {
+          "isSameDimensions": true,
+          "dimensionDifference": {
+            "width": 0,
+            "height": 0
+          },
+          "misMatchPercentage": "0.00"
+        },
+        "candidateVsUnchangedMainDifferentChannelBytes": 0,
+        "controlSha256": "cfc49094d90a2a8fbba136fba58d6282b9a662e12b1f6247b9cad41196b984dd"
+      },
+      {
+        "file": "fullstack_showcase_portfolio_sharing_0_document_3_1440px.png",
+        "status": "pass",
+        "againstOldReference": {
+          "isSameDimensions": true,
+          "dimensionDifference": {
+            "width": 0,
+            "height": 0
+          },
+          "rawMisMatchPercentage": 0.02483814422437177,
+          "misMatchPercentage": "0.02",
+          "analysisTime": 1684
+        },
+        "candidateVsUnchangedMainDifferentChannelBytes": 0,
+        "controlSha256": "381a9add949d4b4ad8030eb9b4aeff5ec075a968d42f8bddc2e53de935f1c9ca"
+      }
+    ]
+  },
+  "knownNonBlockingObservation": "At mobile original-size zoom the caption can require vertical scrolling; close and fit controls remain visible."
+}

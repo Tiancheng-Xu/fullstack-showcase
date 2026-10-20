@@ -24,6 +24,7 @@ import {
 	getProjectRenderingModes,
 } from "@/data/portfolio-projects";
 import { DashboardScrollProgress } from "@/features/portfolio/dashboard-scroll-progress";
+import { LearningWorkflowFigure } from "@/features/portfolio/learning-workflow-figure";
 import { openSourceRepositories, openSourceVerifiedAt } from "@/features/portfolio/open-source-data";
 import { PORTFOLIO_FRAME_CLASS } from "@/features/portfolio/portfolio-layout";
 import { PortfolioPrimaryNavigation } from "@/features/portfolio/portfolio-primary-navigation";
@@ -258,6 +259,7 @@ export function DashboardContent() {
 									</p>
 								</li>
 							</ol>
+							<LearningWorkflowFigure />
 						</div>
 						<div className="mt-5 grid gap-4">
 							{professionalExperiences.map((experience) => (
