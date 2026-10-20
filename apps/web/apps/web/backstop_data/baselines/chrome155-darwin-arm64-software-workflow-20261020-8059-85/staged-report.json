@@ -1,0 +1,1041 @@
+{
+  "schemaVersion": 1,
+  "kind": "staged-release",
+  "browser": "Google Chrome 155.0.8059.85",
+  "thresholdPercent": 0.1,
+  "requireSameDimensions": true,
+  "sourceFiles": [
+    {
+      "file": "src/features/portfolio/dashboard-content.tsx",
+      "sha256": "5865a9d4e2c61d45bd4133c0e460322c7ab121406e451d8d50d7a80bbc370432"
+    },
+    {
+      "file": "src/features/portfolio/learning-workflow-figure.tsx",
+      "sha256": "d877db076ea570a2ee9f65cdbbe78861b0c052bc9ab6a1b923dadf2c48435706"
+    },
+    {
+      "file": "src/features/portfolio/__tests__/learning-workflow-figure.test.tsx",
+      "sha256": "e257f1124cfdd72b0b5b360d988a16ba2b1213f5ca87bc9c76fe4dfe49322b9f"
+    },
+    {
+      "file": "public/portfolio/learning/customer-support-workflow-20261018.png",
+      "sha256": "6a8b76da16e05233ce844481f6154ba3c30ce114ac6b82e04869b26e85bf2954"
+    },
+    {
+      "file": "backstop.config.cjs",
+      "sha256": "26197766093d19c291c18251b8e43c70d4fd6f61812f2d2362f46eff85f6b35e"
+    },
+    {
+      "file": "scripts/visual-environment.test.mjs",
+      "sha256": "0005c82cb58489e9a7377d1466560a9a8c4b95fa583e7f150ee1b2b95f9e772b"
+    }
+  ],
+  "rawReportSha256": "0127af05a253164813be49c42f436d417b13cf25249ff06e2034d8e566b130bc",
+  "rawReportPolicy": "Original report retained locally; this exact pinned export preserves comparison results and replaces private paths with verified content-addressed image paths.",
+  "backstopReport": {
+    "tests": [
+      {
+        "file": "fullstack_showcase_portfolio_dashboard_0_document_0_375px.png",
+        "status": "pass",
+        "pair": {
+          "label": "dashboard",
+          "viewportLabel": "375px",
+          "referenceImage": "backstop_data/baselines/chrome155-darwin-arm64-software-workflow-20261020-8059-85/bitmaps_reference/fullstack_showcase_portfolio_dashboard_0_document_0_375px.png",
+          "testImage": "backstop_data/baselines/chrome155-darwin-arm64-software-workflow-20261020-8059-85/bitmaps_reference/fullstack_showcase_portfolio_dashboard_0_document_0_375px.png",
+          "diff": {
+            "isSameDimensions": true,
+            "dimensionDifference": {
+              "width": 0,
+              "height": 0
+            },
+            "misMatchPercentage": "0.00"
+          }
+        }
+      },
+      {
+        "file": "fullstack_showcase_portfolio_dashboard_0_document_1_390px.png",
+        "status": "pass",
+        "pair": {
+          "label": "dashboard",
+          "viewportLabel": "390px",
+          "referenceImage": "backstop_data/baselines/chrome155-darwin-arm64-software-workflow-20261020-8059-85/bitmaps_reference/fullstack_showcase_portfolio_dashboard_0_document_1_390px.png",
+          "testImage": "backstop_data/baselines/chrome155-darwin-arm64-software-workflow-20261020-8059-85/bitmaps_reference/fullstack_showcase_portfolio_dashboard_0_document_1_390px.png",
+          "diff": {
+            "isSameDimensions": true,
+            "dimensionDifference": {
+              "width": 0,
+              "height": 0
+            },
+            "misMatchPercentage": "0.00"
+          }
+        }
+      },
+      {
+        "file": "fullstack_showcase_portfolio_dashboard_0_document_2_430px.png",
+        "status": "pass",
+        "pair": {
+          "label": "dashboard",
+          "viewportLabel": "430px",
+          "referenceImage": "backstop_data/baselines/chrome155-darwin-arm64-software-workflow-20261020-8059-85/bitmaps_reference/fullstack_showcase_portfolio_dashboard_0_document_2_430px.png",
+          "testImage": "backstop_data/baselines/chrome155-darwin-arm64-software-workflow-20261020-8059-85/bitmaps_reference/fullstack_showcase_portfolio_dashboard_0_document_2_430px.png",
+          "diff": {
+            "isSameDimensions": true,
+            "dimensionDifference": {
+              "width": 0,
+              "height": 0
+            },
+            "misMatchPercentage": "0.00"
+          }
+        }
+      },
+      {
+        "file": "fullstack_showcase_portfolio_dashboard_0_document_3_1440px.png",
+        "status": "pass",
+        "pair": {
+          "label": "dashboard",
+          "viewportLabel": "1440px",
+          "referenceImage": "backstop_data/baselines/chrome155-darwin-arm64-software-workflow-20261020-8059-85/bitmaps_reference/fullstack_showcase_portfolio_dashboard_0_document_3_1440px.png",
+          "testImage": "backstop_data/baselines/chrome155-darwin-arm64-software-workflow-20261020-8059-85/bitmaps_reference/fullstack_showcase_portfolio_dashboard_0_document_3_1440px.png",
+          "diff": {
+            "isSameDimensions": true,
+            "dimensionDifference": {
+              "width": 0,
+              "height": 0
+            },
+            "misMatchPercentage": "0.00"
+          }
+        }
+      },
+      {
+        "file": "fullstack_showcase_portfolio_projects_0_document_0_375px.png",
+        "status": "pass",
+        "pair": {
+          "label": "projects",
+          "viewportLabel": "375px",
+          "referenceImage": "backstop_data/baselines/chrome155-darwin-arm64-software-workflow-20261020-8059-85/bitmaps_reference/fullstack_showcase_portfolio_projects_0_document_0_375px.png",
+          "testImage": "backstop_data/baselines/chrome155-darwin-arm64-software-workflow-20261020-8059-85/evidence/5034ae5267380c383ae9cb61b491fc6f51acdd10014a904371933b2b0c3df000.png",
+          "diff": {
+            "isSameDimensions": true,
+            "dimensionDifference": {
+              "width": 0,
+              "height": 0
+            },
+            "rawMisMatchPercentage": 0.02270079913314371,
+            "misMatchPercentage": "0.02",
+            "analysisTime": 75
+          }
+        }
+      },
+      {
+        "file": "fullstack_showcase_portfolio_projects_0_document_1_390px.png",
+        "status": "pass",
+        "pair": {
+          "label": "projects",
+          "viewportLabel": "390px",
+          "referenceImage": "backstop_data/baselines/chrome155-darwin-arm64-software-workflow-20261020-8059-85/bitmaps_reference/fullstack_showcase_portfolio_projects_0_document_1_390px.png",
+          "testImage": "backstop_data/baselines/chrome155-darwin-arm64-software-workflow-20261020-8059-85/evidence/f010b6c739f7dfcd68e4d4eaf0b3c7b0d78946b674d41b8dbae585b18aaaff8d.png",
+          "diff": {
+            "isSameDimensions": true,
+            "dimensionDifference": {
+              "width": 0,
+              "height": 0
+            },
+            "rawMisMatchPercentage": 0.0224292061452813,
+            "misMatchPercentage": "0.02",
+            "analysisTime": 80
+          }
+        }
+      },
+      {
+        "file": "fullstack_showcase_portfolio_projects_0_document_2_430px.png",
+        "status": "pass",
+        "pair": {
+          "label": "projects",
+          "viewportLabel": "430px",
+          "referenceImage": "backstop_data/baselines/chrome155-darwin-arm64-software-workflow-20261020-8059-85/bitmaps_reference/fullstack_showcase_portfolio_projects_0_document_2_430px.png",
+          "testImage": "backstop_data/baselines/chrome155-darwin-arm64-software-workflow-20261020-8059-85/evidence/d6f1eb836392f27ca6a073f3ae2783d75dc4fe0c0db66379a9052f1180fbd52e.png",
+          "diff": {
+            "isSameDimensions": true,
+            "dimensionDifference": {
+              "width": 0,
+              "height": 0
+            },
+            "rawMisMatchPercentage": 0.021056369761243882,
+            "misMatchPercentage": "0.02",
+            "analysisTime": 80
+          }
+        }
+      },
+      {
+        "file": "fullstack_showcase_portfolio_projects_0_document_3_1440px.png",
+        "status": "pass",
+        "pair": {
+          "label": "projects",
+          "viewportLabel": "1440px",
+          "referenceImage": "backstop_data/baselines/chrome155-darwin-arm64-software-workflow-20261020-8059-85/bitmaps_reference/fullstack_showcase_portfolio_projects_0_document_3_1440px.png",
+          "testImage": "backstop_data/baselines/chrome155-darwin-arm64-software-workflow-20261020-8059-85/evidence/e12f1bd08a64f66cc8a34f0a8f8a07b76f79c31cad224ba0444ada1627c4be24.png",
+          "diff": {
+            "isSameDimensions": true,
+            "dimensionDifference": {
+              "width": 0,
+              "height": 0
+            },
+            "rawMisMatchPercentage": 0.09233405723234203,
+            "misMatchPercentage": "0.09",
+            "analysisTime": 148
+          }
+        }
+      },
+      {
+        "file": "fullstack_showcase_portfolio_evidence_0_document_0_375px.png",
+        "status": "pass",
+        "pair": {
+          "label": "evidence",
+          "viewportLabel": "375px",
+          "referenceImage": "backstop_data/baselines/chrome155-darwin-arm64-software-workflow-20261020-8059-85/bitmaps_reference/fullstack_showcase_portfolio_evidence_0_document_0_375px.png",
+          "testImage": "backstop_data/baselines/chrome155-darwin-arm64-software-workflow-20261020-8059-85/bitmaps_reference/fullstack_showcase_portfolio_evidence_0_document_0_375px.png",
+          "diff": {
+            "isSameDimensions": true,
+            "dimensionDifference": {
+              "width": 0,
+              "height": 0
+            },
+            "misMatchPercentage": "0.00"
+          }
+        }
+      },
+      {
+        "file": "fullstack_showcase_portfolio_evidence_0_document_1_390px.png",
+        "status": "pass",
+        "pair": {
+          "label": "evidence",
+          "viewportLabel": "390px",
+          "referenceImage": "backstop_data/baselines/chrome155-darwin-arm64-software-workflow-20261020-8059-85/bitmaps_reference/fullstack_showcase_portfolio_evidence_0_document_1_390px.png",
+          "testImage": "backstop_data/baselines/chrome155-darwin-arm64-software-workflow-20261020-8059-85/bitmaps_reference/fullstack_showcase_portfolio_evidence_0_document_1_390px.png",
+          "diff": {
+            "isSameDimensions": true,
+            "dimensionDifference": {
+              "width": 0,
+              "height": 0
+            },
+            "misMatchPercentage": "0.00"
+          }
+        }
+      },
+      {
+        "file": "fullstack_showcase_portfolio_evidence_0_document_2_430px.png",
+        "status": "pass",
+        "pair": {
+          "label": "evidence",
+          "viewportLabel": "430px",
+          "referenceImage": "backstop_data/baselines/chrome155-darwin-arm64-software-workflow-20261020-8059-85/bitmaps_reference/fullstack_showcase_portfolio_evidence_0_document_2_430px.png",
+          "testImage": "backstop_data/baselines/chrome155-darwin-arm64-software-workflow-20261020-8059-85/bitmaps_reference/fullstack_showcase_portfolio_evidence_0_document_2_430px.png",
+          "diff": {
+            "isSameDimensions": true,
+            "dimensionDifference": {
+              "width": 0,
+              "height": 0
+            },
+            "misMatchPercentage": "0.00"
+          }
+        }
+      },
+      {
+        "file": "fullstack_showcase_portfolio_evidence_0_document_3_1440px.png",
+        "status": "pass",
+        "pair": {
+          "label": "evidence",
+          "viewportLabel": "1440px",
+          "referenceImage": "backstop_data/baselines/chrome155-darwin-arm64-software-workflow-20261020-8059-85/bitmaps_reference/fullstack_showcase_portfolio_evidence_0_document_3_1440px.png",
+          "testImage": "backstop_data/baselines/chrome155-darwin-arm64-software-workflow-20261020-8059-85/bitmaps_reference/fullstack_showcase_portfolio_evidence_0_document_3_1440px.png",
+          "diff": {
+            "isSameDimensions": true,
+            "dimensionDifference": {
+              "width": 0,
+              "height": 0
+            },
+            "misMatchPercentage": "0.00"
+          }
+        }
+      },
+      {
+        "file": "fullstack_showcase_portfolio_open-source_0_document_0_375px.png",
+        "status": "pass",
+        "pair": {
+          "label": "open-source",
+          "viewportLabel": "375px",
+          "referenceImage": "backstop_data/baselines/chrome155-darwin-arm64-software-workflow-20261020-8059-85/bitmaps_reference/fullstack_showcase_portfolio_open-source_0_document_0_375px.png",
+          "testImage": "backstop_data/baselines/chrome155-darwin-arm64-software-workflow-20261020-8059-85/bitmaps_reference/fullstack_showcase_portfolio_open-source_0_document_0_375px.png",
+          "diff": {
+            "isSameDimensions": true,
+            "dimensionDifference": {
+              "width": 0,
+              "height": 0
+            },
+            "misMatchPercentage": "0.00"
+          }
+        }
+      },
+      {
+        "file": "fullstack_showcase_portfolio_open-source_0_document_1_390px.png",
+        "status": "pass",
+        "pair": {
+          "label": "open-source",
+          "viewportLabel": "390px",
+          "referenceImage": "backstop_data/baselines/chrome155-darwin-arm64-software-workflow-20261020-8059-85/bitmaps_reference/fullstack_showcase_portfolio_open-source_0_document_1_390px.png",
+          "testImage": "backstop_data/baselines/chrome155-darwin-arm64-software-workflow-20261020-8059-85/bitmaps_reference/fullstack_showcase_portfolio_open-source_0_document_1_390px.png",
+          "diff": {
+            "isSameDimensions": true,
+            "dimensionDifference": {
+              "width": 0,
+              "height": 0
+            },
+            "misMatchPercentage": "0.00"
+          }
+        }
+      },
+      {
+        "file": "fullstack_showcase_portfolio_open-source_0_document_2_430px.png",
+        "status": "pass",
+        "pair": {
+          "label": "open-source",
+          "viewportLabel": "430px",
+          "referenceImage": "backstop_data/baselines/chrome155-darwin-arm64-software-workflow-20261020-8059-85/bitmaps_reference/fullstack_showcase_portfolio_open-source_0_document_2_430px.png",
+          "testImage": "backstop_data/baselines/chrome155-darwin-arm64-software-workflow-20261020-8059-85/bitmaps_reference/fullstack_showcase_portfolio_open-source_0_document_2_430px.png",
+          "diff": {
+            "isSameDimensions": true,
+            "dimensionDifference": {
+              "width": 0,
+              "height": 0
+            },
+            "misMatchPercentage": "0.00"
+          }
+        }
+      },
+      {
+        "file": "fullstack_showcase_portfolio_open-source_0_document_3_1440px.png",
+        "status": "pass",
+        "pair": {
+          "label": "open-source",
+          "viewportLabel": "1440px",
+          "referenceImage": "backstop_data/baselines/chrome155-darwin-arm64-software-workflow-20261020-8059-85/bitmaps_reference/fullstack_showcase_portfolio_open-source_0_document_3_1440px.png",
+          "testImage": "backstop_data/baselines/chrome155-darwin-arm64-software-workflow-20261020-8059-85/bitmaps_reference/fullstack_showcase_portfolio_open-source_0_document_3_1440px.png",
+          "diff": {
+            "isSameDimensions": true,
+            "dimensionDifference": {
+              "width": 0,
+              "height": 0
+            },
+            "misMatchPercentage": "0.00"
+          }
+        }
+      },
+      {
+        "file": "fullstack_showcase_portfolio_performance-control_0_document_0_375px.png",
+        "status": "pass",
+        "pair": {
+          "label": "performance-control",
+          "viewportLabel": "375px",
+          "referenceImage": "backstop_data/baselines/chrome155-darwin-arm64-software-workflow-20261020-8059-85/bitmaps_reference/fullstack_showcase_portfolio_performance-control_0_document_0_375px.png",
+          "testImage": "backstop_data/baselines/chrome155-darwin-arm64-software-workflow-20261020-8059-85/bitmaps_reference/fullstack_showcase_portfolio_performance-control_0_document_0_375px.png",
+          "diff": {
+            "isSameDimensions": true,
+            "dimensionDifference": {
+              "width": 0,
+              "height": 0
+            },
+            "misMatchPercentage": "0.00"
+          }
+        }
+      },
+      {
+        "file": "fullstack_showcase_portfolio_performance-control_0_document_1_390px.png",
+        "status": "pass",
+        "pair": {
+          "label": "performance-control",
+          "viewportLabel": "390px",
+          "referenceImage": "backstop_data/baselines/chrome155-darwin-arm64-software-workflow-20261020-8059-85/bitmaps_reference/fullstack_showcase_portfolio_performance-control_0_document_1_390px.png",
+          "testImage": "backstop_data/baselines/chrome155-darwin-arm64-software-workflow-20261020-8059-85/bitmaps_reference/fullstack_showcase_portfolio_performance-control_0_document_1_390px.png",
+          "diff": {
+            "isSameDimensions": true,
+            "dimensionDifference": {
+              "width": 0,
+              "height": 0
+            },
+            "misMatchPercentage": "0.00"
+          }
+        }
+      },
+      {
+        "file": "fullstack_showcase_portfolio_performance-control_0_document_2_430px.png",
+        "status": "pass",
+        "pair": {
+          "label": "performance-control",
+          "viewportLabel": "430px",
+          "referenceImage": "backstop_data/baselines/chrome155-darwin-arm64-software-workflow-20261020-8059-85/bitmaps_reference/fullstack_showcase_portfolio_performance-control_0_document_2_430px.png",
+          "testImage": "backstop_data/baselines/chrome155-darwin-arm64-software-workflow-20261020-8059-85/bitmaps_reference/fullstack_showcase_portfolio_performance-control_0_document_2_430px.png",
+          "diff": {
+            "isSameDimensions": true,
+            "dimensionDifference": {
+              "width": 0,
+              "height": 0
+            },
+            "misMatchPercentage": "0.00"
+          }
+        }
+      },
+      {
+        "file": "fullstack_showcase_portfolio_performance-control_0_document_3_1440px.png",
+        "status": "pass",
+        "pair": {
+          "label": "performance-control",
+          "viewportLabel": "1440px",
+          "referenceImage": "backstop_data/baselines/chrome155-darwin-arm64-software-workflow-20261020-8059-85/bitmaps_reference/fullstack_showcase_portfolio_performance-control_0_document_3_1440px.png",
+          "testImage": "backstop_data/baselines/chrome155-darwin-arm64-software-workflow-20261020-8059-85/bitmaps_reference/fullstack_showcase_portfolio_performance-control_0_document_3_1440px.png",
+          "diff": {
+            "isSameDimensions": true,
+            "dimensionDifference": {
+              "width": 0,
+              "height": 0
+            },
+            "misMatchPercentage": "0.00"
+          }
+        }
+      },
+      {
+        "file": "fullstack_showcase_portfolio_sharing_0_document_0_375px.png",
+        "status": "pass",
+        "pair": {
+          "label": "sharing",
+          "viewportLabel": "375px",
+          "referenceImage": "backstop_data/baselines/chrome155-darwin-arm64-software-workflow-20261020-8059-85/bitmaps_reference/fullstack_showcase_portfolio_sharing_0_document_0_375px.png",
+          "testImage": "backstop_data/baselines/chrome155-darwin-arm64-software-workflow-20261020-8059-85/evidence/534b1c95b3f316841019f56b20870123fe1fad16d1519b16bb4b948a4ec9d780.png",
+          "diff": {
+            "isSameDimensions": true,
+            "dimensionDifference": {
+              "width": 0,
+              "height": 0
+            },
+            "rawMisMatchPercentage": 0.02847377024817952,
+            "misMatchPercentage": "0.03",
+            "analysisTime": 130
+          }
+        }
+      },
+      {
+        "file": "fullstack_showcase_portfolio_sharing_0_document_1_390px.png",
+        "status": "pass",
+        "pair": {
+          "label": "sharing",
+          "viewportLabel": "390px",
+          "referenceImage": "backstop_data/baselines/chrome155-darwin-arm64-software-workflow-20261020-8059-85/bitmaps_reference/fullstack_showcase_portfolio_sharing_0_document_1_390px.png",
+          "testImage": "backstop_data/baselines/chrome155-darwin-arm64-software-workflow-20261020-8059-85/bitmaps_reference/fullstack_showcase_portfolio_sharing_0_document_1_390px.png",
+          "diff": {
+            "isSameDimensions": true,
+            "dimensionDifference": {
+              "width": 0,
+              "height": 0
+            },
+            "misMatchPercentage": "0.00"
+          }
+        }
+      },
+      {
+        "file": "fullstack_showcase_portfolio_sharing_0_document_2_430px.png",
+        "status": "pass",
+        "pair": {
+          "label": "sharing",
+          "viewportLabel": "430px",
+          "referenceImage": "backstop_data/baselines/chrome155-darwin-arm64-software-workflow-20261020-8059-85/bitmaps_reference/fullstack_showcase_portfolio_sharing_0_document_2_430px.png",
+          "testImage": "backstop_data/baselines/chrome155-darwin-arm64-software-workflow-20261020-8059-85/bitmaps_reference/fullstack_showcase_portfolio_sharing_0_document_2_430px.png",
+          "diff": {
+            "isSameDimensions": true,
+            "dimensionDifference": {
+              "width": 0,
+              "height": 0
+            },
+            "misMatchPercentage": "0.00"
+          }
+        }
+      },
+      {
+        "file": "fullstack_showcase_portfolio_sharing_0_document_3_1440px.png",
+        "status": "pass",
+        "pair": {
+          "label": "sharing",
+          "viewportLabel": "1440px",
+          "referenceImage": "backstop_data/baselines/chrome155-darwin-arm64-software-workflow-20261020-8059-85/bitmaps_reference/fullstack_showcase_portfolio_sharing_0_document_3_1440px.png",
+          "testImage": "backstop_data/baselines/chrome155-darwin-arm64-software-workflow-20261020-8059-85/evidence/381a9add949d4b4ad8030eb9b4aeff5ec075a968d42f8bddc2e53de935f1c9ca.png",
+          "diff": {
+            "isSameDimensions": true,
+            "dimensionDifference": {
+              "width": 0,
+              "height": 0
+            },
+            "rawMisMatchPercentage": 0.02483814422437177,
+            "misMatchPercentage": "0.02",
+            "analysisTime": 252
+          }
+        }
+      },
+      {
+        "file": "fullstack_showcase_portfolio_ai-conferences_0_document_0_375px.png",
+        "status": "pass",
+        "pair": {
+          "label": "ai-conferences",
+          "viewportLabel": "375px",
+          "referenceImage": "backstop_data/baselines/chrome155-darwin-arm64-software-workflow-20261020-8059-85/bitmaps_reference/fullstack_showcase_portfolio_ai-conferences_0_document_0_375px.png",
+          "testImage": "backstop_data/baselines/chrome155-darwin-arm64-software-workflow-20261020-8059-85/bitmaps_reference/fullstack_showcase_portfolio_ai-conferences_0_document_0_375px.png",
+          "diff": {
+            "isSameDimensions": true,
+            "dimensionDifference": {
+              "width": 0,
+              "height": 0
+            },
+            "misMatchPercentage": "0.00"
+          }
+        }
+      },
+      {
+        "file": "fullstack_showcase_portfolio_ai-conferences_0_document_1_390px.png",
+        "status": "pass",
+        "pair": {
+          "label": "ai-conferences",
+          "viewportLabel": "390px",
+          "referenceImage": "backstop_data/baselines/chrome155-darwin-arm64-software-workflow-20261020-8059-85/bitmaps_reference/fullstack_showcase_portfolio_ai-conferences_0_document_1_390px.png",
+          "testImage": "backstop_data/baselines/chrome155-darwin-arm64-software-workflow-20261020-8059-85/bitmaps_reference/fullstack_showcase_portfolio_ai-conferences_0_document_1_390px.png",
+          "diff": {
+            "isSameDimensions": true,
+            "dimensionDifference": {
+              "width": 0,
+              "height": 0
+            },
+            "misMatchPercentage": "0.00"
+          }
+        }
+      },
+      {
+        "file": "fullstack_showcase_portfolio_ai-conferences_0_document_2_430px.png",
+        "status": "pass",
+        "pair": {
+          "label": "ai-conferences",
+          "viewportLabel": "430px",
+          "referenceImage": "backstop_data/baselines/chrome155-darwin-arm64-software-workflow-20261020-8059-85/bitmaps_reference/fullstack_showcase_portfolio_ai-conferences_0_document_2_430px.png",
+          "testImage": "backstop_data/baselines/chrome155-darwin-arm64-software-workflow-20261020-8059-85/bitmaps_reference/fullstack_showcase_portfolio_ai-conferences_0_document_2_430px.png",
+          "diff": {
+            "isSameDimensions": true,
+            "dimensionDifference": {
+              "width": 0,
+              "height": 0
+            },
+            "misMatchPercentage": "0.00"
+          }
+        }
+      },
+      {
+        "file": "fullstack_showcase_portfolio_ai-conferences_0_document_3_1440px.png",
+        "status": "pass",
+        "pair": {
+          "label": "ai-conferences",
+          "viewportLabel": "1440px",
+          "referenceImage": "backstop_data/baselines/chrome155-darwin-arm64-software-workflow-20261020-8059-85/bitmaps_reference/fullstack_showcase_portfolio_ai-conferences_0_document_3_1440px.png",
+          "testImage": "backstop_data/baselines/chrome155-darwin-arm64-software-workflow-20261020-8059-85/bitmaps_reference/fullstack_showcase_portfolio_ai-conferences_0_document_3_1440px.png",
+          "diff": {
+            "isSameDimensions": true,
+            "dimensionDifference": {
+              "width": 0,
+              "height": 0
+            },
+            "misMatchPercentage": "0.00"
+          }
+        }
+      },
+      {
+        "file": "fullstack_showcase_portfolio_ai-conference-note_0_document_0_375px.png",
+        "status": "pass",
+        "pair": {
+          "label": "ai-conference-note",
+          "viewportLabel": "375px",
+          "referenceImage": "backstop_data/baselines/chrome155-darwin-arm64-software-workflow-20261020-8059-85/bitmaps_reference/fullstack_showcase_portfolio_ai-conference-note_0_document_0_375px.png",
+          "testImage": "backstop_data/baselines/chrome155-darwin-arm64-software-workflow-20261020-8059-85/bitmaps_reference/fullstack_showcase_portfolio_ai-conference-note_0_document_0_375px.png",
+          "diff": {
+            "isSameDimensions": true,
+            "dimensionDifference": {
+              "width": 0,
+              "height": 0
+            },
+            "misMatchPercentage": "0.00"
+          }
+        }
+      },
+      {
+        "file": "fullstack_showcase_portfolio_ai-conference-note_0_document_1_390px.png",
+        "status": "pass",
+        "pair": {
+          "label": "ai-conference-note",
+          "viewportLabel": "390px",
+          "referenceImage": "backstop_data/baselines/chrome155-darwin-arm64-software-workflow-20261020-8059-85/bitmaps_reference/fullstack_showcase_portfolio_ai-conference-note_0_document_1_390px.png",
+          "testImage": "backstop_data/baselines/chrome155-darwin-arm64-software-workflow-20261020-8059-85/bitmaps_reference/fullstack_showcase_portfolio_ai-conference-note_0_document_1_390px.png",
+          "diff": {
+            "isSameDimensions": true,
+            "dimensionDifference": {
+              "width": 0,
+              "height": 0
+            },
+            "misMatchPercentage": "0.00"
+          }
+        }
+      },
+      {
+        "file": "fullstack_showcase_portfolio_ai-conference-note_0_document_2_430px.png",
+        "status": "pass",
+        "pair": {
+          "label": "ai-conference-note",
+          "viewportLabel": "430px",
+          "referenceImage": "backstop_data/baselines/chrome155-darwin-arm64-software-workflow-20261020-8059-85/bitmaps_reference/fullstack_showcase_portfolio_ai-conference-note_0_document_2_430px.png",
+          "testImage": "backstop_data/baselines/chrome155-darwin-arm64-software-workflow-20261020-8059-85/bitmaps_reference/fullstack_showcase_portfolio_ai-conference-note_0_document_2_430px.png",
+          "diff": {
+            "isSameDimensions": true,
+            "dimensionDifference": {
+              "width": 0,
+              "height": 0
+            },
+            "misMatchPercentage": "0.00"
+          }
+        }
+      },
+      {
+        "file": "fullstack_showcase_portfolio_ai-conference-note_0_document_3_1440px.png",
+        "status": "pass",
+        "pair": {
+          "label": "ai-conference-note",
+          "viewportLabel": "1440px",
+          "referenceImage": "backstop_data/baselines/chrome155-darwin-arm64-software-workflow-20261020-8059-85/bitmaps_reference/fullstack_showcase_portfolio_ai-conference-note_0_document_3_1440px.png",
+          "testImage": "backstop_data/baselines/chrome155-darwin-arm64-software-workflow-20261020-8059-85/bitmaps_reference/fullstack_showcase_portfolio_ai-conference-note_0_document_3_1440px.png",
+          "diff": {
+            "isSameDimensions": true,
+            "dimensionDifference": {
+              "width": 0,
+              "height": 0
+            },
+            "misMatchPercentage": "0.00"
+          }
+        }
+      },
+      {
+        "file": "fullstack_showcase_portfolio_sharing-note_0_document_0_375px.png",
+        "status": "pass",
+        "pair": {
+          "label": "sharing-note",
+          "viewportLabel": "375px",
+          "referenceImage": "backstop_data/baselines/chrome155-darwin-arm64-software-workflow-20261020-8059-85/bitmaps_reference/fullstack_showcase_portfolio_sharing-note_0_document_0_375px.png",
+          "testImage": "backstop_data/baselines/chrome155-darwin-arm64-software-workflow-20261020-8059-85/bitmaps_reference/fullstack_showcase_portfolio_sharing-note_0_document_0_375px.png",
+          "diff": {
+            "isSameDimensions": true,
+            "dimensionDifference": {
+              "width": 0,
+              "height": 0
+            },
+            "misMatchPercentage": "0.00"
+          }
+        }
+      },
+      {
+        "file": "fullstack_showcase_portfolio_sharing-note_0_document_1_390px.png",
+        "status": "pass",
+        "pair": {
+          "label": "sharing-note",
+          "viewportLabel": "390px",
+          "referenceImage": "backstop_data/baselines/chrome155-darwin-arm64-software-workflow-20261020-8059-85/bitmaps_reference/fullstack_showcase_portfolio_sharing-note_0_document_1_390px.png",
+          "testImage": "backstop_data/baselines/chrome155-darwin-arm64-software-workflow-20261020-8059-85/bitmaps_reference/fullstack_showcase_portfolio_sharing-note_0_document_1_390px.png",
+          "diff": {
+            "isSameDimensions": true,
+            "dimensionDifference": {
+              "width": 0,
+              "height": 0
+            },
+            "misMatchPercentage": "0.00"
+          }
+        }
+      },
+      {
+        "file": "fullstack_showcase_portfolio_sharing-note_0_document_2_430px.png",
+        "status": "pass",
+        "pair": {
+          "label": "sharing-note",
+          "viewportLabel": "430px",
+          "referenceImage": "backstop_data/baselines/chrome155-darwin-arm64-software-workflow-20261020-8059-85/bitmaps_reference/fullstack_showcase_portfolio_sharing-note_0_document_2_430px.png",
+          "testImage": "backstop_data/baselines/chrome155-darwin-arm64-software-workflow-20261020-8059-85/bitmaps_reference/fullstack_showcase_portfolio_sharing-note_0_document_2_430px.png",
+          "diff": {
+            "isSameDimensions": true,
+            "dimensionDifference": {
+              "width": 0,
+              "height": 0
+            },
+            "misMatchPercentage": "0.00"
+          }
+        }
+      },
+      {
+        "file": "fullstack_showcase_portfolio_sharing-note_0_document_3_1440px.png",
+        "status": "pass",
+        "pair": {
+          "label": "sharing-note",
+          "viewportLabel": "1440px",
+          "referenceImage": "backstop_data/baselines/chrome155-darwin-arm64-software-workflow-20261020-8059-85/bitmaps_reference/fullstack_showcase_portfolio_sharing-note_0_document_3_1440px.png",
+          "testImage": "backstop_data/baselines/chrome155-darwin-arm64-software-workflow-20261020-8059-85/bitmaps_reference/fullstack_showcase_portfolio_sharing-note_0_document_3_1440px.png",
+          "diff": {
+            "isSameDimensions": true,
+            "dimensionDifference": {
+              "width": 0,
+              "height": 0
+            },
+            "misMatchPercentage": "0.00"
+          }
+        }
+      },
+      {
+        "file": "fullstack_showcase_portfolio_dashboard-resume-desktop_0_skillsportfolio-dashboard-module-card_0_1440px.png",
+        "status": "pass",
+        "pair": {
+          "label": "dashboard-resume-desktop",
+          "viewportLabel": "1440px",
+          "referenceImage": "backstop_data/baselines/chrome155-darwin-arm64-software-workflow-20261020-8059-85/bitmaps_reference/fullstack_showcase_portfolio_dashboard-resume-desktop_0_skillsportfolio-dashboard-module-card_0_1440px.png",
+          "testImage": "backstop_data/baselines/chrome155-darwin-arm64-software-workflow-20261020-8059-85/bitmaps_reference/fullstack_showcase_portfolio_dashboard-resume-desktop_0_skillsportfolio-dashboard-module-card_0_1440px.png",
+          "diff": {
+            "isSameDimensions": true,
+            "dimensionDifference": {
+              "width": 0,
+              "height": 0
+            },
+            "misMatchPercentage": "0.00"
+          }
+        }
+      },
+      {
+        "file": "fullstack_showcase_portfolio_dashboard-resume-desktop_0_skillsportfolio-dashboard-module-card_1_1536px.png",
+        "status": "pass",
+        "pair": {
+          "label": "dashboard-resume-desktop",
+          "viewportLabel": "1536px",
+          "referenceImage": "backstop_data/baselines/chrome155-darwin-arm64-software-workflow-20261020-8059-85/bitmaps_reference/fullstack_showcase_portfolio_dashboard-resume-desktop_0_skillsportfolio-dashboard-module-card_1_1536px.png",
+          "testImage": "backstop_data/baselines/chrome155-darwin-arm64-software-workflow-20261020-8059-85/bitmaps_reference/fullstack_showcase_portfolio_dashboard-resume-desktop_0_skillsportfolio-dashboard-module-card_1_1536px.png",
+          "diff": {
+            "isSameDimensions": true,
+            "dimensionDifference": {
+              "width": 0,
+              "height": 0
+            },
+            "misMatchPercentage": "0.00"
+          }
+        }
+      }
+    ]
+  },
+  "cases": [
+    {
+      "file": "fullstack_showcase_portfolio_dashboard_0_document_0_375px.png",
+      "referenceSha256": "5f8eac24432ca32ae9a2892f24e1a01d856f8881c48a4237307758a2619ec3b9",
+      "testSha256": "5f8eac24432ca32ae9a2892f24e1a01d856f8881c48a4237307758a2619ec3b9",
+      "status": "pass",
+      "isSameDimensions": true,
+      "reportedMismatchPercent": 0
+    },
+    {
+      "file": "fullstack_showcase_portfolio_dashboard_0_document_1_390px.png",
+      "referenceSha256": "228c04478a11b73a1c9907cfd2f8d64fee1acd35779bf5f99afa8736a09ef00d",
+      "testSha256": "228c04478a11b73a1c9907cfd2f8d64fee1acd35779bf5f99afa8736a09ef00d",
+      "status": "pass",
+      "isSameDimensions": true,
+      "reportedMismatchPercent": 0
+    },
+    {
+      "file": "fullstack_showcase_portfolio_dashboard_0_document_2_430px.png",
+      "referenceSha256": "19dad55af440a843906cffa2fc58054c246e6242479ca01645737b1e4c7cd702",
+      "testSha256": "19dad55af440a843906cffa2fc58054c246e6242479ca01645737b1e4c7cd702",
+      "status": "pass",
+      "isSameDimensions": true,
+      "reportedMismatchPercent": 0
+    },
+    {
+      "file": "fullstack_showcase_portfolio_dashboard_0_document_3_1440px.png",
+      "referenceSha256": "b85b928d4859da73e10065db6b1a36c48f6c86ec45877450c036dff24a642707",
+      "testSha256": "b85b928d4859da73e10065db6b1a36c48f6c86ec45877450c036dff24a642707",
+      "status": "pass",
+      "isSameDimensions": true,
+      "reportedMismatchPercent": 0
+    },
+    {
+      "file": "fullstack_showcase_portfolio_projects_0_document_0_375px.png",
+      "referenceSha256": "605f31937892760fa26a6c5de832a7ded8d6ccd0df5931e91a71b558b41040f8",
+      "testSha256": "5034ae5267380c383ae9cb61b491fc6f51acdd10014a904371933b2b0c3df000",
+      "status": "pass",
+      "isSameDimensions": true,
+      "reportedMismatchPercent": 0.02270079913314371
+    },
+    {
+      "file": "fullstack_showcase_portfolio_projects_0_document_1_390px.png",
+      "referenceSha256": "e5f54bc855b7d7892c7184ad52f54fb33deac8547a22fd98cf3a907a03fa10e0",
+      "testSha256": "f010b6c739f7dfcd68e4d4eaf0b3c7b0d78946b674d41b8dbae585b18aaaff8d",
+      "status": "pass",
+      "isSameDimensions": true,
+      "reportedMismatchPercent": 0.0224292061452813
+    },
+    {
+      "file": "fullstack_showcase_portfolio_projects_0_document_2_430px.png",
+      "referenceSha256": "f20344d88ecc3629ccddc5ec5eace43cd156ee8e10380093d97d65e147ccbebd",
+      "testSha256": "d6f1eb836392f27ca6a073f3ae2783d75dc4fe0c0db66379a9052f1180fbd52e",
+      "status": "pass",
+      "isSameDimensions": true,
+      "reportedMismatchPercent": 0.021056369761243882
+    },
+    {
+      "file": "fullstack_showcase_portfolio_projects_0_document_3_1440px.png",
+      "referenceSha256": "67ba7abb991d41c2e40ec10b0c41490b14ca92154def3efcd676fc70aa47a0ba",
+      "testSha256": "e12f1bd08a64f66cc8a34f0a8f8a07b76f79c31cad224ba0444ada1627c4be24",
+      "status": "pass",
+      "isSameDimensions": true,
+      "reportedMismatchPercent": 0.09233405723234203
+    },
+    {
+      "file": "fullstack_showcase_portfolio_evidence_0_document_0_375px.png",
+      "referenceSha256": "c01b7d3424fe575d766338fbe968d82859656749264b0540397be749a1b33701",
+      "testSha256": "c01b7d3424fe575d766338fbe968d82859656749264b0540397be749a1b33701",
+      "status": "pass",
+      "isSameDimensions": true,
+      "reportedMismatchPercent": 0
+    },
+    {
+      "file": "fullstack_showcase_portfolio_evidence_0_document_1_390px.png",
+      "referenceSha256": "fed28cb2eef3ed16b893432703334e754cfb984feb5ea057e0227cd49c31bfe1",
+      "testSha256": "fed28cb2eef3ed16b893432703334e754cfb984feb5ea057e0227cd49c31bfe1",
+      "status": "pass",
+      "isSameDimensions": true,
+      "reportedMismatchPercent": 0
+    },
+    {
+      "file": "fullstack_showcase_portfolio_evidence_0_document_2_430px.png",
+      "referenceSha256": "2133e0354477f4e64b7a84e511848597869c921c5daa0d2d79abcb7e61b86f7c",
+      "testSha256": "2133e0354477f4e64b7a84e511848597869c921c5daa0d2d79abcb7e61b86f7c",
+      "status": "pass",
+      "isSameDimensions": true,
+      "reportedMismatchPercent": 0
+    },
+    {
+      "file": "fullstack_showcase_portfolio_evidence_0_document_3_1440px.png",
+      "referenceSha256": "4fcb1066a1c5b184d77d1e51344d77def9673bc36b0542c1049fbe1d5c6e1d58",
+      "testSha256": "4fcb1066a1c5b184d77d1e51344d77def9673bc36b0542c1049fbe1d5c6e1d58",
+      "status": "pass",
+      "isSameDimensions": true,
+      "reportedMismatchPercent": 0
+    },
+    {
+      "file": "fullstack_showcase_portfolio_open-source_0_document_0_375px.png",
+      "referenceSha256": "fbfa862770de6c7d6e5fe29e563103b7c665bbf4b75b55c1c3b6edd07cf154b8",
+      "testSha256": "fbfa862770de6c7d6e5fe29e563103b7c665bbf4b75b55c1c3b6edd07cf154b8",
+      "status": "pass",
+      "isSameDimensions": true,
+      "reportedMismatchPercent": 0
+    },
+    {
+      "file": "fullstack_showcase_portfolio_open-source_0_document_1_390px.png",
+      "referenceSha256": "66005fcef49a7e026293664f5b20a280ffad7f15820423969305cc7b0c716197",
+      "testSha256": "66005fcef49a7e026293664f5b20a280ffad7f15820423969305cc7b0c716197",
+      "status": "pass",
+      "isSameDimensions": true,
+      "reportedMismatchPercent": 0
+    },
+    {
+      "file": "fullstack_showcase_portfolio_open-source_0_document_2_430px.png",
+      "referenceSha256": "550fb8190f48b72d667aef44eda58e49f1586f008379f5b99ef90ae0aac1f3fd",
+      "testSha256": "550fb8190f48b72d667aef44eda58e49f1586f008379f5b99ef90ae0aac1f3fd",
+      "status": "pass",
+      "isSameDimensions": true,
+      "reportedMismatchPercent": 0
+    },
+    {
+      "file": "fullstack_showcase_portfolio_open-source_0_document_3_1440px.png",
+      "referenceSha256": "05d662f891f701b536f93634aac28e5c421864a1c130bbaf1b2b1b500f3703d5",
+      "testSha256": "05d662f891f701b536f93634aac28e5c421864a1c130bbaf1b2b1b500f3703d5",
+      "status": "pass",
+      "isSameDimensions": true,
+      "reportedMismatchPercent": 0
+    },
+    {
+      "file": "fullstack_showcase_portfolio_performance-control_0_document_0_375px.png",
+      "referenceSha256": "0bc97de5419feb07917f9daf815aee8fdab0fa3519ac92d5e0ec019877027b4e",
+      "testSha256": "0bc97de5419feb07917f9daf815aee8fdab0fa3519ac92d5e0ec019877027b4e",
+      "status": "pass",
+      "isSameDimensions": true,
+      "reportedMismatchPercent": 0
+    },
+    {
+      "file": "fullstack_showcase_portfolio_performance-control_0_document_1_390px.png",
+      "referenceSha256": "c11e2a53ee9eee793769d8f9d54e04c36715c772cdaa67ecb05244f52ff90f97",
+      "testSha256": "c11e2a53ee9eee793769d8f9d54e04c36715c772cdaa67ecb05244f52ff90f97",
+      "status": "pass",
+      "isSameDimensions": true,
+      "reportedMismatchPercent": 0
+    },
+    {
+      "file": "fullstack_showcase_portfolio_performance-control_0_document_2_430px.png",
+      "referenceSha256": "e87895f9f1e44584956195628d4c02b1ef50c1b9a838a8571da5289000fc251a",
+      "testSha256": "e87895f9f1e44584956195628d4c02b1ef50c1b9a838a8571da5289000fc251a",
+      "status": "pass",
+      "isSameDimensions": true,
+      "reportedMismatchPercent": 0
+    },
+    {
+      "file": "fullstack_showcase_portfolio_performance-control_0_document_3_1440px.png",
+      "referenceSha256": "cc5aa19dbde86e6ce71acaae498aa7981b86f22a7071c65f6b44f24718b2411e",
+      "testSha256": "cc5aa19dbde86e6ce71acaae498aa7981b86f22a7071c65f6b44f24718b2411e",
+      "status": "pass",
+      "isSameDimensions": true,
+      "reportedMismatchPercent": 0
+    },
+    {
+      "file": "fullstack_showcase_portfolio_sharing_0_document_0_375px.png",
+      "referenceSha256": "ef10ff678293f0d266ab7ab4536868f1301f9bf8833b7239e3964199a44c888c",
+      "testSha256": "534b1c95b3f316841019f56b20870123fe1fad16d1519b16bb4b948a4ec9d780",
+      "status": "pass",
+      "isSameDimensions": true,
+      "reportedMismatchPercent": 0.02847377024817952
+    },
+    {
+      "file": "fullstack_showcase_portfolio_sharing_0_document_1_390px.png",
+      "referenceSha256": "d8ead2444484052b7eb05d7df44b009aaa255fdfcc95dab0f9a77dbb2b8f2d8c",
+      "testSha256": "d8ead2444484052b7eb05d7df44b009aaa255fdfcc95dab0f9a77dbb2b8f2d8c",
+      "status": "pass",
+      "isSameDimensions": true,
+      "reportedMismatchPercent": 0
+    },
+    {
+      "file": "fullstack_showcase_portfolio_sharing_0_document_2_430px.png",
+      "referenceSha256": "cfc49094d90a2a8fbba136fba58d6282b9a662e12b1f6247b9cad41196b984dd",
+      "testSha256": "cfc49094d90a2a8fbba136fba58d6282b9a662e12b1f6247b9cad41196b984dd",
+      "status": "pass",
+      "isSameDimensions": true,
+      "reportedMismatchPercent": 0
+    },
+    {
+      "file": "fullstack_showcase_portfolio_sharing_0_document_3_1440px.png",
+      "referenceSha256": "17a90e8321e259bd94ab91221b80ed9fee749c2dc75df3bfbc4130fccf46cf90",
+      "testSha256": "381a9add949d4b4ad8030eb9b4aeff5ec075a968d42f8bddc2e53de935f1c9ca",
+      "status": "pass",
+      "isSameDimensions": true,
+      "reportedMismatchPercent": 0.02483814422437177
+    },
+    {
+      "file": "fullstack_showcase_portfolio_ai-conferences_0_document_0_375px.png",
+      "referenceSha256": "99536addfe19a15a6c3368d4cf38fcff98f8154624ee9569e2ebbcf91275bbe4",
+      "testSha256": "99536addfe19a15a6c3368d4cf38fcff98f8154624ee9569e2ebbcf91275bbe4",
+      "status": "pass",
+      "isSameDimensions": true,
+      "reportedMismatchPercent": 0
+    },
+    {
+      "file": "fullstack_showcase_portfolio_ai-conferences_0_document_1_390px.png",
+      "referenceSha256": "0af1d97b295f33eb284a704889ce6399d33c2a5363460229392d3fcdfa24077d",
+      "testSha256": "0af1d97b295f33eb284a704889ce6399d33c2a5363460229392d3fcdfa24077d",
+      "status": "pass",
+      "isSameDimensions": true,
+      "reportedMismatchPercent": 0
+    },
+    {
+      "file": "fullstack_showcase_portfolio_ai-conferences_0_document_2_430px.png",
+      "referenceSha256": "4dcd3960941303242ffe31f48ac8c564c7b80e543048c0cda8de35d9deb0afde",
+      "testSha256": "4dcd3960941303242ffe31f48ac8c564c7b80e543048c0cda8de35d9deb0afde",
+      "status": "pass",
+      "isSameDimensions": true,
+      "reportedMismatchPercent": 0
+    },
+    {
+      "file": "fullstack_showcase_portfolio_ai-conferences_0_document_3_1440px.png",
+      "referenceSha256": "de1748c1d2874922bcd8f962cdf0731bfc9b0c98dbd7577398373ebdd311896e",
+      "testSha256": "de1748c1d2874922bcd8f962cdf0731bfc9b0c98dbd7577398373ebdd311896e",
+      "status": "pass",
+      "isSameDimensions": true,
+      "reportedMismatchPercent": 0
+    },
+    {
+      "file": "fullstack_showcase_portfolio_ai-conference-note_0_document_0_375px.png",
+      "referenceSha256": "00a597e0712d652595151dff0948d7dfa9ecb5c05b337b767d82c71630d2a8d4",
+      "testSha256": "00a597e0712d652595151dff0948d7dfa9ecb5c05b337b767d82c71630d2a8d4",
+      "status": "pass",
+      "isSameDimensions": true,
+      "reportedMismatchPercent": 0
+    },
+    {
+      "file": "fullstack_showcase_portfolio_ai-conference-note_0_document_1_390px.png",
+      "referenceSha256": "ba7e19aff311c1c29f52f2c5c00084cf0d72145e8311ec9e65a4433583ae8f95",
+      "testSha256": "ba7e19aff311c1c29f52f2c5c00084cf0d72145e8311ec9e65a4433583ae8f95",
+      "status": "pass",
+      "isSameDimensions": true,
+      "reportedMismatchPercent": 0
+    },
+    {
+      "file": "fullstack_showcase_portfolio_ai-conference-note_0_document_2_430px.png",
+      "referenceSha256": "67cd1dc551fdd9730c7090968a8aa93dd48c8c30f55ae9e50475454170697a87",
+      "testSha256": "67cd1dc551fdd9730c7090968a8aa93dd48c8c30f55ae9e50475454170697a87",
+      "status": "pass",
+      "isSameDimensions": true,
+      "reportedMismatchPercent": 0
+    },
+    {
+      "file": "fullstack_showcase_portfolio_ai-conference-note_0_document_3_1440px.png",
+      "referenceSha256": "cb1289c4642eaa81ff3a364624e83077dc0fc61e00e2be23d9e93700cf42a168",
+      "testSha256": "cb1289c4642eaa81ff3a364624e83077dc0fc61e00e2be23d9e93700cf42a168",
+      "status": "pass",
+      "isSameDimensions": true,
+      "reportedMismatchPercent": 0
+    },
+    {
+      "file": "fullstack_showcase_portfolio_sharing-note_0_document_0_375px.png",
+      "referenceSha256": "fab1592dc911831c27603243ceed7b4f4e101b0e275f194256d0a647239776b4",
+      "testSha256": "fab1592dc911831c27603243ceed7b4f4e101b0e275f194256d0a647239776b4",
+      "status": "pass",
+      "isSameDimensions": true,
+      "reportedMismatchPercent": 0
+    },
+    {
+      "file": "fullstack_showcase_portfolio_sharing-note_0_document_1_390px.png",
+      "referenceSha256": "e1f729ddf4f8332c09c28871829f4fafb1c06746e97f28a3a387e7aa9135928a",
+      "testSha256": "e1f729ddf4f8332c09c28871829f4fafb1c06746e97f28a3a387e7aa9135928a",
+      "status": "pass",
+      "isSameDimensions": true,
+      "reportedMismatchPercent": 0
+    },
+    {
+      "file": "fullstack_showcase_portfolio_sharing-note_0_document_2_430px.png",
+      "referenceSha256": "88f7b5528fc2123353477cf5bd7268d22c13883c287fea6e8981e29586ef764f",
+      "testSha256": "88f7b5528fc2123353477cf5bd7268d22c13883c287fea6e8981e29586ef764f",
+      "status": "pass",
+      "isSameDimensions": true,
+      "reportedMismatchPercent": 0
+    },
+    {
+      "file": "fullstack_showcase_portfolio_sharing-note_0_document_3_1440px.png",
+      "referenceSha256": "d29bcf31d401d56b4e5f2b7c725f638a1454a77b7c17916acb8cbda4470aef99",
+      "testSha256": "d29bcf31d401d56b4e5f2b7c725f638a1454a77b7c17916acb8cbda4470aef99",
+      "status": "pass",
+      "isSameDimensions": true,
+      "reportedMismatchPercent": 0
+    },
+    {
+      "file": "fullstack_showcase_portfolio_dashboard-resume-desktop_0_skillsportfolio-dashboard-module-card_0_1440px.png",
+      "referenceSha256": "3c94cb44c1f30814bd21341dada5acd1be8cbdd87d16c96ab269469d4a3751b4",
+      "testSha256": "3c94cb44c1f30814bd21341dada5acd1be8cbdd87d16c96ab269469d4a3751b4",
+      "status": "pass",
+      "isSameDimensions": true,
+      "reportedMismatchPercent": 0
+    },
+    {
+      "file": "fullstack_showcase_portfolio_dashboard-resume-desktop_0_skillsportfolio-dashboard-module-card_1_1536px.png",
+      "referenceSha256": "e593253a7c69b094a0e000e0d81acca803e4aeaf67542d588c8b2a3b539bf6fc",
+      "testSha256": "e593253a7c69b094a0e000e0d81acca803e4aeaf67542d588c8b2a3b539bf6fc",
+      "status": "pass",
+      "isSameDimensions": true,
+      "reportedMismatchPercent": 0
+    }
+  ]
+}

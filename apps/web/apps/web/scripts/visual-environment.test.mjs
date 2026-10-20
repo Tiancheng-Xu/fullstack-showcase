@@ -10,7 +10,7 @@ describe("visual regression environment", () => {
 		const config = require("../backstop.config.cjs");
 		const packageJson = require("../package.json");
 		expect(config.visualEnvironment).toEqual({
-			browser: "Google Chrome 155.0.8059.80",
+			browser: "Google Chrome 155.0.8059.85",
 			platform: "darwin",
 			architecture: "arm64",
 			locale: "zh-CN",
