@@ -1,0 +1,785 @@
+{
+  "schemaVersion": 1,
+  "kind": "staged-release",
+  "browser": "Google Chrome 155.0.8059.85",
+  "rawReportSha256": "135588602e4a348e509f7b6686da9f91b9c88af92418ebd8cfc313a8667c917f",
+  "rawReportPolicy": "Original report retained locally. This export verifies native report image paths and removes private filesystem paths.",
+  "tests": [
+    {
+      "file": "fullstack_showcase_portfolio_dashboard_0_document_0_375px.png",
+      "status": "pass",
+      "pair": {
+        "referenceImage": "bitmaps_reference/fullstack_showcase_portfolio_dashboard_0_document_0_375px.png",
+        "referenceSha256": "f09e0ff3466ebf3f1436bf8becf6274297a20afe6baea040d4aaef99824e9533",
+        "testImage": "bitmaps_reference/fullstack_showcase_portfolio_dashboard_0_document_0_375px.png",
+        "testSha256": "f09e0ff3466ebf3f1436bf8becf6274297a20afe6baea040d4aaef99824e9533",
+        "requireSameDimensions": true,
+        "misMatchThreshold": 0.1,
+        "diff": {
+          "isSameDimensions": true,
+          "dimensionDifference": {
+            "width": 0,
+            "height": 0
+          },
+          "misMatchPercentage": "0.00"
+        }
+      }
+    },
+    {
+      "file": "fullstack_showcase_portfolio_dashboard_0_document_1_390px.png",
+      "status": "pass",
+      "pair": {
+        "referenceImage": "bitmaps_reference/fullstack_showcase_portfolio_dashboard_0_document_1_390px.png",
+        "referenceSha256": "d52e306c6ab8ff6783b75d5084bfc67c66e577d9d6cc5e5bf83017defbb4c34d",
+        "testImage": "bitmaps_reference/fullstack_showcase_portfolio_dashboard_0_document_1_390px.png",
+        "testSha256": "d52e306c6ab8ff6783b75d5084bfc67c66e577d9d6cc5e5bf83017defbb4c34d",
+        "requireSameDimensions": true,
+        "misMatchThreshold": 0.1,
+        "diff": {
+          "isSameDimensions": true,
+          "dimensionDifference": {
+            "width": 0,
+            "height": 0
+          },
+          "misMatchPercentage": "0.00"
+        }
+      }
+    },
+    {
+      "file": "fullstack_showcase_portfolio_dashboard_0_document_2_430px.png",
+      "status": "pass",
+      "pair": {
+        "referenceImage": "bitmaps_reference/fullstack_showcase_portfolio_dashboard_0_document_2_430px.png",
+        "referenceSha256": "b49255319ce73c62de0f0e5b620c17e44321e7f2eba53997195cd28b2b7aad32",
+        "testImage": "bitmaps_reference/fullstack_showcase_portfolio_dashboard_0_document_2_430px.png",
+        "testSha256": "b49255319ce73c62de0f0e5b620c17e44321e7f2eba53997195cd28b2b7aad32",
+        "requireSameDimensions": true,
+        "misMatchThreshold": 0.1,
+        "diff": {
+          "isSameDimensions": true,
+          "dimensionDifference": {
+            "width": 0,
+            "height": 0
+          },
+          "misMatchPercentage": "0.00"
+        }
+      }
+    },
+    {
+      "file": "fullstack_showcase_portfolio_dashboard_0_document_3_1440px.png",
+      "status": "pass",
+      "pair": {
+        "referenceImage": "bitmaps_reference/fullstack_showcase_portfolio_dashboard_0_document_3_1440px.png",
+        "referenceSha256": "95f1dfdd26f41249f028f346be833d322d359b7466c5a8694df396edd1ecb140",
+        "testImage": "bitmaps_reference/fullstack_showcase_portfolio_dashboard_0_document_3_1440px.png",
+        "testSha256": "95f1dfdd26f41249f028f346be833d322d359b7466c5a8694df396edd1ecb140",
+        "requireSameDimensions": true,
+        "misMatchThreshold": 0.1,
+        "diff": {
+          "isSameDimensions": true,
+          "dimensionDifference": {
+            "width": 0,
+            "height": 0
+          },
+          "misMatchPercentage": "0.00"
+        }
+      }
+    },
+    {
+      "file": "fullstack_showcase_portfolio_projects_0_document_0_375px.png",
+      "status": "pass",
+      "pair": {
+        "referenceImage": "bitmaps_reference/fullstack_showcase_portfolio_projects_0_document_0_375px.png",
+        "referenceSha256": "605f31937892760fa26a6c5de832a7ded8d6ccd0df5931e91a71b558b41040f8",
+        "testImage": "evidence/5034ae5267380c383ae9cb61b491fc6f51acdd10014a904371933b2b0c3df000.png",
+        "testSha256": "5034ae5267380c383ae9cb61b491fc6f51acdd10014a904371933b2b0c3df000",
+        "requireSameDimensions": true,
+        "misMatchThreshold": 0.1,
+        "diff": {
+          "isSameDimensions": true,
+          "dimensionDifference": {
+            "width": 0,
+            "height": 0
+          },
+          "rawMisMatchPercentage": 0.02270079913314371,
+          "misMatchPercentage": "0.02",
+          "analysisTime": 53
+        }
+      }
+    },
+    {
+      "file": "fullstack_showcase_portfolio_projects_0_document_1_390px.png",
+      "status": "pass",
+      "pair": {
+        "referenceImage": "bitmaps_reference/fullstack_showcase_portfolio_projects_0_document_1_390px.png",
+        "referenceSha256": "e5f54bc855b7d7892c7184ad52f54fb33deac8547a22fd98cf3a907a03fa10e0",
+        "testImage": "evidence/f010b6c739f7dfcd68e4d4eaf0b3c7b0d78946b674d41b8dbae585b18aaaff8d.png",
+        "testSha256": "f010b6c739f7dfcd68e4d4eaf0b3c7b0d78946b674d41b8dbae585b18aaaff8d",
+        "requireSameDimensions": true,
+        "misMatchThreshold": 0.1,
+        "diff": {
+          "isSameDimensions": true,
+          "dimensionDifference": {
+            "width": 0,
+            "height": 0
+          },
+          "rawMisMatchPercentage": 0.0224292061452813,
+          "misMatchPercentage": "0.02",
+          "analysisTime": 52
+        }
+      }
+    },
+    {
+      "file": "fullstack_showcase_portfolio_projects_0_document_2_430px.png",
+      "status": "pass",
+      "pair": {
+        "referenceImage": "bitmaps_reference/fullstack_showcase_portfolio_projects_0_document_2_430px.png",
+        "referenceSha256": "f20344d88ecc3629ccddc5ec5eace43cd156ee8e10380093d97d65e147ccbebd",
+        "testImage": "evidence/d6f1eb836392f27ca6a073f3ae2783d75dc4fe0c0db66379a9052f1180fbd52e.png",
+        "testSha256": "d6f1eb836392f27ca6a073f3ae2783d75dc4fe0c0db66379a9052f1180fbd52e",
+        "requireSameDimensions": true,
+        "misMatchThreshold": 0.1,
+        "diff": {
+          "isSameDimensions": true,
+          "dimensionDifference": {
+            "width": 0,
+            "height": 0
+          },
+          "rawMisMatchPercentage": 0.021056369761243882,
+          "misMatchPercentage": "0.02",
+          "analysisTime": 58
+        }
+      }
+    },
+    {
+      "file": "fullstack_showcase_portfolio_projects_0_document_3_1440px.png",
+      "status": "pass",
+      "pair": {
+        "referenceImage": "bitmaps_reference/fullstack_showcase_portfolio_projects_0_document_3_1440px.png",
+        "referenceSha256": "67ba7abb991d41c2e40ec10b0c41490b14ca92154def3efcd676fc70aa47a0ba",
+        "testImage": "evidence/e12f1bd08a64f66cc8a34f0a8f8a07b76f79c31cad224ba0444ada1627c4be24.png",
+        "testSha256": "e12f1bd08a64f66cc8a34f0a8f8a07b76f79c31cad224ba0444ada1627c4be24",
+        "requireSameDimensions": true,
+        "misMatchThreshold": 0.1,
+        "diff": {
+          "isSameDimensions": true,
+          "dimensionDifference": {
+            "width": 0,
+            "height": 0
+          },
+          "rawMisMatchPercentage": 0.09233405723234203,
+          "misMatchPercentage": "0.09",
+          "analysisTime": 94
+        }
+      }
+    },
+    {
+      "file": "fullstack_showcase_portfolio_evidence_0_document_0_375px.png",
+      "status": "pass",
+      "pair": {
+        "referenceImage": "bitmaps_reference/fullstack_showcase_portfolio_evidence_0_document_0_375px.png",
+        "referenceSha256": "c01b7d3424fe575d766338fbe968d82859656749264b0540397be749a1b33701",
+        "testImage": "bitmaps_reference/fullstack_showcase_portfolio_evidence_0_document_0_375px.png",
+        "testSha256": "c01b7d3424fe575d766338fbe968d82859656749264b0540397be749a1b33701",
+        "requireSameDimensions": true,
+        "misMatchThreshold": 0.1,
+        "diff": {
+          "isSameDimensions": true,
+          "dimensionDifference": {
+            "width": 0,
+            "height": 0
+          },
+          "misMatchPercentage": "0.00"
+        }
+      }
+    },
+    {
+      "file": "fullstack_showcase_portfolio_evidence_0_document_1_390px.png",
+      "status": "pass",
+      "pair": {
+        "referenceImage": "bitmaps_reference/fullstack_showcase_portfolio_evidence_0_document_1_390px.png",
+        "referenceSha256": "fed28cb2eef3ed16b893432703334e754cfb984feb5ea057e0227cd49c31bfe1",
+        "testImage": "bitmaps_reference/fullstack_showcase_portfolio_evidence_0_document_1_390px.png",
+        "testSha256": "fed28cb2eef3ed16b893432703334e754cfb984feb5ea057e0227cd49c31bfe1",
+        "requireSameDimensions": true,
+        "misMatchThreshold": 0.1,
+        "diff": {
+          "isSameDimensions": true,
+          "dimensionDifference": {
+            "width": 0,
+            "height": 0
+          },
+          "misMatchPercentage": "0.00"
+        }
+      }
+    },
+    {
+      "file": "fullstack_showcase_portfolio_evidence_0_document_2_430px.png",
+      "status": "pass",
+      "pair": {
+        "referenceImage": "bitmaps_reference/fullstack_showcase_portfolio_evidence_0_document_2_430px.png",
+        "referenceSha256": "2133e0354477f4e64b7a84e511848597869c921c5daa0d2d79abcb7e61b86f7c",
+        "testImage": "bitmaps_reference/fullstack_showcase_portfolio_evidence_0_document_2_430px.png",
+        "testSha256": "2133e0354477f4e64b7a84e511848597869c921c5daa0d2d79abcb7e61b86f7c",
+        "requireSameDimensions": true,
+        "misMatchThreshold": 0.1,
+        "diff": {
+          "isSameDimensions": true,
+          "dimensionDifference": {
+            "width": 0,
+            "height": 0
+          },
+          "misMatchPercentage": "0.00"
+        }
+      }
+    },
+    {
+      "file": "fullstack_showcase_portfolio_evidence_0_document_3_1440px.png",
+      "status": "pass",
+      "pair": {
+        "referenceImage": "bitmaps_reference/fullstack_showcase_portfolio_evidence_0_document_3_1440px.png",
+        "referenceSha256": "4fcb1066a1c5b184d77d1e51344d77def9673bc36b0542c1049fbe1d5c6e1d58",
+        "testImage": "bitmaps_reference/fullstack_showcase_portfolio_evidence_0_document_3_1440px.png",
+        "testSha256": "4fcb1066a1c5b184d77d1e51344d77def9673bc36b0542c1049fbe1d5c6e1d58",
+        "requireSameDimensions": true,
+        "misMatchThreshold": 0.1,
+        "diff": {
+          "isSameDimensions": true,
+          "dimensionDifference": {
+            "width": 0,
+            "height": 0
+          },
+          "misMatchPercentage": "0.00"
+        }
+      }
+    },
+    {
+      "file": "fullstack_showcase_portfolio_open-source_0_document_0_375px.png",
+      "status": "pass",
+      "pair": {
+        "referenceImage": "bitmaps_reference/fullstack_showcase_portfolio_open-source_0_document_0_375px.png",
+        "referenceSha256": "fbfa862770de6c7d6e5fe29e563103b7c665bbf4b75b55c1c3b6edd07cf154b8",
+        "testImage": "bitmaps_reference/fullstack_showcase_portfolio_open-source_0_document_0_375px.png",
+        "testSha256": "fbfa862770de6c7d6e5fe29e563103b7c665bbf4b75b55c1c3b6edd07cf154b8",
+        "requireSameDimensions": true,
+        "misMatchThreshold": 0.1,
+        "diff": {
+          "isSameDimensions": true,
+          "dimensionDifference": {
+            "width": 0,
+            "height": 0
+          },
+          "misMatchPercentage": "0.00"
+        }
+      }
+    },
+    {
+      "file": "fullstack_showcase_portfolio_open-source_0_document_1_390px.png",
+      "status": "pass",
+      "pair": {
+        "referenceImage": "bitmaps_reference/fullstack_showcase_portfolio_open-source_0_document_1_390px.png",
+        "referenceSha256": "66005fcef49a7e026293664f5b20a280ffad7f15820423969305cc7b0c716197",
+        "testImage": "bitmaps_reference/fullstack_showcase_portfolio_open-source_0_document_1_390px.png",
+        "testSha256": "66005fcef49a7e026293664f5b20a280ffad7f15820423969305cc7b0c716197",
+        "requireSameDimensions": true,
+        "misMatchThreshold": 0.1,
+        "diff": {
+          "isSameDimensions": true,
+          "dimensionDifference": {
+            "width": 0,
+            "height": 0
+          },
+          "misMatchPercentage": "0.00"
+        }
+      }
+    },
+    {
+      "file": "fullstack_showcase_portfolio_open-source_0_document_2_430px.png",
+      "status": "pass",
+      "pair": {
+        "referenceImage": "bitmaps_reference/fullstack_showcase_portfolio_open-source_0_document_2_430px.png",
+        "referenceSha256": "550fb8190f48b72d667aef44eda58e49f1586f008379f5b99ef90ae0aac1f3fd",
+        "testImage": "bitmaps_reference/fullstack_showcase_portfolio_open-source_0_document_2_430px.png",
+        "testSha256": "550fb8190f48b72d667aef44eda58e49f1586f008379f5b99ef90ae0aac1f3fd",
+        "requireSameDimensions": true,
+        "misMatchThreshold": 0.1,
+        "diff": {
+          "isSameDimensions": true,
+          "dimensionDifference": {
+            "width": 0,
+            "height": 0
+          },
+          "misMatchPercentage": "0.00"
+        }
+      }
+    },
+    {
+      "file": "fullstack_showcase_portfolio_open-source_0_document_3_1440px.png",
+      "status": "pass",
+      "pair": {
+        "referenceImage": "bitmaps_reference/fullstack_showcase_portfolio_open-source_0_document_3_1440px.png",
+        "referenceSha256": "05d662f891f701b536f93634aac28e5c421864a1c130bbaf1b2b1b500f3703d5",
+        "testImage": "bitmaps_reference/fullstack_showcase_portfolio_open-source_0_document_3_1440px.png",
+        "testSha256": "05d662f891f701b536f93634aac28e5c421864a1c130bbaf1b2b1b500f3703d5",
+        "requireSameDimensions": true,
+        "misMatchThreshold": 0.1,
+        "diff": {
+          "isSameDimensions": true,
+          "dimensionDifference": {
+            "width": 0,
+            "height": 0
+          },
+          "misMatchPercentage": "0.00"
+        }
+      }
+    },
+    {
+      "file": "fullstack_showcase_portfolio_performance-control_0_document_0_375px.png",
+      "status": "pass",
+      "pair": {
+        "referenceImage": "bitmaps_reference/fullstack_showcase_portfolio_performance-control_0_document_0_375px.png",
+        "referenceSha256": "0bc97de5419feb07917f9daf815aee8fdab0fa3519ac92d5e0ec019877027b4e",
+        "testImage": "bitmaps_reference/fullstack_showcase_portfolio_performance-control_0_document_0_375px.png",
+        "testSha256": "0bc97de5419feb07917f9daf815aee8fdab0fa3519ac92d5e0ec019877027b4e",
+        "requireSameDimensions": true,
+        "misMatchThreshold": 0.1,
+        "diff": {
+          "isSameDimensions": true,
+          "dimensionDifference": {
+            "width": 0,
+            "height": 0
+          },
+          "misMatchPercentage": "0.00"
+        }
+      }
+    },
+    {
+      "file": "fullstack_showcase_portfolio_performance-control_0_document_1_390px.png",
+      "status": "pass",
+      "pair": {
+        "referenceImage": "bitmaps_reference/fullstack_showcase_portfolio_performance-control_0_document_1_390px.png",
+        "referenceSha256": "c11e2a53ee9eee793769d8f9d54e04c36715c772cdaa67ecb05244f52ff90f97",
+        "testImage": "bitmaps_reference/fullstack_showcase_portfolio_performance-control_0_document_1_390px.png",
+        "testSha256": "c11e2a53ee9eee793769d8f9d54e04c36715c772cdaa67ecb05244f52ff90f97",
+        "requireSameDimensions": true,
+        "misMatchThreshold": 0.1,
+        "diff": {
+          "isSameDimensions": true,
+          "dimensionDifference": {
+            "width": 0,
+            "height": 0
+          },
+          "misMatchPercentage": "0.00"
+        }
+      }
+    },
+    {
+      "file": "fullstack_showcase_portfolio_performance-control_0_document_2_430px.png",
+      "status": "pass",
+      "pair": {
+        "referenceImage": "bitmaps_reference/fullstack_showcase_portfolio_performance-control_0_document_2_430px.png",
+        "referenceSha256": "e87895f9f1e44584956195628d4c02b1ef50c1b9a838a8571da5289000fc251a",
+        "testImage": "bitmaps_reference/fullstack_showcase_portfolio_performance-control_0_document_2_430px.png",
+        "testSha256": "e87895f9f1e44584956195628d4c02b1ef50c1b9a838a8571da5289000fc251a",
+        "requireSameDimensions": true,
+        "misMatchThreshold": 0.1,
+        "diff": {
+          "isSameDimensions": true,
+          "dimensionDifference": {
+            "width": 0,
+            "height": 0
+          },
+          "misMatchPercentage": "0.00"
+        }
+      }
+    },
+    {
+      "file": "fullstack_showcase_portfolio_performance-control_0_document_3_1440px.png",
+      "status": "pass",
+      "pair": {
+        "referenceImage": "bitmaps_reference/fullstack_showcase_portfolio_performance-control_0_document_3_1440px.png",
+        "referenceSha256": "cc5aa19dbde86e6ce71acaae498aa7981b86f22a7071c65f6b44f24718b2411e",
+        "testImage": "bitmaps_reference/fullstack_showcase_portfolio_performance-control_0_document_3_1440px.png",
+        "testSha256": "cc5aa19dbde86e6ce71acaae498aa7981b86f22a7071c65f6b44f24718b2411e",
+        "requireSameDimensions": true,
+        "misMatchThreshold": 0.1,
+        "diff": {
+          "isSameDimensions": true,
+          "dimensionDifference": {
+            "width": 0,
+            "height": 0
+          },
+          "misMatchPercentage": "0.00"
+        }
+      }
+    },
+    {
+      "file": "fullstack_showcase_portfolio_sharing_0_document_0_375px.png",
+      "status": "pass",
+      "pair": {
+        "referenceImage": "bitmaps_reference/fullstack_showcase_portfolio_sharing_0_document_0_375px.png",
+        "referenceSha256": "ef10ff678293f0d266ab7ab4536868f1301f9bf8833b7239e3964199a44c888c",
+        "testImage": "evidence/534b1c95b3f316841019f56b20870123fe1fad16d1519b16bb4b948a4ec9d780.png",
+        "testSha256": "534b1c95b3f316841019f56b20870123fe1fad16d1519b16bb4b948a4ec9d780",
+        "requireSameDimensions": true,
+        "misMatchThreshold": 0.1,
+        "diff": {
+          "isSameDimensions": true,
+          "dimensionDifference": {
+            "width": 0,
+            "height": 0
+          },
+          "rawMisMatchPercentage": 0.02847377024817952,
+          "misMatchPercentage": "0.03",
+          "analysisTime": 80
+        }
+      }
+    },
+    {
+      "file": "fullstack_showcase_portfolio_sharing_0_document_1_390px.png",
+      "status": "pass",
+      "pair": {
+        "referenceImage": "bitmaps_reference/fullstack_showcase_portfolio_sharing_0_document_1_390px.png",
+        "referenceSha256": "d8ead2444484052b7eb05d7df44b009aaa255fdfcc95dab0f9a77dbb2b8f2d8c",
+        "testImage": "bitmaps_reference/fullstack_showcase_portfolio_sharing_0_document_1_390px.png",
+        "testSha256": "d8ead2444484052b7eb05d7df44b009aaa255fdfcc95dab0f9a77dbb2b8f2d8c",
+        "requireSameDimensions": true,
+        "misMatchThreshold": 0.1,
+        "diff": {
+          "isSameDimensions": true,
+          "dimensionDifference": {
+            "width": 0,
+            "height": 0
+          },
+          "misMatchPercentage": "0.00"
+        }
+      }
+    },
+    {
+      "file": "fullstack_showcase_portfolio_sharing_0_document_2_430px.png",
+      "status": "pass",
+      "pair": {
+        "referenceImage": "bitmaps_reference/fullstack_showcase_portfolio_sharing_0_document_2_430px.png",
+        "referenceSha256": "cfc49094d90a2a8fbba136fba58d6282b9a662e12b1f6247b9cad41196b984dd",
+        "testImage": "bitmaps_reference/fullstack_showcase_portfolio_sharing_0_document_2_430px.png",
+        "testSha256": "cfc49094d90a2a8fbba136fba58d6282b9a662e12b1f6247b9cad41196b984dd",
+        "requireSameDimensions": true,
+        "misMatchThreshold": 0.1,
+        "diff": {
+          "isSameDimensions": true,
+          "dimensionDifference": {
+            "width": 0,
+            "height": 0
+          },
+          "misMatchPercentage": "0.00"
+        }
+      }
+    },
+    {
+      "file": "fullstack_showcase_portfolio_sharing_0_document_3_1440px.png",
+      "status": "pass",
+      "pair": {
+        "referenceImage": "bitmaps_reference/fullstack_showcase_portfolio_sharing_0_document_3_1440px.png",
+        "referenceSha256": "17a90e8321e259bd94ab91221b80ed9fee749c2dc75df3bfbc4130fccf46cf90",
+        "testImage": "evidence/381a9add949d4b4ad8030eb9b4aeff5ec075a968d42f8bddc2e53de935f1c9ca.png",
+        "testSha256": "381a9add949d4b4ad8030eb9b4aeff5ec075a968d42f8bddc2e53de935f1c9ca",
+        "requireSameDimensions": true,
+        "misMatchThreshold": 0.1,
+        "diff": {
+          "isSameDimensions": true,
+          "dimensionDifference": {
+            "width": 0,
+            "height": 0
+          },
+          "rawMisMatchPercentage": 0.02483814422437177,
+          "misMatchPercentage": "0.02",
+          "analysisTime": 171
+        }
+      }
+    },
+    {
+      "file": "fullstack_showcase_portfolio_ai-conferences_0_document_0_375px.png",
+      "status": "pass",
+      "pair": {
+        "referenceImage": "bitmaps_reference/fullstack_showcase_portfolio_ai-conferences_0_document_0_375px.png",
+        "referenceSha256": "99536addfe19a15a6c3368d4cf38fcff98f8154624ee9569e2ebbcf91275bbe4",
+        "testImage": "bitmaps_reference/fullstack_showcase_portfolio_ai-conferences_0_document_0_375px.png",
+        "testSha256": "99536addfe19a15a6c3368d4cf38fcff98f8154624ee9569e2ebbcf91275bbe4",
+        "requireSameDimensions": true,
+        "misMatchThreshold": 0.1,
+        "diff": {
+          "isSameDimensions": true,
+          "dimensionDifference": {
+            "width": 0,
+            "height": 0
+          },
+          "misMatchPercentage": "0.00"
+        }
+      }
+    },
+    {
+      "file": "fullstack_showcase_portfolio_ai-conferences_0_document_1_390px.png",
+      "status": "pass",
+      "pair": {
+        "referenceImage": "bitmaps_reference/fullstack_showcase_portfolio_ai-conferences_0_document_1_390px.png",
+        "referenceSha256": "0af1d97b295f33eb284a704889ce6399d33c2a5363460229392d3fcdfa24077d",
+        "testImage": "bitmaps_reference/fullstack_showcase_portfolio_ai-conferences_0_document_1_390px.png",
+        "testSha256": "0af1d97b295f33eb284a704889ce6399d33c2a5363460229392d3fcdfa24077d",
+        "requireSameDimensions": true,
+        "misMatchThreshold": 0.1,
+        "diff": {
+          "isSameDimensions": true,
+          "dimensionDifference": {
+            "width": 0,
+            "height": 0
+          },
+          "misMatchPercentage": "0.00"
+        }
+      }
+    },
+    {
+      "file": "fullstack_showcase_portfolio_ai-conferences_0_document_2_430px.png",
+      "status": "pass",
+      "pair": {
+        "referenceImage": "bitmaps_reference/fullstack_showcase_portfolio_ai-conferences_0_document_2_430px.png",
+        "referenceSha256": "4dcd3960941303242ffe31f48ac8c564c7b80e543048c0cda8de35d9deb0afde",
+        "testImage": "bitmaps_reference/fullstack_showcase_portfolio_ai-conferences_0_document_2_430px.png",
+        "testSha256": "4dcd3960941303242ffe31f48ac8c564c7b80e543048c0cda8de35d9deb0afde",
+        "requireSameDimensions": true,
+        "misMatchThreshold": 0.1,
+        "diff": {
+          "isSameDimensions": true,
+          "dimensionDifference": {
+            "width": 0,
+            "height": 0
+          },
+          "misMatchPercentage": "0.00"
+        }
+      }
+    },
+    {
+      "file": "fullstack_showcase_portfolio_ai-conferences_0_document_3_1440px.png",
+      "status": "pass",
+      "pair": {
+        "referenceImage": "bitmaps_reference/fullstack_showcase_portfolio_ai-conferences_0_document_3_1440px.png",
+        "referenceSha256": "de1748c1d2874922bcd8f962cdf0731bfc9b0c98dbd7577398373ebdd311896e",
+        "testImage": "bitmaps_reference/fullstack_showcase_portfolio_ai-conferences_0_document_3_1440px.png",
+        "testSha256": "de1748c1d2874922bcd8f962cdf0731bfc9b0c98dbd7577398373ebdd311896e",
+        "requireSameDimensions": true,
+        "misMatchThreshold": 0.1,
+        "diff": {
+          "isSameDimensions": true,
+          "dimensionDifference": {
+            "width": 0,
+            "height": 0
+          },
+          "misMatchPercentage": "0.00"
+        }
+      }
+    },
+    {
+      "file": "fullstack_showcase_portfolio_ai-conference-note_0_document_0_375px.png",
+      "status": "pass",
+      "pair": {
+        "referenceImage": "bitmaps_reference/fullstack_showcase_portfolio_ai-conference-note_0_document_0_375px.png",
+        "referenceSha256": "00a597e0712d652595151dff0948d7dfa9ecb5c05b337b767d82c71630d2a8d4",
+        "testImage": "bitmaps_reference/fullstack_showcase_portfolio_ai-conference-note_0_document_0_375px.png",
+        "testSha256": "00a597e0712d652595151dff0948d7dfa9ecb5c05b337b767d82c71630d2a8d4",
+        "requireSameDimensions": true,
+        "misMatchThreshold": 0.1,
+        "diff": {
+          "isSameDimensions": true,
+          "dimensionDifference": {
+            "width": 0,
+            "height": 0
+          },
+          "misMatchPercentage": "0.00"
+        }
+      }
+    },
+    {
+      "file": "fullstack_showcase_portfolio_ai-conference-note_0_document_1_390px.png",
+      "status": "pass",
+      "pair": {
+        "referenceImage": "bitmaps_reference/fullstack_showcase_portfolio_ai-conference-note_0_document_1_390px.png",
+        "referenceSha256": "ba7e19aff311c1c29f52f2c5c00084cf0d72145e8311ec9e65a4433583ae8f95",
+        "testImage": "bitmaps_reference/fullstack_showcase_portfolio_ai-conference-note_0_document_1_390px.png",
+        "testSha256": "ba7e19aff311c1c29f52f2c5c00084cf0d72145e8311ec9e65a4433583ae8f95",
+        "requireSameDimensions": true,
+        "misMatchThreshold": 0.1,
+        "diff": {
+          "isSameDimensions": true,
+          "dimensionDifference": {
+            "width": 0,
+            "height": 0
+          },
+          "misMatchPercentage": "0.00"
+        }
+      }
+    },
+    {
+      "file": "fullstack_showcase_portfolio_ai-conference-note_0_document_2_430px.png",
+      "status": "pass",
+      "pair": {
+        "referenceImage": "bitmaps_reference/fullstack_showcase_portfolio_ai-conference-note_0_document_2_430px.png",
+        "referenceSha256": "67cd1dc551fdd9730c7090968a8aa93dd48c8c30f55ae9e50475454170697a87",
+        "testImage": "bitmaps_reference/fullstack_showcase_portfolio_ai-conference-note_0_document_2_430px.png",
+        "testSha256": "67cd1dc551fdd9730c7090968a8aa93dd48c8c30f55ae9e50475454170697a87",
+        "requireSameDimensions": true,
+        "misMatchThreshold": 0.1,
+        "diff": {
+          "isSameDimensions": true,
+          "dimensionDifference": {
+            "width": 0,
+            "height": 0
+          },
+          "misMatchPercentage": "0.00"
+        }
+      }
+    },
+    {
+      "file": "fullstack_showcase_portfolio_ai-conference-note_0_document_3_1440px.png",
+      "status": "pass",
+      "pair": {
+        "referenceImage": "bitmaps_reference/fullstack_showcase_portfolio_ai-conference-note_0_document_3_1440px.png",
+        "referenceSha256": "cb1289c4642eaa81ff3a364624e83077dc0fc61e00e2be23d9e93700cf42a168",
+        "testImage": "bitmaps_reference/fullstack_showcase_portfolio_ai-conference-note_0_document_3_1440px.png",
+        "testSha256": "cb1289c4642eaa81ff3a364624e83077dc0fc61e00e2be23d9e93700cf42a168",
+        "requireSameDimensions": true,
+        "misMatchThreshold": 0.1,
+        "diff": {
+          "isSameDimensions": true,
+          "dimensionDifference": {
+            "width": 0,
+            "height": 0
+          },
+          "misMatchPercentage": "0.00"
+        }
+      }
+    },
+    {
+      "file": "fullstack_showcase_portfolio_sharing-note_0_document_0_375px.png",
+      "status": "pass",
+      "pair": {
+        "referenceImage": "bitmaps_reference/fullstack_showcase_portfolio_sharing-note_0_document_0_375px.png",
+        "referenceSha256": "fab1592dc911831c27603243ceed7b4f4e101b0e275f194256d0a647239776b4",
+        "testImage": "bitmaps_reference/fullstack_showcase_portfolio_sharing-note_0_document_0_375px.png",
+        "testSha256": "fab1592dc911831c27603243ceed7b4f4e101b0e275f194256d0a647239776b4",
+        "requireSameDimensions": true,
+        "misMatchThreshold": 0.1,
+        "diff": {
+          "isSameDimensions": true,
+          "dimensionDifference": {
+            "width": 0,
+            "height": 0
+          },
+          "misMatchPercentage": "0.00"
+        }
+      }
+    },
+    {
+      "file": "fullstack_showcase_portfolio_sharing-note_0_document_1_390px.png",
+      "status": "pass",
+      "pair": {
+        "referenceImage": "bitmaps_reference/fullstack_showcase_portfolio_sharing-note_0_document_1_390px.png",
+        "referenceSha256": "e1f729ddf4f8332c09c28871829f4fafb1c06746e97f28a3a387e7aa9135928a",
+        "testImage": "bitmaps_reference/fullstack_showcase_portfolio_sharing-note_0_document_1_390px.png",
+        "testSha256": "e1f729ddf4f8332c09c28871829f4fafb1c06746e97f28a3a387e7aa9135928a",
+        "requireSameDimensions": true,
+        "misMatchThreshold": 0.1,
+        "diff": {
+          "isSameDimensions": true,
+          "dimensionDifference": {
+            "width": 0,
+            "height": 0
+          },
+          "misMatchPercentage": "0.00"
+        }
+      }
+    },
+    {
+      "file": "fullstack_showcase_portfolio_sharing-note_0_document_2_430px.png",
+      "status": "pass",
+      "pair": {
+        "referenceImage": "bitmaps_reference/fullstack_showcase_portfolio_sharing-note_0_document_2_430px.png",
+        "referenceSha256": "88f7b5528fc2123353477cf5bd7268d22c13883c287fea6e8981e29586ef764f",
+        "testImage": "bitmaps_reference/fullstack_showcase_portfolio_sharing-note_0_document_2_430px.png",
+        "testSha256": "88f7b5528fc2123353477cf5bd7268d22c13883c287fea6e8981e29586ef764f",
+        "requireSameDimensions": true,
+        "misMatchThreshold": 0.1,
+        "diff": {
+          "isSameDimensions": true,
+          "dimensionDifference": {
+            "width": 0,
+            "height": 0
+          },
+          "misMatchPercentage": "0.00"
+        }
+      }
+    },
+    {
+      "file": "fullstack_showcase_portfolio_sharing-note_0_document_3_1440px.png",
+      "status": "pass",
+      "pair": {
+        "referenceImage": "bitmaps_reference/fullstack_showcase_portfolio_sharing-note_0_document_3_1440px.png",
+        "referenceSha256": "d29bcf31d401d56b4e5f2b7c725f638a1454a77b7c17916acb8cbda4470aef99",
+        "testImage": "bitmaps_reference/fullstack_showcase_portfolio_sharing-note_0_document_3_1440px.png",
+        "testSha256": "d29bcf31d401d56b4e5f2b7c725f638a1454a77b7c17916acb8cbda4470aef99",
+        "requireSameDimensions": true,
+        "misMatchThreshold": 0.1,
+        "diff": {
+          "isSameDimensions": true,
+          "dimensionDifference": {
+            "width": 0,
+            "height": 0
+          },
+          "misMatchPercentage": "0.00"
+        }
+      }
+    },
+    {
+      "file": "fullstack_showcase_portfolio_dashboard-resume-desktop_0_skillsportfolio-dashboard-module-card_0_1440px.png",
+      "status": "pass",
+      "pair": {
+        "referenceImage": "bitmaps_reference/fullstack_showcase_portfolio_dashboard-resume-desktop_0_skillsportfolio-dashboard-module-card_0_1440px.png",
+        "referenceSha256": "3c94cb44c1f30814bd21341dada5acd1be8cbdd87d16c96ab269469d4a3751b4",
+        "testImage": "evidence/a7c4e2573db6c8aa254199b99c9353b0929834a55914f96ea4cfae4f6b461c0a.png",
+        "testSha256": "a7c4e2573db6c8aa254199b99c9353b0929834a55914f96ea4cfae4f6b461c0a",
+        "requireSameDimensions": true,
+        "misMatchThreshold": 0.1,
+        "diff": {
+          "isSameDimensions": true,
+          "dimensionDifference": {
+            "width": 0,
+            "height": 0
+          },
+          "rawMisMatchPercentage": 0,
+          "misMatchPercentage": "0.00",
+          "analysisTime": 50
+        }
+      }
+    },
+    {
+      "file": "fullstack_showcase_portfolio_dashboard-resume-desktop_0_skillsportfolio-dashboard-module-card_1_1536px.png",
+      "status": "pass",
+      "pair": {
+        "referenceImage": "bitmaps_reference/fullstack_showcase_portfolio_dashboard-resume-desktop_0_skillsportfolio-dashboard-module-card_1_1536px.png",
+        "referenceSha256": "e593253a7c69b094a0e000e0d81acca803e4aeaf67542d588c8b2a3b539bf6fc",
+        "testImage": "evidence/33999540ab62399df6d4bb1b458472ab7ba7e0e6290dd177e2f406745a9589bd.png",
+        "testSha256": "33999540ab62399df6d4bb1b458472ab7ba7e0e6290dd177e2f406745a9589bd",
+        "requireSameDimensions": true,
+        "misMatchThreshold": 0.1,
+        "diff": {
+          "isSameDimensions": true,
+          "dimensionDifference": {
+            "width": 0,
+            "height": 0
+          },
+          "rawMisMatchPercentage": 0,
+          "misMatchPercentage": "0.00",
+          "analysisTime": 54
+        }
+      }
+    }
+  ]
+}

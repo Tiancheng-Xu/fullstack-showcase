@@ -86,7 +86,7 @@ module.exports = {
 		onReadyScript: "puppet/onReady.cjs",
 	}),
 	paths: {
-		bitmaps_reference: "backstop_data/baselines/chrome155-darwin-arm64-software-workflow-20261020-8059-85/bitmaps_reference",
+		bitmaps_reference: "backstop_data/baselines/chrome155-darwin-arm64-software-xhs-20261020-8059-85/bitmaps_reference",
 		bitmaps_test: "backstop_data/baselines/chrome155-darwin-arm64-software-content-20261015/bitmaps_test",
 		engine_scripts: "backstop_data/engine_scripts",
 		html_report: "backstop_data/baselines/chrome155-darwin-arm64-software-content-20261015/html_report",

@@ -1,0 +1,111 @@
+{
+  "agentId": "01a161d1-264a-7dd1-b21a-ebe899937e22",
+  "role": "gate",
+  "verdict": "pass",
+  "findings": [],
+  "scope": {
+    "identitySource": "CODEX_THREAD_ID returned by the reviewer's local environment",
+    "readyMarkerObservedBeforeSourceRead": true,
+    "reviewKind": "Independent bounded Standards/Gate source and existing evidence review",
+    "sourceReview": [
+      "scripts/backstop-environment.checks.cjs: Xiaohongshu entry revision case, lines 77-159; current incremental review limited to the numeric guard at lines 150-153",
+      "backstop.config.cjs: current baseline, four viewport mapping, rendering contract and 38 configured cases"
+    ],
+    "contextOnly": [
+      "export-report.cjs: native report selection, original image realpath/hash checks and path-redacted export",
+      "check-gate-counterexamples.cjs: read only; not executed",
+      "dashboard-content.tsx: actual SHA-256 only; implementation not reviewed"
+    ],
+    "codeInvariantsObserved": [
+      "Current expected reviewer IDs are the ready marker's two distinct ui/gate IDs, not the earlier IDs.",
+      "The case requires both report descriptors with exact 4/38 counts, exact case-name sets, pass statuses, 0.1 thresholds, same-dimension flags and actual exported image hashes. The revised selected mismatch guard additionally requires a nonblank number/string representation and a finite numeric value within [0, 0.1].",
+      "The case requires two reviewer artifacts with matching IDs, roles, artifact hashes, pass verdicts and empty findings.",
+      "Four unique reviewed-candidate references are limited to the exact _0_375px, _1_390px, _2_430px and _3_1440px dashboard filenames; the other 34 must retain parent hashes.",
+      "The config points to the additive xhs-20261020-8059-85 reference baseline and retains the 0.1 threshold and same-dimension requirement."
+    ],
+    "incrementalReview": {
+      "resolvedFinding": "P2 at the former line 150: malformed selected mismatch values could pass the upper-bound-only check",
+      "resolution": "Lines 150-153 require the selected raw/fallback value to be a number or string, reject blank and whitespace-only representations, and require Number.isFinite(mismatch) && mismatch >= 0 && mismatch <= 0.1. Static analysis finds the reported bypass closed; no additional finding in this incremental scope.",
+      "previousGuardSourceSha256": "1439eb679423dcd8da2e11615a9e4bebbd9ecb620a6f197798b85ca284886b43",
+      "currentGuardSourceSha256": "cf57e147c2be7ffa8098fd773e15c29327fea5249406398b5f2b75266dd8aa2e",
+      "allThreeActualSourceHashesMatchUpdatedSnapshot": true,
+      "existingExportedReportHashesMatchPriorAudit": true,
+      "counterexampleDefinitionsReviewed": 16,
+      "newCounterexampleValues": [
+        "",
+        "   ",
+        "-0.01",
+        "-Infinity",
+        false
+      ],
+      "counterexampleHarnessExecuted": false,
+      "priorReportAndImageAuditReused": true,
+      "pngFilesRehashedThisIncrement": false,
+      "exporterReReviewedThisIncrement": false
+    },
+    "existingReportAudit": {
+      "candidateStability": {
+        "file": "backstop_data/baselines/chrome155-darwin-arm64-software-xhs-20261020-8059-85/stable-report.json",
+        "sha256": "0da3c4039b75bf90a0b2b6d095e3a3f43fd04c7c31311726553abe1f626d663e",
+        "nativeReport": "candidates/bitmaps_test/20261021-000219/report.json",
+        "rawReportSha256": "cd86264a09076a783bf927e81bcc2073a9652e4001d351daed903990cead87bc",
+        "rawReportSha256Matches": true,
+        "cases": 4,
+        "uniqueCaseNames": 4,
+        "allPassed": true,
+        "maximumMismatchPercent": 0
+      },
+      "stagedRelease": {
+        "file": "backstop_data/baselines/chrome155-darwin-arm64-software-xhs-20261020-8059-85/staged-report.json",
+        "sha256": "50c61db731ea0663e980eaf3afe470861fdab02e42cc5438d6e3ccdfb0d7ee67",
+        "nativeReport": "staged/bitmaps_test/20261022-001426/report.json",
+        "rawReportSha256": "135588602e4a348e509f7b6686da9f91b9c88af92418ebd8cfc313a8667c917f",
+        "rawReportSha256Matches": true,
+        "cases": 38,
+        "uniqueCaseNames": 38,
+        "allPassed": true,
+        "maximumMismatchPercent": 0.09233405723234203
+      },
+      "checksPerformed": [
+        "Both exported reports: every reference/test image read and SHA-256 compared with its declared hash; all matched.",
+        "Both exported reports: every actual reference/test PNG dimension pair matched; every status, threshold and dimension flag satisfied the contract; every mismatch value was finite and within [0, 0.1].",
+        "Both selected native reports: actual report SHA-256 matched the exported rawReportSha256; all original reference/test realpaths matched the intended baseline and exact run directories.",
+        "All 42 original native test image SHA-256 values were computed. The four dashboard hashes matched the candidate hashes in both runs; content-addressed exported artifacts were present for the additional retained native test hashes.",
+        "The workflow parent receipt and all 212 protected prior reference images were read; all 212 actual hashes matched the parent receipt's accumulated reference records.",
+        "Earlier failed staged reports were not selected or used as passing evidence."
+      ],
+      "protectedPriorReferences": 212,
+      "protectedPriorHashFailures": 0,
+      "parentReceiptSha256": "1cdf9155e2e50b8ceb022152a7f7981ef2df0cee6245592ddccccf657d320f16"
+    },
+    "sourceFilesChanged": false,
+    "testsRun": false,
+    "productionActionsPerformed": false,
+    "ossQueueAccessed": false
+  },
+  "sourceFiles": [
+    {
+      "file": "apps/web/apps/web/src/features/portfolio/dashboard-content.tsx",
+      "sha256": "5c5805e648402d67f7012a0df2ff421fd7660feb61512081ac5a68ff163d7e36"
+    },
+    {
+      "file": "apps/web/apps/web/backstop.config.cjs",
+      "sha256": "887a7701ef3571618780e8d272dd5ef57956331f84393959692e0f7550fd311b"
+    },
+    {
+      "file": "apps/web/apps/web/scripts/backstop-environment.checks.cjs",
+      "sha256": "cf57e147c2be7ffa8098fd773e15c29327fea5249406398b5f2b75266dd8aa2e"
+    }
+  ],
+  "limitations": [
+    "Final xhs acceptance.json was absent during the initial review and was not revisited in this incremental review. As instructed, this review did not wait for it. Final receipt binding, its actual four-new/34-carried-forward records and the two final reviewer artifact hashes remain for the coordinator to check after this report exists.",
+    "Current-round UI approval and dual-review receipt binding were not rechecked in this numeric-guard-only increment. No current-round dual-review completion is claimed; the initial older-ID artifact was not used as current-round approval.",
+    "The revised harness's 16 counterexample definitions were reviewed, including all five newly added malformed mismatch fixtures, but the harness was not executed. The coordinator must execute it only after binding the real final receipts; no positive-control or negative-case execution result is claimed here.",
+    "The existing 4/4 and 38/38 exported report bytes were freshly hashed and match the prior audited versions. Original report SHA, image hashes/dimensions and the 212 historical reference hashes reuse the prior direct audit in this same review thread; PNG files and native reports were not reopened this increment.",
+    "No test suite, targeted test case, browser run, preview restart, production operation or OSS queue action was performed. Existing 4/4 and 38/38 evidence was audited, not rerun.",
+    "This is not a UI correctness review, a complete historical-baseline audit beyond the requested 212 image hashes, a production approval, or a claim that every release gate passed."
+  ],
+  "requestedModel": "gpt-6.1-sol",
+  "actualServiceModel": "not-exposed",
+  "rawReviewSha256": "2f2e57f8ecbca9b86b1406b5fb940ba158bede9eb7518a43ff77400121847d3d"
+}

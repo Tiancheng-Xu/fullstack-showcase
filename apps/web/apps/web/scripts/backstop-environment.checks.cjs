@@ -71,7 +71,91 @@ test("preserves the rendering contract and mismatch threshold", () => {
 });
 
 test("uses the explicitly adopted content revision separately from both old baselines", () => {
-	assert.equal(loadConfig().paths.bitmaps_reference, "backstop_data/baselines/chrome155-darwin-arm64-software-workflow-20261020-8059-85/bitmaps_reference");
+	assert.equal(loadConfig().paths.bitmaps_reference, "backstop_data/baselines/chrome155-darwin-arm64-software-xhs-20261020-8059-85/bitmaps_reference");
+});
+
+test("Xiaohongshu entry revision preserves prior references and reviewed release evidence", () => {
+	const fs = require("node:fs");
+	const path = require("node:path");
+	const app = path.resolve(__dirname, "..");
+	const sha256 = (bytes) => createHash("sha256").update(bytes).digest("hex");
+	const parent = "chrome155-darwin-arm64-software-workflow-20261020-8059-85";
+	const folder = path.join(app, "backstop_data/baselines/chrome155-darwin-arm64-software-xhs-20261020-8059-85");
+	const receipt = JSON.parse(fs.readFileSync(path.join(folder, "acceptance.json"), "utf8"));
+	const parentFile = path.join(app, "backstop_data/baselines", parent, "acceptance.json");
+	assert.equal(receipt.parentBaseline, parent);
+	assert.equal(sha256(fs.readFileSync(parentFile)), receipt.parentReceiptSha256);
+	const previous = JSON.parse(fs.readFileSync(parentFile, "utf8"));
+	const protectedReferences = [...previous.protectedPriorReferences, ...previous.references.map((row) => ({ file: `backstop_data/baselines/${parent}/bitmaps_reference/${row.file}`, sha256: row.sha256 }))];
+	assert.deepEqual(receipt.protectedPriorReferences, protectedReferences);
+	assert.equal(protectedReferences.length, 212);
+	for (const row of protectedReferences) assert.equal(sha256(fs.readFileSync(path.join(app, row.file))), row.sha256);
+	assert.equal(receipt.browser, "Google Chrome 155.0.8059.85");
+	assert.equal(receipt.thresholdPercent, 0.1);
+	assert.equal(receipt.requireSameDimensions, true);
+	assert.equal(receipt.review.verdict, "pass");
+	assert.equal(receipt.review.stableCandidateCases, 4);
+	assert.equal(receipt.review.fullStagedCases, 38);
+	assert.equal(receipt.review.unexplainedCases, 0);
+	const expectedReviewers = [
+		{ agentId: "01a161d1-25a7-76b0-baed-f74e7b345ff0", role: "ui" },
+		{ agentId: "01a161d1-264a-7dd1-b21a-ebe899937e22", role: "gate" },
+	];
+	assert.deepEqual([...receipt.review.independentAgents].sort(), expectedReviewers.map((row) => row.agentId).sort());
+	assert.equal(receipt.review.independentReviews.length, 2);
+	for (const expected of expectedReviewers) {
+		const review = receipt.review.independentReviews.find((row) => row.agentId === expected.agentId);
+		assert.ok(review);
+		assert.equal(review.role, expected.role);
+		const bytes = fs.readFileSync(path.join(folder, review.file));
+		assert.equal(sha256(bytes), review.sha256);
+		const result = JSON.parse(bytes);
+		assert.equal(result.agentId, expected.agentId);
+		assert.equal(result.role, expected.role);
+		assert.equal(result.verdict, "pass");
+		assert.deepEqual(result.findings, []);
+		assert.ok(result.scope);
+	}
+	assert.equal(receipt.references.length, 38);
+	assert.equal(new Set(receipt.references.map((row) => row.file)).size, 38);
+	const oldHashes = new Map(previous.references.map((row) => [row.file, row.sha256]));
+	for (const row of receipt.references) {
+		assert.equal(sha256(fs.readFileSync(path.join(folder, "bitmaps_reference", row.file))), row.sha256);
+		if (row.origin === "reviewed-candidate") assert.ok([
+			"fullstack_showcase_portfolio_dashboard_0_document_0_375px.png",
+			"fullstack_showcase_portfolio_dashboard_0_document_1_390px.png",
+			"fullstack_showcase_portfolio_dashboard_0_document_2_430px.png",
+			"fullstack_showcase_portfolio_dashboard_0_document_3_1440px.png",
+		].includes(row.file));
+		else { assert.equal(row.origin, "carried-forward"); assert.equal(row.sha256, oldHashes.get(row.file)); }
+	}
+	assert.equal(receipt.references.filter((row) => row.origin === "reviewed-candidate").length, 4);
+	assert.deepEqual(receipt.reports.map(({ kind, caseCount }) => ({ kind, caseCount })), [
+		{ kind: "candidate-stability", caseCount: 4 },
+		{ kind: "staged-release", caseCount: 38 },
+	]);
+	for (const report of receipt.reports) {
+		const bytes = fs.readFileSync(path.join(folder, report.file));
+		assert.equal(sha256(bytes), report.sha256);
+		const result = JSON.parse(bytes);
+		assert.equal(result.kind, report.kind);
+		assert.equal(result.tests.length, report.caseCount);
+		const expectedNames = receipt.references.filter((row) => report.kind === "staged-release" || row.origin === "reviewed-candidate").map((row) => row.file).sort();
+		assert.deepEqual(result.tests.map((row) => row.file).sort(), expectedNames);
+		for (const row of result.tests) {
+			assert.equal(row.status, "pass");
+			assert.equal(row.pair.requireSameDimensions, true);
+			assert.equal(row.pair.misMatchThreshold, 0.1);
+			assert.equal(row.pair.diff.isSameDimensions, true);
+			const rawMismatch = row.pair.diff.rawMisMatchPercentage ?? row.pair.diff.misMatchPercentage;
+			assert.ok((typeof rawMismatch === "number" || typeof rawMismatch === "string") && String(rawMismatch).trim() !== "");
+			const mismatch = Number(rawMismatch);
+			assert.ok(Number.isFinite(mismatch) && mismatch >= 0 && mismatch <= 0.1);
+			assert.equal(sha256(fs.readFileSync(path.join(folder, row.pair.referenceImage))), row.pair.referenceSha256);
+			assert.equal(sha256(fs.readFileSync(path.join(folder, row.pair.testImage))), row.pair.testSha256);
+			assert.equal(row.pair.referenceSha256, receipt.references.find((reference) => reference.file === row.file).sha256);
+		}
+	}
 });
 
 test("preserves all sixty original reference PNG hashes", () => {
