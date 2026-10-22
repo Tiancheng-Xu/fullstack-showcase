@@ -581,6 +581,21 @@ export function DashboardContent() {
 					</a>
 				</section>
 
+				<section className="order-7 mt-8 scroll-mt-24" id="content-creation" aria-label="内容创作">
+					<a
+						className="portfolio-glass-subpanel flex min-h-11 items-center gap-4 border border-[#d8cfbd] bg-[#f8f3e8] px-5 py-4 text-[#071d34] transition duration-300 hover:bg-[#fbf8ef]/80 focus-visible:outline-2 focus-visible:outline-offset-4"
+						href="https://www.xiaohongshu.com/user/profile/5f128571000000000101e9a6"
+						rel="noreferrer"
+						target="_blank"
+					>
+						<PenTool aria-hidden="true" className="shrink-0 text-[#9f3937]" size={20} />
+						<div className="min-w-0 flex-1">
+							<h2 className="font-semibold font-serif text-base">AI 内容商业化探索 · 小红书</h2>
+							<p className="mt-1 text-[#344252] text-sm leading-6">主导「金金」原创 IP 与 AI 图文生产闭环，以文旅、亲子故事和家庭工具三条内容线探索商业转化。</p>
+						</div>
+						<ArrowUpRight aria-hidden="true" className="shrink-0 text-[#9f3937]" size={18} />
+					</a>
+				</section>
 			</main>
 
 			<footer className="portfolio-glass-footer relative mt-6 border-[#c8c0b0] border-t bg-[#ebe6da]">
