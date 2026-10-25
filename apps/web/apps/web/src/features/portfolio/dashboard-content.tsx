@@ -225,6 +225,9 @@ export function DashboardContent() {
 						title="个人简历"
 					/>
 					<div className="portfolio-dashboard-module-card portfolio-glass-panel mt-5 border border-[#cfd5db] bg-white/84 p-5 shadow-sm md:p-8">
+						<blockquote className="mb-6 border-l-2 border-[#b21f35] pl-4 font-serif text-[#344252] text-base leading-8 md:text-lg">
+							过去，工作靠肌肉；现在，工作靠大脑；而未来，工作将靠心灵。
+						</blockquote>
 						<p className="text-[#344252] text-base leading-8">
 							拥有 8 年软件开发经验，具备宁波交警大屏与政企低零代码项目的 FDE 驻场交付经验，主控本人负责的需求澄清、方案取舍、应用 / API、联调验收与上线迭代。主控 AI Agent、全栈与工程工具产品，连接业务价值、任务状态、工具授权、带来源检索和失败恢复；项目已上线或完成本机交付，当前增强版本与对应证据分开说明。持续参与开源共建，围绕源码排障、兼容性修复与工程维护贡献改进，并与上游维护者协作迭代。
 						</p>
