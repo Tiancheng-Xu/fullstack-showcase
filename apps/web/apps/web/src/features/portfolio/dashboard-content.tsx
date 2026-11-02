@@ -21,6 +21,7 @@ import {
 import type { ReactNode } from "react";
 
 import {
+	PROJECTS_INDEX,
 	getProjectRenderingModes,
 } from "@/data/portfolio-projects";
 import { DashboardScrollProgress } from "@/features/portfolio/dashboard-scroll-progress";
@@ -131,6 +132,7 @@ export function DashboardContent() {
 
 	const partTimeProjects = [
 		{
+			projectId: "agent-market",
 			title: "Agent Market",
 			meta: "主控 · 已上线任务分发产品 / 当前增强版本分列",
 			bullets: [
@@ -140,6 +142,7 @@ export function DashboardContent() {
 			],
 		},
 		{
+			projectId: "babysteps",
 			title: "BabySteps",
 			meta: "全栈 / Edge Web3",
 			bullets: [
@@ -149,6 +152,7 @@ export function DashboardContent() {
 			],
 		},
 		{
+			projectId: "aladdin",
 			title: "Aladdin Web3 Agent",
 			meta: "AI Agent 分布式任务调度 / Web3 Agent 平台",
 			bullets: [
@@ -161,36 +165,53 @@ export function DashboardContent() {
 
 	const personalEngineeringShowcases = [
 		{
+			projectId: "qwen-cloud",
+			title: "Qwen 云端工坊",
+			meta: "云端任务入口 / 本机图像生成",
+			body: "支持文生图、图片编辑、原图参数复现、3D 人偶摆姿与双图姿势迁移；网页提交任务，本机连接器执行生成。任务和图片接口需本人登录，模型与私有素材留在本机。",
+			links: [
+				{ label: "项目主页（需授权）", href: "https://qwen.baby2b.online/" },
+				{ label: "项目介绍", href: "https://github.com/Tiancheng-Xu/personal-ai-agent#qwen-云端工坊" },
+			],
+		},
+		{
+			projectId: "personal-ai-agent",
 			title: "Personal AI Agent",
 			meta: "主控 · 私有知识产品 / 本机模型交付",
 			body: "主控私有知识产品与模型交付，分开处理事实检索和模型行为训练。当前检索分支以 Markdown 分块、BM25 / 向量混合召回、RRF 与重排组织带来源回答，并处理故障回退和用户取消；引用编号校验不等于语义支持，后者仍待评测。Qwen3-8B 微调、量化与 Ollama 本机交付和静态网站分别说明，业务工具与转人工保留方案边界。",
 		},
 		{
+			projectId: "office-workflow-agent",
 			title: "OfficeFlow 办公流程 Agent",
 			meta: "主控 · 已上线办公流程产品",
 			body: "将业务需求转为可信字段，经版本批准后执行并独立核对结果；重点设计人工审批、API / Browser 分工与结果未知时的恢复。已有合成工作区生产交付，当前版本采用规则提案且模型关闭；不把点击成功当业务完成，不把合成数据计为真实采购业绩，OCR 增强仍待验。",
 		},
 		{
+			projectId: "github-profile-studio",
 			title: "GitHub Profile Studio",
 			meta: "React、TanStack Router、Hono / Go、SQLite",
 			body: "主控本地优先的 GitHub 公开资料工作台，以统一 API 契约适配 Hono / Node 与 Go 双后端，使用 SQLite 保存白名单字段，通过服务端与 macOS 钥匙串隔离凭据。本机产品交付与公网 API 托管是不同范围；本地保存不等于修改 GitHub 账号或 Profile README。",
 		},
 		{
+			projectId: "fullstack-showcase",
 			title: "Showcase Dashboard",
 			meta: "React、TypeScript、SSG / Hydration、Cloudflare Pages",
 			body: "把项目状态、Evidence、Portfolio Sync、性能观测与受保护控制入口整合为个人工程作品系统；保持静态首屏、水合后数据和项目自有链接一致，并让未知路由返回真实 404。",
 		},
 		{
+			projectId: "portfolio-sync",
 			title: "Portfolio Sync",
 			meta: "GitHub App、Cloudflare Workers、KV、HMAC",
 			body: "以 GitHub App Webhook、HMAC 验签与 Cloudflare Worker/KV 汇总真实项目发布清单，并用定时任务补齐事件遗漏；难点是同步状态、静态首屏与项目自有 Evidence 的一致性。当前增强实现只读 OpenAPI 契约、摘要与按项目读取、分页及 ETag / 304 / HEAD；尚未部署，不改变已审核的项目叙事与证据链接。",
 		},
 		{
+			projectId: "performance-observability-control",
 			title: "性能观测与成本控制",
 			meta: "Core Web Vitals、AWS、Cloudflare、Evidence",
 			body: "将浏览器真实性能样本、临时 AWS 聚合链路、成本控制与零残留清理纳入同一受保护控制面；难点是同时守住样本可信度、最小权限和预算边界。",
 		},
 		{
+			projectId: "tc-workflow",
 			title: "TC Flow 2.1",
 			meta: "N1-N8、检查点、Review Gate、Evidence",
 			body: "把需求、实现、审查、修复和发布拆成可恢复的 N1-N8 流程，沉淀本地与远端 Gate；难点是让复杂任务在失败、续跑和多人协作时仍保持可审查状态。",
@@ -410,12 +431,18 @@ export function DashboardContent() {
 											const index = displayProjects.findIndex(
 												(candidate) => candidate.id === project.id,
 											);
-							const pageLinks = getProjectActionLinks(project);
+							const pageLinks = [
+								...getProjectActionLinks(project),
+								...(project.id === "personal-ai-agent"
+									? [{ id: "qwen-cloud", label: "Qwen 云端工坊（需授权）", href: "https://qwen.baby2b.online/" }]
+									: []),
+							];
 							const defaultPage = pageLinks[0];
 
 											return (
 								<article
 									className="portfolio-project-card group relative min-w-0 overflow-hidden border border-transparent transition hover:-translate-y-0.5"
+									id={`project-${project.id}`}
 									key={project.id}
 								>
 									<span className="portfolio-project-number" aria-hidden="true">
@@ -426,7 +453,9 @@ export function DashboardContent() {
 											<ProjectIcon projectId={project.id} />
 											<div className="min-w-0 pt-1">
 												<h3 className="font-bold font-serif text-xl leading-snug md:text-lg">
-													{project.title}
+													{defaultPage ? (
+														<a className="underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-4" href={defaultPage.href}>{project.title}</a>
+													) : project.title}
 												</h3>
 												<p className="portfolio-project-summary mt-2 text-[#344252] text-sm leading-relaxed">
 													{project.desc}
@@ -632,8 +661,20 @@ export function DashboardContent() {
 function ResumeProjectCard({
 	block,
 }: {
-	block: { title: string; meta: string; body?: string; bullets?: string[] };
+	block: {
+		projectId: string;
+		title: string;
+		meta: string;
+		body?: string;
+		bullets?: string[];
+		links?: { label: string; href: string }[];
+	};
 }) {
+	const project = PROJECTS_INDEX[block.projectId];
+	const projectLinks = project ? getProjectActionLinks(project, true) : [];
+	const links = block.links ?? (projectLinks.length > 0 ? projectLinks : [
+		{ label: "项目介绍", href: `#project-${block.projectId}` },
+	]);
 	return (
 		<article className="portfolio-glass-subpanel border border-[#e1d8c7] bg-[#fbf8ef] p-4">
 			<div className="flex items-start gap-3">
@@ -641,7 +682,9 @@ function ResumeProjectCard({
 					<Code2 aria-hidden="true" size={19} />
 				</div>
 				<div>
-					<h4 className="font-semibold font-serif text-base">{block.title}</h4>
+					<h4 className="font-semibold font-serif text-base">
+						<a className="underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-4" href={links[0].href}>{block.title}</a>
+					</h4>
 					<p className="mt-1 font-bold text-[#3f4650] text-xs">
 						{block.meta}
 					</p>
@@ -658,6 +701,13 @@ function ResumeProjectCard({
 					{block.body}
 				</p>
 			)}
+			<nav aria-label={`${block.title} 项目入口`} className="mt-4 flex flex-wrap gap-x-4 gap-y-2 border-t border-[#e1d8c7] pt-3">
+				{links.map((link) => (
+					<a key={link.href} href={link.href} className="inline-flex min-h-11 items-center gap-1 text-sm font-semibold text-[#b21f35] underline underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-4">
+						{link.label}<ArrowUpRight aria-hidden="true" size={14} />
+					</a>
+				))}
+			</nav>
 		</article>
 	);
 }
