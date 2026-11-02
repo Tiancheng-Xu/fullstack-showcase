@@ -4,6 +4,23 @@ import { describe, expect, it } from "vitest";
 import { DashboardContent } from "../dashboard-content";
 
 describe("Dashboard project links", () => {
+	it("links every resume project title to a matching entry and exposes Qwen", () => {
+		const { container } = render(<DashboardContent />);
+		const skills = container.querySelector("#skills") as HTMLElement;
+		const titles = skills.querySelectorAll("h4");
+		expect(titles.length).toBeGreaterThan(10);
+		for (const title of titles) {
+			const anchor = title.querySelector("a");
+			expect(anchor).not.toBeNull();
+			const href = anchor?.getAttribute("href") ?? "";
+			expect(href).toMatch(/^(https:\/\/|\/|#project-)/);
+			if (href.startsWith("#")) expect(container.querySelector(href)).not.toBeNull();
+		}
+		const resume = within(skills);
+		expect(resume.getByRole("link", { name: "Qwen 云端工坊", exact: true })).toHaveAttribute("href", "https://qwen.baby2b.online/");
+		expect(within(container.querySelector("#projects") as HTMLElement).getByRole("link", { name: /：Qwen 云端工坊/ })).toHaveAttribute("href", "https://qwen.baby2b.online/");
+	});
+
 	it("uses the existing project tags as real page links without dashboard fallbacks", () => {
 		const { container } = render(<DashboardContent />);
 		const projects = container.querySelector("#projects");
